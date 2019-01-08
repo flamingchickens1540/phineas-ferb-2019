@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.RobotMap;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.Utilities;
+import org.team1540.robot2019.PhineasUtilities;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
@@ -306,12 +306,12 @@ public class Drivetrain extends Subsystem {
   }
 
   public void checkStickyFaults() {
-    Utilities.processStickyFaults("Drivetrain", "left A", driveLeftMotorA);
-    Utilities.processStickyFaults("Drivetrain", "left B", driveLeftMotorB);
-    Utilities.processStickyFaults("Drivetrain", "left C", driveLeftMotorC);
-    Utilities.processStickyFaults("Drivetrain", "right A", driveRightMotorA);
-    Utilities.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
-    Utilities.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
+    PhineasUtilities.processStickyFaults("Drivetrain", "left A", driveLeftMotorA);
+    PhineasUtilities.processStickyFaults("Drivetrain", "left B", driveLeftMotorB);
+    PhineasUtilities.processStickyFaults("Drivetrain", "left C", driveLeftMotorC);
+    PhineasUtilities.processStickyFaults("Drivetrain", "right A", driveRightMotorA);
+    PhineasUtilities.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
+    PhineasUtilities.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
   }
 
   public Sendable getDifferentialDriveSendable() {
