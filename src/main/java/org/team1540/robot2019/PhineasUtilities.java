@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.rooster.wrappers.ChickenController;
 
-public class Utilities {
+public class PhineasUtilities {
 
   public static void processStickyFaults(String subsystemName, String motorName,
       @NotNull ChickenController controller) {
