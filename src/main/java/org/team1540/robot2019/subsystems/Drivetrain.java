@@ -155,7 +155,8 @@ public class Drivetrain extends Subsystem {
     driveRightMotorA.set(ControlMode.Position, position);
   }
 
-  public void setPosition(double left, double right, double leftFeedForward, double rightFeedForward) {
+  public void setPosition(double left, double right, double leftFeedForward,
+      double rightFeedForward) {
     setLeftPosition(left, leftFeedForward);
     setRightPosition(right, rightFeedForward);
   }
@@ -301,7 +302,7 @@ public class Drivetrain extends Subsystem {
 
     leftThrottleEntry.setNumber(getLeftThrottle());
     rightThrottleEntry.setNumber(getRightThrottle());
-    
+
     leftCurrentAEntry.setNumber(driveLeftMotorA.getOutputCurrent());
     leftCurrentBEntry.setNumber(driveLeftMotorB.getOutputCurrent());
     leftCurrentCEntry.setNumber(driveLeftMotorC.getOutputCurrent());
