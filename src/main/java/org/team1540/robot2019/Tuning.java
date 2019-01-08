@@ -13,4 +13,10 @@ public class Tuning {
   public static double drivePositionI = 0;
   public static double drivePositionD = 0;
   public static double drivePositionF = 0;
+
+  public static double driveThrottleExponent = 3;
+  public static double driveSoftTurnExponent = 3;
+  public static double driveHardTurnExponent = 3;
+
+  public static double driveDeadzone = 0.1;
 }
