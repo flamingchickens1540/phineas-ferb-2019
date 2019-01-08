@@ -12,6 +12,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     PreferenceManager.getInstance().add(new Tuning());
 
+    OI.init();
+
+
     // TODO: shuffleboard
   }
 

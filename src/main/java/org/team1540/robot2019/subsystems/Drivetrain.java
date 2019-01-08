@@ -8,13 +8,16 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
+import org.team1540.robot2019.OI;
 import org.team1540.robot2019.RobotMap;
+import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.PhineasUtilities;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
 import org.team1540.rooster.wrappers.ChickenTalon;
+import org.team1540.rooster.util.SimpleLoopCommand;
 
 public class Drivetrain extends Subsystem {
 
@@ -84,7 +87,10 @@ public class Drivetrain extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    // TODO: set up drive code
+    setDefaultCommand(new SimpleLoopCommand("Drive",
+        new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
+            OI::getDriveHardTurn)
+            .then(getPipelineOutput())));
   }
 
   public Output<TankDriveData> getPipelineOutput() {
