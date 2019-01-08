@@ -45,7 +45,7 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
-    compile "org.team1540:rooster:2019-updates-SNAPSHOT"
+    compile "org.team1540:rooster:master-SNAPSHOT"
 }
 
 jar {

@@ -12,8 +12,8 @@ import org.team1540.robot2019.RobotMap;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.Utilities;
 import org.team1540.rooster.drive.pipeline.DriveData;
-import org.team1540.rooster.drive.pipeline.Output;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
+import org.team1540.rooster.functional.Output;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class Drivetrain extends Subsystem {
