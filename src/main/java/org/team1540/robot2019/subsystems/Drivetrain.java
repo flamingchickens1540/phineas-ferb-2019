@@ -100,7 +100,7 @@ public class Drivetrain extends Subsystem {
 
       private void processSide(DriveData data, IMotorController controller) {
         if (data.position.isPresent() && useClosedLoop) {
-          controller.selectProfileSlot(0,0);
+          controller.selectProfileSlot(0, 0);
           if (data.additionalFeedForward.isPresent()) {
             controller.set(ControlMode.Position, data.position.getAsDouble(),
                 DemandType.ArbitraryFeedForward, data.additionalFeedForward.getAsDouble());
@@ -108,7 +108,7 @@ public class Drivetrain extends Subsystem {
             controller.set(ControlMode.Position, data.position.getAsDouble());
           }
         } else if (data.velocity.isPresent() && useClosedLoop) {
-          controller.selectProfileSlot(1,0);
+          controller.selectProfileSlot(1, 0);
           if (data.additionalFeedForward.isPresent()) {
             controller.set(ControlMode.Velocity, data.velocity.getAsDouble(),
                 DemandType.ArbitraryFeedForward, data.additionalFeedForward.getAsDouble());
@@ -156,12 +156,14 @@ public class Drivetrain extends Subsystem {
 
   public void setLeftPosition(double position, double feedForward) {
     configTalonsForPosition();
-    driveLeftMotorA.set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
+    driveLeftMotorA
+        .set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
   }
 
   public void setRightPosition(double position, double feedForward) {
     configTalonsForPosition();
-    driveRightMotorA.set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
+    driveRightMotorA
+        .set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
   }
 
 
@@ -180,19 +182,22 @@ public class Drivetrain extends Subsystem {
     driveRightMotorA.set(ControlMode.Velocity, velocity);
   }
 
-  public void setVelocity(double left, double right, double leftFeedForward, double rightFeedForward) {
+  public void setVelocity(double left, double right, double leftFeedForward,
+      double rightFeedForward) {
     setLeftVelocity(left, leftFeedForward);
     setRightVelocity(right, rightFeedForward);
   }
 
   public void setLeftVelocity(double velocity, double feedForward) {
     configTalonsForVelocity();
-    driveLeftMotorA.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
+    driveLeftMotorA
+        .set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
   }
 
   public void setRightVelocity(double velocity, double feedForward) {
     configTalonsForVelocity();
-    driveRightMotorA.set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
+    driveRightMotorA
+        .set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
   }
 
   public void setThrottle(double left, double right) {
@@ -308,4 +313,24 @@ public class Drivetrain extends Subsystem {
     Utilities.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
     Utilities.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
   }
+
+  public Sendable getDifferentialDriveSendable() {
+    return new SendableBase() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("DifferentialDrive");
+        builder.setActuator(true);
+        builder.setSafeState(Drivetrain.this::stop);
+        builder.addDoubleProperty(
+            "Left Motor Speed",
+            Drivetrain.this::getLeftThrottle,
+            Drivetrain.this::setLeftThrottle);
+        builder.addDoubleProperty(
+            "Right Motor Speed",
+            Drivetrain.this::getRightThrottle,
+            Drivetrain.this::setRightThrottle);
+      }
+    };
+  }
 }
+
