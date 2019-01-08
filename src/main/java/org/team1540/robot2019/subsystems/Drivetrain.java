@@ -320,24 +320,5 @@ public class Drivetrain extends Subsystem {
     PhineasUtilities.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
     PhineasUtilities.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
   }
-
-  public Sendable getDifferentialDriveSendable() {
-    return new SendableBase() {
-      @Override
-      public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("DifferentialDrive");
-        builder.setActuator(true);
-        builder.setSafeState(Drivetrain.this::stop);
-        builder.addDoubleProperty(
-            "Left Motor Speed",
-            Drivetrain.this::getLeftThrottle,
-            Drivetrain.this::setLeftThrottle);
-        builder.addDoubleProperty(
-            "Right Motor Speed",
-            Drivetrain.this::getRightThrottle,
-            Drivetrain.this::setRightThrottle);
-      }
-    };
-  }
 }
 
