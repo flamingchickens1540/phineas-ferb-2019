@@ -19,4 +19,6 @@ public class Tuning {
   public static double driveHardTurnExponent = 3;
 
   public static double driveDeadzone = 0.1;
+
+  public static double driveRamp = .2;
 }

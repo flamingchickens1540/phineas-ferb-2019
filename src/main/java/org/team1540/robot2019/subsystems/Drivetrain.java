@@ -16,6 +16,7 @@ import org.team1540.robot2019.PhineasUtilities;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
+import org.team1540.rooster.functional.Processor;
 import org.team1540.rooster.wrappers.ChickenTalon;
 import org.team1540.rooster.util.SimpleLoopCommand;
 
@@ -31,6 +32,9 @@ public class Drivetrain extends Subsystem {
   private ChickenTalon[] driveRightMotors;
   private ChickenTalon[] driveMotorAll;
   private ChickenTalon[] driveMotorMasters;
+
+  double leftRampAccumulator;
+  double rightRampAccumulator;
 
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("drivetrain");
   private NetworkTableEntry leftPositionEntry = table.getEntry("leftPos");
@@ -96,7 +100,14 @@ public class Drivetrain extends Subsystem {
     setDefaultCommand(new SimpleLoopCommand("Drive",
         new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
             OI::getDriveHardTurn)
-            .then(getPipelineOutput())));
+            .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> tankDriveData
+                .withAdditionalFeedForwards(leftRampAccumulator += Math.signum(
+                    tankDriveData.left.additionalFeedForward.getAsDouble()
+                        - leftRampAccumulator) * Tuning.driveRamp,
+                    rightRampAccumulator += Math.signum(
+                        tankDriveData.right.additionalFeedForward.getAsDouble()
+                            - rightRampAccumulator) * Tuning.driveRamp))
+            .then(getPipelineOutput()), this));
   }
 
   public Output<TankDriveData> getPipelineOutput() {
@@ -316,6 +327,11 @@ public class Drivetrain extends Subsystem {
     rightCurrentAEntry.setNumber(driveRightMotorA.getOutputCurrent());
     rightCurrentBEntry.setNumber(driveRightMotorB.getOutputCurrent());
     rightCurrentCEntry.setNumber(driveRightMotorC.getOutputCurrent());
+
+    if (!DriverStation.getInstance().isOperatorControl()) {
+      leftRampAccumulator = 0;
+      rightRampAccumulator = 0;
+    }
   }
 
   public void checkStickyFaults() {
