@@ -28,7 +28,7 @@ public class OI {
 
   public static double getDriveSoftTurn() {
     return Utilities.scale(
-        -Utilities.processDeadzone(driver.getX(Hand.kRight), Tuning.driveDeadzone),
+        Utilities.processDeadzone(driver.getX(Hand.kRight), Tuning.driveDeadzone),
         Tuning.driveSoftTurnExponent);
   }
 
