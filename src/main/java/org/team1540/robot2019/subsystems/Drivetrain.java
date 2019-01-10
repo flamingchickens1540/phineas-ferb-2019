@@ -66,10 +66,16 @@ public class Drivetrain extends Subsystem {
         driveRightMotorA, driveRightMotorB, driveRightMotorC};
     driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
 
+    driveLeftMotorB.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
+    driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
+    driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+    driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+
     checkStickyFaults();
 
     for (ChickenTalon talon : driveMotorAll) {
       talon.configFactoryDefault();
+      talon.setBrake(true);
       // TODO: configure ramping, etc
     }
 
