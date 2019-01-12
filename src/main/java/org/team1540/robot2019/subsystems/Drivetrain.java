@@ -23,6 +23,9 @@ import org.team1540.rooster.util.SimpleLoopCommand;
 
 public class Drivetrain extends Subsystem {
 
+  private static final int POSITION_SLOT_IDX = 0;
+  private static final int VELOCITY_SLOT_IDX = 1;
+
   private ChickenTalon driveLeftMotorA;
   private ChickenTalon driveLeftMotorB;
   private ChickenTalon driveLeftMotorC;
@@ -71,29 +74,49 @@ public class Drivetrain extends Subsystem {
         driveRightMotorA, driveRightMotorB, driveRightMotorC};
     driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
 
-    driveLeftMotorB.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
-    driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
-    driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
-    driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+    reset();
+  }
 
+  public void reset() {
     checkStickyFaults();
 
     for (ChickenTalon talon : driveMotorAll) {
       talon.configFactoryDefault();
       talon.setBrake(true);
-      // TODO: configure ramping, etc
+      talon.configVoltageCompSaturation(12);
+      talon.enableVoltageCompensation(true);
+      // at the moment, this hard caps to driveCurrentLimit; we might implement peak limiting
+      // instead
+      talon.configPeakCurrentLimit(0);
+      talon.configContinuousCurrentLimit(Tuning.driveCurrentLimit);
     }
 
     for (ChickenTalon talon : driveMotorMasters) {
-      talon.config_kP(0, Tuning.drivePositionP);
-      talon.config_kI(0, Tuning.drivePositionI);
-      talon.config_kD(0, Tuning.drivePositionD);
-      talon.config_kF(0, Tuning.drivePositionF);
-      talon.config_kP(1, Tuning.driveVelocityP);
-      talon.config_kI(1, Tuning.driveVelocityI);
-      talon.config_kD(1, Tuning.driveVelocityD);
-      talon.config_kF(1, Tuning.driveVelocityF);
+      talon.config_kP(POSITION_SLOT_IDX, Tuning.drivePositionP);
+      talon.config_kI(POSITION_SLOT_IDX, Tuning.drivePositionI);
+      talon.config_kD(POSITION_SLOT_IDX, Tuning.drivePositionD);
+      talon.config_kF(POSITION_SLOT_IDX, Tuning.drivePositionF);
+      talon.config_kP(VELOCITY_SLOT_IDX, Tuning.driveVelocityP);
+      talon.config_kI(VELOCITY_SLOT_IDX, Tuning.driveVelocityI);
+      talon.config_kD(VELOCITY_SLOT_IDX, Tuning.driveVelocityD);
+      talon.config_kF(VELOCITY_SLOT_IDX, Tuning.driveVelocityF);
     }
+
+    for (ChickenTalon talon : driveLeftMotors) {
+      talon.setInverted(Tuning.invertDriveLeft);
+    }
+
+    for (ChickenTalon talon : driveRightMotors) {
+      talon.setInverted(Tuning.invertDriveRight);
+    }
+
+    driveLeftMotorA.setSensorPhase(Tuning.invertDriveLeftSensor);
+    driveRightMotorA.setSensorPhase(Tuning.invertDriveRightSensor);
+
+    driveLeftMotorB.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
+    driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
+    driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+    driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
   }
 
   @Override
@@ -104,10 +127,10 @@ public class Drivetrain extends Subsystem {
             .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> tankDriveData
                 .withAdditionalFeedForwards(leftRampAccumulator += Math.signum(
                     tankDriveData.left.additionalFeedForward.getAsDouble()
-                        - leftRampAccumulator) * Tuning.driveRamp,
+                        - leftRampAccumulator) * Tuning.driveControlRamp,
                     rightRampAccumulator += Math.signum(
                         tankDriveData.right.additionalFeedForward.getAsDouble()
-                            - rightRampAccumulator) * Tuning.driveRamp))
+                            - rightRampAccumulator) * Tuning.driveControlRamp))
             .then(getPipelineOutput()), this));
   }
 
@@ -124,7 +147,7 @@ public class Drivetrain extends Subsystem {
 
       private void processSide(DriveData data, IMotorController controller) {
         if (data.position.isPresent() && useClosedLoop) {
-          controller.selectProfileSlot(0, 0);
+          controller.selectProfileSlot(POSITION_SLOT_IDX, 0);
           if (data.additionalFeedForward.isPresent()) {
             controller.set(ControlMode.Position, data.position.getAsDouble(),
                 DemandType.ArbitraryFeedForward, data.additionalFeedForward.getAsDouble());
@@ -132,7 +155,7 @@ public class Drivetrain extends Subsystem {
             controller.set(ControlMode.Position, data.position.getAsDouble());
           }
         } else if (data.velocity.isPresent() && useClosedLoop) {
-          controller.selectProfileSlot(1, 0);
+          controller.selectProfileSlot(VELOCITY_SLOT_IDX, 0);
           if (data.additionalFeedForward.isPresent()) {
             controller.set(ControlMode.Velocity, data.velocity.getAsDouble(),
                 DemandType.ArbitraryFeedForward, data.additionalFeedForward.getAsDouble());
@@ -148,13 +171,13 @@ public class Drivetrain extends Subsystem {
 
   private void configTalonsForPosition() {
     for (ChickenTalon t : driveMotorMasters) {
-      t.selectProfileSlot(0);
+      t.selectProfileSlot(POSITION_SLOT_IDX);
     }
   }
 
   private void configTalonsForVelocity() {
     for (ChickenTalon t : driveMotorMasters) {
-      t.selectProfileSlot(1);
+      t.selectProfileSlot(VELOCITY_SLOT_IDX);
     }
   }
 

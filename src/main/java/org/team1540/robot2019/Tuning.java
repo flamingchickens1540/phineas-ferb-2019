@@ -20,5 +20,15 @@ public class Tuning {
 
   public static double driveDeadzone = 0.1;
 
-  public static double driveRamp = .2;
+  public static double driveControlRamp = .2;
+  public static double driveOpenLoopRamp = 0;
+  public static double driveClosedLoopRamp = 0;
+
+  public static boolean invertDriveLeft = false;
+  public static boolean invertDriveLeftSensor = false;
+  public static boolean invertDriveRight = true;
+  public static boolean invertDriveRightSensor = false;
+
+  public static int driveCurrentLimit = 40;
+
 }
