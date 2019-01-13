@@ -4,6 +4,8 @@ import org.team1540.rooster.preferencemanager.TuningClass;
 
 @TuningClass("phineas_")
 public class Tuning {
+
+  // drive
   public static double driveVelocityP = 0;
   public static double driveVelocityI = 0;
   public static double driveVelocityD = 0;
@@ -31,4 +33,20 @@ public class Tuning {
 
   public static int driveCurrentLimit = 40;
 
+  // elevator
+  public static double elevatorUpSpeed = 1;
+  public static double elevatorDownSpeed = 1;
+
+  public static boolean invertElevatorA = false;
+  public static boolean invertElevatorB = false;
+
+  // intake
+  public static boolean intakeInvertTop = false;
+  public static boolean intakeInvertBtm = false;
+
+  public static double intakeIntakeSpeedTop = 1;
+  public static double intakeIntakeSpeedBtm = 1;
+
+  public static double intakeEjectSpeedTop = 1;
+  public static double intakeEjectSpeedBtm = 1;
 }
