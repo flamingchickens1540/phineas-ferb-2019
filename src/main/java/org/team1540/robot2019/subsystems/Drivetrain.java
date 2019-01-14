@@ -261,6 +261,12 @@ public class Drivetrain extends Subsystem {
     driveRightMotorA.set(ControlMode.PercentOutput, throttle);
   }
 
+  public void setBrake(boolean brake) {
+    for (ChickenTalon talon : driveMotorAll) {
+      talon.setBrake(brake);
+    }
+  }
+
   public double getLeftPosition() {
     return driveLeftMotorA.getSelectedSensorVelocity();
   }

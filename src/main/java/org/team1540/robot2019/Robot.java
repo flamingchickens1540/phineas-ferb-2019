@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    drivetrain.setBrake(false);
   }
 
   @Override
@@ -48,6 +49,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    drivetrain.setBrake(true);
   }
 
   @Override
@@ -56,6 +58,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    drivetrain.setBrake(true);
   }
 
   @Override
