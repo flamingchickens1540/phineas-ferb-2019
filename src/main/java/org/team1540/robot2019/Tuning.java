@@ -49,4 +49,8 @@ public class Tuning {
 
   public static double intakeEjectSpeedTop = 1;
   public static double intakeEjectSpeedBtm = 1;
+
+  public static double intakeTimeout = 5;
+
+  public static double intakeEjectTime = 2;
 }
