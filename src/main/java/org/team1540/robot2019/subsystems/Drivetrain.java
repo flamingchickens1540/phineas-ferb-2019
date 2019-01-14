@@ -352,7 +352,7 @@ public class Drivetrain extends Subsystem {
     rightCurrentBEntry.setNumber(driveRightMotorB.getOutputCurrent());
     rightCurrentCEntry.setNumber(driveRightMotorC.getOutputCurrent());
 
-    if (!DriverStation.getInstance().isOperatorControl()) {
+    if (DriverStation.getInstance().isDisabled()) {
       leftRampAccumulator = 0;
       rightRampAccumulator = 0;
     }
