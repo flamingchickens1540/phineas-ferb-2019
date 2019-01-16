@@ -22,7 +22,11 @@ public class Tuning {
 
   public static double driveDeadzone = 0.1;
 
-  public static double driveControlRamp = .2;
+  // this unit is [-1,1] throttle per 20ms, which is kind of terrible but makes for nicer drive code
+  // divide 0.02 by this to get seconds from neutral to full throttle
+  public static double driveControlRampUp = .2;
+  public static double driveControlRampDown = .2;
+
   public static double driveOpenLoopRamp = 0;
   public static double driveClosedLoopRamp = 0;
 

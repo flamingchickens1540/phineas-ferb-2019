@@ -37,8 +37,8 @@ public class Drivetrain extends Subsystem {
   private ChickenTalon[] driveMotorAll;
   private ChickenTalon[] driveMotorMasters;
 
-  double leftRampAccumulator;
-  double rightRampAccumulator;
+  double leftRampAccum;
+  double rightRampAccum;
 
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("drivetrain");
   private NetworkTableEntry leftPositionEntry = table.getEntry("leftPos");
@@ -53,7 +53,7 @@ public class Drivetrain extends Subsystem {
   private NetworkTableEntry leftCurrentAEntry = table.getEntry("leftCurrA");
   private NetworkTableEntry leftCurrentBEntry = table.getEntry("leftCurrB");
   private NetworkTableEntry leftCurrentCEntry = table.getEntry("leftCurrC");
-  
+
   private NetworkTableEntry rightCurrentAEntry = table.getEntry("rightCurrA");
   private NetworkTableEntry rightCurrentBEntry = table.getEntry("rightCurrB");
   private NetworkTableEntry rightCurrentCEntry = table.getEntry("rightCurrC");
@@ -124,14 +124,55 @@ public class Drivetrain extends Subsystem {
     setDefaultCommand(new SimpleLoopCommand("Drive",
         new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
             OI::getDriveHardTurn)
-            .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> tankDriveData
-                .withAdditionalFeedForwards(leftRampAccumulator += Math.signum(
-                    tankDriveData.left.additionalFeedForward.getAsDouble()
-                        - leftRampAccumulator) * Tuning.driveControlRamp,
-                    rightRampAccumulator += Math.signum(
-                        tankDriveData.right.additionalFeedForward.getAsDouble()
-                            - rightRampAccumulator) * Tuning.driveControlRamp))
+            .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> {
+
+              double leftThrot = tankDriveData.left.additionalFeedForward.getAsDouble();
+              double leftRamp = calcRamp(leftThrot, leftRampAccum);
+
+              double rightThrot = tankDriveData.right.additionalFeedForward.getAsDouble();
+              double rightRamp = calcRamp(rightThrot, rightRampAccum);
+
+              leftRampAccum += leftRamp;
+              rightRampAccum += rightRamp;
+              return tankDriveData.withAdditionalFeedForwards(leftRampAccum, rightRampAccum);
+            })
             .then(getPipelineOutput()), this));
+  }
+
+  private static double calcRamp(double throttle, double rampAccum) {
+    double ramp;
+    if (throttle == 0) {
+      if (rampAccum < -Tuning.driveControlRampDown) {
+        ramp = Tuning.driveControlRampDown;
+      } else if (rampAccum <= 0) {
+        ramp = rampAccum; // this will make the accumulator 0
+      } else if (rampAccum < Tuning.driveControlRampDown) {
+        ramp = -rampAccum;
+      } else {
+        ramp = -Tuning.driveControlRampDown;
+      }
+    } else if (throttle < 0) {
+      if (rampAccum < throttle - Tuning.driveControlRampDown) {
+        ramp = Tuning.driveControlRampDown;
+      } else if (rampAccum < throttle + Tuning.driveControlRampUp) {
+        ramp = rampAccum - throttle;
+      } else if (rampAccum <= 0) {
+        ramp = -Tuning.driveControlRampUp;
+      } else {
+        ramp = -Tuning.driveControlRampDown;
+      }
+    } else { // throttle is greater than 0
+      if (rampAccum > throttle + Tuning.driveControlRampDown) {
+        ramp = -Tuning.driveControlRampDown;
+      } else if (rampAccum > throttle - Tuning.driveControlRampUp) {
+        ramp = rampAccum - throttle;
+      } else if (rampAccum >= 0) {
+        ramp = Tuning.driveControlRampUp;
+      } else {
+        ramp = Tuning.driveControlRampDown;
+      }
+    }
+    return ramp;
   }
 
   public Output<TankDriveData> getPipelineOutput() {
@@ -359,8 +400,8 @@ public class Drivetrain extends Subsystem {
     rightCurrentCEntry.setNumber(driveRightMotorC.getOutputCurrent());
 
     if (DriverStation.getInstance().isDisabled()) {
-      leftRampAccumulator = 0;
-      rightRampAccumulator = 0;
+      leftRampAccum = 0;
+      rightRampAccum = 0;
     }
   }
 
