@@ -1,41 +1,36 @@
 package org.team1540.robot2019.subsystems;
 
+import static org.team1540.robot2019.Hardware.DRIVE_POSITION_SLOT_IDX;
+import static org.team1540.robot2019.Hardware.DRIVE_VELOCITY_SLOT_IDX;
+import static org.team1540.robot2019.Hardware.driveLeftMotorA;
+import static org.team1540.robot2019.Hardware.driveLeftMotorB;
+import static org.team1540.robot2019.Hardware.driveLeftMotorC;
+import static org.team1540.robot2019.Hardware.driveMotorAll;
+import static org.team1540.robot2019.Hardware.driveMotorMasters;
+import static org.team1540.robot2019.Hardware.driveRightMotorA;
+import static org.team1540.robot2019.Hardware.driveRightMotorB;
+import static org.team1540.robot2019.Hardware.driveRightMotorC;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.IMotorController;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.OI;
-import org.team1540.robot2019.RobotMap;
-import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.PhineasUtilities;
+import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
 import org.team1540.rooster.functional.Processor;
-import org.team1540.rooster.wrappers.ChickenTalon;
 import org.team1540.rooster.util.SimpleLoopCommand;
+import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class Drivetrain extends Subsystem {
-
-  private static final int POSITION_SLOT_IDX = 0;
-  private static final int VELOCITY_SLOT_IDX = 1;
-
-  private ChickenTalon driveLeftMotorA;
-  private ChickenTalon driveLeftMotorB;
-  private ChickenTalon driveLeftMotorC;
-  private ChickenTalon[] driveLeftMotors;
-  private ChickenTalon driveRightMotorA;
-  private ChickenTalon driveRightMotorB;
-  private ChickenTalon driveRightMotorC;
-  private ChickenTalon[] driveRightMotors;
-  private ChickenTalon[] driveMotorAll;
-  private ChickenTalon[] driveMotorMasters;
 
   double leftRampAccum;
   double rightRampAccum;
@@ -57,67 +52,6 @@ public class Drivetrain extends Subsystem {
   private NetworkTableEntry rightCurrentAEntry = table.getEntry("rightCurrA");
   private NetworkTableEntry rightCurrentBEntry = table.getEntry("rightCurrB");
   private NetworkTableEntry rightCurrentCEntry = table.getEntry("rightCurrC");
-
-  public Drivetrain() {
-
-    driveLeftMotorA = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
-    driveLeftMotorB = new ChickenTalon(RobotMap.DRIVE_LEFT_B);
-    driveLeftMotorC = new ChickenTalon(RobotMap.DRIVE_LEFT_C);
-
-    driveRightMotorA = new ChickenTalon(RobotMap.DRIVE_RIGHT_A);
-    driveRightMotorB = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
-    driveRightMotorC = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
-
-    driveLeftMotors = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC};
-    driveRightMotors = new ChickenTalon[]{driveRightMotorA, driveRightMotorB, driveRightMotorC};
-    driveMotorAll = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC,
-        driveRightMotorA, driveRightMotorB, driveRightMotorC};
-    driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
-
-    reset();
-  }
-
-  public void reset() {
-    checkStickyFaults();
-
-    for (ChickenTalon talon : driveMotorAll) {
-      talon.configFactoryDefault();
-      talon.setBrake(true);
-      talon.configVoltageCompSaturation(12);
-      talon.enableVoltageCompensation(true);
-      // at the moment, this hard caps to driveCurrentLimit; we might implement peak limiting
-      // instead
-      talon.configPeakCurrentLimit(0);
-      talon.configContinuousCurrentLimit(Tuning.driveCurrentLimit);
-    }
-
-    for (ChickenTalon talon : driveMotorMasters) {
-      talon.config_kP(POSITION_SLOT_IDX, Tuning.drivePositionP);
-      talon.config_kI(POSITION_SLOT_IDX, Tuning.drivePositionI);
-      talon.config_kD(POSITION_SLOT_IDX, Tuning.drivePositionD);
-      talon.config_kF(POSITION_SLOT_IDX, Tuning.drivePositionF);
-      talon.config_kP(VELOCITY_SLOT_IDX, Tuning.driveVelocityP);
-      talon.config_kI(VELOCITY_SLOT_IDX, Tuning.driveVelocityI);
-      talon.config_kD(VELOCITY_SLOT_IDX, Tuning.driveVelocityD);
-      talon.config_kF(VELOCITY_SLOT_IDX, Tuning.driveVelocityF);
-    }
-
-    for (ChickenTalon talon : driveLeftMotors) {
-      talon.setInverted(Tuning.invertDriveLeft);
-    }
-
-    for (ChickenTalon talon : driveRightMotors) {
-      talon.setInverted(Tuning.invertDriveRight);
-    }
-
-    driveLeftMotorA.setSensorPhase(Tuning.invertDriveLeftSensor);
-    driveRightMotorA.setSensorPhase(Tuning.invertDriveRightSensor);
-
-    driveLeftMotorB.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
-    driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
-    driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
-    driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
-  }
 
   @Override
   protected void initDefaultCommand() {
@@ -188,7 +122,7 @@ public class Drivetrain extends Subsystem {
 
       private void processSide(DriveData data, IMotorController controller) {
         if (data.position.isPresent() && useClosedLoop) {
-          controller.selectProfileSlot(POSITION_SLOT_IDX, 0);
+          controller.selectProfileSlot(DRIVE_POSITION_SLOT_IDX, 0);
           if (data.additionalFeedForward.isPresent()) {
             controller.set(ControlMode.Position, data.position.getAsDouble(),
                 DemandType.ArbitraryFeedForward, data.additionalFeedForward.getAsDouble());
@@ -196,7 +130,7 @@ public class Drivetrain extends Subsystem {
             controller.set(ControlMode.Position, data.position.getAsDouble());
           }
         } else if (data.velocity.isPresent() && useClosedLoop) {
-          controller.selectProfileSlot(VELOCITY_SLOT_IDX, 0);
+          controller.selectProfileSlot(DRIVE_VELOCITY_SLOT_IDX, 0);
           if (data.additionalFeedForward.isPresent()) {
             controller.set(ControlMode.Velocity, data.velocity.getAsDouble(),
                 DemandType.ArbitraryFeedForward, data.additionalFeedForward.getAsDouble());
@@ -212,13 +146,13 @@ public class Drivetrain extends Subsystem {
 
   private void configTalonsForPosition() {
     for (ChickenTalon t : driveMotorMasters) {
-      t.selectProfileSlot(POSITION_SLOT_IDX);
+      t.selectProfileSlot(DRIVE_POSITION_SLOT_IDX);
     }
   }
 
   private void configTalonsForVelocity() {
     for (ChickenTalon t : driveMotorMasters) {
-      t.selectProfileSlot(VELOCITY_SLOT_IDX);
+      t.selectProfileSlot(DRIVE_VELOCITY_SLOT_IDX);
     }
   }
 
@@ -403,15 +337,6 @@ public class Drivetrain extends Subsystem {
       leftRampAccum = 0;
       rightRampAccum = 0;
     }
-  }
-
-  public void checkStickyFaults() {
-    PhineasUtilities.processStickyFaults("Drivetrain", "left A", driveLeftMotorA);
-    PhineasUtilities.processStickyFaults("Drivetrain", "left B", driveLeftMotorB);
-    PhineasUtilities.processStickyFaults("Drivetrain", "left C", driveLeftMotorC);
-    PhineasUtilities.processStickyFaults("Drivetrain", "right A", driveRightMotorA);
-    PhineasUtilities.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
-    PhineasUtilities.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
   }
 }
 

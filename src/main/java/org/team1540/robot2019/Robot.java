@@ -19,16 +19,17 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     PreferenceManager.getInstance().add(new Tuning());
 
-    OI.init();
-
     Scheduler.getInstance().run();
 
-    // initialize them after we run the scheduler once so that the preference manager can update its
-    // values
+    // initialize hardware after we run the scheduler once so that the preference manager can update its values
+    Hardware.initAll();
+
     drivetrain = new Drivetrain();
     elevator = new Elevator();
     arm = new Arm();
     intake = new Intake();
+
+    OI.init();
 
     // TODO: shuffleboard
   }
