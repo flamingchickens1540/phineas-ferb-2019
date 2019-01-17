@@ -3,6 +3,7 @@ package org.team1540.robot2019;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.robot2019.subsystems.*;
 import org.team1540.robot2019.subsystems.Elevator;
@@ -46,13 +47,22 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
   }
 
+  private Timer brakeTimer = new Timer();
+
   @Override
   public void disabledInit() {
-    drivetrain.setBrake(false);
+    System.out.println("Disabling drive brakes in 2 seconds...");
+    brakeTimer.reset();
+    brakeTimer.start();
   }
 
   @Override
   public void disabledPeriodic() {
+    if (brakeTimer.hasPeriodPassed(2)) {
+      brakeTimer.stop();
+      drivetrain.setBrake(false);
+      System.out.println("Drive brakes disabled");
+    }
   }
 
   @Override
