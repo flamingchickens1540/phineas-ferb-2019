@@ -44,6 +44,9 @@ public class Tuning {
   public static boolean invertElevatorA = false;
   public static boolean invertElevatorB = false;
 
+  // arm
+  public static boolean armInvertMotor = false;
+
   // intake
   public static boolean intakeInvertTop = false;
   public static boolean intakeInvertBtm = false;
