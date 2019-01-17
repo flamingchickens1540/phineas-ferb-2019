@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
@@ -84,13 +85,22 @@ public class Hardware {
   // TODO add intake sensor
 
   static void initAll() {
+    System.out.println("Initializing robot hardware...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
     initDrive();
     initElevator();
     initArm();
     initIntake();
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    System.out.println("Initialized robot hardware in " + (end - start) + " ms");
   }
 
   public static void initDrive() {
+    System.out.println("Initializing drive...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
     driveLeftMotorA = new ChickenTalon(DRIVE_LEFT_A);
     driveLeftMotorB = new ChickenTalon(DRIVE_LEFT_B);
     driveLeftMotorC = new ChickenTalon(DRIVE_LEFT_C);
@@ -136,9 +146,15 @@ public class Hardware {
     driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
     driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
     driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    System.out.println("Initialized drive in " + (end - start) + " ms");
   }
 
   public static void initElevator() {
+    System.out.println("Initializing elevator...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
     elevatorA = new CANSparkMax(ELEVATOR_A, MotorType.kBrushless);
     elevatorB = new CANSparkMax(ELEVATOR_B, MotorType.kBrushless);
 
@@ -146,13 +162,25 @@ public class Hardware {
 
     elevatorTopSwitch = new DigitalInput(ELEVATOR_TOP_SW);
     elevatorBtmSwitch = new DigitalInput(ELEVATOR_BTM_SW);
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    System.out.println("Initialized elevator in " + (end - start) + " ms");
   }
 
   public static void initArm() {
+    System.out.println("Initializing arm...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
     armActuator = new Solenoid(ARM_ACTUATOR);
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    System.out.println("Initialized arm in " + (end - start) + " ms");
   }
 
   public static void initIntake() {
+    System.out.println("Initializing intake...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
     intakeTop = new ChickenTalon(INTAKE_TOP);
     intakeBtm = new ChickenTalon(INTAKE_BTM);
 
@@ -164,6 +192,9 @@ public class Hardware {
 
     intakeTop.setBrake(true);
     intakeBtm.setBrake(true);
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    System.out.println("Initialized intake in " + (end - start) + " ms");
   }
 
   public static void checkStickyFaults() {
