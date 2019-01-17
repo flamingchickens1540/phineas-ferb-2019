@@ -15,44 +15,6 @@ import org.team1540.rooster.wrappers.ChickenTalon;
  */
 public class Hardware {
 
-  // motors
-  public static final int DRIVE_LEFT_A = 1;
-  public static final int DRIVE_LEFT_B = 2;
-  public static final int DRIVE_LEFT_C = 3;
-
-  public static final int DRIVE_RIGHT_A = 4;
-  public static final int DRIVE_RIGHT_B = 5;
-  public static final int DRIVE_RIGHT_C = 6;
-
-  public static final int ELEVATOR_A = 7;
-  public static final int ELEVATOR_B = 8;
-
-  public static final int ARM_MOTOR = 9;
-
-  public static final int INTAKE_TOP = 10;
-  public static final int INTAKE_BTM = 11;
-
-
-  // pneumatics
-  public static final int ELEVATOR_BRAKE = 0;
-
-  public static final int ARM_CYLINDER = 0;
-
-  public static final int HATCH_ACTUATOR = 0;
-
-  public static final int CLIMBER_REAR_PISTON = 0;
-
-  // sensors and switches
-  public static final int ELEVATOR_TOP_SW = 0;
-  public static final int ELEVATOR_BTM_SW = 0;
-
-  public static final int INTAKE_SENSOR = 0;
-
-  public static final int ARM_TOP_SW = 0;
-  public static final int ARM_BTM_SW = 0;
-
-  public static final int GROUND_PROXIMITY_SENSOR = 0;
-
   public static final int DRIVE_POSITION_SLOT_IDX = 0;
   public static final int DRIVE_VELOCITY_SLOT_IDX = 1;
 
@@ -110,13 +72,13 @@ public class Hardware {
     System.out.println("Initializing drive...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    driveLeftMotorA = new ChickenTalon(DRIVE_LEFT_A);
-    driveLeftMotorB = new ChickenTalon(DRIVE_LEFT_B);
-    driveLeftMotorC = new ChickenTalon(DRIVE_LEFT_C);
+    driveLeftMotorA = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
+    driveLeftMotorB = new ChickenTalon(RobotMap.DRIVE_LEFT_B);
+    driveLeftMotorC = new ChickenTalon(RobotMap.DRIVE_LEFT_C);
 
-    driveRightMotorA = new ChickenTalon(DRIVE_RIGHT_A);
-    driveRightMotorB = new ChickenTalon(DRIVE_RIGHT_B);
-    driveRightMotorC = new ChickenTalon(DRIVE_RIGHT_C);
+    driveRightMotorA = new ChickenTalon(RobotMap.DRIVE_RIGHT_A);
+    driveRightMotorB = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
+    driveRightMotorC = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
 
     for (ChickenTalon talon : driveMotorAll) {
       talon.configFactoryDefault();
@@ -164,13 +126,13 @@ public class Hardware {
     System.out.println("Initializing elevator...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    elevatorA = new CANSparkMax(ELEVATOR_A, MotorType.kBrushless);
-    elevatorB = new CANSparkMax(ELEVATOR_B, MotorType.kBrushless);
+    elevatorA = new CANSparkMax(RobotMap.ELEVATOR_A, MotorType.kBrushless);
+    elevatorB = new CANSparkMax(RobotMap.ELEVATOR_B, MotorType.kBrushless);
 
-    elevatorBrake = new Solenoid(ELEVATOR_BRAKE);
+    elevatorBrake = new Solenoid(RobotMap.ELEVATOR_BRAKE);
 
-    elevatorTopSwitch = new DigitalInput(ELEVATOR_TOP_SW);
-    elevatorBtmSwitch = new DigitalInput(ELEVATOR_BTM_SW);
+    elevatorTopSwitch = new DigitalInput(RobotMap.ELEVATOR_TOP_SW);
+    elevatorBtmSwitch = new DigitalInput(RobotMap.ELEVATOR_BTM_SW);
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized elevator in " + (end - start) + " ms");
@@ -180,15 +142,15 @@ public class Hardware {
     System.out.println("Initializing arm...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    armCylinder = new Solenoid(ARM_CYLINDER);
+    armCylinder = new Solenoid(RobotMap.ARM_CYLINDER);
 
-    armMotor = new ChickenTalon(ARM_MOTOR);
+    armMotor = new ChickenTalon(RobotMap.ARM_MOTOR);
 
     armMotor.setInverted(Tuning.armInvertMotor);
     armMotor.setBrake(true);
 
-    armTopSwitch = new DigitalInput(ARM_TOP_SW);
-    armBtmSwitch = new DigitalInput(ARM_BTM_SW);
+    armTopSwitch = new DigitalInput(RobotMap.ARM_TOP_SW);
+    armBtmSwitch = new DigitalInput(RobotMap.ARM_BTM_SW);
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized arm in " + (end - start) + " ms");
@@ -198,8 +160,8 @@ public class Hardware {
     System.out.println("Initializing intake...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    intakeTop = new ChickenTalon(INTAKE_TOP);
-    intakeBtm = new ChickenTalon(INTAKE_BTM);
+    intakeTop = new ChickenTalon(RobotMap.INTAKE_TOP);
+    intakeBtm = new ChickenTalon(RobotMap.INTAKE_BTM);
 
     intakeTop.configFactoryDefault();
     intakeBtm.configFactoryDefault();
