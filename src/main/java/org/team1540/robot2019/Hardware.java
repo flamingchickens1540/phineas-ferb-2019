@@ -2,6 +2,7 @@ package org.team1540.robot2019;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
@@ -128,6 +129,12 @@ public class Hardware {
 
     elevatorA = new CANSparkMax(RobotMap.ELEVATOR_L, MotorType.kBrushless);
     elevatorB = new CANSparkMax(RobotMap.ELEVATOR_R, MotorType.kBrushless);
+
+    elevatorA.setIdleMode(IdleMode.kBrake);
+    elevatorB.setIdleMode(IdleMode.kBrake);
+
+    elevatorA.setInverted(Tuning.invertElevatorA);
+    elevatorB.setInverted(Tuning.invertElevatorB);
 
     elevatorBrake = new Solenoid(RobotMap.ELEVATOR_BRAKE);
 
