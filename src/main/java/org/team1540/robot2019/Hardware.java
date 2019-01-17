@@ -27,14 +27,16 @@ public class Hardware {
   public static final int ELEVATOR_A = 7;
   public static final int ELEVATOR_B = 8;
 
-  public static final int INTAKE_TOP = 9;
-  public static final int INTAKE_BTM = 10;
+  public static final int ARM_MOTOR = 9;
+
+  public static final int INTAKE_TOP = 10;
+  public static final int INTAKE_BTM = 11;
 
 
   // pneumatics
   public static final int ELEVATOR_BRAKE = 0;
 
-  public static final int ARM_ACTUATOR = 0;
+  public static final int ARM_CYLINDER = 0;
 
   public static final int HATCH_ACTUATOR = 0;
 
@@ -45,6 +47,9 @@ public class Hardware {
   public static final int ELEVATOR_BTM_SW = 0;
 
   public static final int INTAKE_SENSOR = 0;
+
+  public static final int ARM_TOP_SW = 0;
+  public static final int ARM_BTM_SW = 0;
 
   public static final int GROUND_PROXIMITY_SENSOR = 0;
 
@@ -74,9 +79,13 @@ public class Hardware {
   public static DigitalInput elevatorTopSwitch;
   public static DigitalInput elevatorBtmSwitch;
 
+  public static DigitalInput armTopSwitch;
+  public static DigitalInput armBtmSwitch;
+
 
   // solenoid on is arm extended/down
-  public static Solenoid armActuator;
+  public static Solenoid armCylinder;
+  public static ChickenTalon armMotor;
 
 
   // positive setpoint is outtaking
@@ -171,7 +180,15 @@ public class Hardware {
     System.out.println("Initializing arm...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    armActuator = new Solenoid(ARM_ACTUATOR);
+    armCylinder = new Solenoid(ARM_CYLINDER);
+
+    armMotor = new ChickenTalon(ARM_MOTOR);
+
+    armMotor.setInverted(Tuning.armInvertMotor);
+    armMotor.setBrake(true);
+
+    armTopSwitch = new DigitalInput(ARM_TOP_SW);
+    armBtmSwitch = new DigitalInput(ARM_BTM_SW);
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized arm in " + (end - start) + " ms");
@@ -204,6 +221,8 @@ public class Hardware {
     PhineasUtilities.processStickyFaults("Drivetrain", "right A", driveRightMotorA);
     PhineasUtilities.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
     PhineasUtilities.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
+
+    PhineasUtilities.processStickyFaults("Arm", "motor", armMotor);
 
     PhineasUtilities.processStickyFaults("Intake", "top", intakeTop);
     PhineasUtilities.processStickyFaults("Intake", "bottom", intakeBtm);

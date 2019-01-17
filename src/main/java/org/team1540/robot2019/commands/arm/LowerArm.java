@@ -1,8 +1,22 @@
 package org.team1540.robot2019.commands.arm;
 
-public class LowerArm extends MoveArm {
+import edu.wpi.first.wpilibj.command.Command;
+import org.team1540.robot2019.Robot;
 
-  public LowerArm() {
-    super(false);
+public class LowerArm extends Command {
+
+  @Override
+  protected void initialize() {
+    Robot.arm.moveDown();
+  }
+
+  @Override
+  protected void end() {
+    Robot.arm.stop();
+  }
+
+  @Override
+  protected boolean isFinished() {
+    return Robot.arm.isAtBtm();
   }
 }
