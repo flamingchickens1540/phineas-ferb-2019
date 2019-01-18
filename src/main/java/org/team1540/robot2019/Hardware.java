@@ -126,8 +126,8 @@ public class Hardware {
     System.out.println("Initializing elevator...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    elevatorA = new CANSparkMax(RobotMap.ELEVATOR_A, MotorType.kBrushless);
-    elevatorB = new CANSparkMax(RobotMap.ELEVATOR_B, MotorType.kBrushless);
+    elevatorA = new CANSparkMax(RobotMap.ELEVATOR_L, MotorType.kBrushless);
+    elevatorB = new CANSparkMax(RobotMap.ELEVATOR_R, MotorType.kBrushless);
 
     elevatorBrake = new Solenoid(RobotMap.ELEVATOR_BRAKE);
 
@@ -142,9 +142,9 @@ public class Hardware {
     System.out.println("Initializing arm...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    armCylinder = new Solenoid(RobotMap.ARM_CYLINDER);
+    armCylinder = new Solenoid(RobotMap.INTAKE_CYLINDER);
 
-    armMotor = new ChickenTalon(RobotMap.ARM_MOTOR);
+    armMotor = new ChickenTalon(RobotMap.INTAKE_WRIST);
 
     armMotor.setInverted(Tuning.armInvertMotor);
     armMotor.setBrake(true);
