@@ -48,6 +48,11 @@ dependencies {
     compile "org.team1540:rooster:master-SNAPSHOT"
 }
 
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
 jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
