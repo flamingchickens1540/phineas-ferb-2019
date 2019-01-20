@@ -44,6 +44,24 @@ public class Tuning {
   public static boolean invertElevatorA = false;
   public static boolean invertElevatorB = false;
 
+  // (2.872986590827646 in sprocket diameter * pi) / (5:1 gear ratio)
+  public static double elevatorRotationsPerIn = 1.805150714;
+  public static double elevatorMaxAccelUp = 600; // in/s^2
+
+  public static double elevatorMaxVel = 130; // in/s^2 // TODO: rough guess based on motor specs
+  public static double elevatorMaxAccelDown = 1346; // in/s^2/ / TODO: rough guess based on motor specs
+  // range, in inches, inside of which we use standard PID instead of a trapezoidal curve
+  public static double elevatorMinTrapezoidalRange = 1; // inches
+  // range, in inches, inside of which we engage the brake
+  public static double elevatorTolerance = 0.25; // inches
+  public static double elevatorHoldThrottle = 0.4; // TODO: rough guess based on motor specs
+  // volts per inch per sec
+  public static double elevatorVelCoeff = 0.092307692; // TODO: rough guess based on motor specs
+  // volts per inch per sec^2
+  public static double elevatorAccelCoeff = 0.012120702; // TODO: rough guess based on motor specs
+
+  public static double elevatorDelta = 28; // inches
+
   // arm
   public static boolean armInvertMotor = false;
 
