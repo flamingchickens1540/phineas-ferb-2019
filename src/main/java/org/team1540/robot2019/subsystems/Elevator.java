@@ -107,6 +107,10 @@ public class Elevator extends Subsystem {
     double posSetpoint;
     double velSetpoint;
 
+    Status status = Status.DISABLE;
+
+    Status lastStatus = status;
+
     ElevatorController(double elevatorRotationsPerIn) {
       positionOffset = -(elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn);
     }
@@ -121,11 +125,15 @@ public class Elevator extends Subsystem {
           positionOffset = height - (elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn);
           setpoint = height;
           currentPosition = height;
+
+          status = Status.ZERO_HIGH;
         }
         if (isAtBottom() && setpoint <= currentPosition) {
           positionOffset = -(elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn);
           setpoint = 0;
           currentPosition = 0;
+
+          status = Status.ZERO_LOW;
           // this will then cause the motors to stop and brake to be turned on
         }
 
@@ -137,6 +145,10 @@ public class Elevator extends Subsystem {
             elevatorBrake.set(true);
             elevatorA.stopMotor();
 
+            if (!(isAtTop() || isAtBottom())) {
+              status = Status.STOP;
+            }
+
             // clear (set to current values) setpoints
             posSetpoint = currentPosition;
             velSetpoint = currentVelocity;
@@ -145,6 +157,8 @@ public class Elevator extends Subsystem {
             elevatorBrake.set(false);
             if (absError < minTrapezoidalRange) {
               // we're very close to the target, just use position PID
+              status = Status.MOVE_PID;
+
               // holdThrot is in throttle percentages but this method takes volts for some reason
               elevatorA.getPIDController()
                   .setReference((setpoint + positionOffset) * rotationsPerIn, ControlType.kPosition,
@@ -155,6 +169,7 @@ public class Elevator extends Subsystem {
               velSetpoint = currentVelocity;
             } else {
               // trapezoid time
+              status = Status.MOVE_TRAPEZOIDAL;
 
               // figure out what acceleration we need at our current velocity in order to hit 0
               // velocity at the distance we want
@@ -196,8 +211,22 @@ public class Elevator extends Subsystem {
           // clear (set to current values) setpoints
           posSetpoint = currentPosition;
           velSetpoint = currentVelocity;
+
+          status = Status.DISABLE;
+        }
+
+        // status change listening
+        if (status != lastStatus) {
+          System.out.println("Elevator state changed from " + lastStatus + " to " + status);
+
+          lastStatus = status;
         }
       }
     }
+
+  }
+
+  private enum Status {
+    DISABLE, MOVE_TRAPEZOIDAL, MOVE_PID, STOP, ZERO_HIGH, ZERO_LOW
   }
 }
