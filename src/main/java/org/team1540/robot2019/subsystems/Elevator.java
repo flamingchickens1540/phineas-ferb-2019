@@ -11,7 +11,6 @@ import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.team1540.robot2019.Tuning;
 
 public class Elevator extends Subsystem {
@@ -20,7 +19,7 @@ public class Elevator extends Subsystem {
   private ElevatorController controller = new ElevatorController(elevatorRotationsPerIn);
   private Notifier controllerNotifier = new Notifier(controller);
 
-  private AtomicBoolean enableController = new AtomicBoolean();
+  private volatile boolean enableController = true;
 
   public Elevator() {
     elevatorA.setInverted(Tuning.invertElevatorA);
@@ -132,7 +131,7 @@ public class Elevator extends Subsystem {
 
         double absError = Math.abs(currentPosition - setpoint);
 
-        if (DriverStation.getInstance().isEnabled() && enableController.get()) {
+        if (DriverStation.getInstance().isEnabled() && enableController) {
           if (absError < tolerance) {
             // we're at our target, just engage the brake and sit there
             elevatorBrake.set(true);
