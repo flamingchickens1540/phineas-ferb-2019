@@ -90,17 +90,17 @@ public class Elevator extends Subsystem {
 
     private static final double GRAV_ACCEL = 386.220472; // in/s^2
 
-    double rotationsPerIn;
-    double maxAccelUp;
-    double maxVel;
-    double maxAccelDown;
-    double setpoint;
-    double tolerance;
-    double minTrapezoidalRange;
-    double holdThrot;
-    double velCoeff;
-    double accelCoeff;
-    double height;
+    volatile double rotationsPerIn;
+    volatile double maxAccelUp;
+    volatile double maxVel;
+    volatile double maxAccelDown;
+    volatile double setpoint;
+    volatile double tolerance;
+    volatile double minTrapezoidalRange;
+    volatile double holdThrot;
+    volatile double velCoeff;
+    volatile double accelCoeff;
+    volatile double height;
 
     double positionOffset;
 
