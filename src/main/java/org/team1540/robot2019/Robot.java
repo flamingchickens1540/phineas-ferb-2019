@@ -53,6 +53,8 @@ public class Robot extends TimedRobot {
     System.out.println("Disabling drive brakes in 2 seconds...");
     brakeTimer.reset();
     brakeTimer.start();
+
+    Hardware.checkStickyFaults();
   }
 
   @Override
@@ -67,6 +69,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     drivetrain.setBrake(true);
+
+    Hardware.checkStickyFaults();
   }
 
   @Override
@@ -76,6 +80,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     drivetrain.setBrake(true);
+
+    Hardware.checkStickyFaults();
   }
 
   @Override
