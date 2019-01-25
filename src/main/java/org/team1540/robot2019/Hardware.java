@@ -149,7 +149,7 @@ public class Hardware {
     System.out.println("Initializing wrist...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    wristCylinder = new Solenoid(RobotMap.INTAKE_CYLINDER);
+    wristCylinder = new Solenoid(RobotMap.WRIST_CYLINDER_1);
 
     wristMotor = new ChickenTalon(RobotMap.INTAKE_WRIST);
 
