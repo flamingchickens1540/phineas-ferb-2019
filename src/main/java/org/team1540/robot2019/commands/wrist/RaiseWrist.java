@@ -1,22 +1,22 @@
-package org.team1540.robot2019.commands.arm;
+package org.team1540.robot2019.commands.wrist;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2019.Robot;
 
-public class LowerArm extends Command {
+public class RaiseWrist extends Command {
 
   @Override
   protected void initialize() {
-    Robot.arm.moveDown();
+    Robot.wrist.moveUp();
   }
 
   @Override
   protected void end() {
-    Robot.arm.stop();
+    Robot.wrist.stop();
   }
 
   @Override
   protected boolean isFinished() {
-    return Robot.arm.isAtBtm();
+    return Robot.wrist.isAtTop();
   }
 }

@@ -62,8 +62,8 @@ public class Tuning {
 
   public static double elevatorDelta = 28; // inches
 
-  // arm
-  public static boolean armInvertMotor = false;
+  // wrist
+  public static boolean wristInvertMotor = false;
 
   // intake
   public static boolean intakeInvertTop = false;
