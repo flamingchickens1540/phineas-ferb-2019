@@ -13,7 +13,7 @@ public class Robot extends TimedRobot {
 
   public static Drivetrain drivetrain;
   public static Elevator elevator;
-  public static Arm arm;
+  public static Wrist wrist;
   public static Intake intake;
 
   @Override
@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
 
     drivetrain = new Drivetrain();
     elevator = new Elevator();
-    arm = new Arm();
+    wrist = new Wrist();
     intake = new Intake();
 
     OI.init();

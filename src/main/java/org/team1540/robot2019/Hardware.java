@@ -42,13 +42,13 @@ public class Hardware {
   public static DigitalInput elevatorTopSwitch;
   public static DigitalInput elevatorBtmSwitch;
 
-  public static DigitalInput armTopSwitch;
-  public static DigitalInput armBtmSwitch;
+  public static DigitalInput wristTopSwitch;
+  public static DigitalInput wristBtmSwitch;
 
 
-  // solenoid on is arm extended/down
-  public static Solenoid armCylinder;
-  public static ChickenTalon armMotor;
+  // solenoid on is wrist extended/down
+  public static Solenoid wristCylinder;
+  public static ChickenTalon wristMotor;
 
 
   // positive setpoint is outtaking
@@ -62,7 +62,7 @@ public class Hardware {
 
     initDrive();
     initElevator();
-    initArm();
+    initWrist();
     initIntake();
 
     double end = RobotController.getFPGATime() / 1000.0;
@@ -145,22 +145,22 @@ public class Hardware {
     System.out.println("Initialized elevator in " + (end - start) + " ms");
   }
 
-  public static void initArm() {
-    System.out.println("Initializing arm...");
+  public static void initWrist() {
+    System.out.println("Initializing wrist...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    armCylinder = new Solenoid(RobotMap.INTAKE_CYLINDER);
+    wristCylinder = new Solenoid(RobotMap.INTAKE_CYLINDER);
 
-    armMotor = new ChickenTalon(RobotMap.INTAKE_WRIST);
+    wristMotor = new ChickenTalon(RobotMap.INTAKE_WRIST);
 
-    armMotor.setInverted(Tuning.armInvertMotor);
-    armMotor.setBrake(true);
+    wristMotor.setInverted(Tuning.wristInvertMotor);
+    wristMotor.setBrake(true);
 
-    armTopSwitch = new DigitalInput(RobotMap.ARM_TOP_SW);
-    armBtmSwitch = new DigitalInput(RobotMap.ARM_BTM_SW);
+    wristTopSwitch = new DigitalInput(RobotMap.ARM_TOP_SW);
+    wristBtmSwitch = new DigitalInput(RobotMap.ARM_BTM_SW);
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized arm in " + (end - start) + " ms");
+    System.out.println("Initialized wrist in " + (end - start) + " ms");
   }
 
   public static void initIntake() {
@@ -191,7 +191,7 @@ public class Hardware {
     PhineasUtilities.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
     PhineasUtilities.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
 
-    PhineasUtilities.processStickyFaults("Arm", "motor", armMotor);
+    PhineasUtilities.processStickyFaults("Wrist", "motor", wristMotor);
 
     PhineasUtilities.processStickyFaults("Intake", "top", intakeTop);
     PhineasUtilities.processStickyFaults("Intake", "bottom", intakeBtm);
