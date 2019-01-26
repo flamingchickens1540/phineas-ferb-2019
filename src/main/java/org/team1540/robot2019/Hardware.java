@@ -40,7 +40,6 @@ public class Hardware {
   public static Solenoid elevatorBrake;
 
   public static DigitalInput elevatorLimitSensor;
-  public static DigitalInput elevatorBtmSwitch;
 
   public static DigitalInput wristTopSwitch;
   public static DigitalInput wristBtmSwitch;
