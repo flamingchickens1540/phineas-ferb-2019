@@ -7,20 +7,20 @@ public class RobotMap {
   public static final int DRIVE_LEFT_B = 2;
   public static final int DRIVE_LEFT_C = 3;
 
-  public static final int DRIVE_RIGHT_A = 4;
-  public static final int DRIVE_RIGHT_B = 5;
-  public static final int DRIVE_RIGHT_C = 6;
+  public static final int DRIVE_RIGHT_A = 11;
+  public static final int DRIVE_RIGHT_B = 12;
+  public static final int DRIVE_RIGHT_C = 13;
 
-  public static final int ELEVATOR_L = 7;
-  public static final int ELEVATOR_R = 8;
+  public static final int ELEVATOR_L = 6;
+  public static final int ELEVATOR_R = 7;
 
-  public static final int INTAKE_WRIST = 9;
+  public static final int INTAKE_WRIST = 4;
 
-  public static final int INTAKE_TOP = 10;
-  public static final int INTAKE_BTM = 11;
+  public static final int INTAKE_TOP = 5;
+  public static final int INTAKE_BTM = 8;
 
-  public static final int CLIMBER_ARM_L = 12;
-  public static final int CLIMBER_ARM_R = 13;
+  public static final int CLIMBER_ARM_L = 9;
+  public static final int CLIMBER_ARM_R = 10;
 
   // pneumatics
   public static final int ELEVATOR_BRAKE = 0;
