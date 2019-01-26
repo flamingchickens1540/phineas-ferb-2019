@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -56,6 +57,9 @@ public class Hardware {
 
   public static DigitalInput intakeSensor;
 
+
+  public static AnalogInput pressureSensor;
+
   static void initAll() {
     System.out.println("Initializing robot hardware...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
@@ -64,6 +68,7 @@ public class Hardware {
     initElevator();
     initWrist();
     initIntake();
+    initPressureSensor();
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized robot hardware in " + (end - start) + " ms");
@@ -182,6 +187,16 @@ public class Hardware {
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized intake in " + (end - start) + " ms");
+  }
+
+  public static void initPressureSensor() {
+    System.out.println("Initializing pressure sensor...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+    pressureSensor = new AnalogInput(RobotMap.PRESSURE_SENSOR);
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    System.out.println("Initialized pressure sensor in " + (end - start) + " ms");
   }
 
   public static void checkStickyFaults() {

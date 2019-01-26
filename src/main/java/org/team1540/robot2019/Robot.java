@@ -4,9 +4,8 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.robot2019.subsystems.*;
-import org.team1540.robot2019.subsystems.Elevator;
-import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class Robot extends TimedRobot {
@@ -44,6 +43,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+
+    // TODO: put this on shuffleboard properly
+    SmartDashboard.putNumber("System Pressure",
+        Hardware.pressureSensor.getVoltage() * Tuning.pressureSensorVoltageScaleFactor);
+
   }
 
   private Timer brakeTimer = new Timer();
