@@ -14,6 +14,7 @@ public class Robot extends TimedRobot {
   public static Elevator elevator;
   public static Wrist wrist;
   public static Intake intake;
+  public static HatchMech hatchMech;
 
   @Override
   public void robotInit() {

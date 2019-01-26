@@ -57,6 +57,9 @@ public class Hardware {
 
   public static DigitalInput intakeSensor;
 
+  public static Solenoid hatchSlide;
+  public static Solenoid hatchSuctionCups;
+
 
   public static AnalogInput pressureSensor;
 
@@ -187,6 +190,17 @@ public class Hardware {
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized intake in " + (end - start) + " ms");
+  }
+
+  public static void initHatchMech() {
+    System.out.println("Initializing hatch mech...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+    hatchSlide = new Solenoid(RobotMap.HATCH_SLIDE);
+    hatchSuctionCups = new Solenoid(RobotMap.HATCH_SUCTION_CUPS);
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    System.out.println("Initialized hatch mech in " + (end - start) + " ms");
   }
 
   public static void initPressureSensor() {
