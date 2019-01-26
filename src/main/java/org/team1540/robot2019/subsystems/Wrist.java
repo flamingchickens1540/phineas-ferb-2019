@@ -24,6 +24,10 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.PercentOutput, 0);
   }
 
+  public void set(double throttle) {
+    wristMotor.set(ControlMode.PercentOutput, throttle);
+  }
+
   public boolean isAtTop() {
     return wristTopSwitch.get();
   }
