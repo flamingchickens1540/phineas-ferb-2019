@@ -30,9 +30,9 @@ public class Tuning {
   public static double driveOpenLoopRamp = 0;
   public static double driveClosedLoopRamp = 0;
 
-  public static boolean invertDriveLeft = false;
+  public static boolean invertDriveLeft = true;
   public static boolean invertDriveLeftSensor = false;
-  public static boolean invertDriveRight = true;
+  public static boolean invertDriveRight = false;
   public static boolean invertDriveRightSensor = false;
 
   public static int driveCurrentLimit = 40;
@@ -41,8 +41,8 @@ public class Tuning {
   public static double elevatorUpSpeed = 1;
   public static double elevatorDownSpeed = 1;
 
-  public static boolean invertElevatorA = false;
-  public static boolean invertElevatorB = false;
+  public static boolean invertElevatorA = true;
+  public static boolean invertElevatorB = true;
 
   // (2.872986590827646 in sprocket diameter * pi) / (5:1 gear ratio)
   public static double elevatorRotationsPerIn = 1.805150714;
