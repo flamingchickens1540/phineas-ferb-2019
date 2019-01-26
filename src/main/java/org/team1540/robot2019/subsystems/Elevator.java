@@ -77,6 +77,18 @@ public class Elevator extends Subsystem {
     }
   }
 
+  public void setRaw(double throttle) {
+    elevatorA.set(throttle);
+  }
+
+  public boolean isEnableController() {
+    return enableController;
+  }
+
+  public void setEnableController(boolean enableController) {
+    this.enableController = enableController;
+  }
+
   @Override
   public void periodic() {
     updateController();
