@@ -39,7 +39,7 @@ public class Hardware {
 
   public static Solenoid elevatorBrake;
 
-  public static DigitalInput elevatorTopSwitch;
+  public static DigitalInput elevatorLimitSensor;
   public static DigitalInput elevatorBtmSwitch;
 
   public static DigitalInput wristTopSwitch;
@@ -138,8 +138,7 @@ public class Hardware {
 
     elevatorBrake = new Solenoid(RobotMap.ELEVATOR_BRAKE);
 
-    elevatorTopSwitch = new DigitalInput(RobotMap.ELEVATOR_TOP_SW);
-    elevatorBtmSwitch = new DigitalInput(RobotMap.ELEVATOR_BTM_SW);
+    elevatorLimitSensor = new DigitalInput(RobotMap.ELEVATOR_LIMIT_SENSOR);
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized elevator in " + (end - start) + " ms");
