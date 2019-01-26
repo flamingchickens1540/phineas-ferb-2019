@@ -4,8 +4,8 @@
     <bytecodeTargetLevel>
       <module name="phineas-ferb-2019.main" target="11" />
       <module name="phineas-ferb-2019.test" target="11" />
-      <module name="phineas-ferb-2019_main" target="1.8" />
-      <module name="phineas-ferb-2019_test" target="1.8" />
+      <module name="phineas-ferb-2019_main" target="11" />
+      <module name="phineas-ferb-2019_test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
