@@ -3,8 +3,7 @@ package org.team1540.robot2019.subsystems;
 import static org.team1540.robot2019.Hardware.elevatorA;
 import static org.team1540.robot2019.Hardware.elevatorB;
 import static org.team1540.robot2019.Hardware.elevatorBrake;
-import static org.team1540.robot2019.Hardware.elevatorBtmSwitch;
-import static org.team1540.robot2019.Hardware.elevatorTopSwitch;
+import static org.team1540.robot2019.Hardware.elevatorLimitSensor;
 import static org.team1540.robot2019.Tuning.elevatorRotationsPerIn;
 
 import com.revrobotics.ControlType;
@@ -48,12 +47,8 @@ public class Elevator extends Subsystem {
     elevatorA.set(0);
   }
 
-  public boolean isAtTop() {
-    return elevatorTopSwitch.get();
-  }
-
-  public boolean isAtBottom() {
-    return elevatorBtmSwitch.get();
+  public boolean isAtLimit() {
+    return elevatorLimitSensor.get();
   }
 
   public void setWantedPosition(double position) {
@@ -121,20 +116,25 @@ public class Elevator extends Subsystem {
         double currentPosition =
             (elevatorA.getEncoder().getPosition() / rotationsPerIn) + positionOffset;
         double currentVelocity = (elevatorA.getEncoder().getVelocity() / (rotationsPerIn * 60));
-        if (isAtTop() && setpoint >= currentPosition) {
-          positionOffset = height - (elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn);
-          setpoint = height;
-          currentPosition = height;
+        if (isAtLimit()) {
+          if (currentPosition > (height / 2)) {
+            // we're probably at the top
 
-          status = Status.ZERO_HIGH;
-        }
-        if (isAtBottom() && setpoint <= currentPosition) {
-          positionOffset = -(elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn);
-          setpoint = 0;
-          currentPosition = 0;
+            positionOffset = height - (elevatorA.getEncoder().getPosition() / rotationsPerIn);
+            setpoint = height;
+            currentPosition = height;
 
-          status = Status.ZERO_LOW;
-          // this will then cause the motors to stop and brake to be turned on
+            status = Status.ZERO_HIGH;
+          } else {
+            // we're probably at the bottom
+
+            positionOffset = -(elevatorA.getEncoder().getPosition() / rotationsPerIn);
+            setpoint = 0;
+            currentPosition = 0;
+
+            status = Status.ZERO_LOW;
+            // this will then cause the motors to stop and brake to be turned on
+          }
         }
 
         double absError = Math.abs(currentPosition - setpoint);
@@ -145,7 +145,7 @@ public class Elevator extends Subsystem {
             elevatorBrake.set(true);
             elevatorA.stopMotor();
 
-            if (!(isAtTop() || isAtBottom())) {
+            if (!isAtLimit()) {
               status = Status.STOP;
             }
 
