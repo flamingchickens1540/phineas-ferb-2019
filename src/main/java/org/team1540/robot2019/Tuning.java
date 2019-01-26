@@ -78,4 +78,7 @@ public class Tuning {
   public static double intakeTimeout = 5;
 
   public static double intakeEjectTime = 2;
+
+
+  public static double pressureSensorVoltageScaleFactor;
 }
