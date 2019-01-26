@@ -20,11 +20,15 @@ public class OI {
     System.out.println("Initializing operator interface...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    driver = new XboxController(0);
-    copilot = new XboxController(1);
+    initJoysticks();
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized operator interface in " + (end - start) + " ms");
+  }
+
+  public static void initJoysticks() {
+    driver = new XboxController(0);
+    copilot = new XboxController(1);
   }
 
   public static double getDriveThrottle() {
