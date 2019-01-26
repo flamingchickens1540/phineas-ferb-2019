@@ -79,6 +79,10 @@ public class Tuning {
 
   public static double intakeEjectTime = 2;
 
+  // hatch mech
+  public static double hatchGetTime = 0.3;
+  public static double hatchPlaceTime = 0.3;
+
 
   public static double pressureSensorVoltageScaleFactor;
 }
