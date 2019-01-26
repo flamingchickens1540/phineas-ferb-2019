@@ -7,6 +7,9 @@ import static org.team1540.robot2019.Hardware.elevatorLimitSensor;
 import static org.team1540.robot2019.Tuning.elevatorRotationsPerIn;
 
 import com.revrobotics.ControlType;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -19,6 +22,23 @@ public class Elevator extends Subsystem {
   private Notifier controllerNotifier = new Notifier(controller);
 
   private volatile boolean enableController = true;
+
+  private NetworkTable table = NetworkTableInstance.getDefault().getTable("elevator");
+
+  private NetworkTableEntry positionEntry = table.getEntry("pos");
+
+  private NetworkTableEntry velocityEntry = table.getEntry("vel");
+
+  private NetworkTableEntry throttleEntry = table.getEntry("throt");
+
+  private NetworkTableEntry currentAEntry = table.getEntry("currA");
+  private NetworkTableEntry currentBEntry = table.getEntry("currB");
+
+  private NetworkTableEntry targetPosEntry = table.getEntry("tgtPos");
+  private NetworkTableEntry targetVelEntry = table.getEntry("tgtVel");
+
+  private NetworkTableEntry statusEntry = table.getEntry("status");
+
 
   public Elevator() {
     elevatorA.setInverted(Tuning.invertElevatorA);
@@ -60,6 +80,21 @@ public class Elevator extends Subsystem {
   @Override
   public void periodic() {
     updateController();
+
+    positionEntry.forceSetNumber((elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn)
+        + controller.positionOffset);
+    velocityEntry
+        .forceSetNumber((elevatorA.getEncoder().getVelocity() / (elevatorRotationsPerIn * 60)));
+
+    throttleEntry.forceSetNumber(elevatorA.getAppliedOutput());
+
+    currentAEntry.forceSetNumber(elevatorA.getOutputCurrent());
+    currentBEntry.forceSetNumber(elevatorB.getOutputCurrent());
+
+    targetPosEntry.forceSetNumber(controller.posSetpoint);
+    targetVelEntry.forceSetNumber(controller.velSetpoint);
+
+    statusEntry.forceSetString(controller.status.toString());
   }
 
   private void updateController() {
@@ -97,12 +132,12 @@ public class Elevator extends Subsystem {
     volatile double accelCoeff;
     volatile double height;
 
-    double positionOffset;
+    volatile double positionOffset;
 
-    double posSetpoint;
-    double velSetpoint;
+    volatile double posSetpoint;
+    volatile double velSetpoint;
 
-    Status status = Status.DISABLE;
+    volatile Status status = Status.DISABLE;
 
     Status lastStatus = status;
 
