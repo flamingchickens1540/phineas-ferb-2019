@@ -54,7 +54,8 @@ public class Hardware {
   // positive setpoint is outtaking
   public static ChickenTalon intakeTop;
   public static ChickenTalon intakeBtm;
-  // TODO add intake sensor
+
+  public static DigitalInput intakeSensor;
 
   static void initAll() {
     System.out.println("Initializing robot hardware...");
@@ -177,6 +178,8 @@ public class Hardware {
 
     intakeTop.setBrake(true);
     intakeBtm.setBrake(true);
+
+    intakeSensor = new DigitalInput(RobotMap.INTAKE_SENSOR);
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized intake in " + (end - start) + " ms");

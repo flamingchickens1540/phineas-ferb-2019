@@ -1,6 +1,7 @@
 package org.team1540.robot2019.subsystems;
 
 import static org.team1540.robot2019.Hardware.intakeBtm;
+import static org.team1540.robot2019.Hardware.intakeSensor;
 import static org.team1540.robot2019.Hardware.intakeTop;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -30,7 +31,6 @@ public class Intake extends Subsystem {
   }
 
   public boolean hasBall() {
-    // TODO placeholder
-    return false;
+    return intakeSensor.get();
   }
 }
