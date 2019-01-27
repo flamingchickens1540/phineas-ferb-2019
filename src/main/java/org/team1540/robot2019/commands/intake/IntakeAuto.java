@@ -4,8 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class
-IntakeAuto extends Command {
+public class IntakeAuto extends Command {
 
   public IntakeAuto() {
     super(Tuning.intakeTimeout);

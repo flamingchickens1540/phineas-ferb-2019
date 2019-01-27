@@ -5,9 +5,10 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import org.team1540.robot2019.commands.IntakeSequence;
+import org.team1540.robot2019.commands.gamepieceGroups.EjectThenDown;
+import org.team1540.robot2019.commands.gamepieceGroups.IntakeSequence;
+import org.team1540.robot2019.commands.gamepieceGroups.MoveElevatorToPosition;
 import org.team1540.rooster.Utilities;
-import sun.nio.ch.Util;
 
 public class OI {
 
@@ -40,7 +41,7 @@ public class OI {
   private static JoystickButton elevatorDownButton = new JoystickButton(copilot, 0);
 
   private static JoystickButton autoIntakeButton = new JoystickButton(copilot, 0);
-  private static JoystickButton ejectCargoButton = new JoystickButton(copilot, 0);
+  private static JoystickButton ejectButton = new JoystickButton(copilot, 0);
 
   private static JoystickButton getHatchButton = new JoystickButton(copilot, 0);
   private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, 0);
@@ -72,7 +73,12 @@ public class OI {
   }
 
   public static void initButtons() {
+    elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+    elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
+    elevatorDownButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorDownPosition));
+
     autoIntakeButton.whenPressed(new IntakeSequence());
+    ejectButton.whenPressed(new EjectThenDown());
   }
 
   public static double getDriveThrottle() {
