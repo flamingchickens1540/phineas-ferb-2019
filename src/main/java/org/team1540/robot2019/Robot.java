@@ -15,6 +15,7 @@ public class Robot extends TimedRobot {
   public static Wrist wrist;
   public static Intake intake;
   public static HatchMech hatchMech;
+  public static Climber climber;
 
   @Override
   public void robotInit() {
@@ -32,6 +33,8 @@ public class Robot extends TimedRobot {
     elevator = new Elevator();
     wrist = new Wrist();
     intake = new Intake();
+    hatchMech = new HatchMech();
+    climber = new Climber();
 
     OI.init();
 
