@@ -47,7 +47,9 @@ public class OI {
   private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, 0);
   private static JoystickButton placeHatchButton = new JoystickButton(copilot, 0);
 
-  //for climber testing
+  // climber stuff
+
+  // for climber testing
   public static double getClimberArmJoystick() {
     return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), 0.1);
   }
@@ -79,6 +81,9 @@ public class OI {
 
     autoIntakeButton.whenPressed(new IntakeSequence());
     ejectButton.whenPressed(new EjectThenDown());
+
+    // hatch stuff
+    // climber stuff
   }
 
   public static double getDriveThrottle() {
