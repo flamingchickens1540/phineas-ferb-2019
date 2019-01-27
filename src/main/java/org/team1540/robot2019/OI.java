@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import org.team1540.robot2019.commands.IntakeSequence;
 import org.team1540.rooster.Utilities;
 import sun.nio.ch.Util;
 
@@ -34,16 +35,16 @@ public class OI {
   private static XboxController copilot;
 
   // copilot buttons
-  private static JoystickButton elevatorMidRocketButton; // initialize them here too
-  private static JoystickButton elevatorCargoShipButton;
-  private static JoystickButton elevatorDownButton;
+  private static JoystickButton elevatorMidRocketButton = new JoystickButton(copilot, 0);
+  private static JoystickButton elevatorCargoShipButton = new JoystickButton(copilot, 0);
+  private static JoystickButton elevatorDownButton = new JoystickButton(copilot, 0);
 
-  private static JoystickButton autoIntakeButton;
-  private static JoystickButton ejectCargoButton;
+  private static JoystickButton autoIntakeButton = new JoystickButton(copilot, 0);
+  private static JoystickButton ejectCargoButton = new JoystickButton(copilot, 0);
 
-  private static JoystickButton getHatchButton;
-  private static JoystickButton getHatchFloorButton;
-  private static JoystickButton placeHatchButton;
+  private static JoystickButton getHatchButton = new JoystickButton(copilot, 0);
+  private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, 0);
+  private static JoystickButton placeHatchButton = new JoystickButton(copilot, 0);
 
   //for climber testing
   public static double getClimberArmJoystick() {
@@ -71,7 +72,7 @@ public class OI {
   }
 
   public static void initButtons() {
-
+    autoIntakeButton.whenPressed(new IntakeSequence());
   }
 
   public static double getDriveThrottle() {
