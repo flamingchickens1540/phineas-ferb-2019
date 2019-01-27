@@ -3,13 +3,13 @@ package org.team1540.robot2019;
 public class RobotMap {
 
   // motors
-  public static final int DRIVE_LEFT_A = 1;
-  public static final int DRIVE_LEFT_B = 2;
-  public static final int DRIVE_LEFT_C = 3;
+  public static final int DRIVE_LEFT_A = 11;
+  public static final int DRIVE_LEFT_B = 12;
+  public static final int DRIVE_LEFT_C = 13;
 
-  public static final int DRIVE_RIGHT_A = 11;
-  public static final int DRIVE_RIGHT_B = 12;
-  public static final int DRIVE_RIGHT_C = 13;
+  public static final int DRIVE_RIGHT_A = 1;
+  public static final int DRIVE_RIGHT_B = 2;
+  public static final int DRIVE_RIGHT_C = 3;
 
   public static final int ELEVATOR_L = 6;
   public static final int ELEVATOR_R = 7;
