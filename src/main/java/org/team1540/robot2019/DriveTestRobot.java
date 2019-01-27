@@ -21,10 +21,6 @@ public class DriveTestRobot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {
-  }
-
-  @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
   }
