@@ -14,7 +14,6 @@ public class ElevatorTuningRobot extends TimedRobot {
   @Override
   public void robotInit() {
     Hardware.initElevator();
-    Hardware.initWrist();
 
     elevator = new Elevator();
 
