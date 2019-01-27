@@ -42,7 +42,7 @@ public class Tuning {
   public static double elevatorDownSpeed = 1;
 
   public static boolean invertElevatorA = true;
-  public static boolean invertElevatorB = true;
+  public static boolean invertElevatorB = false;
 
   public static double elevatorUpPosition = 0; // TODO: add these
   public static double elevatorCargoShipPosition = 0;
