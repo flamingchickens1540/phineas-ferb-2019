@@ -44,6 +44,10 @@ public class Tuning {
   public static boolean invertElevatorA = true;
   public static boolean invertElevatorB = true;
 
+  public static double elevatorUpPosition = 0; // TODO: add these
+  public static double elevatorCargoShipPosition = 0;
+  public static double elevatorDownPosition = 0;
+
   // (2.872986590827646 in sprocket diameter * pi) / (5:1 gear ratio)
   public static double elevatorRotationsPerIn = 1.805150714;
   public static double elevatorMaxAccelUp = 600; // in/s^2
