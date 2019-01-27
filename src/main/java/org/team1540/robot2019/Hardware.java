@@ -60,6 +60,12 @@ public class Hardware {
   public static Solenoid hatchSlide;
   public static Solenoid hatchSuctionCups;
 
+  public static ChickenTalon climberArmLeft;
+  public static ChickenTalon climberArmRight;
+
+  public static Solenoid climberCylinder1;
+  public static Solenoid climberCylinder2;
+
 
   public static AnalogInput pressureSensor;
 
@@ -207,6 +213,20 @@ public class Hardware {
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized hatch mech in " + (end - start) + " ms");
+  }
+
+  public static void initClimber() {
+    System.out.println("Initializing climber...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+    climberArmLeft = new ChickenTalon(RobotMap.CLIMBER_ARM_L);
+    climberArmRight = new ChickenTalon(RobotMap.CLIMBER_ARM_R);
+
+    climberCylinder1 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_1);
+    climberCylinder2 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_2);
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    System.out.println("Initialized climber in " + (end - start) + " ms");
   }
 
   public static void initPressureSensor() {
