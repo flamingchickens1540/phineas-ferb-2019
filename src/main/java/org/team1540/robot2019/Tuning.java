@@ -80,8 +80,8 @@ public class Tuning {
   public static double intakeEjectTime = 2;
 
   // hatch mech
-  public static double hatchGetTime = 0.3;
-  public static double hatchPlaceTime = 0.3;
+  public static double hatchGetTime = 0.3; // DELETE IF NOT USING COMMAND
+  public static double hatchPlaceTime = 0.3; // DELETE IF NOT USING COMMAND
 
 
   public static double pressureSensorVoltageScaleFactor;
