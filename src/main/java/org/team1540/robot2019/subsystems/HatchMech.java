@@ -7,6 +7,16 @@ import static org.team1540.robot2019.Hardware.hatchSuctionCups;
 
 public class HatchMech extends Subsystem {
 
+    public void getHatch() {
+        slideOut();
+        attatch();
+    }
+
+    public void placeHatch() {
+        release();
+        slideIn();
+    }
+
     public void slideOut() {
         hatchSlide.set(true);
     }
