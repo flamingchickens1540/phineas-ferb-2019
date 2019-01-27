@@ -26,7 +26,6 @@ public class RobotMap {
   public static final int ELEVATOR_BRAKE = 0;
 
   public static final int WRIST_CYLINDER_1 = 0;
-  public static final int WRIST_CYLINDER_2 = 0;
 
   public static final int HATCH_SLIDE = 0;
   public static final int HATCH_SUCTION_CUPS = 0;
