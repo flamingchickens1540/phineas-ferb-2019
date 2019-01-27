@@ -89,6 +89,12 @@ public class Hardware {
     driveRightMotorB = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
     driveRightMotorC = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
 
+    driveMotorAll = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC,
+        driveRightMotorA, driveRightMotorB, driveRightMotorC};
+    driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
+    driveLeftMotors = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC};
+    driveRightMotors = new ChickenTalon[]{driveRightMotorA, driveRightMotorB, driveRightMotorC};
+
     for (ChickenTalon talon : driveMotorAll) {
       talon.configFactoryDefault();
       talon.setBrake(true);
