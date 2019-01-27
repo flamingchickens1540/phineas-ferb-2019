@@ -75,6 +75,8 @@ public class Hardware {
     initElevator();
     initWrist();
     initIntake();
+    initHatchMech();
+    initClimber();
     initPressureSensor();
 
     double end = RobotController.getFPGATime() / 1000.0;
