@@ -38,8 +38,6 @@ public class Hardware {
   public static CANSparkMax elevatorA;
   public static CANSparkMax elevatorB;
 
-  public static Solenoid elevatorBrake;
-
   public static DigitalInput elevatorLimitSensor;
 
   public static DigitalInput wristTopSwitch;
@@ -155,8 +153,6 @@ public class Hardware {
 
     elevatorA.setInverted(Tuning.invertElevatorA);
     elevatorB.setInverted(Tuning.invertElevatorB);
-
-    elevatorBrake = new Solenoid(RobotMap.ELEVATOR_BRAKE);
 
     elevatorLimitSensor = new DigitalInput(RobotMap.ELEVATOR_LIMIT_SENSOR);
 

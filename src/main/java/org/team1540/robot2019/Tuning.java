@@ -57,7 +57,6 @@ public class Tuning {
   // range, in inches, inside of which we use standard PID instead of a trapezoidal curve
   public static double elevatorMinTrapezoidalRange = 1; // inches
   // range, in inches, inside of which we engage the brake
-  public static double elevatorTolerance = 0.25; // inches
   public static double elevatorHoldThrottle = 0.4; // TODO: rough guess based on motor specs
   // volts per inch per sec
   public static double elevatorVelCoeff = 0.092307692; // TODO: rough guess based on motor specs

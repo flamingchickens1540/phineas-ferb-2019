@@ -37,8 +37,8 @@ public class RobotMap {
   public static final int ELEVATOR_LIMIT_SENSOR = 0;
   public static final int ELEVATOR_BTM_SW = 0;
 
-  public static final int ARM_TOP_SW = 0;
-  public static final int ARM_BTM_SW = 0;
+  public static final int ARM_TOP_SW = 1;
+  public static final int ARM_BTM_SW = 2;
 
   public static final int INTAKE_SENSOR = 0;
 
