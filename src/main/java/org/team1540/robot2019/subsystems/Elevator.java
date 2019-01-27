@@ -52,21 +52,6 @@ public class Elevator extends Subsystem {
 
   }
 
-  public void startMovingUp() {
-    elevatorBrake.set(false);
-    elevatorA.set(Tuning.elevatorUpSpeed);
-  }
-
-  public void startMovingDown() {
-    elevatorBrake.set(false);
-    elevatorA.set(-Tuning.elevatorDownSpeed);
-  }
-
-  public void stop() {
-    elevatorBrake.set(true);
-    elevatorA.set(0);
-  }
-
   public boolean isAtLimit() {
     return elevatorLimitSensor.get();
   }
