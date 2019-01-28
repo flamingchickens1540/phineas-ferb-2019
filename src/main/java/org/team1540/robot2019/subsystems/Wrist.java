@@ -38,6 +38,10 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.PercentOutput, throttle);
   }
 
+  public void setCylinder(boolean value) {
+    wristCylinder.set(value);
+  }
+
   public boolean isAtTop() {
     return wristTopSwitch.get();
   }
