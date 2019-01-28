@@ -18,14 +18,13 @@ public class Climber extends Subsystem {
         climberCylinder2.set(true);
     }
 
-    public void joystickArms(double value) {
+    public void setRawArms(double value) {
         climberArmLeft.set(ControlMode.PercentOutput, value);
         climberArmRight.set(ControlMode.PercentOutput, value);
     }
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new JoystickClimberArms());
     }
 
 }
