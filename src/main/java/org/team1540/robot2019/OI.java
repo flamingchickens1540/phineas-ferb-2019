@@ -23,7 +23,7 @@ public class OI {
   public static final int BACK = 7;
   public static final int START = 8;
 
-  // Joysticks
+  // Axes
   public static final int LEFT_X = 0;
   public static final int LEFT_Y = 1;
   public static final int LEFT_TRIG = 2;
@@ -31,7 +31,7 @@ public class OI {
   public static final int RIGHT_X = 4;
   public static final int RIGHT_Y = 5;
 
-
+  // Joysticks
   private static XboxController driver;
   private static XboxController copilot;
 
@@ -51,7 +51,7 @@ public class OI {
 
   // for climber testing
   public static double getClimberArmJoystick() {
-    return Utilities.processDeadzone(copilot.getRawAxis(RIGHT_Y), 0.1);
+    return Utilities.processDeadzone(copilot.getY(Hand.kRight), 0.1);
   }
 
   /**
