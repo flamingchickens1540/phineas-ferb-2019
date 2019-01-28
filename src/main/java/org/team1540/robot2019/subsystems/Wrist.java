@@ -6,9 +6,19 @@ import static org.team1540.robot2019.Hardware.wristMotor;
 import static org.team1540.robot2019.Hardware.wristTopSwitch;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Wrist extends Subsystem {
+
+  private NetworkTable table = NetworkTableInstance.getDefault().getTable("wrist");
+
+  private NetworkTableEntry isAtTopEntry = table.getEntry("atTop");
+  private NetworkTableEntry isAtBtmEntry = table.getEntry("atBtm");
+  private NetworkTableEntry cylinderEntry = table.getEntry("cylinder");
+  private NetworkTableEntry motorEntry = table.getEntry("motorThrot");
 
   public void moveDown() {
     wristCylinder.set(true);
@@ -39,5 +49,13 @@ public class Wrist extends Subsystem {
   @Override
   protected void initDefaultCommand() {
 
+  }
+
+  @Override
+  public void periodic() {
+    isAtTopEntry.forceSetBoolean(isAtTop());
+    isAtBtmEntry.forceSetBoolean(isAtBtm());
+    cylinderEntry.forceSetBoolean(wristCylinder.get());
+    motorEntry.forceSetNumber(wristMotor.getMotorOutputPercent());
   }
 }
