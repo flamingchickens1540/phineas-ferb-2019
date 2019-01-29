@@ -58,7 +58,7 @@ public class ElevatorCharacterizationRobot extends TimedRobot {
         elevator.setRaw(setpoint);
 
         if (elevator.getVelocity() != 0) {
-          regression.addData(elevator.getVelocity(), elevator.getThrottle());
+          regression.addData(elevator.getVelocity(), elevator.getVoltage());
         }
       }
     } else {
