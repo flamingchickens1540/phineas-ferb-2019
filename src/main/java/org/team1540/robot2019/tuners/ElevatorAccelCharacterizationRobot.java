@@ -1,7 +1,9 @@
 package org.team1540.robot2019.tuners;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -11,18 +13,32 @@ import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.subsystems.Elevator;
+import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class ElevatorAccelCharacterizationRobot extends TimedRobot {
 
   private static final int ACCEL_MEASUREMENT_WINDOW = 6;
   private static final int SETPOINT = 6;
+  private Notifier notifier;
 
   @Override
   public void robotInit() {
+    PreferenceManager.getInstance().add(new Tuning());
+    Scheduler.getInstance().run(); // process preferences
     Hardware.initElevator();
+    elevator = new Elevator();
+
+    notifier = new Notifier(this::run);
+
+    notifier.startPeriodic(0.01);
   }
 
-  private static Elevator elevator = new Elevator();
+  @Override
+  public void robotPeriodic() {
+    Scheduler.getInstance().run(); // process preferences
+  }
+
+  private static Elevator elevator;
 
   private Joystick joystick = new Joystick(0);
 
