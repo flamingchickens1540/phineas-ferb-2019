@@ -2,14 +2,22 @@ package org.team1540.robot2019.subsystems;
 
 import static org.team1540.robot2019.Hardware.wristBtmSwitch;
 import static org.team1540.robot2019.Hardware.wristCylinder;
+import static org.team1540.robot2019.Hardware.wristMidSwitch;
 import static org.team1540.robot2019.Hardware.wristMotor;
-import static org.team1540.robot2019.Hardware.wristTopSwitch;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.squirrelframework.foundation.fsm.StateMachineBuilderFactory;
+import org.squirrelframework.foundation.fsm.StateMachineLogger;
+import org.squirrelframework.foundation.fsm.UntypedStateMachine;
+import org.squirrelframework.foundation.fsm.UntypedStateMachineBuilder;
+import org.squirrelframework.foundation.fsm.annotation.StateMachineParameters;
+import org.squirrelframework.foundation.fsm.impl.AbstractUntypedStateMachine;
+import org.team1540.robot2019.Tuning;
 
 public class Wrist extends Subsystem {
 
@@ -20,18 +28,75 @@ public class Wrist extends Subsystem {
   private NetworkTableEntry cylinderEntry = table.getEntry("cylinder");
   private NetworkTableEntry motorEntry = table.getEntry("motorThrot");
 
+  private final Object wristStateMachineLock = new Object();
+
+  public UntypedStateMachine stateMachine;
+
+  public Wrist() {
+    UntypedStateMachineBuilder builder = StateMachineBuilderFactory.create(WristStateMachine.class);
+
+    builder.onEntry(WristState.OFF_UP).callMethod("stop");
+    builder.onEntry(WristState.OFF_DOWN).callMethod("stop");
+    builder.onEntry(WristState.DOWN_TRAVEL_POWER).callMethod("downTravelPwr");
+    builder.onEntry(WristState.DOWN_TRAVEL_BRAKE).callMethod("downTravelBrake");
+    builder.onEntry(WristState.UP_TRAVEL).callMethod("upTravel");
+
+    builder.externalTransition().from(WristState.OFF_UP).to(WristState.DOWN_TRAVEL_POWER)
+        .on(WristEvent.DOWN_CMD);
+    builder.externalTransition().from(WristState.OFF_DOWN).to(WristState.UP_TRAVEL)
+        .on(WristEvent.UP_CMD);
+
+    builder.externalTransition().from(WristState.DOWN_TRAVEL_POWER).to(WristState.DOWN_TRAVEL_BRAKE)
+        .on(WristEvent.MID_SENSOR);
+    builder.externalTransition().from(WristState.UP_TRAVEL).to(WristState.OFF_UP)
+        .on(WristEvent.MID_SENSOR);
+
+    builder.externalTransition().from(WristState.DOWN_TRAVEL_BRAKE).to(WristState.OFF_DOWN)
+        .on(WristEvent.BTM_SENSOR);
+
+    builder.externalTransition().from(WristState.OFF_UP).to(WristState.OFF_DOWN)
+        .on(WristEvent.BTM_SENSOR).callMethod("stop");
+    builder.externalTransition().from(WristState.OFF_DOWN).to(WristState.OFF_UP)
+        .on(WristEvent.MID_SENSOR).callMethod("stop");
+
+    stateMachine = builder.newStateMachine(WristState.OFF_UP);
+
+    StateMachineLogger logger = new StateMachineLogger(stateMachine);
+    logger.startLogging();
+
+    wristMidSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
+      @Override
+      public void interruptFired(int i, Object o) {
+        synchronized (wristStateMachineLock) {
+          stateMachine.fire(WristEvent.MID_SENSOR);
+        }
+      }
+    });
+
+    wristBtmSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
+      @Override
+      public void interruptFired(int i, Object o) {
+        synchronized (wristStateMachineLock) {
+          stateMachine.fire(WristEvent.BTM_SENSOR);
+        }
+      }
+    });
+  }
+
   public void moveDown() {
-    wristCylinder.set(true);
-    wristMotor.set(ControlMode.PercentOutput, 1);
+    synchronized (wristStateMachineLock) {
+      stateMachine.fire(WristEvent.DOWN_CMD);
+    }
   }
 
   public void moveUp() {
-    wristCylinder.set(false);
-    wristMotor.set(ControlMode.PercentOutput, -1);
+    synchronized (wristStateMachineLock) {
+      stateMachine.fire(WristEvent.UP_CMD);
+    }
   }
 
-  public void stop() {
-    wristMotor.set(ControlMode.PercentOutput, 0);
+  public WristState getState() {
+    return (WristState) stateMachine.getCurrentState();
   }
 
   public void set(double throttle) {
@@ -43,7 +108,7 @@ public class Wrist extends Subsystem {
   }
 
   public boolean isAtTop() {
-    return wristTopSwitch.get();
+    return wristMidSwitch.get();
   }
 
   public boolean isAtBtm() {
@@ -61,5 +126,39 @@ public class Wrist extends Subsystem {
     isAtBtmEntry.forceSetBoolean(isAtBtm());
     cylinderEntry.forceSetBoolean(wristCylinder.get());
     motorEntry.forceSetNumber(wristMotor.getMotorOutputPercent());
+  }
+
+  public enum WristEvent {UP_CMD, DOWN_CMD, BTM_SENSOR, MID_SENSOR, RESET}
+
+  public enum WristState {OFF_UP, OFF_DOWN, DOWN_TRAVEL_POWER, DOWN_TRAVEL_BRAKE, UP_TRAVEL}
+
+  @StateMachineParameters(stateType = WristState.class, eventType = WristEvent.class, contextType = Integer.class)
+  private static class WristStateMachine extends AbstractUntypedStateMachine {
+
+    protected void stop(WristState from, WristState to, WristEvent event, Integer context) {
+      if (wristMotor != null) {
+        wristMotor.set(ControlMode.PercentOutput, 0);
+      }
+    }
+
+    protected void downTravelPwr(WristState from, WristState to, WristEvent event,
+        Integer context) {
+      if (wristMotor != null) {
+        wristMotor.set(ControlMode.PercentOutput, -Tuning.wristDownTravelPwrThrot);
+      }
+    }
+
+    protected void downTravelBrake(WristState from, WristState to, WristEvent event,
+        Integer context) {
+      if (wristMotor != null) {
+        wristMotor.set(ControlMode.PercentOutput, Tuning.wristDownTravelBrakeThrot);
+      }
+    }
+
+    protected void upTravel(WristState from, WristState to, WristEvent event, Integer context) {
+      if (wristMotor != null) {
+        wristMotor.set(ControlMode.PercentOutput, Tuning.wristUpTravelThrot);
+      }
+    }
   }
 }

@@ -40,7 +40,7 @@ public class Hardware {
 
   public static DigitalInput elevatorLimitSensor;
 
-  public static DigitalInput wristTopSwitch;
+  public static DigitalInput wristMidSwitch;
   public static DigitalInput wristBtmSwitch;
 
 
@@ -173,7 +173,7 @@ public class Hardware {
     wristMotor.setInverted(Tuning.wristInvertMotor);
     wristMotor.setBrake(true);
 
-    wristTopSwitch = new DigitalInput(RobotMap.ARM_TOP_SW);
+    wristMidSwitch = new DigitalInput(RobotMap.ARM_TOP_SW);
     wristBtmSwitch = new DigitalInput(RobotMap.ARM_BTM_SW);
 
     double end = RobotController.getFPGATime() / 1000.0;
