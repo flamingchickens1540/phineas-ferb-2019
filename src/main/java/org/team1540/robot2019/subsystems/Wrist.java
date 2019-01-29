@@ -23,9 +23,9 @@ public class Wrist extends Subsystem {
 
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("wrist");
 
-  private NetworkTableEntry isAtTopEntry = table.getEntry("atTop");
+  private NetworkTableEntry isAtMidEntry = table.getEntry("atMid");
   private NetworkTableEntry isAtBtmEntry = table.getEntry("atBtm");
-  private NetworkTableEntry cylinderEntry = table.getEntry("cylinder");
+  private NetworkTableEntry currentStateEntry = table.getEntry("state");
   private NetworkTableEntry motorEntry = table.getEntry("motorThrot");
 
   private final Object wristStateMachineLock = new Object();
@@ -107,7 +107,7 @@ public class Wrist extends Subsystem {
     wristCylinder.set(value);
   }
 
-  public boolean isAtTop() {
+  public boolean isAtMid() {
     return wristMidSwitch.get();
   }
 
@@ -122,10 +122,10 @@ public class Wrist extends Subsystem {
 
   @Override
   public void periodic() {
-    isAtTopEntry.forceSetBoolean(isAtTop());
+    isAtMidEntry.forceSetBoolean(isAtMid());
     isAtBtmEntry.forceSetBoolean(isAtBtm());
-    cylinderEntry.forceSetBoolean(wristCylinder.get());
     motorEntry.forceSetNumber(wristMotor.getMotorOutputPercent());
+    currentStateEntry.forceSetString(stateMachine.getCurrentState().toString());
   }
 
   public enum WristEvent {UP_CMD, DOWN_CMD, BTM_SENSOR, MID_SENSOR, RESET}
