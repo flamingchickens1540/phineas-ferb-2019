@@ -22,6 +22,16 @@ public class MoveElevatorToPosition extends Command {
   }
 
   @Override
+  protected void end() {
+    logger.debug("Elevator movement to " + position + " complete");
+  }
+
+  @Override
+  protected void interrupted() {
+    logger.debug("Elevator movement to " + position + " interrupted");
+  }
+
+  @Override
   protected boolean isFinished() {
     return Math.abs(Robot.elevator.getPosition() - position) < Tuning.elevatorTolerance;
   }
