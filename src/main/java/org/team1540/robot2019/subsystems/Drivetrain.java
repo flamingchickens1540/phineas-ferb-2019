@@ -26,7 +26,6 @@ import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
-import org.team1540.rooster.functional.Processor;
 import org.team1540.rooster.util.SimpleLoopCommand;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
@@ -58,19 +57,7 @@ public class Drivetrain extends Subsystem {
     setDefaultCommand(new SimpleLoopCommand("Drive",
         new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
             OI::getDriveHardTurn)
-            .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> {
-
-              double leftThrot = tankDriveData.left.additionalFeedForward.getAsDouble();
-              double leftRamp = calcRamp(leftThrot, leftRampAccum);
-
-              double rightThrot = tankDriveData.right.additionalFeedForward.getAsDouble();
-              double rightRamp = calcRamp(rightThrot, rightRampAccum);
-
-              leftRampAccum += leftRamp;
-              rightRampAccum += rightRamp;
-              return tankDriveData.withAdditionalFeedForwards(leftRampAccum, rightRampAccum);
-            })
-            .then(getPipelineOutput()), this));
+            .then(getPipelineOutput(false)), this));
   }
 
   private static double calcRamp(double throttle, double rampAccum) {
