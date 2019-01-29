@@ -11,6 +11,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.squirrelframework.foundation.fsm.StateMachineBuilderFactory;
 import org.squirrelframework.foundation.fsm.StateMachineLogger;
 import org.squirrelframework.foundation.fsm.UntypedStateMachine;
@@ -60,6 +62,10 @@ public class Wrist extends Subsystem {
         .on(WristEvent.MID_SENSOR).callMethod("stop");
 
     stateMachine = builder.newStateMachine(WristState.OFF_UP);
+
+    // configure state machine logger
+    Logger.getLogger(StateMachineLogger.class)
+        .setLevel(Level.INFO); // this can be changed as needed
 
     StateMachineLogger logger = new StateMachineLogger(stateMachine);
     logger.startLogging();
