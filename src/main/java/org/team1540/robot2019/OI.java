@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.groups.EjectThenDown;
 import org.team1540.robot2019.commands.groups.IntakeSequence;
-import org.team1540.robot2019.commands.groups.MoveElevatorToPosition;
+import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.rooster.Utilities;
 
 public class OI {
