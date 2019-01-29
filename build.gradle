@@ -46,6 +46,9 @@ dependencies {
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
     compile "org.team1540:rooster:master-SNAPSHOT"
+
+    // Squirrel state machines
+    compile "org.squirrelframework:squirrel-foundation:0.3.8"
 }
 
 compileJava {
