@@ -56,6 +56,7 @@ public class Tuning {
   public static double elevatorMaxAccelDown = 1346; // in/s^2/ / TODO: rough guess based on motor specs
   // range, in inches, inside of which we use standard PID instead of a trapezoidal curve
   public static double elevatorMinTrapezoidalRange = 1; // inches
+  public static double elevatorTolerance = 0.5; // inches
 
   // volts per inch per sec
   public static double elevatorKV;

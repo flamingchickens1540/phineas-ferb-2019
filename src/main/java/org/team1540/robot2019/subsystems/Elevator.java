@@ -92,8 +92,7 @@ public class Elevator extends Subsystem {
   public void periodic() {
     updateController();
 
-    positionEntry.forceSetNumber((elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn)
-        + controller.positionOffset);
+    positionEntry.forceSetNumber(getPosition());
     velocityEntry.forceSetNumber(getVelocity());
 
     throttleEntry.forceSetNumber(elevatorA.getAppliedOutput());
@@ -105,6 +104,11 @@ public class Elevator extends Subsystem {
     targetVelEntry.forceSetNumber(controller.velSetpoint);
 
     statusEntry.forceSetString(controller.status.toString());
+  }
+
+  public double getPosition() {
+    return (elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn)
+        + controller.positionOffset;
   }
 
   private void updateController() {
