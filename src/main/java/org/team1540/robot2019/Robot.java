@@ -5,10 +5,19 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team1540.robot2019.subsystems.*;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.team1540.robot2019.subsystems.Climber;
+import org.team1540.robot2019.subsystems.Drivetrain;
+import org.team1540.robot2019.subsystems.Elevator;
+import org.team1540.robot2019.subsystems.HatchMech;
+import org.team1540.robot2019.subsystems.Intake;
+import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class Robot extends TimedRobot {
+
+  private static final Logger logger = Logger.getLogger(Robot.class);
 
   public static Drivetrain drivetrain;
   public static Elevator elevator;
@@ -19,7 +28,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    System.out.println("Initializing...");
+    // logging configuration
+    Logger.getRootLogger().setLevel(Level.ALL);
+
+    logger.info("Initializing...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     PreferenceManager.getInstance().add(new Tuning());
@@ -41,7 +53,7 @@ public class Robot extends TimedRobot {
     // TODO: shuffleboard
 
     double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
-    System.out.println("Robot ready. Initialization took " + (end - start) + " ms");
+    logger.info("Robot ready. Initialization took " + (end - start) + " ms");
   }
 
   @Override
@@ -58,7 +70,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    System.out.println("Disabling drive brakes in 2 seconds...");
+    logger.debug("Disabling drive brakes in 2 seconds...");
     brakeTimer.reset();
     brakeTimer.start();
 
@@ -70,7 +82,7 @@ public class Robot extends TimedRobot {
     if (brakeTimer.hasPeriodPassed(2)) {
       brakeTimer.stop();
       drivetrain.setBrake(false);
-      System.out.println("Drive brakes disabled");
+      logger.debug("Drive brakes disabled");
     }
   }
 
