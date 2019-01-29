@@ -70,7 +70,7 @@ public class Tuning {
 
   // intake
   public static boolean intakeInvertTop = false;
-  public static boolean intakeInvertBtm = false;
+  public static boolean intakeInvertBtm = true;
 
   public static double intakeIntakeSpeedTop = 1;
   public static double intakeIntakeSpeedBtm = 1;
