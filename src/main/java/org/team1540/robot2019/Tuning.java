@@ -2,7 +2,7 @@ package org.team1540.robot2019;
 
 import org.team1540.rooster.preferencemanager.TuningClass;
 
-@TuningClass("phineas_")
+@TuningClass("ph_")
 public class Tuning {
 
   // drive
