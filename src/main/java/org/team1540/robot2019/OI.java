@@ -5,12 +5,15 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.gamepieceGroups.EjectThenDown;
 import org.team1540.robot2019.commands.gamepieceGroups.IntakeSequence;
 import org.team1540.robot2019.commands.gamepieceGroups.MoveElevatorToPosition;
 import org.team1540.rooster.Utilities;
 
 public class OI {
+
+  private static final Logger logger = Logger.getLogger(OI.class);
 
   // Buttons
   public static final int A = 1;
@@ -60,13 +63,13 @@ public class OI {
    * weirdness.
    */
   static void init() {
-    System.out.println("Initializing operator interface...");
+    logger.info("Initializing operator interface...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     initJoysticks();
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized operator interface in " + (end - start) + " ms");
+    logger.info("Initialized operator interface in " + (end - start) + " ms");
   }
 
   public static void initJoysticks() {

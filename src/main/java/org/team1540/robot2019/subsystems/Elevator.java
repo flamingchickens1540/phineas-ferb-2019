@@ -12,9 +12,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.Tuning;
 
 public class Elevator extends Subsystem {
+
+  private static final Logger logger = Logger.getLogger(Elevator.class);
 
   private final Object controllerLock = new Object();
   private ElevatorController controller = new ElevatorController(elevatorRotationsPerIn);
@@ -235,7 +238,7 @@ public class Elevator extends Subsystem {
 
         // status change listening
         if (status != lastStatus) {
-          System.out.println("Elevator state changed from " + lastStatus + " to " + status);
+          logger.debug("Elevator state changed from " + lastStatus + " to " + status);
 
           lastStatus = status;
         }

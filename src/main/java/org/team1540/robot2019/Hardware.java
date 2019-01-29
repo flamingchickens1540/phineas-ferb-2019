@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
+import org.apache.log4j.Logger;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
 /**
@@ -16,6 +17,8 @@ import org.team1540.rooster.wrappers.ChickenTalon;
  * making alternative robots or funky testing code.
  */
 public class Hardware {
+
+  private static final Logger logger = Logger.getLogger(Hardware.class);
 
   public static final int DRIVE_POSITION_SLOT_IDX = 0;
   public static final int DRIVE_VELOCITY_SLOT_IDX = 1;
@@ -68,7 +71,7 @@ public class Hardware {
   public static AnalogInput pressureSensor;
 
   static void initAll() {
-    System.out.println("Initializing robot hardware...");
+    logger.info("Initializing robot hardware...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     initDrive();
@@ -80,11 +83,11 @@ public class Hardware {
     initPressureSensor();
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized robot hardware in " + (end - start) + " ms");
+    logger.info("Initialized robot hardware in " + (end - start) + " ms");
   }
 
   public static void initDrive() {
-    System.out.println("Initializing drive...");
+    logger.info("Initializing drive...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     driveLeftMotorA = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
@@ -140,11 +143,11 @@ public class Hardware {
     driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized drive in " + (end - start) + " ms");
+    logger.info("Initialized drive in " + (end - start) + " ms");
   }
 
   public static void initElevator() {
-    System.out.println("Initializing elevator...");
+    logger.info("Initializing elevator...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     elevatorA = new CANSparkMax(RobotMap.ELEVATOR_L, MotorType.kBrushless);
@@ -159,11 +162,11 @@ public class Hardware {
     elevatorLimitSensor = new DigitalInput(RobotMap.ELEVATOR_LIMIT_SENSOR);
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized elevator in " + (end - start) + " ms");
+    logger.info("Initialized elevator in " + (end - start) + " ms");
   }
 
   public static void initWrist() {
-    System.out.println("Initializing wrist...");
+    logger.info("Initializing wrist...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     wristCylinder = new Solenoid(RobotMap.WRIST_CYLINDER_1);
@@ -180,11 +183,11 @@ public class Hardware {
     wristBtmSwitch = new DigitalInput(RobotMap.ARM_BTM_SW);
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized wrist in " + (end - start) + " ms");
+    logger.info("Initialized wrist in " + (end - start) + " ms");
   }
 
   public static void initIntake() {
-    System.out.println("Initializing intake...");
+    logger.info("Initializing intake...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     intakeTop = new ChickenTalon(RobotMap.INTAKE_TOP);
@@ -208,22 +211,22 @@ public class Hardware {
     intakeSensor = new DigitalInput(RobotMap.INTAKE_SENSOR);
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized intake in " + (end - start) + " ms");
+    logger.info("Initialized intake in " + (end - start) + " ms");
   }
 
   public static void initHatchMech() {
-    System.out.println("Initializing hatch mech...");
+    logger.info("Initializing hatch mech...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     hatchSlide = new Solenoid(RobotMap.HATCH_SLIDE);
     hatchSuctionCups = new Solenoid(RobotMap.HATCH_SUCTION_CUPS);
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized hatch mech in " + (end - start) + " ms");
+    logger.info("Initialized hatch mech in " + (end - start) + " ms");
   }
 
   public static void initClimber() {
-    System.out.println("Initializing climber...");
+    logger.info("Initializing climber...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     climberArmLeft = new ChickenTalon(RobotMap.CLIMBER_ARM_L);
@@ -250,17 +253,17 @@ public class Hardware {
 //    climberCylinder2 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_2);
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized climber in " + (end - start) + " ms");
+    logger.info("Initialized climber in " + (end - start) + " ms");
   }
 
   public static void initPressureSensor() {
-    System.out.println("Initializing pressure sensor...");
+    logger.info("Initializing pressure sensor...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     pressureSensor = new AnalogInput(RobotMap.PRESSURE_SENSOR);
 
     double end = RobotController.getFPGATime() / 1000.0;
-    System.out.println("Initialized pressure sensor in " + (end - start) + " ms");
+    logger.info("Initialized pressure sensor in " + (end - start) + " ms");
   }
 
   public static void checkStickyFaults() {
