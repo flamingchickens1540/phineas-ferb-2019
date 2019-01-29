@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.gamepieceGroups.EjectThenDown;
-import org.team1540.robot2019.commands.gamepieceGroups.IntakeSequence;
-import org.team1540.robot2019.commands.gamepieceGroups.MoveElevatorToPosition;
+import org.team1540.robot2019.commands.groups.EjectThenDown;
+import org.team1540.robot2019.commands.groups.IntakeSequence;
+import org.team1540.robot2019.commands.groups.MoveElevatorToPosition;
 import org.team1540.rooster.Utilities;
 
 public class OI {
