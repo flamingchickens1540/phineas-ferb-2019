@@ -13,11 +13,13 @@ public class IntakeAuto extends Command {
 
   @Override
   protected void initialize() {
+    System.out.println("Intake starting");
     Robot.intake.startIntaking();
   }
 
   @Override
   protected void end() {
+    System.out.println("Intake stopping");
     Robot.intake.stop();
   }
 
