@@ -15,7 +15,6 @@ public class WristTuningRobot extends TimedRobot {
   @Override
   public void robotInit() {
     Hardware.initWrist();
-    Hardware.initClimber();
 
     wrist = new Wrist();
   }
