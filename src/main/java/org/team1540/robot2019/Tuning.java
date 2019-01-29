@@ -68,6 +68,10 @@ public class Tuning {
   // wrist
   public static boolean wristInvertMotor = false;
 
+  public static double wristDownTravelPwrThrot = 1;
+  public static double wristDownTravelBrakeThrot = 0.2;
+  public static double wristUpTravelThrot = 1;
+
   // intake
   public static boolean intakeInvertTop = false;
   public static boolean intakeInvertBtm = true;
