@@ -173,6 +173,9 @@ public class Hardware {
     wristMotor.setInverted(Tuning.wristInvertMotor);
     wristMotor.setBrake(true);
 
+    wristMotor.configVoltageCompSaturation(12);
+    wristMotor.enableVoltageCompensation(true);
+
     wristMidSwitch = new DigitalInput(RobotMap.ARM_TOP_SW);
     wristBtmSwitch = new DigitalInput(RobotMap.ARM_BTM_SW);
 
@@ -195,6 +198,12 @@ public class Hardware {
 
     intakeTop.setBrake(true);
     intakeBtm.setBrake(true);
+
+    intakeTop.configVoltageCompSaturation(12);
+    intakeTop.enableVoltageCompensation(true);
+
+    intakeBtm.configVoltageCompSaturation(12);
+    intakeBtm.enableVoltageCompensation(true);
 
     intakeSensor = new DigitalInput(RobotMap.INTAKE_SENSOR);
 
@@ -220,12 +229,20 @@ public class Hardware {
     climberArmLeft = new ChickenTalon(RobotMap.CLIMBER_ARM_L);
     climberArmRight = new ChickenTalon(RobotMap.CLIMBER_ARM_R);
 
+    climberArmLeft.configFactoryDefault();
+    climberArmRight.configFactoryDefault();
+
     climberArmLeft.setBrake(true);
     climberArmRight.setBrake(true);
-//
+
     climberArmLeft.setInverted(false);
     climberArmRight.setInverted(true);
-//
+
+    climberArmLeft.configVoltageCompSaturation(12);
+    climberArmLeft.enableVoltageCompensation(true);
+    climberArmRight.configVoltageCompSaturation(12);
+    climberArmRight.enableVoltageCompensation(true);
+
     climberArmRight.setControlMode(ControlMode.Follower);
     climberArmRight.set(climberArmLeft.getDeviceID());
 //
