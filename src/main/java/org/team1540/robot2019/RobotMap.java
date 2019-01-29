@@ -14,13 +14,13 @@ public class RobotMap {
   public static final int ELEVATOR_L = 6;
   public static final int ELEVATOR_R = 7;
 
-  public static final int INTAKE_WRIST = 4;
+  public static final int INTAKE_WRIST = 9;
 
-  public static final int INTAKE_TOP = 5;
-  public static final int INTAKE_BTM = 8;
+  public static final int INTAKE_TOP = 8;
+  public static final int INTAKE_BTM = 10;
 
-  public static final int CLIMBER_ARM_L = 9;
-  public static final int CLIMBER_ARM_R = 10;
+  public static final int CLIMBER_ARM_L = 4;
+  public static final int CLIMBER_ARM_R = 5;
 
   // pneumatics
   public static final int ELEVATOR_BRAKE = 0;

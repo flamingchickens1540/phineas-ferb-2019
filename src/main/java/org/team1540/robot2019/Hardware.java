@@ -220,8 +220,17 @@ public class Hardware {
     climberArmLeft = new ChickenTalon(RobotMap.CLIMBER_ARM_L);
     climberArmRight = new ChickenTalon(RobotMap.CLIMBER_ARM_R);
 
-    climberCylinder1 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_1);
-    climberCylinder2 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_2);
+    climberArmLeft.setBrake(true);
+    climberArmRight.setBrake(true);
+//
+    climberArmLeft.setInverted(false);
+    climberArmRight.setInverted(true);
+//
+    climberArmRight.setControlMode(ControlMode.Follower);
+    climberArmRight.set(climberArmLeft.getDeviceID());
+//
+//    climberCylinder1 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_1);
+//    climberCylinder2 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_2);
 
     double end = RobotController.getFPGATime() / 1000.0;
     System.out.println("Initialized climber in " + (end - start) + " ms");
