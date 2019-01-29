@@ -11,15 +11,15 @@ public class MoveElevatorToPosition extends Command {
 
   double position;
 
-    public MoveElevatorToPosition(double pos) {
-      this.position = pos;
-    }
+  public MoveElevatorToPosition(double pos) {
+    this.position = pos;
+  }
 
-    @Override
-    protected void initialize() {
-      logger.debug("Moving elevator to position " + position);
-      Robot.elevator.setWantedPosition(position);
-    }
+  @Override
+  protected void initialize() {
+    logger.debug("Moving elevator to position " + position);
+    Robot.elevator.setWantedPosition(position);
+  }
 
   @Override
   protected boolean isFinished() {
