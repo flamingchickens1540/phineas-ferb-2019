@@ -73,14 +73,21 @@ public class Elevator extends Subsystem {
     this.enableController = enableController;
   }
 
+  public double getVelocity() {
+    return elevatorA.getEncoder().getVelocity() / (elevatorRotationsPerIn * 60);
+  }
+
+  public double getThrottle() {
+    return elevatorA.getAppliedOutput();
+  }
+
   @Override
   public void periodic() {
     updateController();
 
     positionEntry.forceSetNumber((elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn)
         + controller.positionOffset);
-    velocityEntry
-        .forceSetNumber((elevatorA.getEncoder().getVelocity() / (elevatorRotationsPerIn * 60)));
+    velocityEntry.forceSetNumber(getVelocity());
 
     throttleEntry.forceSetNumber(elevatorA.getAppliedOutput());
 
