@@ -84,6 +84,10 @@ public class Elevator extends Subsystem {
     return elevatorA.getAppliedOutput();
   }
 
+  public double getVoltage() {
+    return elevatorA.getBusVoltage() * elevatorA.getAppliedOutput();
+  }
+
   @Override
   public void periodic() {
     updateController();
@@ -113,9 +117,9 @@ public class Elevator extends Subsystem {
       controller.maxAccelDown = Tuning.elevatorMaxAccelDown;
       controller.maxAccelUp = Tuning.elevatorMaxAccelUp;
       controller.minTrapezoidalRange = Tuning.elevatorMinTrapezoidalRange;
-      controller.holdThrot = Tuning.elevatorHoldThrottle;
-      controller.velCoeff = Tuning.elevatorVelCoeff;
-      controller.accelCoeff = Tuning.elevatorAccelCoeff;
+      controller.kV = Tuning.elevatorKV;
+      controller.kA = Tuning.elevatorKA;
+      controller.vIntercept = Tuning.elevatorVIntercept;
       controller.height = Tuning.elevatorDelta;
     }
   }
@@ -131,9 +135,9 @@ public class Elevator extends Subsystem {
     volatile double maxAccelDown;
     volatile double setpoint;
     volatile double minTrapezoidalRange;
-    volatile double holdThrot;
-    volatile double velCoeff;
-    volatile double accelCoeff;
+    volatile double kV;
+    volatile double kA;
+    volatile double vIntercept;
     volatile double height;
 
     volatile double positionOffset;
@@ -181,10 +185,7 @@ public class Elevator extends Subsystem {
             // we're very close to the target, just use position PID
             status = Status.MOVE_PID;
 
-            // holdThrot is in throttle percentages but this method takes volts for some reason
-            elevatorA.getPIDController()
-                .setReference((setpoint + positionOffset) * rotationsPerIn, ControlType.kPosition,
-                    0, holdThrot * 12);
+            setPositionAndVelocity((setpoint + positionOffset) * rotationsPerIn, 0);
 
             // clear (set to current values) setpoints
             posSetpoint = currentPosition;
@@ -218,15 +219,7 @@ public class Elevator extends Subsystem {
 
             posSetpoint += velSetpoint;
 
-            double feedForward = 0;
-
-            feedForward += (velSetpoint) * velCoeff;
-
-            feedForward += (appliedAccel + GRAV_ACCEL) * accelCoeff;
-
-            elevatorA.getPIDController()
-                .setReference((posSetpoint + positionOffset) * rotationsPerIn,
-                    ControlType.kPosition, 0, feedForward);
+            setPositionAndVelocity((posSetpoint + positionOffset) * rotationsPerIn, velSetpoint);
           }
         } else {
           // clear (set to current values) setpoints
@@ -243,6 +236,11 @@ public class Elevator extends Subsystem {
           lastStatus = status;
         }
       }
+    }
+
+    private void setPositionAndVelocity(double pos, double vel) {
+      elevatorA.getPIDController()
+          .setReference(pos, ControlType.kPosition, 0, vel * kV + vIntercept);
     }
   }
 

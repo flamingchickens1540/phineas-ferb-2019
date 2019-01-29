@@ -56,12 +56,13 @@ public class Tuning {
   public static double elevatorMaxAccelDown = 1346; // in/s^2/ / TODO: rough guess based on motor specs
   // range, in inches, inside of which we use standard PID instead of a trapezoidal curve
   public static double elevatorMinTrapezoidalRange = 1; // inches
-  // range, in inches, inside of which we engage the brake
-  public static double elevatorHoldThrottle = 0.4; // TODO: rough guess based on motor specs
+
   // volts per inch per sec
-  public static double elevatorVelCoeff = 0.092307692; // TODO: rough guess based on motor specs
+  public static double elevatorKV;
   // volts per inch per sec^2
-  public static double elevatorAccelCoeff = 0.012120702; // TODO: rough guess based on motor specs
+  public static double elevatorKA;
+  // volts
+  public static double elevatorVIntercept;
 
   public static double elevatorDelta = 28; // inches
 
