@@ -1,8 +1,6 @@
 package org.team1540.robot2019;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import org.team1540.robot2019.tuners.ClimberTuningRobot;
-import org.team1540.robot2019.tuners.WristTuningRobot;
 
 public class Main {
   public static void main(String[] args) {
@@ -11,8 +9,6 @@ public class Main {
       System.setErr(System.out);
     }
 
-//    RobotBase.startRobot(Robot::new);
-//    RobotBase.startRobot(WristTuningRobot::new);
-    RobotBase.startRobot(ClimberTuningRobot::new);
+    RobotBase.startRobot(Robot::new);
   }
 }
