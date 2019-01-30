@@ -2,8 +2,7 @@ package org.team1540.robot2019.subsystems;
 
 import static org.team1540.robot2019.Hardware.elevatorA;
 import static org.team1540.robot2019.Hardware.elevatorB;
-import static org.team1540.robot2019.Hardware.elevatorLimitSensor;
-import static org.team1540.robot2019.Tuning.elevatorRotationsPerIn;
+import static org.team1540.robot2019.Tuning.inPerRotation;
 
 import com.revrobotics.ControlType;
 import edu.wpi.first.networktables.NetworkTable;
@@ -20,7 +19,7 @@ public class Elevator extends Subsystem {
   private static final Logger logger = Logger.getLogger(Elevator.class);
 
   private final Object controllerLock = new Object();
-  private ElevatorController controller = new ElevatorController(elevatorRotationsPerIn);
+  private ElevatorController controller = new ElevatorController(inPerRotation);
   private Notifier controllerNotifier = new Notifier(controller);
 
   private volatile boolean enableController = true;
@@ -77,7 +76,7 @@ public class Elevator extends Subsystem {
   }
 
   public double getVelocity() {
-    return elevatorA.getEncoder().getVelocity() / (elevatorRotationsPerIn * 60);
+    return elevatorA.getEncoder().getVelocity() * (inPerRotation / 60);
   }
 
   public double getThrottle() {
@@ -107,7 +106,7 @@ public class Elevator extends Subsystem {
   }
 
   public double getPosition() {
-    return (elevatorA.getEncoder().getPosition() / elevatorRotationsPerIn)
+    return (elevatorA.getEncoder().getPosition() * inPerRotation)
         + controller.positionOffset;
   }
 
@@ -116,7 +115,7 @@ public class Elevator extends Subsystem {
     // inside the controller due to thread-safety issues with the PreferenceManager changing things
     // around. So, they get synchronized every tick.
     synchronized (controllerLock) {
-      controller.rotationsPerIn = elevatorRotationsPerIn;
+      controller.inPerRotations = inPerRotation;
       controller.maxVel = Tuning.elevatorMaxVel;
       controller.maxAccelDown = Tuning.elevatorMaxAccelDown;
       controller.maxAccelUp = Tuning.elevatorMaxAccelUp;
@@ -133,7 +132,7 @@ public class Elevator extends Subsystem {
 
     private static final double GRAV_ACCEL = 386.220472; // in/s^2
 
-    volatile double rotationsPerIn;
+    volatile double inPerRotations;
     volatile double maxAccelUp;
     volatile double maxVel;
     volatile double maxAccelDown;
@@ -161,13 +160,13 @@ public class Elevator extends Subsystem {
     public void run() {
       synchronized (controllerLock) {
         double currentPosition =
-            (elevatorA.getEncoder().getPosition() / rotationsPerIn) + positionOffset;
-        double currentVelocity = (elevatorA.getEncoder().getVelocity() / (rotationsPerIn * 60));
+            (elevatorA.getEncoder().getPosition() * inPerRotations) + positionOffset;
+        double currentVelocity = (elevatorA.getEncoder().getVelocity() * (inPerRotations / 60));
         if (isAtLimit()) {
           if (currentPosition > (height / 2)) {
             // we're probably at the top
 
-            positionOffset = height - (elevatorA.getEncoder().getPosition() / rotationsPerIn);
+            positionOffset = height - (elevatorA.getEncoder().getPosition() * inPerRotations);
             setpoint = height;
             currentPosition = height;
 
@@ -175,7 +174,7 @@ public class Elevator extends Subsystem {
           } else {
             // we're probably at the bottom
 
-            positionOffset = -(elevatorA.getEncoder().getPosition() / rotationsPerIn);
+            positionOffset = -(elevatorA.getEncoder().getPosition() * inPerRotations);
             setpoint = 0;
             currentPosition = 0;
 
@@ -189,7 +188,7 @@ public class Elevator extends Subsystem {
             // we're very close to the target, just use position PID
             status = Status.MOVE_PID;
 
-            setPositionAndVelocity((setpoint + positionOffset) * rotationsPerIn, 0);
+            setPositionAndVelocity((setpoint + positionOffset) / inPerRotations, 0);
 
             // clear (set to current values) setpoints
             posSetpoint = currentPosition;
@@ -223,7 +222,7 @@ public class Elevator extends Subsystem {
 
             posSetpoint += velSetpoint;
 
-            setPositionAndVelocity((posSetpoint + positionOffset) * rotationsPerIn, velSetpoint);
+            setPositionAndVelocity((posSetpoint + positionOffset) / inPerRotations, velSetpoint);
           }
         } else {
           // clear (set to current values) setpoints
