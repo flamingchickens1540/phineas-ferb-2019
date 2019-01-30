@@ -27,6 +27,7 @@ public class ElevatorAccelCharacterizationRobot extends TimedRobot {
     Scheduler.getInstance().run(); // process preferences
     Hardware.initElevator();
     elevator = new Elevator();
+    elevator.setEnableController(false);
 
     notifier = new Notifier(this::run);
 
