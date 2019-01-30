@@ -48,8 +48,8 @@ public class Tuning {
   public static double elevatorCargoShipPosition = 0;
   public static double elevatorDownPosition = 0;
 
-  // (2.872986590827646 in sprocket diameter * pi) / (5:1 gear ratio)
-  public static double elevatorRotationsPerIn = 1.805150714;
+  // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
+  public static double inPerRotation = -1.805150714;
   public static double elevatorMaxAccelUp = 600; // in/s^2
 
   public static double elevatorMaxVel = 130; // in/s^2 // TODO: rough guess based on motor specs
@@ -59,11 +59,11 @@ public class Tuning {
   public static double elevatorTolerance = 0.5; // inches
 
   // volts per inch per sec
-  public static double elevatorKV;
+  public static double elevatorKV = 0.22134;
   // volts per inch per sec^2
   public static double elevatorKA;
   // volts
-  public static double elevatorVIntercept;
+  public static double elevatorVIntercept = -1.28341;
 
   public static double elevatorDelta = 28; // inches
 
