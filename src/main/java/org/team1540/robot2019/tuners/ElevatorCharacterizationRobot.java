@@ -28,6 +28,7 @@ public class ElevatorCharacterizationRobot extends TimedRobot {
   private NetworkTableEntry slopeEntry = table.getEntry("slope");
   private NetworkTableEntry interceptEntry = table.getEntry("intercept");
   private NetworkTableEntry rSquaredEntry = table.getEntry("rSquared");
+  private NetworkTableEntry setpointEntry = table.getEntry("setpoint");
 
 
   @Override
@@ -45,7 +46,7 @@ public class ElevatorCharacterizationRobot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {
+  public void teleopPeriodic() {
     if (joystick.getRawButton(1)) {
       if (!running) {
         running = true;
@@ -71,6 +72,8 @@ public class ElevatorCharacterizationRobot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+
+    setpointEntry.forceSetNumber(setpoint);
 
     if (!Double.isNaN(regression.getSlope())) {
       slopeEntry.forceSetNumber(regression.getSlope());
