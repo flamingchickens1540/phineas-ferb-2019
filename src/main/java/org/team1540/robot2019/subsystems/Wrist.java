@@ -62,6 +62,7 @@ public class Wrist extends Subsystem {
         .on(WristEvent.MID_SENSOR).callMethod("stop");
 
     stateMachine = builder.newStateMachine(WristState.OFF_UP);
+    stateMachine.start();
 
     // configure state machine logger
     Logger.getLogger(StateMachineLogger.class)
