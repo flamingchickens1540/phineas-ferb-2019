@@ -39,6 +39,7 @@ public class Elevator extends Subsystem {
   private NetworkTableEntry targetVelEntry = table.getEntry("tgtVel");
 
   private NetworkTableEntry statusEntry = table.getEntry("status");
+  private NetworkTableEntry limEntry = table.getEntry("limit");
 
 
   public Elevator() {
@@ -103,6 +104,7 @@ public class Elevator extends Subsystem {
     targetVelEntry.forceSetNumber(controller.velSetpoint);
 
     statusEntry.forceSetString(controller.status.toString());
+    limEntry.forceSetBoolean(isAtLimit());
   }
 
   public double getPosition() {
