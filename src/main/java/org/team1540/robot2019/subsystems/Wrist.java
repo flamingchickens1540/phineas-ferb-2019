@@ -71,6 +71,7 @@ public class Wrist extends Subsystem {
     StateMachineLogger logger = new StateMachineLogger(stateMachine);
     logger.startLogging();
 
+    wristMidSwitch.setUpSourceEdge(false, true);
     wristMidSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {
@@ -80,6 +81,7 @@ public class Wrist extends Subsystem {
       }
     });
 
+    wristBtmSwitch.setUpSourceEdge(false, true);
     wristBtmSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {
@@ -115,11 +117,11 @@ public class Wrist extends Subsystem {
   }
 
   public boolean isAtMid() {
-    return wristMidSwitch.get();
+    return !wristMidSwitch.get();
   }
 
   public boolean isAtBtm() {
-    return wristBtmSwitch.get();
+    return !wristBtmSwitch.get();
   }
 
   @Override
