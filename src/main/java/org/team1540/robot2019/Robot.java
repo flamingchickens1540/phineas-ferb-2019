@@ -67,9 +67,7 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
 
     // TODO: put this on shuffleboard properly
-    SmartDashboard.putNumber("System Pressure",
-        Hardware.pressureSensor.getVoltage() * Tuning.pressureSensorVoltageScaleFactor);
-
+    SmartDashboard.putNumber("System Pressure", 50 * (Hardware.pressureSensor.getVoltage() - 0.5));
   }
 
   private Timer brakeTimer = new Timer();
