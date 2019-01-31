@@ -74,11 +74,20 @@ public class OI {
   }
 
   public static void initJoysticks() {
+    logger.info("Initializing joysticks...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
     driver = new XboxController(0);
     copilot = new XboxController(1);
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    logger.info("Initialized joysticks in " + (end - start) + " ms");
   }
 
   public static void initButtons() {
+    logger.info("Initializing buttons...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
     elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
     elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
     elevatorDownButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorDownPosition));
@@ -88,6 +97,9 @@ public class OI {
 
     // hatch stuff
     // climber stuff
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    logger.info("Initialized buttons in " + (end - start) + " ms");
   }
 
   public static double getDriveThrottle() {
