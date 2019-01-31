@@ -37,4 +37,8 @@ public class WristLogicTuningRobot extends TimedRobot {
     Scheduler.getInstance().run();
   }
 
+  @Override
+  public void disabledInit() {
+    Robot.wrist.handleDisable();
+  }
 }

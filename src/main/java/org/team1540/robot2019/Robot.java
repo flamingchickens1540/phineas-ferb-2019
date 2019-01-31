@@ -80,6 +80,8 @@ public class Robot extends TimedRobot {
     brakeTimer.reset();
     brakeTimer.start();
 
+    wrist.handleDisable();
+
     Hardware.checkStickyFaults();
   }
 
