@@ -50,10 +50,10 @@ public class Tuning {
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
   public static double inPerRotation = -1.805150714;
-  public static double elevatorMaxAccelUp = 600; // in/s^2
+  public static double elevatorMaxAccelUp = 100; // in/s^2
 
-  public static double elevatorMaxVel = 130; // in/s^2 // TODO: rough guess based on motor specs
-  public static double elevatorMaxAccelDown = 1346; // in/s^2/ / TODO: rough guess based on motor specs
+  public static double elevatorMaxVel = 100; // in/s^2 // TODO: rough guess based on motor specs
+  public static double elevatorMaxAccelDown = 100; // in/s^2/ / TODO: rough guess based on motor specs
   // range, in inches, inside of which we use standard PID instead of a trapezoidal curve
   public static double elevatorMinTrapezoidalRange = 1; // inches
   public static double elevatorTolerance = 0.5; // inches
@@ -63,20 +63,24 @@ public class Tuning {
   // volts per inch per sec^2
   public static double elevatorKA;
   // volts
-  public static double elevatorVIntercept = -1.28341;
+  public static double elevatorVIntercept = 1.28341;
 
   public static double elevatorDelta = 28; // inches
 
-  // wrist
-  public static boolean wristInvertMotor = false;
+  public static double elevatorP = 0;
+  public static double elevatorI = 0;
+  public static double elevatorD = 0;
 
-  public static double wristDownTravelPwrThrot = 1;
-  public static double wristDownTravelBrakeThrot = 0.2;
-  public static double wristUpTravelThrot = 1;
+  // wrist
+  public static boolean wristInvertMotor = true;
+
+  public static double wristDownTravelPwrThrot = 0.7;
+  public static double wristDownTravelBrakeThrot = 0.0;
+  public static double wristUpTravelThrot = 0.55;
 
   // intake
-  public static boolean intakeInvertTop = false;
-  public static boolean intakeInvertBtm = true;
+  public static boolean intakeInvertTop = true;
+  public static boolean intakeInvertBtm = false;
 
   public static double intakeIntakeSpeedTop = 1;
   public static double intakeIntakeSpeedBtm = 1;
