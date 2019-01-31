@@ -63,7 +63,8 @@ public class Wrist extends Subsystem {
     builder.externalTransition().from(WristState.OFF_DOWN).to(WristState.OFF_UP)
         .on(WristEvent.MID_SENSOR).callMethod("stop");
 
-    stateMachine = builder.newStateMachine(WristState.OFF_UP);
+    stateMachine = builder
+        .newStateMachine(wristBtmSwitch.get() ? WristState.OFF_DOWN : WristState.OFF_UP);
     stateMachine.start();
 
     // configure state machine logger
