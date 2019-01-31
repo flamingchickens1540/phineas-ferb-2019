@@ -23,6 +23,8 @@ import org.team1540.robot2019.Tuning;
 
 public class Wrist extends Subsystem {
 
+  private static final Logger logger = Logger.getLogger(Wrist.class);
+
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("wrist");
 
   private NetworkTableEntry isAtMidEntry = table.getEntry("atMid");
@@ -71,25 +73,32 @@ public class Wrist extends Subsystem {
     StateMachineLogger logger = new StateMachineLogger(stateMachine);
     logger.startLogging();
 
-    wristMidSwitch.setUpSourceEdge(false, true);
     wristMidSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {
         synchronized (wristStateMachineLock) {
+          Wrist.logger.debug("Mid Switch Interrupt");
           stateMachine.fire(WristEvent.MID_SENSOR);
         }
       }
     });
 
-    wristBtmSwitch.setUpSourceEdge(false, true);
     wristBtmSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {
         synchronized (wristStateMachineLock) {
+          Wrist.logger.debug("Btm Switch Interrupt");
           stateMachine.fire(WristEvent.BTM_SENSOR);
         }
       }
     });
+
+    wristMidSwitch.setUpSourceEdge(false, true);
+
+    wristBtmSwitch.setUpSourceEdge(false, true);
+
+    wristMidSwitch.enableInterrupts();
+    wristBtmSwitch.enableInterrupts();
   }
 
   public void moveDown() {
