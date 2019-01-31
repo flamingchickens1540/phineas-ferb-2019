@@ -67,6 +67,7 @@ public class OI {
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     initJoysticks();
+    initButtons();
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized operator interface in " + (end - start) + " ms");
