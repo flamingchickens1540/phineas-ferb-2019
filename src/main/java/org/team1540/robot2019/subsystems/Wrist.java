@@ -63,6 +63,15 @@ public class Wrist extends Subsystem {
     builder.externalTransition().from(WristState.OFF_DOWN).to(WristState.OFF_UP)
         .on(WristEvent.MID_SENSOR).callMethod("stop");
 
+    // disabling-caused transitions
+
+    builder.externalTransition().from(WristState.DOWN_TRAVEL_POWER).to(WristState.OFF_UP)
+        .on(WristEvent.DISABLE);
+    builder.externalTransition().from(WristState.DOWN_TRAVEL_BRAKE).to(WristState.OFF_DOWN)
+        .on(WristEvent.DISABLE);
+    builder.externalTransition().from(WristState.UP_TRAVEL).to(WristState.OFF_DOWN)
+        .on(WristEvent.DISABLE);
+
     stateMachine = builder
         .newStateMachine(wristBtmSwitch.get() ? WristState.OFF_DOWN : WristState.OFF_UP);
     stateMachine.start();
@@ -118,6 +127,10 @@ public class Wrist extends Subsystem {
     return (WristState) stateMachine.getCurrentState();
   }
 
+  public void handleDisable() {
+    stateMachine.fire(WristEvent.DISABLE);
+  }
+
   public void set(double throttle) {
     wristMotor.set(ControlMode.PercentOutput, throttle);
   }
@@ -147,7 +160,7 @@ public class Wrist extends Subsystem {
     currentStateEntry.forceSetString(stateMachine.getCurrentState().toString());
   }
 
-  public enum WristEvent {UP_CMD, DOWN_CMD, BTM_SENSOR, MID_SENSOR, RESET}
+  public enum WristEvent {UP_CMD, DOWN_CMD, BTM_SENSOR, MID_SENSOR, DISABLE}
 
   public enum WristState {OFF_UP, OFF_DOWN, DOWN_TRAVEL_POWER, DOWN_TRAVEL_BRAKE, UP_TRAVEL}
 
