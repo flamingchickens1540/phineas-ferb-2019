@@ -32,8 +32,6 @@ public class Wrist extends Subsystem {
   private NetworkTableEntry currentStateEntry = table.getEntry("state");
   private NetworkTableEntry motorEntry = table.getEntry("motorThrot");
 
-  private final Object wristStateMachineLock = new Object();
-
   public UntypedStateMachine stateMachine;
 
   public Wrist() {
@@ -86,20 +84,16 @@ public class Wrist extends Subsystem {
     wristMidSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {
-        synchronized (wristStateMachineLock) {
           Wrist.logger.debug("Mid Switch Interrupt");
           stateMachine.fire(WristEvent.MID_SENSOR);
-        }
       }
     });
 
     wristBtmSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {
-        synchronized (wristStateMachineLock) {
           Wrist.logger.debug("Btm Switch Interrupt");
           stateMachine.fire(WristEvent.BTM_SENSOR);
-        }
       }
     });
 
@@ -112,15 +106,11 @@ public class Wrist extends Subsystem {
   }
 
   public void moveDown() {
-    synchronized (wristStateMachineLock) {
       stateMachine.fire(WristEvent.DOWN_CMD);
-    }
   }
 
   public void moveUp() {
-    synchronized (wristStateMachineLock) {
       stateMachine.fire(WristEvent.UP_CMD);
-    }
   }
 
   public WristState getState() {
