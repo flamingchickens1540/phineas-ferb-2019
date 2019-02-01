@@ -1,7 +1,6 @@
 package org.team1540.robot2019;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -18,7 +17,6 @@ import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
-import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
 
@@ -57,10 +55,7 @@ public class Robot extends TimedRobot {
 
     OI.init();
 
-    Shuffleboard.getTab("Phineas")
-        .add(new SimpleCommand("Reset Preferences", Preferences.getInstance()::removeAll));
-
-    // TODO: shuffleboard
+    ShuffleboardDisplay.init();
 
     double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
     logger.info("Robot ready. Initialization took " + (end - start) + " ms");
