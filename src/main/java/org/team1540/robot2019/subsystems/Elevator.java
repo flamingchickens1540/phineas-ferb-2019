@@ -44,7 +44,8 @@ public class Elevator extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-
+    // no default command - the move to position command leaves the elevator PID on and at the
+    // setpoint, and the zero command stops the motors when it finishes.
   }
 
   public boolean isAtLimit() {
