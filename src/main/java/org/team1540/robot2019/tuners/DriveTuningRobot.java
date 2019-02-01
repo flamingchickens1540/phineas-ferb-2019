@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.subsystems.*;
+import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class DriveTuningRobot extends TimedRobot {

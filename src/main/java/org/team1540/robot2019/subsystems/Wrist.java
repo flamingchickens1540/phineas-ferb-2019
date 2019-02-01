@@ -84,16 +84,16 @@ public class Wrist extends Subsystem {
     wristMidSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {
-          Wrist.logger.debug("Mid Switch Interrupt");
-          stateMachine.fire(WristEvent.MID_SENSOR);
+        Wrist.logger.debug("Mid Switch Interrupt");
+        stateMachine.fire(WristEvent.MID_SENSOR);
       }
     });
 
     wristBtmSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {
-          Wrist.logger.debug("Btm Switch Interrupt");
-          stateMachine.fire(WristEvent.BTM_SENSOR);
+        Wrist.logger.debug("Btm Switch Interrupt");
+        stateMachine.fire(WristEvent.BTM_SENSOR);
       }
     });
 
@@ -106,11 +106,11 @@ public class Wrist extends Subsystem {
   }
 
   public void moveDown() {
-      stateMachine.fire(WristEvent.DOWN_CMD);
+    stateMachine.fire(WristEvent.DOWN_CMD);
   }
 
   public void moveUp() {
-      stateMachine.fire(WristEvent.UP_CMD);
+    stateMachine.fire(WristEvent.UP_CMD);
   }
 
   public WristState getState() {

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import org.team1540.robot2019.tuners.DriveTuningRobot;
 
 public class Main {
+
   public static void main(String[] args) {
     if (RobotBase.isSimulation()) {
       // workaround for java simulator not catching standard error
