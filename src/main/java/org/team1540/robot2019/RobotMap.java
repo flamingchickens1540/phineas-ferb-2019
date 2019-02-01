@@ -34,7 +34,7 @@ public class RobotMap {
   public static final int CLIMBER_REAR_CYLINDER_2 = 0;
 
   // sensors and switches
-  public static final int ELEVATOR_LIMIT_SENSOR = 0;
+  public static final int ELEVATOR_LIMIT_SENSOR = 1;
 
   public static final int ARM_MID_SW = 2;
   public static final int ARM_BTM_SW = 3;
