@@ -2,7 +2,6 @@ package org.team1540.robot2019.tuners;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.robot2019.Hardware;
@@ -26,8 +25,6 @@ public class ClimberTuningRobot extends TimedRobot {
 
     climber = new Climber();
     elevator = new Elevator();
-
-    elevator.setEnableController(false);
   }
 
   @Override
