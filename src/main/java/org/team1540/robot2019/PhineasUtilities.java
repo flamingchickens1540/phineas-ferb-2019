@@ -2,6 +2,8 @@ package org.team1540.robot2019;
 
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.rooster.wrappers.ChickenController;
 
@@ -29,9 +31,13 @@ public class PhineasUtilities {
         stringBuilder.delete(stringBuilder.length() - 3, stringBuilder.length());
       }
 
-      DriverStation.reportWarning(
+      String description =
           subsystemName + " controller " + controller.getDeviceID() + "(" + motorName
-              + ") had sticky faults: " + stringBuilder.toString(), false);
+              + ") had sticky faults: " + stringBuilder.toString();
+      DriverStation.reportWarning(description, false);
+
+      Shuffleboard
+          .addEventMarker(subsystemName + " sticky fault", description, EventImportance.kHigh);
     }
   }
 
