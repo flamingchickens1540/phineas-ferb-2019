@@ -86,4 +86,12 @@ public class Tuning {
 
 
   public static double pressureSensorVoltageScaleFactor;
+
+  // auto-lineup
+  public static double drivetrainRadius = 0.305; // This is for pandora
+
+  public static long drivetrainUDPTimeout = 500;
+
+  public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
+  public static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
 }
