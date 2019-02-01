@@ -13,6 +13,7 @@ public class MoveElevatorToPosition extends Command {
 
   public MoveElevatorToPosition(double pos) {
     this.position = pos;
+    requires(Robot.elevator);
   }
 
   @Override
