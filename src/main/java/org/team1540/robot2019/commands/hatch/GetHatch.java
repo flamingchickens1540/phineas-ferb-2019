@@ -6,12 +6,12 @@ import org.team1540.robot2019.Tuning;
 
 public class GetHatch extends TimedCommand { // TODO: update to match new mech
 
-    public GetHatch() {
-        super(Tuning.hatchGetTime);
-    }
+  public GetHatch() {
+    super(Tuning.hatchGetTime);
+  }
 
-    protected void initialize() {
-        Robot.hatchMech.getHatch();
-    }
+  protected void initialize() {
+    Robot.hatchMech.getHatch();
+  }
 
 }

@@ -6,12 +6,12 @@ import org.team1540.robot2019.Tuning;
 
 public class PlaceHatch extends TimedCommand { // TODO: update to match new mech
 
-    public PlaceHatch() {
-        super(Tuning.hatchPlaceTime);
-    }
+  public PlaceHatch() {
+    super(Tuning.hatchPlaceTime);
+  }
 
-    protected void initialize() {
-        Robot.hatchMech.placeHatch();
-    }
+  protected void initialize() {
+    Robot.hatchMech.placeHatch();
+  }
 
 }

@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.subsystems.*;
+import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.rooster.Utilities;
 
 public class WristTuningRobot extends TimedRobot {
