@@ -51,6 +51,7 @@ public class Tuning {
   public static double elevatorTolerance = 0.5; // inches
   public static double elevatorVelocityTolerance = 1; // inches per second
   public static double elevatorStaticFeedForward = 1.3143; // volts
+  public static double elevatorZeroingThrottle = 0.1;
 
   public static double elevatorDelta = 28; // inches
 
