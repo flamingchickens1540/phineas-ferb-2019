@@ -41,8 +41,6 @@ public class ElevatorCharacterizationRobot extends TimedRobot {
     joystick = new Joystick(0);
 
     elevator = new Elevator();
-
-    elevator.setEnableController(false);
   }
 
   @Override

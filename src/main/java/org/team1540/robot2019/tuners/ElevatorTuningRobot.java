@@ -27,8 +27,6 @@ public class ElevatorTuningRobot extends TimedRobot {
 
     Robot.elevator = new Elevator();
 
-    Robot.elevator.setEnableController(false);
-
     new JoystickButton(joystick, 1).whenPressed(new MoveElevatorToPosition(0));
     new JoystickButton(joystick, 2).whenPressed(new MoveElevatorToPosition(20));
     new JoystickButton(joystick, 3).whenPressed(new MoveElevatorToPosition(28));

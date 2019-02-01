@@ -17,8 +17,6 @@ public class Elevator extends Subsystem {
 
   private static final Logger logger = Logger.getLogger(Elevator.class);
 
-  private volatile boolean enableController = true;
-
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("elevator");
 
   private NetworkTableEntry positionEntry = table.getEntry("pos");
@@ -65,14 +63,6 @@ public class Elevator extends Subsystem {
 
   public void setRaw(double throttle) {
     elevatorA.set(throttle);
-  }
-
-  public boolean isEnableController() {
-    return enableController;
-  }
-
-  public void setEnableController(boolean enableController) {
-    this.enableController = enableController;
   }
 
   public double getVelocity() {
