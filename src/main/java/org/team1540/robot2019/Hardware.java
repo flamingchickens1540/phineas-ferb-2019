@@ -157,7 +157,12 @@ public class Hardware {
     elevatorB.setIdleMode(IdleMode.kBrake);
 
     elevatorA.setInverted(Tuning.invertElevatorA);
-    elevatorB.setInverted(Tuning.invertElevatorB);
+    elevatorB.follow(elevatorA, Tuning.invertElevatorB);
+
+    elevatorA.getPIDController().setP(Tuning.elevatorP);
+    elevatorA.getPIDController().setI(Tuning.elevatorI);
+    elevatorA.getPIDController().setD(Tuning.elevatorD);
+    elevatorA.getPIDController().setOutputRange(-1, 1);
 
     elevatorLimitSensor = new DigitalInput(RobotMap.ELEVATOR_LIMIT_SENSOR);
 

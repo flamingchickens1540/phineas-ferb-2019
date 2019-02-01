@@ -18,7 +18,7 @@ public class MoveElevatorToPosition extends Command {
   @Override
   protected void initialize() {
     logger.debug("Moving elevator to position " + position);
-    Robot.elevator.setWantedPosition(position);
+    Robot.elevator.setPosition(position);
   }
 
   @Override
@@ -33,6 +33,7 @@ public class MoveElevatorToPosition extends Command {
 
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.elevator.getPosition() - position) < Tuning.elevatorTolerance;
+    return Math.abs(Robot.elevator.getPosition() - position) < Tuning.elevatorTolerance
+        && Math.abs(Robot.elevator.getVelocity()) < Tuning.elevatorVelocityTolerance;
   }
 }

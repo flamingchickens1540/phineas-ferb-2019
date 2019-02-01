@@ -38,9 +38,6 @@ public class Tuning {
   public static int driveCurrentLimit = 40;
 
   // elevator
-  public static double elevatorUpSpeed = 1;
-  public static double elevatorDownSpeed = 1;
-
   public static boolean invertElevatorA = true;
   public static boolean invertElevatorB = false;
 
@@ -50,20 +47,10 @@ public class Tuning {
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
   public static double inPerRotation = -1.805150714;
-  public static double elevatorMaxAccelUp = 100; // in/s^2
 
-  public static double elevatorMaxVel = 100; // in/s^2 // TODO: rough guess based on motor specs
-  public static double elevatorMaxAccelDown = 100; // in/s^2/ / TODO: rough guess based on motor specs
-  // range, in inches, inside of which we use standard PID instead of a trapezoidal curve
-  public static double elevatorMinTrapezoidalRange = 1; // inches
   public static double elevatorTolerance = 0.5; // inches
-
-  // volts per inch per sec
-  public static double elevatorKV = 0.22134;
-  // volts per inch per sec^2
-  public static double elevatorKA;
-  // volts
-  public static double elevatorVIntercept = 1.28341;
+  public static double elevatorVelocityTolerance = 1; // inches per second
+  public static double elevatorStaticFeedForward = 1.3143; // volts
 
   public static double elevatorDelta = 28; // inches
 
