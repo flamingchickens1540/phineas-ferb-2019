@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.groups.EjectThenDown;
 import org.team1540.robot2019.commands.groups.IntakeSequence;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
@@ -90,7 +91,7 @@ public class OI {
 
     elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
     elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
-    elevatorDownButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorDownPosition));
+    elevatorDownButton.whenPressed(new MoveElevatorToZero());
 
     autoIntakeButton.whenPressed(new IntakeSequence());
     ejectButton.whenPressed(new EjectThenDown());
