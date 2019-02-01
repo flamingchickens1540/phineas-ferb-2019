@@ -23,13 +23,12 @@ public class RobotMap {
   public static final int CLIMBER_ARM_R = 5;
 
   // pneumatics
-  public static final int WRIST_CYLINDER_1 = 0;
+  public static final int WRIST_CYLINDER_1 = 1;
 
-  public static final int HATCH_SLIDE = 0;
-  public static final int HATCH_SUCTION_CUPS = 0;
+  public static final int HATCH_SLIDE = 2;
+  public static final int HATCH_SUCTION_CUPS = 3;
 
-  public static final int CLIMBER_REAR_CYLINDER_1 = 0;
-  public static final int CLIMBER_REAR_CYLINDER_2 = 0;
+  public static final int CLIMBER_REAR_CYLINDER = 4;
 
   // sensors and switches
   public static final int ELEVATOR_LIMIT_SENSOR = 1;
