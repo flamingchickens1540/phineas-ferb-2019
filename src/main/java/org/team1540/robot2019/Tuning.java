@@ -90,6 +90,8 @@ public class Tuning {
   // auto-lineup
   public static double drivetrainRadius = 0.305; // This is for pandora
 
+  public static double drivetrainTicksPerMeter = 2117.78; // This is also for pandora
+
   public static long drivetrainUDPTimeout = 500;
 
   public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
