@@ -36,12 +36,6 @@ public class Elevator extends Subsystem {
 
   private double positionOffset;
 
-
-  public Elevator() {
-    elevatorA.setInverted(Tuning.invertElevatorA);
-    elevatorB.follow(elevatorA, Tuning.invertElevatorB);
-  }
-
   @Override
   protected void initDefaultCommand() {
     // no default command - the move to position command leaves the elevator PID on and at the
