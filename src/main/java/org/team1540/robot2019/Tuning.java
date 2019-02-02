@@ -46,7 +46,7 @@ public class Tuning {
   public static double elevatorDownPosition = 0;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
-  public static double elevatorInPerRotation = -1.805150714;
+  public static double elevatorInPerRotation = 1.418332785;
 
   public static double elevatorTolerance = 0.5; // inches
   public static double elevatorVelocityTolerance = 1; // inches per second
@@ -55,9 +55,9 @@ public class Tuning {
 
   public static double elevatorDelta = 28; // inches
 
-  public static double elevatorP = 0;
+  public static double elevatorP = 0.1;
   public static double elevatorI = 0;
-  public static double elevatorD = 0;
+  public static double elevatorD = 5;
 
   // wrist
   public static boolean wristInvertMotor = true;
