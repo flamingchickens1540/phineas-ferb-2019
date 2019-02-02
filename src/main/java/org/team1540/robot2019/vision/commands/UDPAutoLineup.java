@@ -1,40 +1,46 @@
 package org.team1540.robot2019.vision.commands;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
-import org.team1540.robot2019.tuners.AutoAlignTuningRobot;
+import org.team1540.robot2019.networking.UDPOdometryGoalSender;
+import org.team1540.robot2019.networking.UDPTwistReceiver;
 import org.team1540.robot2019.utils.LimelightLocalization;
-import org.team1540.robot2019.utils.TankDriveOdometry;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.robot2019.utils.TrigUtils;
-import org.team1540.rooster.drive.pipeline.CTREOutput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
-import org.team1540.rooster.wrappers.RevBlinken.ColorPattern;
 
 public class UDPAutoLineup extends Command {
 
+  private final UDPOdometryGoalSender sender;
+  private final UDPTwistReceiver receiver;
   private final LimelightLocalization limeLoc;
   private final TankDriveOdometryRunnable driveOdometry;
+  private final Transform3D lastOdomToLimelight;
+  private final AHRS navx;
 
   Transform3D goal;
   private Executable pipeline;
   private TankDriveTwist2DInput twist2DInput;
 
-  public UDPAutoLineup(LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry) {
+  public UDPAutoLineup(UDPOdometryGoalSender sender, UDPTwistReceiver receiver, LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry, Transform3D lastOdomToLimelight, AHRS navx) {
+    this.sender = sender;
+    this.receiver = receiver;
     this.limeLoc = limeLoc;
     this.driveOdometry = driveOdometry;
+    this.lastOdomToLimelight = lastOdomToLimelight;
+    this.navx = navx;
     requires(Robot.drivetrain);
     twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadius);
     pipeline = twist2DInput
@@ -46,7 +52,7 @@ public class UDPAutoLineup extends Command {
 
   @Override
   protected void initialize() {
-    Robot.drivetrain.reset();
+//    Robot.drivetrain.reset();
     Robot.drivetrain.configTalonsForVelocity();
 
 
@@ -56,15 +62,16 @@ public class UDPAutoLineup extends Command {
     tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
     tebConfigTable.getEntry("AccLimX").setNumber(0.7);
     tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
-    tebConfigTable.getEntry("AccLimTheta").setNumber(7.0);
+    tebConfigTable.getEntry("AccLimTheta").setNumber(6.0);
     if (limeLoc.attemptUpdatePose()) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     } else {
       if (limeLoc.millisSinceLastAcquired() < 2000) {
-        updateGoal(Robot.lastOdomToLimelight);
+        updateGoal(lastOdomToLimelight);
+      } else {
+  //      Robot.leds.set(ColorPattern.RED);
+        cancel();
       }
-//      Robot.leds.set(ColorPattern.RED);
-      cancel();
     }
   }
 
@@ -80,11 +87,11 @@ public class UDPAutoLineup extends Command {
 
   private void updateGoal(Transform3D newGoal) {
     this.goal = newGoal;
-    Robot.udpSender.setGoal(goal.toTransform2D());
+    sender.setGoal(goal.toTransform2D());
     System.out.println("Goal updated");
 
     Transform3D via_point = goal.add(new Transform3D(-0.7, 0, 0));
-    Robot.udpSender.setViaPoint(via_point.toTransform2D().getPositionVector());
+    sender.setViaPoint(via_point.toTransform2D().getPositionVector());
   }
 
   @Override
@@ -94,7 +101,7 @@ public class UDPAutoLineup extends Command {
     }
 
     // Send velocity command
-    Twist2D cmdVel = Robot.udpReceiver.getCmdVel();
+    Twist2D cmdVel = receiver.getCmdVel();
     twist2DInput.setTwist(cmdVel);
     pipeline.execute();
   }
@@ -104,7 +111,7 @@ public class UDPAutoLineup extends Command {
     if (goal == null) {
       return true;
     }
-    if (getDistanceError() < 0.02 && Math.abs(getAngleError()) < Math.toRadians(2)) {
+    if (getDistanceError() < 0.02 && Math.abs(getAngleError()) < Math.toRadians(3)) {
       Robot.drivetrain.stop();
 //      Robot.leds.set(ColorPattern.LIME);
       return true;
@@ -118,6 +125,6 @@ public class UDPAutoLineup extends Command {
   }
 
   private double getAngleError() {
-    return TrigUtils.SignedAngleDifference(goal.toTransform2D().getTheta(), Math.toRadians(-Robot.navx.getYaw()));
+    return TrigUtils.SignedAngleDifference(goal.toTransform2D().getTheta(), Math.toRadians(-navx.getYaw()));
   }
 }
