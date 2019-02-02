@@ -46,7 +46,7 @@ public class UDPAutoLineup extends Command {
     pipeline = twist2DInput
         .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
         // .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> new TankDriveData(tankDriveData.left, tankDriveData.right))
-        .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
+        .then(new UnitScaler(Tuning.driveTicksPerMeter, 10))
         .then(Robot.drivetrain.getPipelineOutput());
   }
 
