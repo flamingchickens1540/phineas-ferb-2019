@@ -333,19 +333,19 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getLeftPositionMeters() {
-    return getLeftPosition() / Tuning.drivetrainTicksPerMeter;
+    return getLeftPosition() / Tuning.driveTicksPerMeter;
   }
 
   public double getRightPositionMeters() {
-    return getRightPosition() / Tuning.drivetrainTicksPerMeter;
+    return getRightPosition() / Tuning.driveTicksPerMeter;
   }
 
   public double getLeftVelocityMetersPerSecond() {
-    return getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+    return getLeftVelocity() * 10 / Tuning.driveTicksPerMeter;
   }
 
   public double getRightVelocityMetersPerSecond() {
-    return getRightVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+    return getRightVelocity() * 10 / Tuning.driveTicksPerMeter;
   }
 
   public Twist2D getTwist() {
