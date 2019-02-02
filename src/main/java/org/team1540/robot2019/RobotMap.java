@@ -32,8 +32,8 @@ public class RobotMap {
   // sensors and switches
   public static final int ELEVATOR_LIMIT_SENSOR = 1;
 
-  public static final int ARM_MID_SW = 2;
-  public static final int ARM_BTM_SW = 3;
+  public static final int WRIST_MID_SW = 2;
+  public static final int WRIST_BTM_SW = 3;
 
   public static final int INTAKE_SENSOR = 0;
 
