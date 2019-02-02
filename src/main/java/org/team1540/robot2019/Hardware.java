@@ -250,6 +250,8 @@ public class Hardware {
     climberArmRight.setControlMode(ControlMode.Follower);
     climberArmRight.set(climberArmLeft.getDeviceID());
 
+
+
     climberCylinder = new DoubleSolenoid(RobotMap.CLIMBER_CYLINDER_1, RobotMap.CLIMBER_CYLINDER_2);
 
     double end = RobotController.getFPGATime() / 1000.0;

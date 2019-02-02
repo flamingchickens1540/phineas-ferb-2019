@@ -51,12 +51,7 @@ public class OI {
   private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, 0);
   private static JoystickButton placeHatchButton = new JoystickButton(copilot, 0);
 
-  // climber stuff
-
-  // for climber testing
-  public static double getClimberArmJoystick() {
-    return Utilities.processDeadzone(copilot.getY(Hand.kRight), 0.1);
-  }
+  // add climber stuff
 
   /**
    * Since we want to initialize stuff once the robot actually boots up (not as static
