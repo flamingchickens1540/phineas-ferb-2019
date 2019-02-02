@@ -24,6 +24,8 @@ import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Tuning;
 import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
+import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
+import org.team1540.rooster.drive.pipeline.FeedForwardToVelocityProcessor;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
 import org.team1540.rooster.util.SimpleLoopCommand;
@@ -57,6 +59,8 @@ public class Drivetrain extends Subsystem {
     setDefaultCommand(new SimpleLoopCommand("Drive",
         new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
             OI::getDriveHardTurn)
+            .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
+            .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(getPipelineOutput(false)), this));
   }
 
@@ -230,7 +234,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getLeftPosition() {
-    return driveLeftMotorA.getSelectedSensorVelocity();
+    return driveLeftMotorA.getSelectedSensorPosition();
   }
 
   public double getLeftVelocity() {
@@ -242,7 +246,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getRightPosition() {
-    return driveRightMotorA.getSelectedSensorVelocity();
+    return driveRightMotorA.getSelectedSensorPosition();
   }
 
   public double getRightVelocity() {
