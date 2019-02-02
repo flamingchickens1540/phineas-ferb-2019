@@ -78,7 +78,7 @@ public class Tuning {
 
   public static double intakeTimeout = 5;
 
-  public static double intakeEjectTime = 2;
+  public static double intakeEjectTime = 1;
 
   // hatch mech
   public static double hatchGetTime = 0.3; // DELETE IF NOT USING COMMAND
