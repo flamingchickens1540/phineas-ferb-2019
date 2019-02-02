@@ -176,8 +176,8 @@ public class Hardware {
     wristMotor.configVoltageCompSaturation(12);
     wristMotor.enableVoltageCompensation(true);
 
-    wristMidSwitch = new DigitalInput(RobotMap.ARM_MID_SW);
-    wristBtmSwitch = new DigitalInput(RobotMap.ARM_BTM_SW);
+    wristMidSwitch = new DigitalInput(RobotMap.WRIST_MID_SW);
+    wristBtmSwitch = new DigitalInput(RobotMap.WRIST_BTM_SW);
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized wrist in " + (end - start) + " ms");
