@@ -45,7 +45,6 @@ public class Hardware {
 
 
   // solenoid on is wrist extended/down
-  public static Solenoid wristCylinder;
   public static ChickenTalon wristMotor;
 
 
@@ -56,7 +55,6 @@ public class Hardware {
   public static DigitalInput intakeSensor;
 
   public static Solenoid hatchSlide;
-  public static Solenoid hatchSuctionCups;
 
   public static ChickenTalon climberArmLeft;
   public static ChickenTalon climberArmRight;
@@ -170,8 +168,6 @@ public class Hardware {
     logger.info("Initializing wrist...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    wristCylinder = new Solenoid(RobotMap.WRIST_CYLINDER_1);
-
     wristMotor = new ChickenTalon(RobotMap.INTAKE_WRIST);
 
     wristMotor.setInverted(Tuning.wristInvertMotor);
@@ -220,7 +216,6 @@ public class Hardware {
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     hatchSlide = new Solenoid(RobotMap.HATCH_SLIDE);
-    hatchSuctionCups = new Solenoid(RobotMap.HATCH_SUCTION_CUPS);
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized hatch mech in " + (end - start) + " ms");
@@ -249,8 +244,6 @@ public class Hardware {
 
     climberArmRight.setControlMode(ControlMode.Follower);
     climberArmRight.set(climberArmLeft.getDeviceID());
-
-
 
     climberCylinder = new DoubleSolenoid(RobotMap.CLIMBER_CYLINDER_1, RobotMap.CLIMBER_CYLINDER_2);
 
