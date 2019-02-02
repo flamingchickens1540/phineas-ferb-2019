@@ -39,5 +39,5 @@ public class RobotMap {
 
   public static final int INTAKE_SENSOR = 0;
 
-  public static final int PRESSURE_SENSOR = 0;
+  public static final int PRESSURE_SENSOR = 3;
 }
