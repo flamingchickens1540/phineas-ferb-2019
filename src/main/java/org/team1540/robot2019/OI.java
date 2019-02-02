@@ -36,27 +36,24 @@ public class OI {
   public static final int RIGHT_Y = 5;
 
   // Joysticks
-  private static XboxController driver;
-  private static XboxController copilot;
+  private static XboxController driver = new XboxController(0);
+  ;
+  private static XboxController copilot = new XboxController(1);
 
   // copilot buttons
-  private static JoystickButton elevatorMidRocketButton = new JoystickButton(copilot, 0);
-  private static JoystickButton elevatorCargoShipButton = new JoystickButton(copilot, 0);
-  private static JoystickButton elevatorDownButton = new JoystickButton(copilot, 0);
+  private static JoystickButton elevatorMidRocketButton = new JoystickButton(copilot, X);
+  private static JoystickButton elevatorCargoShipButton = new JoystickButton(copilot, B);
+  private static JoystickButton elevatorDownButton = new JoystickButton(copilot, A);
 
-  private static JoystickButton autoIntakeButton = new JoystickButton(copilot, 0);
-  private static JoystickButton ejectButton = new JoystickButton(copilot, 0);
+  private static JoystickButton autoIntakeButton = new JoystickButton(copilot, LB);
+  private static JoystickButton ejectButton = new JoystickButton(copilot, RB);
 
-  private static JoystickButton getHatchButton = new JoystickButton(copilot, 0);
-  private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, 0);
-  private static JoystickButton placeHatchButton = new JoystickButton(copilot, 0);
+  private static JoystickButton getHatchButton = new JoystickButton(copilot, START);
+  private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, START);
+  private static JoystickButton placeHatchButton = new JoystickButton(copilot, START);
 
-  // climber stuff
+  private static JoystickButton startClimbingButton = new JoystickButton(copilot, 0);
 
-  // for climber testing
-  public static double getClimberArmJoystick() {
-    return Utilities.processDeadzone(copilot.getY(Hand.kRight), 0.1);
-  }
 
   /**
    * Since we want to initialize stuff once the robot actually boots up (not as static
@@ -78,9 +75,6 @@ public class OI {
     logger.info("Initializing joysticks...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    driver = new XboxController(0);
-    copilot = new XboxController(1);
-
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized joysticks in " + (end - start) + " ms");
   }
@@ -89,9 +83,9 @@ public class OI {
     logger.info("Initializing buttons...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+    elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(28));
     elevatorCargoShipButton
-        .whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
+        .whenPressed(new MoveElevatorToPosition(14));
     elevatorDownButton.whenPressed(new MoveElevatorToZero());
 
     autoIntakeButton.whenPressed(new IntakeSequence());
