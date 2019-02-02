@@ -20,8 +20,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
@@ -137,7 +139,7 @@ public class Drivetrain extends Subsystem {
     }
   }
 
-  private void configTalonsForVelocity() {
+  public void configTalonsForVelocity() {
     for (ChickenTalon t : driveMotorMasters) {
       t.selectProfileSlot(DRIVE_VELOCITY_SLOT_IDX);
     }
@@ -324,6 +326,38 @@ public class Drivetrain extends Subsystem {
       leftRampAccum = 0;
       rightRampAccum = 0;
     }
+  }
+
+  public double getLeftPositionMeters() {
+    return getLeftPosition() / Tuning.drivetrainTicksPerMeter;
+  }
+
+  public double getRightPositionMeters() {
+    return getRightPosition() / Tuning.drivetrainTicksPerMeter;
+  }
+
+  public double getLeftVelocityMetersPerSecond() {
+    return getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+  }
+
+  public double getRightVelocityMetersPerSecond() {
+    return getRightVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
+  }
+
+  public Twist2D getTwist() {
+    double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
+    double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadius) / 2;
+    return new Twist2D(xvel, 0, thetavel);
+  }
+
+  public void zeroEncoders() {
+    Hardware.driveLeftMotorA.setSelectedSensorPosition(0);
+    Hardware.driveRightMotorA.setSelectedSensorPosition(0);
+  }
+
+  public void stop() {
+    setLeftVelocity(0);
+    setRightVelocity(0);
   }
 }
 
