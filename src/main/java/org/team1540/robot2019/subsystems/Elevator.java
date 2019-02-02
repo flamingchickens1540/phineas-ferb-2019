@@ -53,8 +53,10 @@ public class Elevator extends Subsystem {
   }
 
   public void setPosition(double position) {
+    double positionRaw = (position / elevatorInPerRotation) + positionOffset;
+    logger.debug("Setting elevator to raw position " + positionRaw);
     elevatorA.getPIDController()
-        .setReference((position / elevatorInPerRotation) + positionOffset, ControlType.kPosition, 0,
+        .setReference(positionRaw, ControlType.kPosition, 0,
             Tuning.elevatorStaticFeedForward);
   }
 
