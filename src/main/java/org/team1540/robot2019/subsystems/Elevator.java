@@ -90,7 +90,7 @@ public class Elevator extends Subsystem {
   }
 
   public double getPosition() {
-    return (elevatorA.getEncoder().getPosition() * elevatorInPerRotation)
+    return -(elevatorA.getEncoder().getPosition() * elevatorInPerRotation)
         + positionOffset;
   }
 
