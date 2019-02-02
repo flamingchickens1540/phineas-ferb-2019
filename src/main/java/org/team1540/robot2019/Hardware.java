@@ -106,7 +106,10 @@ public class Hardware {
       // at the moment, this hard caps to driveCurrentLimit; we might implement peak limiting
       // instead
       talon.configPeakCurrentLimit(0);
+      talon.configPeakOutputForward(1);
+      talon.configPeakOutputReverse(-1);
       talon.configContinuousCurrentLimit(Tuning.driveCurrentLimit);
+      talon.configOpenloopRamp(Tuning.driveOpenLoopRamp);
     }
 
     for (ChickenTalon talon : driveMotorMasters) {
