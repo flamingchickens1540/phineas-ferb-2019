@@ -26,11 +26,9 @@ public class HatchMech extends Subsystem {
   }
 
   public void attatch() {
-    hatchSuctionCups.set(true);
   }
 
   public void release() {
-    hatchSuctionCups.set(false);
   }
 
   @Override

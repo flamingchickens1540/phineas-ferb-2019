@@ -3,7 +3,7 @@ package org.team1540.robot2019.subsystems;
 import static org.team1540.robot2019.Hardware.elevatorA;
 import static org.team1540.robot2019.Hardware.elevatorB;
 import static org.team1540.robot2019.Hardware.elevatorLimitSensor;
-import static org.team1540.robot2019.Tuning.inPerRotation;
+import static org.team1540.robot2019.Tuning.elevatorInPerRotation;
 
 import com.revrobotics.ControlType;
 import edu.wpi.first.networktables.NetworkTable;
@@ -36,15 +36,10 @@ public class Elevator extends Subsystem {
 
   private double positionOffset;
 
-
-  public Elevator() {
-    elevatorA.setInverted(Tuning.invertElevatorA);
-    elevatorB.follow(elevatorA, Tuning.invertElevatorB);
-  }
-
   @Override
   protected void initDefaultCommand() {
-
+    // no default command - the move to position command leaves the elevator PID on and at the
+    // setpoint, and the zero command stops the motors when it finishes.
   }
 
   public boolean isAtLimit() {
@@ -52,8 +47,10 @@ public class Elevator extends Subsystem {
   }
 
   public void setPosition(double position) {
+    double positionRaw = (position / elevatorInPerRotation) + positionOffset;
+    logger.debug("Setting elevator to raw position " + positionRaw);
     elevatorA.getPIDController()
-        .setReference((position / inPerRotation) + positionOffset, ControlType.kPosition, 0,
+        .setReference(positionRaw, ControlType.kPosition, 0,
             Tuning.elevatorStaticFeedForward);
   }
 
@@ -66,7 +63,7 @@ public class Elevator extends Subsystem {
   }
 
   public double getVelocity() {
-    return elevatorA.getEncoder().getVelocity() * (inPerRotation / 60);
+    return elevatorA.getEncoder().getVelocity() * (elevatorInPerRotation / 60);
   }
 
   public double getThrottle() {
@@ -93,7 +90,7 @@ public class Elevator extends Subsystem {
   }
 
   public double getPosition() {
-    return (elevatorA.getEncoder().getPosition() * inPerRotation)
+    return -(elevatorA.getEncoder().getPosition() * elevatorInPerRotation)
         + positionOffset;
   }
 

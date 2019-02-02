@@ -1,10 +1,11 @@
 package org.team1540.robot2019;
 
-import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
@@ -16,7 +17,6 @@ import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
-import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
 
@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   public static Intake intake;
   public static HatchMech hatchMech;
   public static Climber climber;
+
+  boolean disableBrakes;
 
   @Override
   public void robotInit() {
@@ -53,10 +55,7 @@ public class Robot extends TimedRobot {
 
     OI.init();
 
-    Shuffleboard.getTab("Phineas")
-        .add(new SimpleCommand("Reset Preferences", Preferences.getInstance()::removeAll));
-
-    // TODO: shuffleboard
+    ShuffleboardDisplay.init();
 
     double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
     logger.info("Robot ready. Initialization took " + (end - start) + " ms");
@@ -77,18 +76,29 @@ public class Robot extends TimedRobot {
     logger.debug("Disabling drive brakes in 2 seconds...");
     brakeTimer.reset();
     brakeTimer.start();
+    disableBrakes = true;
 
     wrist.handleDisable();
+
+    if (DriverStation.getInstance().isFMSAttached()) {
+      logger.debug("FMS is attached, auto-stopping recording");
+      Shuffleboard.stopRecording();
+    }
+
+    Shuffleboard.addEventMarker("Robot Disable", EventImportance.kNormal);
 
     Hardware.checkStickyFaults();
   }
 
   @Override
   public void disabledPeriodic() {
-    if (brakeTimer.hasPeriodPassed(2)) {
+    if (brakeTimer.hasPeriodPassed(2) && disableBrakes) {
       brakeTimer.stop();
       drivetrain.setBrake(false);
       logger.debug("Drive brakes disabled");
+      disableBrakes = false;
+
+      Shuffleboard.addEventMarker("Drive brakes disabled", EventImportance.kTrivial);
     }
   }
 
@@ -97,6 +107,18 @@ public class Robot extends TimedRobot {
     drivetrain.setBrake(true);
 
     Hardware.checkStickyFaults();
+
+    if (DriverStation.getInstance().isFMSAttached()) {
+      logger.debug("FMS is attached, auto-starting recording");
+      Shuffleboard.setRecordingFileNameFormat(
+          DriverStation.getInstance().getEventName() + "-" + DriverStation.getInstance()
+              .getMatchType() + "-" + DriverStation.getInstance().getMatchNumber()
+              + "-${date}-${time}");
+
+      Shuffleboard.startRecording();
+    }
+
+    Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
   }
 
   @Override
@@ -108,6 +130,12 @@ public class Robot extends TimedRobot {
     drivetrain.setBrake(true);
 
     Hardware.checkStickyFaults();
+
+    if (DriverStation.getInstance().isFMSAttached()) {
+      Shuffleboard.startRecording();
+    }
+
+    Shuffleboard.addEventMarker("Teleop Start", EventImportance.kNormal);
   }
 
   @Override

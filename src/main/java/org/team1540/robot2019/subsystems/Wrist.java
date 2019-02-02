@@ -125,10 +125,6 @@ public class Wrist extends Subsystem {
     wristMotor.set(ControlMode.PercentOutput, throttle);
   }
 
-  public void setCylinder(boolean value) {
-    wristCylinder.set(value);
-  }
-
   public boolean isAtMid() {
     return !wristMidSwitch.get();
   }

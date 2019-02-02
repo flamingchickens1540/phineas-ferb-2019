@@ -4,10 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.*;
 import org.apache.log4j.Logger;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
@@ -48,7 +45,6 @@ public class Hardware {
 
 
   // solenoid on is wrist extended/down
-  public static Solenoid wristCylinder;
   public static ChickenTalon wristMotor;
 
 
@@ -59,13 +55,11 @@ public class Hardware {
   public static DigitalInput intakeSensor;
 
   public static Solenoid hatchSlide;
-  public static Solenoid hatchSuctionCups;
 
   public static ChickenTalon climberArmLeft;
   public static ChickenTalon climberArmRight;
 
-  public static Solenoid climberCylinder1;
-  public static Solenoid climberCylinder2;
+  public static DoubleSolenoid climberCylinder;
 
 
   public static AnalogInput pressureSensor;
@@ -112,7 +106,10 @@ public class Hardware {
       // at the moment, this hard caps to driveCurrentLimit; we might implement peak limiting
       // instead
       talon.configPeakCurrentLimit(0);
+      talon.configPeakOutputForward(1);
+      talon.configPeakOutputReverse(-1);
       talon.configContinuousCurrentLimit(Tuning.driveCurrentLimit);
+      talon.configOpenloopRamp(Tuning.driveOpenLoopRamp);
     }
 
     for (ChickenTalon talon : driveMotorMasters) {
@@ -174,8 +171,6 @@ public class Hardware {
     logger.info("Initializing wrist...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    wristCylinder = new Solenoid(RobotMap.WRIST_CYLINDER_1);
-
     wristMotor = new ChickenTalon(RobotMap.INTAKE_WRIST);
 
     wristMotor.setInverted(Tuning.wristInvertMotor);
@@ -184,8 +179,8 @@ public class Hardware {
     wristMotor.configVoltageCompSaturation(12);
     wristMotor.enableVoltageCompensation(true);
 
-    wristMidSwitch = new DigitalInput(RobotMap.ARM_MID_SW);
-    wristBtmSwitch = new DigitalInput(RobotMap.ARM_BTM_SW);
+    wristMidSwitch = new DigitalInput(RobotMap.WRIST_MID_SW);
+    wristBtmSwitch = new DigitalInput(RobotMap.WRIST_BTM_SW);
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized wrist in " + (end - start) + " ms");
@@ -224,7 +219,6 @@ public class Hardware {
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     hatchSlide = new Solenoid(RobotMap.HATCH_SLIDE);
-    hatchSuctionCups = new Solenoid(RobotMap.HATCH_SUCTION_CUPS);
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized hatch mech in " + (end - start) + " ms");
@@ -253,9 +247,8 @@ public class Hardware {
 
     climberArmRight.setControlMode(ControlMode.Follower);
     climberArmRight.set(climberArmLeft.getDeviceID());
-//
-//    climberCylinder1 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_1);
-//    climberCylinder2 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_2);
+
+    climberCylinder = new DoubleSolenoid(RobotMap.CLIMBER_CYLINDER_1, RobotMap.CLIMBER_CYLINDER_2);
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized climber in " + (end - start) + " ms");

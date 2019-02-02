@@ -34,6 +34,10 @@ public class Tuning {
   public static boolean invertDriveLeftSensor = false;
   public static boolean invertDriveRight = false;
   public static boolean invertDriveRightSensor = false;
+  public static double driveTicksPerMeter = 1047.8;
+  public static double driveKV = 0.25975;
+  public static double driveVIntercept = 0.054083333;
+  public static double driveMaxVel = 3.645171639;
 
   public static int driveCurrentLimit = 40;
 
@@ -46,7 +50,7 @@ public class Tuning {
   public static double elevatorDownPosition = 0;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
-  public static double inPerRotation = -1.805150714;
+  public static double elevatorInPerRotation = 1.418332785;
 
   public static double elevatorTolerance = 0.5; // inches
   public static double elevatorVelocityTolerance = 1; // inches per second
@@ -55,9 +59,9 @@ public class Tuning {
 
   public static double elevatorDelta = 28; // inches
 
-  public static double elevatorP = 0;
+  public static double elevatorP = 0.1;
   public static double elevatorI = 0;
-  public static double elevatorD = 0;
+  public static double elevatorD = 5;
 
   // wrist
   public static boolean wristInvertMotor = true;
@@ -78,19 +82,21 @@ public class Tuning {
 
   public static double intakeTimeout = 5;
 
-  public static double intakeEjectTime = 2;
+  public static double intakeEjectTime = 1;
 
   // hatch mech
   public static double hatchGetTime = 0.3; // DELETE IF NOT USING COMMAND
   public static double hatchPlaceTime = 0.3; // DELETE IF NOT USING COMMAND
 
-
-  public static double pressureSensorVoltageScaleFactor;
+  // climber
+  public static double climberArmSpeed = 0;
+  public static double climberArmHoldSpeed = 0;
+  public static double climberP = 0;
+  public static double climberI = 0;
+  public static double climberD = 0;
 
   // auto-lineup
   public static double drivetrainRadius = 0.305; // This is for pandora
-
-  public static double drivetrainTicksPerMeter = 2117.78; // This is also for pandora
 
   public static long drivetrainUDPTimeout = 500;
 
