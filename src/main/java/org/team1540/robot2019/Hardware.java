@@ -4,10 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.*;
 import org.apache.log4j.Logger;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
@@ -64,8 +61,7 @@ public class Hardware {
   public static ChickenTalon climberArmLeft;
   public static ChickenTalon climberArmRight;
 
-  public static Solenoid climberCylinder1;
-  public static Solenoid climberCylinder2;
+  public static DoubleSolenoid climberCylinder;
 
 
   public static AnalogInput pressureSensor;
@@ -253,9 +249,8 @@ public class Hardware {
 
     climberArmRight.setControlMode(ControlMode.Follower);
     climberArmRight.set(climberArmLeft.getDeviceID());
-//
-//    climberCylinder1 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER);
-//    climberCylinder2 = new Solenoid(RobotMap.CLIMBER_REAR_CYLINDER_2);
+
+    climberCylinder = new DoubleSolenoid(RobotMap.CLIMBER_CYLINDER_1, RobotMap.CLIMBER_CYLINDER_2);
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized climber in " + (end - start) + " ms");
