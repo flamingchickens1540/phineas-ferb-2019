@@ -17,6 +17,9 @@ public class DriveTuningRobot extends TimedRobot {
   @Override
   public void robotInit() {
     PreferenceManager.getInstance().add(new Tuning());
+
+    Scheduler.getInstance().run();
+
     Hardware.initDrive();
     OI.initJoysticks();
 
