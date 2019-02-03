@@ -1,5 +1,7 @@
 package org.team1540.robot2019;
 
+import edu.wpi.first.wpilibj.SPI.Port;
+
 public class RobotMap {
 
   // motors
@@ -38,4 +40,6 @@ public class RobotMap {
   public static final int INTAKE_SENSOR = 0;
 
   public static final int PRESSURE_SENSOR = 3;
+
+  public static final Port NAVX = Port.kMXP;
 }

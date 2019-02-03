@@ -1,6 +1,7 @@
 package org.team1540.robot2019;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -64,6 +65,8 @@ public class Hardware {
 
   public static AnalogInput pressureSensor;
 
+  public static AHRS navx;
+
   static void initAll() {
     logger.info("Initializing robot hardware...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
@@ -75,6 +78,7 @@ public class Hardware {
     initHatchMech();
     initClimber();
     initPressureSensor();
+    initNavX();
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized robot hardware in " + (end - start) + " ms");
@@ -262,6 +266,16 @@ public class Hardware {
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized pressure sensor in " + (end - start) + " ms");
+  }
+
+  public static void initNavX() {
+    logger.info("Initializing NavX-MXP...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+    navx = new AHRS(RobotMap.NAVX);
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    logger.info("Initialized NavX-MXP in " + (end - start) + " ms");
   }
 
   public static void checkStickyFaults() {
