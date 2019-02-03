@@ -22,8 +22,6 @@ public class WristTuningRobot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     wrist.set(Utilities.processDeadzone(joystick.getRawAxis(1), 0.1));
-
-    wrist.setCylinder(joystick.getRawButton(1));
   }
 
   @Override

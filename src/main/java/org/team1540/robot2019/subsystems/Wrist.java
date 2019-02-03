@@ -1,7 +1,6 @@
 package org.team1540.robot2019.subsystems;
 
 import static org.team1540.robot2019.Hardware.wristBtmSwitch;
-import static org.team1540.robot2019.Hardware.wristCylinder;
 import static org.team1540.robot2019.Hardware.wristMidSwitch;
 import static org.team1540.robot2019.Hardware.wristMotor;
 

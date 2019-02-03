@@ -1,7 +1,6 @@
 package org.team1540.robot2019.subsystems;
 
 import static org.team1540.robot2019.Hardware.hatchSlide;
-import static org.team1540.robot2019.Hardware.hatchSuctionCups;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
