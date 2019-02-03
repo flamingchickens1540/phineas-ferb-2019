@@ -29,7 +29,7 @@ public class ClimberTuningRobot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    climber.setArms(-Utilities.processDeadzone(joystick.getRawAxis(5), 0.1));
+//    climber.setArms(-Utilities.processDeadzone(joystick.getRawAxis(5), 0.1));
 
 //    elevator.setRaw(Utilities.processDeadzone(joystick2.getRawAxis(1), 0.1) / 5);
 //    elevator.setRaw(0.04);
@@ -37,7 +37,7 @@ public class ClimberTuningRobot extends TimedRobot {
     SmartDashboard.putNumber("climber current left", climber.getCurrentLeft());
     SmartDashboard.putNumber("climber current right", climber.getCurrentRight());
 
-    button1.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
+//    button1.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
     button1.whenPressed(new SimpleCommand("start climbing", climber::startClimbing));
     button2.whenPressed(new SimpleCommand("retract cylinder", climber::onPlatform));
   }
