@@ -6,7 +6,7 @@ import org.team1540.rooster.preferencemanager.TuningClass;
 public class Tuning {
 
   // drive
-  public static double driveVelocityP = 0;
+  public static double driveVelocityP = 2;
   public static double driveVelocityI = 0;
   public static double driveVelocityD = 0;
   public static double driveVelocityF = 0;
@@ -31,9 +31,9 @@ public class Tuning {
   public static double driveClosedLoopRamp = 0;
 
   public static boolean invertDriveLeft = true;
-  public static boolean invertDriveLeftSensor = false;
+  public static boolean invertDriveLeftSensor = true;
   public static boolean invertDriveRight = false;
-  public static boolean invertDriveRightSensor = false;
+  public static boolean invertDriveRightSensor = true;
   public static double driveTicksPerMeter = 1047.8;
   public static double driveKV = 0.25975;
   public static double driveVIntercept = 0.054083333;
