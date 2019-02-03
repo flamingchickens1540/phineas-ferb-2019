@@ -48,6 +48,9 @@ public class Drivetrain extends Subsystem {
   private NetworkTableEntry leftThrottleEntry = table.getEntry("leftThrot");
   private NetworkTableEntry rightThrottleEntry = table.getEntry("rightThrot");
 
+  private NetworkTableEntry rightErrEntry = table.getEntry("leftErr");
+  private NetworkTableEntry leftErrEntry = table.getEntry("rightErr");
+
   private NetworkTableEntry leftCurrentAEntry = table.getEntry("leftCurrA");
   private NetworkTableEntry leftCurrentBEntry = table.getEntry("leftCurrB");
   private NetworkTableEntry leftCurrentCEntry = table.getEntry("leftCurrC");
@@ -317,6 +320,9 @@ public class Drivetrain extends Subsystem {
 
     leftThrottleEntry.setNumber(getLeftThrottle());
     rightThrottleEntry.setNumber(getRightThrottle());
+
+    leftErrEntry.forceSetNumber(driveLeftMotorA.getClosedLoopError());
+    leftErrEntry.forceSetNumber(driveRightMotorA.getClosedLoopError());
 
     leftCurrentAEntry.setNumber(driveLeftMotorA.getOutputCurrent());
     leftCurrentBEntry.setNumber(driveLeftMotorB.getOutputCurrent());
