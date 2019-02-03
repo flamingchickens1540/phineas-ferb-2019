@@ -24,8 +24,8 @@ public class RobotMap {
 
   // pneumatics
 
-  public static final int CLIMBER_CYLINDER_1 = 7;
-  public static final int CLIMBER_CYLINDER_2 = 8;
+  public static final int CLIMBER_CYLINDER_1 = 6;
+  public static final int CLIMBER_CYLINDER_2 = 7;
 
   public static final int HATCH_SLIDE = 2;
 
