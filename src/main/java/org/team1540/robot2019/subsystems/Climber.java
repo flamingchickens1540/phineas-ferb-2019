@@ -5,11 +5,17 @@ import static org.team1540.robot2019.Hardware.climberArmRight;
 import static org.team1540.robot2019.Hardware.climberCylinder;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2019.Tuning;
 
 public class Climber extends Subsystem {
+
+  private NetworkTable table = NetworkTableInstance.getDefault().getTable("climber");
+  private NetworkTableEntry posEntry = table.getEntry("pos");
 
   public void cylinderDown() {
     climberCylinder.set(DoubleSolenoid.Value.kForward);
@@ -22,6 +28,10 @@ public class Climber extends Subsystem {
   public void setArms(double value) {
     climberArmLeft.set(ControlMode.PercentOutput, value);
 //        climberArmRight.set(ControlMode.PercentOutput, value);
+  }
+
+  public void setArmPosition(double pos) {
+    climberArmLeft.set(ControlMode.Position, pos);
   }
 
   public void setArmsConstant(double speed) {
@@ -50,4 +60,12 @@ public class Climber extends Subsystem {
   protected void initDefaultCommand() {
   }
 
+  public double getPosition() {
+    return climberArmLeft.getSelectedSensorPosition();
+  }
+
+  @Override
+  public void periodic() {
+    posEntry.forceSetNumber(getPosition());
+  }
 }
