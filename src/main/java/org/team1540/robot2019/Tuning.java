@@ -5,6 +5,9 @@ import org.team1540.rooster.preferencemanager.TuningClass;
 @TuningClass("ph_")
 public class Tuning {
 
+  // general
+  public static boolean isComp;
+
   // drive
   public static double driveVelocityP = 0;
   public static double driveVelocityI = 0;

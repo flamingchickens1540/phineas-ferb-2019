@@ -1,7 +1,6 @@
 package org.team1540.robot2019.subsystems;
 
 import static org.team1540.robot2019.Hardware.climberArmLeft;
-import static org.team1540.robot2019.Hardware.climberArmRight;
 import static org.team1540.robot2019.Hardware.climberCylinder;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -10,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Tuning;
 
 public class Climber extends Subsystem {
@@ -49,11 +49,11 @@ public class Climber extends Subsystem {
   }
 
   public double getCurrentLeft() {
-    return climberArmLeft.getOutputCurrent();
+    return Hardware.getClimberLCurrent();
   }
 
   public double getCurrentRight() {
-    return climberArmRight.getOutputCurrent();
+    return Hardware.getClimberRCurrent();
   }
 
   @Override

@@ -41,5 +41,19 @@ public class RobotMap {
 
   public static final int PRESSURE_SENSOR = 3;
 
+
+  // pdp ports
+  public static final int PDP_DRIVE_LEFT_A = 0;
+  public static final int PDP_DRIVE_LEFT_B = 0;
+  public static final int PDP_DRIVE_LEFT_C = 0;
+  public static final int PDP_DRIVE_RIGHT_A = 0;
+  public static final int PDP_DRIVE_RIGHT_B = 0;
+  public static final int PDP_DRIVE_RIGHT_C = 0;
+  public static final int PDP_INTAKE_WRIST = 0;
+  public static final int PDP_INTAKE_TOP = 0;
+  public static final int PDP_INTAKE_BTM = 0;
+  public static final int PDP_CLIMBER_ARM_L = 0;
+  public static final int PDP_CLIMBER_ARM_R = 0;
+
   public static final Port NAVX = Port.kMXP;
 }
