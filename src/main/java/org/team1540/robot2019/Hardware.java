@@ -5,9 +5,16 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Solenoid;
 import org.apache.log4j.Logger;
+import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
+import org.team1540.rooster.wrappers.ChickenVictor;
 
 /**
  * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I
@@ -24,14 +31,14 @@ public class Hardware {
   // these aren't final for initialization but don't change them mkay
 
   public static ChickenTalon driveLeftMotorA;
-  public static ChickenTalon driveLeftMotorB;
-  public static ChickenTalon driveLeftMotorC;
-  public static ChickenTalon[] driveLeftMotors;
+  public static ChickenController driveLeftMotorB;
+  public static ChickenController driveLeftMotorC;
+  public static ChickenController[] driveLeftMotors;
   public static ChickenTalon driveRightMotorA;
-  public static ChickenTalon driveRightMotorB;
-  public static ChickenTalon driveRightMotorC;
-  public static ChickenTalon[] driveRightMotors;
-  public static ChickenTalon[] driveMotorAll;
+  public static ChickenController driveRightMotorB;
+  public static ChickenController driveRightMotorC;
+  public static ChickenController[] driveRightMotors;
+  public static ChickenController[] driveMotorAll;
   public static ChickenTalon[] driveMotorMasters;
 
 
@@ -46,19 +53,19 @@ public class Hardware {
 
 
   // solenoid on is wrist extended/down
-  public static ChickenTalon wristMotor;
+  public static ChickenController wristMotor;
 
 
   // positive setpoint is outtaking
-  public static ChickenTalon intakeTop;
-  public static ChickenTalon intakeBtm;
+  public static ChickenController intakeTop;
+  public static ChickenController intakeBtm;
 
   public static DigitalInput intakeSensor;
 
   public static Solenoid hatchSlide;
 
   public static ChickenTalon climberArmLeft;
-  public static ChickenTalon climberArmRight;
+  public static ChickenController climberArmRight;
 
   public static DoubleSolenoid climberCylinder;
 
@@ -66,6 +73,9 @@ public class Hardware {
   public static AnalogInput pressureSensor;
 
   public static AHRS navx;
+
+  // initialized statically as there's literally no scenario where the PDP wouldn't be connected
+  public static PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   static void initAll() {
     logger.info("Initializing robot hardware...");
@@ -96,23 +106,20 @@ public class Hardware {
     driveRightMotorB = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
     driveRightMotorC = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
 
-    driveMotorAll = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC,
+    driveMotorAll = new ChickenController[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC,
         driveRightMotorA, driveRightMotorB, driveRightMotorC};
     driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
-    driveLeftMotors = new ChickenTalon[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC};
-    driveRightMotors = new ChickenTalon[]{driveRightMotorA, driveRightMotorB, driveRightMotorC};
+    driveLeftMotors = new ChickenController[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC};
+    driveRightMotors = new ChickenController[]{driveRightMotorA, driveRightMotorB,
+        driveRightMotorC};
 
-    for (ChickenTalon talon : driveMotorAll) {
-      talon.configFactoryDefault();
+    for (ChickenController talon : driveMotorAll) {
       talon.setBrake(true);
       talon.configVoltageCompSaturation(12);
       talon.enableVoltageCompensation(true);
-      // at the moment, this hard caps to driveCurrentLimit; we might implement peak limiting
-      // instead
-      talon.configPeakCurrentLimit(0);
+
       talon.configPeakOutputForward(1);
       talon.configPeakOutputReverse(-1);
-      talon.configContinuousCurrentLimit(Tuning.driveCurrentLimit);
       talon.configOpenloopRamp(Tuning.driveOpenLoopRamp);
     }
 
@@ -125,13 +132,18 @@ public class Hardware {
       talon.config_kI(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityI);
       talon.config_kD(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityD);
       talon.config_kF(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityF);
+
+      // at the moment, this hard caps to driveCurrentLimit; we might implement peak limiting
+      // instead
+      talon.configPeakCurrentLimit(0);
+      talon.configContinuousCurrentLimit(Tuning.driveCurrentLimit);
     }
 
-    for (ChickenTalon talon : driveLeftMotors) {
+    for (ChickenController talon : driveLeftMotors) {
       talon.setInverted(Tuning.invertDriveLeft);
     }
 
-    for (ChickenTalon talon : driveRightMotors) {
+    for (ChickenController talon : driveRightMotors) {
       talon.setInverted(Tuning.invertDriveRight);
     }
 
@@ -175,7 +187,7 @@ public class Hardware {
     logger.info("Initializing wrist...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    wristMotor = new ChickenTalon(RobotMap.INTAKE_WRIST);
+    wristMotor = createController(RobotMap.INTAKE_WRIST);
 
     wristMotor.setInverted(Tuning.wristInvertMotor);
     wristMotor.setBrake(true);
@@ -194,11 +206,8 @@ public class Hardware {
     logger.info("Initializing intake...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    intakeTop = new ChickenTalon(RobotMap.INTAKE_TOP);
-    intakeBtm = new ChickenTalon(RobotMap.INTAKE_BTM);
-
-    intakeTop.configFactoryDefault();
-    intakeBtm.configFactoryDefault();
+    intakeTop = createController(RobotMap.INTAKE_TOP);
+    intakeBtm = createController(RobotMap.INTAKE_BTM);
 
     intakeTop.setInverted(Tuning.intakeInvertTop);
     intakeBtm.setInverted(Tuning.intakeInvertBtm);
@@ -233,10 +242,7 @@ public class Hardware {
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     climberArmLeft = new ChickenTalon(RobotMap.CLIMBER_ARM_L);
-    climberArmRight = new ChickenTalon(RobotMap.CLIMBER_ARM_R);
-
-    climberArmLeft.configFactoryDefault();
-    climberArmRight.configFactoryDefault();
+    climberArmRight = createController(RobotMap.CLIMBER_ARM_R);
 
     climberArmLeft.setBrake(true);
     climberArmRight.setBrake(true);
@@ -290,5 +296,89 @@ public class Hardware {
 
     PhineasUtilities.processStickyFaults("Intake", "top", intakeTop);
     PhineasUtilities.processStickyFaults("Intake", "bottom", intakeBtm);
+  }
+
+  public static ChickenController createController(int id) {
+    return Tuning.isComp ? new ChickenVictor(id) : new ChickenTalon(id);
+  }
+
+  public static double getDriveLeftACurrent() {
+    return driveLeftMotorA.getOutputCurrent();
+  }
+
+  public static double getDriveLeftBCurrent() {
+    if (driveLeftMotorB instanceof ChickenTalon) {
+      return ((ChickenTalon) driveLeftMotorB).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_DRIVE_LEFT_B);
+    }
+  }
+
+  public static double getDriveLeftCCurrent() {
+    if (driveLeftMotorC instanceof ChickenTalon) {
+      return ((ChickenTalon) driveLeftMotorC).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_DRIVE_LEFT_C);
+    }
+  }
+
+  public static double getDriveRightACurrent() {
+    return driveLeftMotorA.getOutputCurrent();
+  }
+
+  public static double getDriveRightBCurrent() {
+    if (driveRightMotorB instanceof ChickenTalon) {
+      return ((ChickenTalon) driveRightMotorB).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_DRIVE_RIGHT_B);
+    }
+  }
+
+  public static double getDriveRightCCurrent() {
+    if (driveRightMotorC instanceof ChickenTalon) {
+      return ((ChickenTalon) driveRightMotorC).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_DRIVE_RIGHT_C);
+    }
+  }
+
+  public static double getIntakeWristCurrent() {
+    if (wristMotor instanceof ChickenTalon) {
+      return ((ChickenTalon) wristMotor).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_INTAKE_WRIST);
+    }
+  }
+
+  public static double getIntakeTopCurrent() {
+    if (intakeTop instanceof ChickenTalon) {
+      return ((ChickenTalon) intakeTop).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_INTAKE_TOP);
+    }
+  }
+
+  public static double getIntakeBtmCurrent() {
+    if (intakeBtm instanceof ChickenTalon) {
+      return ((ChickenTalon) intakeBtm).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_INTAKE_BTM);
+    }
+  }
+
+  public static double getClimberLCurrent() {
+    if (climberArmLeft instanceof ChickenTalon) {
+      return ((ChickenTalon) climberArmLeft).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_CLIMBER_ARM_L);
+    }
+  }
+
+  public static double getClimberRCurrent() {
+    if (climberArmRight instanceof ChickenTalon) {
+      return ((ChickenTalon) climberArmRight).getOutputCurrent();
+    } else {
+      return pdp.getCurrent(RobotMap.PDP_CLIMBER_ARM_R);
+    }
   }
 }
