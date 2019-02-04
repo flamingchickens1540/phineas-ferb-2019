@@ -1,5 +1,7 @@
 package org.team1540.robot2019;
 
+import static org.team1540.rooster.Utilities.scale;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
@@ -99,21 +101,38 @@ public class OI {
   }
 
   public static double getDriveThrottle() {
-    return Utilities.scale(
+    return scale(
         -Utilities.processDeadzone(driver.getY(GenericHID.Hand.kLeft), Tuning.driveDeadzone),
         Tuning.driveThrottleExponent);
   }
 
   public static double getDriveSoftTurn() {
-    return Utilities.scale(
+    return scale(
         Utilities.processDeadzone(driver.getX(Hand.kRight), Tuning.driveDeadzone),
         Tuning.driveSoftTurnExponent);
   }
 
   public static double getDriveHardTurn() {
-    return Utilities.scale(
+    return scale(
         Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kRight), 0.1)
             - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
         Tuning.driveHardTurnExponent);
+  }
+
+  // DRIVETRAIN
+  public static double getTankdriveLeftAxis() {
+    return scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_Y), Tuning.axisDeadzone), 2);
+  }
+
+  public static double getTankdriveRightAxis() {
+    return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
+  }
+
+  public static double getTankdriveBackwardsAxis() {
+    return scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_TRIG), Tuning.axisDeadzone), 2);
+  }
+
+  public static double getTankdriveForwardsAxis() {
+    return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
   }
 }

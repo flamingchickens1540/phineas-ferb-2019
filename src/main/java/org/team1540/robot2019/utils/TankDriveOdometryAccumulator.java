@@ -7,9 +7,9 @@ public class TankDriveOdometryAccumulator {
 
   private Transform3D odomToBaseLink = Transform3D.IDENTITY;
 
-  private double distancePrevLeft;
-  private double distancePrevRight;
-  private double angleRadsPrev;
+  private double distancePrevLeft = 0;
+  private double distancePrevRight = 0;
+  private double angleRadsPrev = 0;
 
   /**
    * @param distanceLeft Absolute distance in meters of left wheels
@@ -32,5 +32,11 @@ public class TankDriveOdometryAccumulator {
 
   public Transform3D getTransform() {
     return odomToBaseLink;
+  }
+
+  public void reset() {
+    distancePrevLeft = 0;
+    distancePrevRight = 0;
+    angleRadsPrev = 0;
   }
 }

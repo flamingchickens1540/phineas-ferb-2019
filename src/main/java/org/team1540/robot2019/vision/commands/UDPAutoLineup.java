@@ -13,6 +13,7 @@ import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.networking.UDPOdometryGoalSender;
 import org.team1540.robot2019.networking.UDPTwistReceiver;
+import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
@@ -23,7 +24,8 @@ import org.team1540.rooster.functional.Executable;
 
 public class UDPAutoLineup extends Command {
 
-  private final UDPOdometryGoalSender sender;
+    private final Drivetrain dt;
+    private final UDPOdometryGoalSender sender;
   private final UDPTwistReceiver receiver;
   private final LimelightLocalization limeLoc;
   private final TankDriveOdometryRunnable driveOdometry;
@@ -34,35 +36,37 @@ public class UDPAutoLineup extends Command {
   private Executable pipeline;
   private TankDriveTwist2DInput twist2DInput;
 
-  public UDPAutoLineup(UDPOdometryGoalSender sender, UDPTwistReceiver receiver, LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry, Transform3D lastOdomToLimelight, AHRS navx) {
-    this.sender = sender;
+  public UDPAutoLineup(Drivetrain dt,UDPOdometryGoalSender sender, UDPTwistReceiver receiver, LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry, Transform3D lastOdomToLimelight, AHRS navx) {
+      this.dt = dt;
+      this.sender = sender;
     this.receiver = receiver;
     this.limeLoc = limeLoc;
     this.driveOdometry = driveOdometry;
     this.lastOdomToLimelight = lastOdomToLimelight;
     this.navx = navx;
-    requires(Robot.drivetrain);
+    requires(dt);
     twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadius);
     pipeline = twist2DInput
-        .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
+        .then(new FeedForwardProcessor(0, 0,0))
+//        .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
         // .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> new TankDriveData(tankDriveData.left, tankDriveData.right))
         .then(new UnitScaler(Tuning.driveTicksPerMeter, 10))
-        .then(Robot.drivetrain.getPipelineOutput());
+        .then(dt.getPipelineOutput());
   }
 
   @Override
   protected void initialize() {
-//    Robot.drivetrain.reset();
-    Robot.drivetrain.configTalonsForVelocity();
+//    dt.reset();
+    dt.configTalonsForVelocity();
 
 
     NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
     tebConfigTable.getEntry("TEBReset").setBoolean(true);
     tebConfigTable.getEntry("MaxVelX").setNumber(2.0);
     tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
-    tebConfigTable.getEntry("AccLimX").setNumber(0.7);
+    tebConfigTable.getEntry("AccLimX").setNumber(1.4);
     tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
-    tebConfigTable.getEntry("AccLimTheta").setNumber(6.0);
+    tebConfigTable.getEntry("AccLimTheta").setNumber(12.0);
     if (limeLoc.attemptUpdatePose()) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     } else {
@@ -112,7 +116,7 @@ public class UDPAutoLineup extends Command {
       return true;
     }
     if (getDistanceError() < 0.02 && Math.abs(getAngleError()) < Math.toRadians(3)) {
-      Robot.drivetrain.stop();
+      dt.stop();
 //      Robot.leds.set(ColorPattern.LIME);
       return true;
     }
