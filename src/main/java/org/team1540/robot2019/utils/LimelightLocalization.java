@@ -22,10 +22,10 @@ public class LimelightLocalization {
   }
 
   public boolean attemptUpdatePose() {
-    double CAMERA_TILT = Math.toRadians(-40.2);
-    double CAMERA_ROLL = Math.toRadians(-1.38);
+    double CAMERA_TILT = Math.toRadians(-37);
+    double CAMERA_ROLL = Math.toRadians(0);
     double PLANE_HEIGHT = 0.74; // Height of vision targets in meters
-    Vector3D CAMERA_POSITION = new Vector3D(0.15, 0, 1.26); // Position of camera in meters
+    Vector3D CAMERA_POSITION = new Vector3D(0.089, 0, 1.12); // Position of camera in meters
 
     // TODO: Filter limelight contours using size, angle, etc.
 

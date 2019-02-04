@@ -9,7 +9,7 @@ import org.team1540.robot2019.datastructures.threed.Transform3D;
  */
 public class TankDriveOdometryRunnable implements Runnable {
 
-  private TankDriveOdometryAccumulator odometryAccumulator;
+  private TankDriveOdometryAccumulator odometryAccumulator = new TankDriveOdometryAccumulator();
 
   private DoubleSupplier leftPosSupplier;
   private DoubleSupplier rightPosSupplier;
@@ -48,6 +48,6 @@ public class TankDriveOdometryRunnable implements Runnable {
   }
 
   public void reset() { // TODO: This should not be necessary when used with a better transformations/localization manager
-    odometryAccumulator = new TankDriveOdometryAccumulator();
+    odometryAccumulator.reset();
   }
 }

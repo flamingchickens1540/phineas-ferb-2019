@@ -23,7 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.commands.drivetrain.VelocityDrive;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
+import org.team1540.robot2019.tuners.AutoAlignTuningRobot;
 import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
@@ -61,12 +63,13 @@ public class Drivetrain extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(new SimpleLoopCommand("Drive",
-        new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
-            OI::getDriveHardTurn)
-            .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
-            .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
-            .then(getPipelineOutput(false)), this));
+    setDefaultCommand(new VelocityDrive(AutoAlignTuningRobot.drivetrain));
+//    setDefaultCommand(new SimpleLoopCommand("Drive",
+//        new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
+//            OI::getDriveHardTurn)
+//            .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
+//            .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
+//            .then(getPipelineOutput(false)), this));
   }
 
   private static double calcRamp(double throttle, double rampAccum) {
