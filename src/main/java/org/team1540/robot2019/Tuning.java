@@ -96,4 +96,7 @@ public class Tuning {
   public static double climberD = 0;
   public static double climberF = 0;
 
+
+  public static double antiTipDeadzone = 2;
+  public static double antiTipP = 0.02;
 }
