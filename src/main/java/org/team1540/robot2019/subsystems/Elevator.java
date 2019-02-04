@@ -74,6 +74,14 @@ public class Elevator extends Subsystem {
     return elevatorA.getBusVoltage() * elevatorA.getAppliedOutput();
   }
 
+  public double getCurrentA() {
+    return elevatorA.getOutputCurrent();
+  }
+
+  public double getCurrentB() {
+    return elevatorB.getOutputCurrent();
+  }
+
   @Override
   public void periodic() {
     positionEntry.forceSetNumber(getPosition());
