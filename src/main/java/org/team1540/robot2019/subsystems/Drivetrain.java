@@ -62,9 +62,8 @@ public class Drivetrain extends Subsystem {
         new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
             OI::getDriveHardTurn)
             .then(data -> {
-              if (Robot.climber.getCurrentCommand() == null
-                  && Hardware.navx != null
-                  && Hardware.navx.isConnected()
+              if ((Robot.climber == null || Robot.climber.getCurrentCommand() == null)
+                  && Hardware.navx != null && Hardware.navx.isConnected()
                   && Math.abs(Hardware.navx.getPitch()) > Tuning.antiTipDeadzone) {
 
                 OI.setDriverRumble(Tuning.antiTipDriverRumble);
