@@ -66,6 +66,9 @@ public class Drivetrain extends Subsystem {
                   && Hardware.navx != null
                   && Hardware.navx.isConnected()
                   && Math.abs(Hardware.navx.getPitch()) > Tuning.antiTipDeadzone) {
+
+                OI.setDriverRumble(Tuning.antiTipDriverRumble);
+
                 double correction = Tuning.antiTipP * Hardware.navx.getPitch();
                 return data.plusAdditionalFeedForwards(correction, correction);
               } else {

@@ -99,4 +99,5 @@ public class Tuning {
 
   public static double antiTipDeadzone = 2;
   public static double antiTipP = 0.02;
+  public static double antiTipDriverRumble = 1;
 }
