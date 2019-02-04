@@ -25,6 +25,8 @@ public class Hardware {
 
   private static final Logger logger = Logger.getLogger(Hardware.class);
 
+  private static boolean hasLoggedCompBot = false;
+
   public static final int DRIVE_POSITION_SLOT_IDX = 0;
   public static final int DRIVE_VELOCITY_SLOT_IDX = 1;
 
@@ -299,6 +301,15 @@ public class Hardware {
   }
 
   public static ChickenController createController(int id) {
+    if (!hasLoggedCompBot) {
+      if (Tuning.isComp) {
+        logger.info("Competition robot detected, initializing motors as Victor SPXs");
+      } else {
+        logger.info("Practice robot detected, initializing motors as Talon SRXs");
+      }
+      hasLoggedCompBot = true;
+    }
+
     return Tuning.isComp ? new ChickenVictor(id) : new ChickenTalon(id);
   }
 
