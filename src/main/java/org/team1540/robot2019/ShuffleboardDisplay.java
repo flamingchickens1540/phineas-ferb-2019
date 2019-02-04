@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.elevator.ZeroElevator;
+import org.team1540.robot2019.commands.groups.SelfTest;
 import org.team1540.rooster.util.SimpleCommand;
 
 public class ShuffleboardDisplay {
@@ -17,6 +18,9 @@ public class ShuffleboardDisplay {
 
     Shuffleboard.getTab("Phineas")
         .add(new SimpleCommand("Reset Preferences", Preferences.getInstance()::removeAll));
+
+    Shuffleboard.getTab("Phineas")
+        .add(new SelfTest());
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized Shuffleboard in " + (end - start) + " ms");
