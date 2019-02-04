@@ -24,10 +24,14 @@ public class ShuffleboardDisplay {
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     ShuffleboardTab tab = Shuffleboard.getTab("Phineas");
-    tab.add(new SimpleCommand("Reset Preferences", Preferences.getInstance()::removeAll));
+    tab.add(new SimpleCommand("Reset Preferences", Preferences.getInstance()::removeAll))
+        .withPosition(2, 0);
+
     pressureEntry = tab.add("System Pressure", 0)
         .withWidget(BuiltInWidgets.kDial)
         .withProperties(Map.of("Min", 0, "Max", 120))
+        .withPosition(0, 0)
+        .withSize(2, 2)
         .getEntry();
 
     // initialize a loop command to update values
