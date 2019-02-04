@@ -378,11 +378,7 @@ public class Hardware {
   }
 
   public static double getClimberLCurrent() {
-    if (climberArmLeft instanceof ChickenTalon) {
-      return ((ChickenTalon) climberArmLeft).getOutputCurrent();
-    } else {
-      return pdp.getCurrent(RobotMap.PDP_CLIMBER_ARM_L);
-    }
+    return climberArmLeft.getOutputCurrent();
   }
 
   public static double getClimberRCurrent() {
