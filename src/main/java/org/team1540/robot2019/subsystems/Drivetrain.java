@@ -20,7 +20,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
+import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
@@ -59,6 +61,19 @@ public class Drivetrain extends Subsystem {
     setDefaultCommand(new SimpleLoopCommand("Drive",
         new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
             OI::getDriveHardTurn)
+            .then(data -> {
+              if (Robot.climber.getCurrentCommand() == null
+                  && Hardware.navx != null
+                  && Hardware.navx.isConnected()
+                  && Math.abs(Hardware.navx.getPitch()) > Tuning.antiTipDeadzone) {
+                double correction = Tuning.antiTipP * Hardware.navx.getPitch();
+                return data.plusAdditionalFeedForwards(correction, correction);
+              } else {
+                // don't try to auto-balance when climbing, or in testing when the NavX isn't initialized,
+                // or if we aren't really tipping that much
+                return data;
+              }
+            })
             .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(getPipelineOutput(false)), this));
