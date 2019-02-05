@@ -50,7 +50,7 @@ public class Tuning {
   public static double elevatorDownPosition = 0;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
-  public static double elevatorInPerRotation = 1.418332785;
+  public static double elevatorInPerRotation = .929926125;
 
   public static double elevatorTolerance = 0.5; // inches
   public static double elevatorVelocityTolerance = 1; // inches per second
@@ -91,9 +91,20 @@ public class Tuning {
   // climber
   public static double climberArmSpeed = 10000;
   public static double climberArmHoldSpeed = 0;
-  public static double climberP = 1;
+  public static double climberP = 0.5;
   public static double climberI = 0;
   public static double climberD = 0;
-  public static double climberF = 1;
+  public static double climberF = 0.1364;
 
+  public static int climberMaxVel = 7500;
+  public static int climberMaxAcc = 10000;
+
+  public static double climberGyroP = 0.05;
+  public static double climberGyroI = 0;
+  public static double climberGyroD = 0;
+  public static double climberGyroStartPos = 30000;
+  public static double climberGyroFF = 0.5;
+  public static double climberUpPosition = 53000;
+
+  public static double climberTolerance = 1000;
 }

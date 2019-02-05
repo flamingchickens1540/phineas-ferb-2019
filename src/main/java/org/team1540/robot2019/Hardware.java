@@ -249,10 +249,10 @@ public class Hardware {
     climberArmLeft.configPeakOutputForward(1);
     climberArmLeft.configPeakOutputReverse(-1);
 
-//    climberArmLeft.configVoltageCompSaturation(12);
-//    climberArmLeft.enableVoltageCompensation(true);
-//    climberArmRight.configVoltageCompSaturation(12);
-//    climberArmRight.enableVoltageCompensation(true);
+    climberArmLeft.configVoltageCompSaturation(12);
+    climberArmLeft.enableVoltageCompensation(true);
+    climberArmRight.configVoltageCompSaturation(12);
+    climberArmRight.enableVoltageCompensation(true);
 
     climberArmRight.setControlMode(ControlMode.Follower);
     climberArmRight.set(climberArmLeft.getDeviceID());
@@ -261,6 +261,10 @@ public class Hardware {
     climberArmLeft.config_kI(0, Tuning.climberI);
     climberArmLeft.config_kD(0, Tuning.climberD);
     climberArmLeft.config_kF(0, Tuning.climberF);
+    climberArmLeft.configMotionCruiseVelocity(Tuning.climberMaxVel);
+    climberArmLeft.configMotionAcceleration(Tuning.climberMaxAcc);
+    climberArmLeft.setSensorPhase(true);
+    climberArmLeft.setSelectedSensorPosition(0);
 
     climberCylinder = new DoubleSolenoid(RobotMap.CLIMBER_CYLINDER_1, RobotMap.CLIMBER_CYLINDER_2);
 
