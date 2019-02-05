@@ -31,7 +31,7 @@ public class Climber extends Subsystem {
   }
 
   public void setArmPosition(double pos) {
-    climberArmLeft.set(ControlMode.Position, pos);
+    climberArmLeft.set(ControlMode.MotionMagic, pos);
   }
 
   public void setArmsConstant(double speed) {
