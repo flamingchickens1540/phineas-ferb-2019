@@ -34,7 +34,7 @@ public class Tuning {
   public static boolean invertDriveLeftSensor = true;
   public static boolean invertDriveRight = false;
   public static boolean invertDriveRightSensor = true;
-  public static double driveTicksPerMeter = 2047.8;
+    public static double driveTicksPerMeter = 1047.8;
   public static double driveKV = 0.25975;
   public static double driveVIntercept = 0.054083333;
   public static double driveMaxVel = 3.645171639;
