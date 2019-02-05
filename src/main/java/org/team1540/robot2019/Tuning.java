@@ -89,11 +89,11 @@ public class Tuning {
   public static double hatchPlaceTime = 0.3; // DELETE IF NOT USING COMMAND
 
   // climber
-  public static double climberArmSpeed = 100;
+  public static double climberArmSpeed = 10000;
   public static double climberArmHoldSpeed = 0;
-  public static double climberP = 0;
+  public static double climberP = 1;
   public static double climberI = 0;
   public static double climberD = 0;
-  public static double climberF = 0;
+  public static double climberF = 1;
 
 }
