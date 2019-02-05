@@ -6,9 +6,10 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.subsystems.Climber;
+import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
 import org.team1540.robot2019.commands.groups.PrepareForClimb;
+import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
 import org.team1540.rooster.util.SimpleCommand;
 
