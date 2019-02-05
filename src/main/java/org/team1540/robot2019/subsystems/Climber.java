@@ -8,7 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2019.Tuning;
 
@@ -18,11 +18,11 @@ public class Climber extends Subsystem {
   private NetworkTableEntry posEntry = table.getEntry("pos");
 
   public void cylinderDown() {
-    climberCylinder.set(DoubleSolenoid.Value.kForward);
+    climberCylinder.set(Value.kReverse);
   }
 
   public void cylinderUp() {
-    climberCylinder.set(DoubleSolenoid.Value.kReverse);
+    climberCylinder.set(Value.kForward);
   }
 
   public void setArms(double value) {
