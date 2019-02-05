@@ -30,8 +30,8 @@ public class VelocityDrive extends Command {
     double rightSetpoint = (triggerValue - OI.getTankdriveRightAxis()) * Tuning.drivetrainMaxVelocity;
     dt.setLeftVelocity(leftSetpoint);
     dt.setRightVelocity(rightSetpoint);
-    SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint*10/Tuning.driveTicksPerMeter);
-    SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint*10/Tuning.driveTicksPerMeter);
+      SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
+      SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
     SmartDashboard.putNumber("debug-setpoint-left-raw", leftSetpoint);
     SmartDashboard.putNumber("debug-setpoint-right-raw", rightSetpoint);
     SmartDashboard.putNumber("debug-velocity-left", dt.getLeftVelocityMetersPerSecond());

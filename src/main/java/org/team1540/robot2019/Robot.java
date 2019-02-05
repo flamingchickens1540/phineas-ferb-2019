@@ -1,7 +1,9 @@
 package org.team1540.robot2019;
 
+import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -10,13 +12,17 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.networking.UDPOdometryGoalSender;
+import org.team1540.robot2019.networking.UDPTwistReceiver;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
 import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.Wrist;
-import org.team1540.rooster.preferencemanager.PreferenceManager;
+import org.team1540.robot2019.utils.LimelightLocalization;
+import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
 
 public class Robot extends TimedRobot {
 
@@ -31,6 +37,19 @@ public class Robot extends TimedRobot {
 
   boolean disableBrakes;
 
+  private static Transform3D map_to_odom = Transform3D.IDENTITY;
+  private static Transform3D odom_to_base_link = Transform3D.IDENTITY;
+
+  public static TankDriveOdometryRunnable wheelOdometry;
+
+  public static UDPOdometryGoalSender udpSender;
+  public static UDPTwistReceiver udpReceiver;
+  public static LimelightLocalization limelightLocalization;
+
+  public static Transform3D lastOdomToLimelight;
+
+  public static AHRS navx = new AHRS(Port.kMXP);
+
   @Override
   public void robotInit() {
     // logging configuration
@@ -39,7 +58,7 @@ public class Robot extends TimedRobot {
     logger.info("Initializing...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    PreferenceManager.getInstance().add(new Tuning());
+    //PreferenceManager.getInstance().add(new Tuning());
 
     Scheduler.getInstance().run();
 

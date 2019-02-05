@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
@@ -50,7 +49,7 @@ public class UDPAutoLineup extends Command {
         .then(new FeedForwardProcessor(0, 0,0))
 //        .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
         // .then((Processor<TankDriveData, TankDriveData>) tankDriveData -> new TankDriveData(tankDriveData.left, tankDriveData.right))
-        .then(new UnitScaler(Tuning.driveTicksPerMeter, 10))
+        .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
         .then(dt.getPipelineOutput());
   }
 

@@ -4,6 +4,7 @@ import static org.team1540.robot2019.OI.LB;
 import static org.team1540.robot2019.OI.RB;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Notifier;
@@ -19,8 +20,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.drivetrain.VelocityDrive;
-import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.networking.UDPOdometryGoalSender;
@@ -32,7 +31,6 @@ import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
 import org.team1540.robot2019.vision.commands.UDPAutoLineup;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
 import org.team1540.rooster.util.SimpleCommand;
-import org.team1540.rooster.wrappers.RevBlinken;
 
 public class AutoAlignTuningRobot extends TimedRobot {
 
@@ -61,9 +59,10 @@ public class AutoAlignTuningRobot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    PreferenceManager.getInstance().add(new Tuning());
-    Hardware.initDrive();
-    OI.initJoysticks();
+      PreferenceManager.getInstance().add(new Tuning());
+      Scheduler.getInstance().run();
+      Hardware.initDrive();
+      OI.initJoysticks();
 
     drivetrain = new Drivetrain();
 
@@ -117,13 +116,12 @@ public class AutoAlignTuningRobot extends TimedRobot {
 //    });
 //    SmartDashboard.putData(testTEB);
 
-//        // Testing code
-//    Command resetWheelOdom = new SimpleCommand("Reset Odometry", () -> {
-//      drivetrain.zeroEncoders();
-//      navx.zeroYaw();
-//      wheelOdometry.reset();
-//    });
-//    SmartDashboard.putData(resetWheelOdom);
+      // Testing code
+      Command resetWheelOdom = new SimpleCommand("Update PID Values", () -> {
+          drivetrain.updatePIDValues();
+      });
+      resetWheelOdom.setRunWhenDisabled(true);
+      SmartDashboard.putData(resetWheelOdom);
 
     autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
       alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, limelightLocalization, wheelOdometry, lastOdomToLimelight, navx);
@@ -139,6 +137,10 @@ public class AutoAlignTuningRobot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
+
+      NetworkTableInstance nt = NetworkTableInstance.getDefault();
+      nt.getTable("Drivetrain/Debug/Position").getEntry("Left").setNumber(drivetrain.getLeftPosition());
+      nt.getTable("Drivetrain/Debug/Position").getEntry("Right").setNumber(drivetrain.getRightPosition());
   }
 
   @Override
@@ -148,7 +150,5 @@ public class AutoAlignTuningRobot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    drivetrain.configTalonsForVelocity();
-    new VelocityDrive(drivetrain).start();
   }
 }

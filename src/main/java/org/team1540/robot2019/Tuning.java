@@ -7,7 +7,7 @@ public class Tuning {
 
   // drive
   public static double driveVelocityP = 3;
-  public static double driveVelocityI = 0.01;
+    public static double driveVelocityI = 0.02;
   public static double driveVelocityD = 0;
   public static double driveVelocityF = 0;
 
@@ -34,7 +34,7 @@ public class Tuning {
   public static boolean invertDriveLeftSensor = true;
   public static boolean invertDriveRight = false;
   public static boolean invertDriveRightSensor = true;
-    public static double driveTicksPerMeter = 1047.8;
+    public static double drivetrainTicksPerMeter = 1017.3;
   public static double driveKV = 0.25975;
   public static double driveVIntercept = 0.054083333;
   public static double driveMaxVel = 3.645171639;
@@ -103,5 +103,5 @@ public class Tuning {
   public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
   public static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
   public static double axisDeadzone = 0.1;
-  public static double drivetrainMaxVelocity = 750;
+    public static double drivetrainMaxVelocity = 400;
 }
