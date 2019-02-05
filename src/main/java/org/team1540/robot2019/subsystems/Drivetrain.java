@@ -21,18 +21,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.drivetrain.VelocityDrive;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.tuners.AutoAlignTuningRobot;
-import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
-import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
-import org.team1540.rooster.drive.pipeline.FeedForwardToVelocityProcessor;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
-import org.team1540.rooster.util.SimpleLoopCommand;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class Drivetrain extends Subsystem {
@@ -63,6 +58,7 @@ public class Drivetrain extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
+//    setDefaultCommand(new PercentDrive(AutoAlignTuningRobot.drivetrain));
     setDefaultCommand(new VelocityDrive(AutoAlignTuningRobot.drivetrain));
 //    setDefaultCommand(new SimpleLoopCommand("Drive",
 //        new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
@@ -143,6 +139,19 @@ public class Drivetrain extends Subsystem {
     };
   }
 
+    public void updatePIDValues() {
+        for (ChickenTalon talon : driveMotorMasters) {
+            talon.config_kP(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionP);
+            talon.config_kI(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionI);
+            talon.config_kD(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionD);
+            talon.config_kF(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionF);
+            talon.config_kP(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityP);
+            talon.config_kI(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityI);
+            talon.config_kD(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityD);
+            talon.config_kF(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityF);
+        }
+    }
+
   private void configTalonsForPosition() {
     for (ChickenTalon t : driveMotorMasters) {
       t.selectProfileSlot(DRIVE_POSITION_SLOT_IDX);
@@ -203,6 +212,14 @@ public class Drivetrain extends Subsystem {
     configTalonsForVelocity();
     driveRightMotorA.set(ControlMode.Velocity, velocity);
   }
+
+    public void setLeftPercent(double percent) {
+        driveLeftMotorA.set(ControlMode.PercentOutput, percent);
+    }
+
+    public void setRightPercent(double percent) {
+        driveRightMotorA.set(ControlMode.PercentOutput, percent);
+    }
 
   public void setVelocity(double left, double right, double leftFeedForward,
       double rightFeedForward) {
@@ -342,19 +359,19 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getLeftPositionMeters() {
-    return getLeftPosition() / Tuning.driveTicksPerMeter;
+      return getLeftPosition() / Tuning.drivetrainTicksPerMeter;
   }
 
   public double getRightPositionMeters() {
-    return getRightPosition() / Tuning.driveTicksPerMeter;
+      return getRightPosition() / Tuning.drivetrainTicksPerMeter;
   }
 
   public double getLeftVelocityMetersPerSecond() {
-    return getLeftVelocity() * 10 / Tuning.driveTicksPerMeter;
+      return getLeftVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
   }
 
   public double getRightVelocityMetersPerSecond() {
-    return getRightVelocity() * 10 / Tuning.driveTicksPerMeter;
+      return getRightVelocity() * 10 / Tuning.drivetrainTicksPerMeter;
   }
 
   public Twist2D getTwist() {
