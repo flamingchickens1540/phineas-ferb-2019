@@ -52,7 +52,7 @@ public class OI {
   private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, START);
   private static JoystickButton placeHatchButton = new JoystickButton(copilot, START);
 
-  private static JoystickButton startClimbingButton = new JoystickButton(copilot, 0);
+  //climber stuff
 
 
   /**

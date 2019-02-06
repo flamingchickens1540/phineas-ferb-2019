@@ -7,16 +7,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class HatchMech extends Subsystem {
 
-  public void getHatch() {
-    slideOut();
-    attatch();
-  }
-
-  public void placeHatch() {
-    release();
-    slideIn();
-  }
-
   public void slideOut() {
     hatchSlide.set(true);
   }
