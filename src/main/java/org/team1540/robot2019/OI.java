@@ -9,7 +9,10 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.groups.EjectThenDown;
+import org.team1540.robot2019.commands.groups.GetHatchFloor;
 import org.team1540.robot2019.commands.groups.IntakeSequence;
+import org.team1540.robot2019.commands.groups.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.hatch.GetHatch;
 import org.team1540.rooster.Utilities;
 
 public class OI {
@@ -91,7 +94,10 @@ public class OI {
     autoIntakeButton.whenPressed(new IntakeSequence());
     ejectButton.whenPressed(new EjectThenDown());
 
-    // hatch stuff
+    getHatchButton.whenPressed(new GetHatch());
+    getHatchFloorButton.whenPressed(new GetHatchFloor());
+    placeHatchButton.whenPressed(new PlaceHatchThenDown());
+
     // climber stuff
 
     double end = RobotController.getFPGATime() / 1000.0;
