@@ -4,14 +4,19 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class PlaceHatch extends TimedCommand { // TODO: update to match new mech
+public class PlaceHatch extends TimedCommand {
 
   public PlaceHatch() {
     super(Tuning.hatchPlaceTime);
+    requires(Robot.hatchMech);
   }
 
   protected void initialize() {
-    Robot.hatchMech.placeHatch();
+    Robot.hatchMech.release();
+  }
+
+  protected void end() {
+    Robot.hatchMech.slideIn();
   }
 
 }
