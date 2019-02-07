@@ -145,6 +145,10 @@ public class Wrist extends Subsystem {
     currentStateEntry.forceSetString(stateMachine.getCurrentState().toString());
   }
 
+  public void setBrake(boolean brake) {
+    wristMotor.setBrake(brake);
+  }
+
   public enum WristEvent {UP_CMD, DOWN_CMD, BTM_SENSOR, MID_SENSOR, DISABLE}
 
   public enum WristState {OFF_UP, OFF_DOWN, DOWN_TRAVEL_POWER, DOWN_TRAVEL_BRAKE, UP_TRAVEL}
