@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.apache.log4j.Level;
@@ -36,41 +37,56 @@ public class Wrist extends Subsystem {
   public Wrist() {
     UntypedStateMachineBuilder builder = StateMachineBuilderFactory.create(WristStateMachine.class);
 
-    builder.onEntry(WristState.OFF_UP).callMethod("stop");
-    builder.onEntry(WristState.OFF_DOWN).callMethod("stop");
+    builder.onEntry(WristState.DISABLE_UP).callMethod("stop");
+    builder.onEntry(WristState.DISABLE_DOWN).callMethod("stop");
+    builder.onEntry(WristState.HOLD_UP).callMethod("holdUp");
+    builder.onEntry(WristState.HOLD_DOWN).callMethod("stop");
     builder.onEntry(WristState.DOWN_TRAVEL_POWER).callMethod("downTravelPwr");
     builder.onEntry(WristState.DOWN_TRAVEL_BRAKE).callMethod("downTravelBrake");
     builder.onEntry(WristState.UP_TRAVEL).callMethod("upTravel");
 
-    builder.externalTransition().from(WristState.OFF_UP).to(WristState.DOWN_TRAVEL_POWER)
+    builder.externalTransition().from(WristState.HOLD_UP).to(WristState.DOWN_TRAVEL_POWER)
         .on(WristEvent.DOWN_CMD);
-    builder.externalTransition().from(WristState.OFF_DOWN).to(WristState.UP_TRAVEL)
+    builder.externalTransition().from(WristState.HOLD_DOWN).to(WristState.UP_TRAVEL)
         .on(WristEvent.UP_CMD);
 
     builder.externalTransition().from(WristState.DOWN_TRAVEL_POWER).to(WristState.DOWN_TRAVEL_BRAKE)
         .on(WristEvent.MID_SENSOR);
-    builder.externalTransition().from(WristState.UP_TRAVEL).to(WristState.OFF_UP)
+    builder.externalTransition().from(WristState.UP_TRAVEL).to(WristState.HOLD_UP)
         .on(WristEvent.MID_SENSOR);
 
-    builder.externalTransition().from(WristState.DOWN_TRAVEL_BRAKE).to(WristState.OFF_DOWN)
+    builder.externalTransition().from(WristState.DOWN_TRAVEL_BRAKE).to(WristState.HOLD_DOWN)
         .on(WristEvent.BTM_SENSOR);
 
-    builder.externalTransition().from(WristState.OFF_UP).to(WristState.OFF_DOWN)
-        .on(WristEvent.BTM_SENSOR).callMethod("stop");
-    builder.externalTransition().from(WristState.OFF_DOWN).to(WristState.OFF_UP)
-        .on(WristEvent.MID_SENSOR).callMethod("stop");
+    builder.externalTransition().from(WristState.DISABLE_UP).to(WristState.DISABLE_DOWN)
+        .on(WristEvent.BTM_SENSOR);
+    builder.externalTransition().from(WristState.DISABLE_DOWN).to(WristState.DISABLE_UP)
+        .on(WristEvent.MID_SENSOR);
+    builder.externalTransition().from(WristState.HOLD_UP).to(WristState.HOLD_DOWN)
+        .on(WristEvent.BTM_SENSOR);
+    builder.externalTransition().from(WristState.HOLD_DOWN).to(WristState.HOLD_UP)
+        .on(WristEvent.MID_SENSOR);
 
     // disabling-caused transitions
 
-    builder.externalTransition().from(WristState.DOWN_TRAVEL_POWER).to(WristState.OFF_UP)
+    builder.externalTransition().from(WristState.DOWN_TRAVEL_POWER).to(WristState.DISABLE_UP)
         .on(WristEvent.DISABLE);
-    builder.externalTransition().from(WristState.DOWN_TRAVEL_BRAKE).to(WristState.OFF_DOWN)
+    builder.externalTransition().from(WristState.DOWN_TRAVEL_BRAKE).to(WristState.DISABLE_DOWN)
         .on(WristEvent.DISABLE);
-    builder.externalTransition().from(WristState.UP_TRAVEL).to(WristState.OFF_DOWN)
+    builder.externalTransition().from(WristState.UP_TRAVEL).to(WristState.DISABLE_DOWN)
         .on(WristEvent.DISABLE);
 
+    builder.externalTransition().from(WristState.HOLD_DOWN).to(WristState.DISABLE_DOWN)
+        .on(WristEvent.DISABLE);
+    builder.externalTransition().from(WristState.HOLD_UP).to(WristState.DISABLE_UP)
+        .on(WristEvent.DISABLE);
+    builder.externalTransition().from(WristState.DISABLE_UP).to(WristState.HOLD_UP)
+        .on(WristEvent.ENABLE);
+    builder.externalTransition().from(WristState.DISABLE_DOWN).to(WristState.HOLD_DOWN)
+        .on(WristEvent.ENABLE);
+
     stateMachine = builder
-        .newStateMachine(wristBtmSwitch.get() ? WristState.OFF_DOWN : WristState.OFF_UP);
+        .newStateMachine(wristBtmSwitch.get() ? WristState.DISABLE_DOWN : WristState.DISABLE_UP);
     stateMachine.start();
 
     // configure state machine logger
@@ -116,10 +132,6 @@ public class Wrist extends Subsystem {
     return (WristState) stateMachine.getCurrentState();
   }
 
-  public void handleDisable() {
-    stateMachine.fire(WristEvent.DISABLE);
-  }
-
   public void set(double throttle) {
     wristMotor.set(ControlMode.PercentOutput, throttle);
   }
@@ -143,15 +155,27 @@ public class Wrist extends Subsystem {
     isAtBtmEntry.forceSetBoolean(isAtBtm());
     motorEntry.forceSetNumber(wristMotor.getMotorOutputPercent());
     currentStateEntry.forceSetString(stateMachine.getCurrentState().toString());
+
+    if (DriverStation.getInstance().isEnabled() &&
+        (stateMachine.getCurrentState() == WristState.DISABLE_UP
+            || stateMachine.getCurrentState() == WristState.DISABLE_DOWN)) {
+      stateMachine.fire(WristEvent.ENABLE);
+    }
+
+    if (DriverStation.getInstance().isDisabled() && (
+        stateMachine.getCurrentState() != WristState.DISABLE_UP
+            && stateMachine.getCurrentState() != WristState.DISABLE_DOWN)) {
+      stateMachine.fire(WristEvent.DISABLE);
+    }
   }
 
   public void setBrake(boolean brake) {
     wristMotor.setBrake(brake);
   }
 
-  public enum WristEvent {UP_CMD, DOWN_CMD, BTM_SENSOR, MID_SENSOR, DISABLE}
+  public enum WristEvent {UP_CMD, DOWN_CMD, BTM_SENSOR, MID_SENSOR, ENABLE, DISABLE}
 
-  public enum WristState {OFF_UP, OFF_DOWN, DOWN_TRAVEL_POWER, DOWN_TRAVEL_BRAKE, UP_TRAVEL}
+  public enum WristState {DISABLE_UP, DISABLE_DOWN, HOLD_UP, HOLD_DOWN, DOWN_TRAVEL_POWER, DOWN_TRAVEL_BRAKE, UP_TRAVEL}
 
   @StateMachineParameters(stateType = WristState.class, eventType = WristEvent.class, contextType = Integer.class)
   private static class WristStateMachine extends AbstractUntypedStateMachine {
@@ -179,6 +203,12 @@ public class Wrist extends Subsystem {
     protected void upTravel(WristState from, WristState to, WristEvent event, Integer context) {
       if (wristMotor != null) {
         wristMotor.set(ControlMode.PercentOutput, Tuning.wristUpTravelThrot);
+      }
+    }
+
+    protected void holdUp(WristState from, WristState to, WristEvent event, Integer context) {
+      if (wristMotor != null) {
+        wristMotor.set(ControlMode.PercentOutput, Tuning.wristHoldThrot);
       }
     }
   }
