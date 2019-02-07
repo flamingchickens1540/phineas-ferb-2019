@@ -68,6 +68,8 @@ public class Hardware {
 
   public static AHRS navx;
 
+  public static Compressor compressor;
+
   static void initAll() {
     logger.info("Initializing robot hardware...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
@@ -78,6 +80,7 @@ public class Hardware {
     initIntake();
     initHatchMech();
     initClimber();
+    initCompressor();
     initPressureSensor();
     initNavX();
 
@@ -270,6 +273,16 @@ public class Hardware {
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized climber in " + (end - start) + " ms");
+  }
+
+  public static void initCompressor() {
+    logger.info("Initializing compressor...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+    compressor = new Compressor();
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    logger.info("Initialized compressor in " + (end - start) + " ms");
   }
 
   public static void initPressureSensor() {
