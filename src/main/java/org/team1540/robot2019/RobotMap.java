@@ -30,6 +30,7 @@ public class RobotMap {
   public static final int CLIMBER_CYLINDER_2 = 7;
 
   public static final int HATCH_SLIDE = 2;
+  public static final int HATCH_GRABBER = 0;
 
   // sensors and switches
   public static final int ELEVATOR_LIMIT_SENSOR = 1;
