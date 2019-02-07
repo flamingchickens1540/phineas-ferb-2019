@@ -135,6 +135,15 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    if (Hardware.compressor.getClosedLoopControl()
+        && (Robot.elevator.getPosition() > Tuning.elevatorTolerance)
+        && (Robot.climber.getCurrentCommand() == null)) {
+      logger.debug("Stopping compressor because elevator is up");
+      Hardware.compressor.stop();
+    } else if (!Hardware.compressor.getClosedLoopControl()) {
+      logger.debug("Restarting compressor");
+      Hardware.compressor.start();
+    }
   }
 
   @Override
