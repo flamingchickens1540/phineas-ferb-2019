@@ -68,7 +68,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    logger.debug("Disabling drive brakes in 2 seconds...");
+    logger.debug("Disabling mechanism brakes in 2 seconds...");
     brakeTimer.reset();
     brakeTimer.start();
     disableBrakes = true;
@@ -89,17 +89,19 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     if (brakeTimer.hasPeriodPassed(2) && disableBrakes) {
       brakeTimer.stop();
-      drivetrain.setBrake(false);
-      logger.debug("Drive brakes disabled");
+      setMechanismBrakes(false);
+
+      logger.debug("Mechanism brakes disabled");
+
       disableBrakes = false;
 
-      Shuffleboard.addEventMarker("Drive brakes disabled", EventImportance.kTrivial);
+      Shuffleboard.addEventMarker("Mechanism brakes disabled", EventImportance.kTrivial);
     }
   }
 
   @Override
   public void autonomousInit() {
-    drivetrain.setBrake(true);
+    setMechanismBrakes(true);
 
     Hardware.checkStickyFaults();
 
@@ -122,7 +124,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    drivetrain.setBrake(true);
+    setMechanismBrakes(true);
 
     Hardware.checkStickyFaults();
 
@@ -152,5 +154,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+  }
+
+  private void setMechanismBrakes(boolean b) {
+    drivetrain.setBrake(b);
+    elevator.setBrake(b);
+    climber.setArmBrake(b);
+    wrist.setBrake(b);
   }
 }
