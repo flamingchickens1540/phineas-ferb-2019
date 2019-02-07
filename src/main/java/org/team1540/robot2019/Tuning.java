@@ -69,6 +69,7 @@ public class Tuning {
   public static double wristDownTravelPwrThrot = 0.7;
   public static double wristDownTravelBrakeThrot = 0.0;
   public static double wristUpTravelThrot = 0.55;
+  public static double wristHoldThrot = 0.1;
 
   // intake
   public static boolean intakeInvertTop = true;
