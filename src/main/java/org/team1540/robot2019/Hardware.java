@@ -56,6 +56,7 @@ public class Hardware {
   public static DigitalInput intakeSensor;
 
   public static Solenoid hatchSlide;
+  public static Solenoid hatchGrabber;
 
   public static ChickenTalon climberArmLeft;
   public static ChickenTalon climberArmRight;
@@ -223,6 +224,7 @@ public class Hardware {
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     hatchSlide = new Solenoid(RobotMap.HATCH_SLIDE);
+    hatchGrabber = new Solenoid(RobotMap.HATCH_GRABBER);
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized hatch mech in " + (end - start) + " ms");
@@ -244,6 +246,9 @@ public class Hardware {
     climberArmLeft.setInverted(false);
     climberArmRight.setInverted(true);
 
+    climberArmLeft.configPeakOutputForward(1);
+    climberArmLeft.configPeakOutputReverse(-1);
+
     climberArmLeft.configVoltageCompSaturation(12);
     climberArmLeft.enableVoltageCompensation(true);
     climberArmRight.configVoltageCompSaturation(12);
@@ -251,6 +256,15 @@ public class Hardware {
 
     climberArmRight.setControlMode(ControlMode.Follower);
     climberArmRight.set(climberArmLeft.getDeviceID());
+
+    climberArmLeft.config_kP(0, Tuning.climberP);
+    climberArmLeft.config_kI(0, Tuning.climberI);
+    climberArmLeft.config_kD(0, Tuning.climberD);
+    climberArmLeft.config_kF(0, Tuning.climberF);
+    climberArmLeft.configMotionCruiseVelocity(Tuning.climberMaxVel);
+    climberArmLeft.configMotionAcceleration(Tuning.climberMaxAcc);
+    climberArmLeft.setSensorPhase(true);
+    climberArmLeft.setSelectedSensorPosition(0);
 
     climberCylinder = new DoubleSolenoid(RobotMap.CLIMBER_CYLINDER_1, RobotMap.CLIMBER_CYLINDER_2);
 
