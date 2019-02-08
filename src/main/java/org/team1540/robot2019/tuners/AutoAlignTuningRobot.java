@@ -32,7 +32,6 @@ import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.StateChangeDetector;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
-import org.team1540.robot2019.vision.commands.UDPAutoLineup;
 import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
 import org.team1540.rooster.adjustables.AdjustableManager;
 import org.team1540.rooster.power.PowerManager;
@@ -124,7 +123,8 @@ public class AutoAlignTuningRobot extends TimedRobot {
       SmartDashboard.putData(resetWheelOdom);
 
     autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelight, Robot.navx);
+//      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelight, Robot.navx);
+        alignCommand = new UDPVelocityTwistDrive();
       alignCommand.start();
     }));
     autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {

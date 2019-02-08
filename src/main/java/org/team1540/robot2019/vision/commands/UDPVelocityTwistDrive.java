@@ -55,9 +55,9 @@ public class UDPVelocityTwistDrive extends Command {
         if (tebConfigTable.getEntry("ResetTuningVals").getBoolean(true)) {
 //      Robot.leds.set(ColorPattern.CHASE_BLUE);
 
-            tebConfigTable.getEntry("TebReset").setBoolean(true);
+            tebConfigTable.getEntry("TEBReset").setBoolean(true);
             tebConfigTable.getEntry("MaxVelX").setNumber(1.5);
-            tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
+            tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.4);
             tebConfigTable.getEntry("AccLimX").setNumber(1.5);
             tebConfigTable.getEntry("MaxVelTheta").setNumber(5.0);
             tebConfigTable.getEntry("AccLimTheta").setNumber(15.0);
@@ -77,7 +77,7 @@ public class UDPVelocityTwistDrive extends Command {
 
 //    Robot.wheelOdometry.reset();
         Robot.udpSender.setGoal(goal);
-        Robot.udpSender.setViaPoint(Robot.wheelOdometry.getOdomToBaseLink().toTransform2D().getPositionVector());
+        Robot.udpSender.setViaPoint(goal.getPositionVector());
 //    Robot.udpSender.setViaPoint(new Vector2D(1, -1));
     }
 
@@ -108,9 +108,9 @@ public class UDPVelocityTwistDrive extends Command {
         double angleError = TrigUtils
             .SignedAngleDifference(goal.getTheta(), Math.toRadians(-Robot.navx.getYaw())); // TODO: If this is the proper way to calculate signed angle, this should be moved to the TrigUtils class
 
-        boolean finished = Math.abs(xError) < 0.038 && // TODO: Make this a static function
-            Math.abs(yError) < 0.038 &&
-            Math.abs(angleError) < Math.toRadians(3);
+        boolean finished = Math.abs(xError) < 0.05 && // TODO: Make this a static function
+            Math.abs(yError) < 0.05 &&
+            Math.abs(angleError) < Math.toRadians(5);
         if (finished) {
             System.out.println("Close to goalAvg: " + goal.getX() + " " + goal.getY());
             Robot.drivetrain.stop();
