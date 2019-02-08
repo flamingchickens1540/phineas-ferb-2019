@@ -63,7 +63,7 @@ public class UDPAutoLineup extends Command {
     tebConfigTable.getEntry("TEBReset").setBoolean(true);
     tebConfigTable.getEntry("MaxVelX").setNumber(2.0);
     tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
-    tebConfigTable.getEntry("AccLimX").setNumber(1.4);
+    tebConfigTable.getEntry("AccLimX").setNumber(0.8);
     tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
     tebConfigTable.getEntry("AccLimTheta").setNumber(12.0);
     if (limeLoc.attemptUpdatePose()) { // TODO: Make this distance tunable

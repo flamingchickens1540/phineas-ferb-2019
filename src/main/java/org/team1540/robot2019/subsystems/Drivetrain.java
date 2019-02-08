@@ -21,10 +21,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
+import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.drivetrain.VelocityDrive;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
-import org.team1540.robot2019.tuners.AutoAlignTuningRobot;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
@@ -59,7 +59,7 @@ public class Drivetrain extends Subsystem {
   @Override
   protected void initDefaultCommand() {
 //    setDefaultCommand(new PercentDrive(AutoAlignTuningRobot.drivetrain));
-    setDefaultCommand(new VelocityDrive(AutoAlignTuningRobot.drivetrain));
+    setDefaultCommand(new VelocityDrive(Robot.drivetrain));
 //    setDefaultCommand(new SimpleLoopCommand("Drive",
 //        new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
 //            OI::getDriveHardTurn)
