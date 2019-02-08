@@ -1,13 +1,18 @@
 package org.team1540.robot2019;
 
-import org.team1540.rooster.preferencemanager.TuningClass;
+//import org.team1540.rooster.preferencemanager.TuningClass;
 
-@TuningClass("ph_")
+import org.team1540.rooster.adjustables.Tunable;
+
+//@TuningClass("ph_")
 public class Tuning {
 
   // drive
+  @Tunable("DriveTrain/VelocityPID/P")
   public static double driveVelocityP = 3;
-    public static double driveVelocityI = 0.02;
+  @Tunable("DriveTrain/VelocityPID/I")
+  public static double driveVelocityI = 0.02;
+  @Tunable("DriveTrain/VelocityPID/D")
   public static double driveVelocityD = 0;
   public static double driveVelocityF = 0;
 

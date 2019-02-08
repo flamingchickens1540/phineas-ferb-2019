@@ -4,7 +4,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 
@@ -22,10 +21,10 @@ public class LimelightLocalization {
   }
 
   public boolean attemptUpdatePose() {
-    double CAMERA_TILT = Math.toRadians(-37);
+    double CAMERA_TILT = Math.toRadians(-37.5);
     double CAMERA_ROLL = Math.toRadians(0);
     double PLANE_HEIGHT = 0.74; // Height of vision targets in meters
-    Vector3D CAMERA_POSITION = new Vector3D(0.089, 0, 1.12); // Position of camera in meters
+    Vector3D CAMERA_POSITION = new Vector3D(-0.076, 0.089, 1.12); // Position of camera in meters
 
     // TODO: Filter limelight contours using size, angle, etc.
 

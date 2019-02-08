@@ -37,8 +37,8 @@ public class Robot extends TimedRobot {
 
   boolean disableBrakes;
 
-  private static Transform3D map_to_odom = Transform3D.IDENTITY;
-  private static Transform3D odom_to_base_link = Transform3D.IDENTITY;
+  public static Transform3D map_to_odom = Transform3D.IDENTITY;
+  public static Transform3D odom_to_base_link = Transform3D.IDENTITY;
 
   public static TankDriveOdometryRunnable wheelOdometry;
 
