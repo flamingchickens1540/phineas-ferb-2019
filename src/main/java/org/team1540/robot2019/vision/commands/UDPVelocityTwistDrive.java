@@ -52,10 +52,10 @@ public class UDPVelocityTwistDrive extends Command {
             .then(new CTREOutput(Hardware.driveLeftMotorA, Hardware.driveRightMotorA, true));
 
         NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
+        tebConfigTable.getEntry("TEBReset").setBoolean(true);
         if (tebConfigTable.getEntry("ResetTuningVals").getBoolean(true)) {
 //      Robot.leds.set(ColorPattern.CHASE_BLUE);
 
-            tebConfigTable.getEntry("TEBReset").setBoolean(true);
             tebConfigTable.getEntry("MaxVelX").setNumber(1.5);
             tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.4);
             tebConfigTable.getEntry("AccLimX").setNumber(1.5);
@@ -66,7 +66,7 @@ public class UDPVelocityTwistDrive extends Command {
     }
 
     private void updateGoal() {
-        double xGoal = SmartDashboard.getNumber("test-goal/position/x", 2);
+        double xGoal = SmartDashboard.getNumber("test-goal/position/x", 1);
         double yGoal = SmartDashboard.getNumber("test-goal/position/y", 0);
         double angleGoal = SmartDashboard.getNumber("test-goal/orientation/z", 0);
         System.out.println("Updated goal!");
