@@ -38,8 +38,8 @@ public class Twist2D {
 
   public void putToNetworkTable(String networkTablesPath) {
     NetworkTable table = NetworkTableInstance.getDefault().getTable(networkTablesPath);
-    table.getEntry("position/x").setNumber(getX());
-    table.getEntry("position/y").setNumber(getY());
-    table.getEntry("orientation/z").setNumber(getOmega());
+      table.getEntry("velocity/x").setNumber(getX());
+      table.getEntry("velocity/y").setNumber(getY());
+      table.getEntry("angular/z").setNumber(getOmega());
   }
 }

@@ -33,10 +33,4 @@ public class TankDriveOdometryAccumulator {
   public Transform3D getTransform() {
     return odomToBaseLink;
   }
-
-  public void reset() {
-    distancePrevLeft = 0;
-    distancePrevRight = 0;
-    angleRadsPrev = 0;
-  }
 }
