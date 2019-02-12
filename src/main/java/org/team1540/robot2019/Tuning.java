@@ -45,8 +45,8 @@ public class Tuning {
   public static boolean invertElevatorA = true;
   public static boolean invertElevatorB = false;
 
-  public static double elevatorUpPosition = 0; // TODO: add these
-  public static double elevatorCargoShipPosition = 0;
+  public static double elevatorUpPosition = 28;
+  public static double elevatorCargoShipPosition = 14;
   public static double elevatorDownPosition = 0;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
