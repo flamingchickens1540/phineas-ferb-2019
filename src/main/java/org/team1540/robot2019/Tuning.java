@@ -104,7 +104,7 @@ public class Tuning {
   public static double climberGyroD = 0;
   public static double climberGyroStartPos = 30000;
   public static double climberGyroFF = 0.5;
-  public static double climberUpPosition = 53000;
+  public static double climberUpPosition = 53000; // arms
 
   public static double climberTolerance = 1000;
 }
