@@ -67,8 +67,7 @@ public class Drivetrain extends Subsystem {
                   && Math.abs(Hardware.navx.getPitch()) > Tuning.antiTipDeadzone) {
 
                 OI.setDriverRumble(Tuning.antiTipDriverRumble);
-
-                double correction = Tuning.antiTipP * Hardware.navx.getPitch();
+                double correction = Tuning.antiTipUnyeetAmt * Math.signum(Hardware.navx.getPitch());
                 return data.plusAdditionalFeedForwards(correction, correction);
               } else {
                 // don't try to auto-balance when climbing, or in testing when the NavX isn't initialized,

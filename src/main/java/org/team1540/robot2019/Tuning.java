@@ -108,7 +108,8 @@ public class Tuning {
 
   public static double climberTolerance = 1000;
 
-  public static double antiTipDeadzone = 2;
+  public static double antiTipDeadzone = 10;
   public static double antiTipP = 0.02;
+  public static double antiTipUnyeetAmt = -0.25;
   public static double antiTipDriverRumble = 1;
 }
