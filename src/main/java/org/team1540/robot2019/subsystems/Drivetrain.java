@@ -73,6 +73,7 @@ public class Drivetrain extends Subsystem {
               } else {
                 // don't try to auto-balance when climbing, or in testing when the NavX isn't initialized,
                 // or if we aren't really tipping that much
+                OI.setDriverRumble(0);
                 return data;
               }
             })
