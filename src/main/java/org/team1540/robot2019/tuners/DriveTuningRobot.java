@@ -21,6 +21,7 @@ public class DriveTuningRobot extends TimedRobot {
     Scheduler.getInstance().run();
 
     Hardware.initDrive();
+    Hardware.initNavX();
     OI.initJoysticks();
 
     drivetrain = new Drivetrain();
@@ -28,6 +29,8 @@ public class DriveTuningRobot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    System.out.println(Hardware.navx.getPitch());
+
     Scheduler.getInstance().run();
   }
 }
