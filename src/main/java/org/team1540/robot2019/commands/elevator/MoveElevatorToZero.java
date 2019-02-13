@@ -6,6 +6,6 @@ public class MoveElevatorToZero extends CommandGroup {
 
   public MoveElevatorToZero() {
     addSequential(new MoveElevatorToPosition(0));
-    addSequential(new ZeroElevator());
+//    addSequential(new ZeroElevator());
   }
 }
