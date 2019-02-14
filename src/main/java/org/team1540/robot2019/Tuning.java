@@ -27,7 +27,7 @@ public class Tuning {
   public static double driveControlRampUp = .2;
   public static double driveControlRampDown = .2;
 
-  public static double driveOpenLoopRamp = 0;
+  public static double driveOpenLoopRamp = 0.25;
   public static double driveClosedLoopRamp = 0;
 
   public static boolean invertDriveLeft = true;
