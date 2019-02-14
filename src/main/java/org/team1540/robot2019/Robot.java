@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     // logging configuration
-    Logger.getRootLogger().setLevel(Level.ALL);
+    Logger.getRootLogger().setLevel(Level.DEBUG);
 
     logger.info("Initializing...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
@@ -61,7 +61,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+//    long time = System.currentTimeMillis();
     Scheduler.getInstance().run();
+//    System.out.println(time - System.currentTimeMillis());
   }
 
   private Timer brakeTimer = new Timer();
@@ -145,11 +147,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (Hardware.compressor.getClosedLoopControl()
-        && (Robot.elevator.getPosition() > Tuning.elevatorTolerance)
+    if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
         && (Robot.climber.getCurrentCommand() == null)) {
-      logger.debug("Stopping compressor because elevator is up");
-      Hardware.compressor.stop();
+      if (Hardware.compressor.getClosedLoopControl()) {
+        logger.debug("Stopping compressor because elevator is up");
+        Hardware.compressor.stop();
+      }
     } else if (!Hardware.compressor.getClosedLoopControl()) {
       logger.debug("Restarting compressor");
       Hardware.compressor.start();
