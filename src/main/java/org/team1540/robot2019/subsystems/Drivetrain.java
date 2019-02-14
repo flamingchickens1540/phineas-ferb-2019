@@ -5,7 +5,6 @@ import static org.team1540.robot2019.Hardware.DRIVE_VELOCITY_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.driveLeftMotorA;
 import static org.team1540.robot2019.Hardware.driveLeftMotorB;
 import static org.team1540.robot2019.Hardware.driveLeftMotorC;
-import static org.team1540.robot2019.Hardware.driveMotorAll;
 import static org.team1540.robot2019.Hardware.driveMotorMasters;
 import static org.team1540.robot2019.Hardware.driveRightMotorA;
 import static org.team1540.robot2019.Hardware.driveRightMotorB;
@@ -228,7 +227,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public void setBrake(boolean brake) {
-    for (ChickenTalon talon : driveMotorAll) {
+    for (ChickenTalon talon : driveMotorMasters) {
       talon.setBrake(brake);
     }
   }
