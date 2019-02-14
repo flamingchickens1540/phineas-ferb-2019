@@ -30,7 +30,7 @@ public class Tuning {
   public static double driveControlRampUp = .2;
   public static double driveControlRampDown = .2;
 
-  public static double driveOpenLoopRamp = 0;
+  public static double driveOpenLoopRamp = 0.25;
   public static double driveClosedLoopRamp = 0;
 
   public static boolean invertDriveLeft = true;
@@ -48,8 +48,8 @@ public class Tuning {
   public static boolean invertElevatorA = true;
   public static boolean invertElevatorB = false;
 
-  public static double elevatorUpPosition = 0; // TODO: add these
-  public static double elevatorCargoShipPosition = 0;
+  public static double elevatorUpPosition = 28;
+  public static double elevatorCargoShipPosition = 14;
   public static double elevatorDownPosition = 0;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
@@ -107,7 +107,7 @@ public class Tuning {
   public static double climberGyroD = 0;
   public static double climberGyroStartPos = 30000;
   public static double climberGyroFF = 0.5;
-  public static double climberUpPosition = 53000;
+  public static double climberUpPosition = 53000; // arms
 
   public static double climberTolerance = 1000;
 }

@@ -68,4 +68,9 @@ public class Climber extends Subsystem {
   public void periodic() {
     posEntry.forceSetNumber(getPosition());
   }
+
+  public void setArmBrake(boolean brake) {
+    climberArmLeft.setBrake(brake);
+    climberArmRight.setBrake(brake);
+  }
 }

@@ -5,6 +5,7 @@ import static org.team1540.robot2019.Hardware.elevatorB;
 import static org.team1540.robot2019.Hardware.elevatorLimitSensor;
 import static org.team1540.robot2019.Tuning.elevatorInPerRotation;
 
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -96,5 +97,15 @@ public class Elevator extends Subsystem {
 
   public double getOffset() {
     return positionOffset;
+  }
+
+  public void setBrake(boolean brake) {
+    IdleMode mode = brake ? IdleMode.kBrake : IdleMode.kCoast;
+    elevatorA.setIdleMode(mode);
+    elevatorB.setIdleMode(mode);
+  }
+
+  public void stop() {
+    setRaw(0);
   }
 }
