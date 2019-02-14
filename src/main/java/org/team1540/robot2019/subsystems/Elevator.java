@@ -104,4 +104,8 @@ public class Elevator extends Subsystem {
     elevatorA.setIdleMode(mode);
     elevatorB.setIdleMode(mode);
   }
+
+  public void stop() {
+    setRaw(0);
+  }
 }
