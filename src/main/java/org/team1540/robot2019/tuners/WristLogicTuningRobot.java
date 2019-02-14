@@ -25,6 +25,7 @@ public class WristLogicTuningRobot extends TimedRobot {
     Scheduler.getInstance().run();
 
     Hardware.initWrist();
+    Hardware.initCompressor();
 
     Robot.wrist = new Wrist();
 
