@@ -114,6 +114,10 @@ public class Robot extends TimedRobot {
     }
 
     Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
+
+    if (elevator.getPosition() < 1) {
+      elevator.setRaw(0);
+    }
   }
 
   @Override
@@ -131,6 +135,10 @@ public class Robot extends TimedRobot {
     }
 
     Shuffleboard.addEventMarker("Teleop Start", EventImportance.kNormal);
+
+    if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
+      elevator.setRaw(0);
+    }
   }
 
   @Override
