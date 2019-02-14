@@ -108,7 +108,7 @@ public class Hardware {
 
     for (ChickenTalon talon : driveMotorAll) {
       talon.configFactoryDefault();
-      talon.setBrake(true);
+      talon.setBrake(false);
       talon.configVoltageCompSaturation(12);
       talon.enableVoltageCompensation(true);
       // at the moment, this hard caps to driveCurrentLimit; we might implement peak limiting
@@ -121,6 +121,8 @@ public class Hardware {
     }
 
     for (ChickenTalon talon : driveMotorMasters) {
+      talon.setBrake(true);
+
       talon.config_kP(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionP);
       talon.config_kI(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionI);
       talon.config_kD(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionD);
