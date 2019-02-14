@@ -80,6 +80,8 @@ public class Hardware {
   // initialized statically as there's literally no scenario where the PDP wouldn't be connected
   public static PowerDistributionPanel pdp = new PowerDistributionPanel();
 
+  public static Compressor compressor;
+
   static void initAll() {
     logger.info("Initializing robot hardware...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
@@ -90,6 +92,7 @@ public class Hardware {
     initIntake();
     initHatchMech();
     initClimber();
+    initCompressor();
     initPressureSensor();
     initNavX();
 
@@ -117,7 +120,7 @@ public class Hardware {
         driveRightMotorC};
 
     for (ChickenController talon : driveMotorAll) {
-      talon.setBrake(true);
+      talon.setBrake(false);
       talon.configVoltageCompSaturation(12);
       talon.enableVoltageCompensation(true);
 
@@ -127,6 +130,8 @@ public class Hardware {
     }
 
     for (ChickenTalon talon : driveMotorMasters) {
+      talon.setBrake(true);
+
       talon.config_kP(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionP);
       talon.config_kI(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionI);
       talon.config_kD(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionD);
@@ -278,6 +283,16 @@ public class Hardware {
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized climber in " + (end - start) + " ms");
+  }
+
+  public static void initCompressor() {
+    logger.info("Initializing compressor...");
+    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+    compressor = new Compressor();
+
+    double end = RobotController.getFPGATime() / 1000.0;
+    logger.info("Initialized compressor in " + (end - start) + " ms");
   }
 
   public static void initPressureSensor() {
