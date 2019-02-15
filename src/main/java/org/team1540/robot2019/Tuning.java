@@ -91,8 +91,8 @@ public class Tuning {
   public static double intakeEjectTime = 1;
 
   // hatch mech
-  public static double hatchGetTime = 0.3; // DELETE IF NOT USING COMMAND
-  public static double hatchPlaceTime = 0.3; // DELETE IF NOT USING COMMAND
+  public static double hatchGetTime = 0.6;
+  public static double hatchPlaceTime = 0.6;
 
   // climber
   public static double climberArmSpeed = 10000;
