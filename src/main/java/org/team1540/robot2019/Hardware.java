@@ -1,11 +1,11 @@
 package org.team1540.robot2019;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -105,12 +105,12 @@ public class Hardware {
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     driveLeftMotorA = new ChickenTalon(RobotMap.DRIVE_LEFT_A);
-    driveLeftMotorB = new ChickenTalon(RobotMap.DRIVE_LEFT_B);
-    driveLeftMotorC = new ChickenTalon(RobotMap.DRIVE_LEFT_C);
+    driveLeftMotorB = createController(RobotMap.DRIVE_LEFT_B);
+    driveLeftMotorC = createController(RobotMap.DRIVE_LEFT_C);
 
     driveRightMotorA = new ChickenTalon(RobotMap.DRIVE_RIGHT_A);
-    driveRightMotorB = new ChickenTalon(RobotMap.DRIVE_RIGHT_B);
-    driveRightMotorC = new ChickenTalon(RobotMap.DRIVE_RIGHT_C);
+    driveRightMotorB = createController(RobotMap.DRIVE_RIGHT_B);
+    driveRightMotorC = createController(RobotMap.DRIVE_RIGHT_C);
 
     driveMotorAll = new ChickenController[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC,
         driveRightMotorA, driveRightMotorB, driveRightMotorC};
@@ -127,6 +127,9 @@ public class Hardware {
       talon.configPeakOutputForward(1);
       talon.configPeakOutputReverse(-1);
       talon.configOpenloopRamp(Tuning.driveOpenLoopRamp);
+      talon.configForwardSoftLimitEnable(false);
+      talon.configReverseSoftLimitEnable(false);
+      talon.overrideLimitSwitchesEnable(false);
     }
 
     for (ChickenTalon talon : driveMotorMasters) {
@@ -158,10 +161,10 @@ public class Hardware {
     driveLeftMotorA.setSensorPhase(Tuning.invertDriveLeftSensor);
     driveRightMotorA.setSensorPhase(Tuning.invertDriveRightSensor);
 
-    driveLeftMotorB.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
-    driveLeftMotorC.set(ControlMode.Follower, driveLeftMotorA.getDeviceID());
-    driveRightMotorB.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
-    driveRightMotorC.set(ControlMode.Follower, driveRightMotorA.getDeviceID());
+    driveLeftMotorB.follow(driveLeftMotorA);
+    driveLeftMotorC.follow(driveLeftMotorA);
+    driveRightMotorB.follow(driveRightMotorA);
+    driveRightMotorC.follow(driveRightMotorA);
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized drive in " + (end - start) + " ms");
@@ -267,8 +270,7 @@ public class Hardware {
     climberArmRight.configVoltageCompSaturation(12);
     climberArmRight.enableVoltageCompensation(true);
 
-    climberArmRight.setControlMode(ControlMode.Follower);
-    climberArmRight.set(climberArmLeft.getDeviceID());
+    climberArmRight.follow(climberArmLeft);
 
     climberArmLeft.config_kP(0, Tuning.climberP);
     climberArmLeft.config_kI(0, Tuning.climberI);
@@ -363,7 +365,7 @@ public class Hardware {
   }
 
   public static double getDriveRightACurrent() {
-    return driveLeftMotorA.getOutputCurrent();
+    return driveRightMotorA.getOutputCurrent();
   }
 
   public static double getDriveRightBCurrent() {
