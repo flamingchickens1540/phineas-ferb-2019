@@ -7,16 +7,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.groups.EjectThenDown;
-import org.team1540.robot2019.commands.groups.GetHatchFloor;
-import org.team1540.robot2019.commands.groups.IntakeSequence;
-import org.team1540.robot2019.commands.groups.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.groups.*;
 import org.team1540.robot2019.commands.hatch.GetHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.triggers.StrictDPadButton;
+import org.team1540.rooster.util.SimpleCommand;
 
 public class OI {
 
@@ -43,7 +42,6 @@ public class OI {
 
   // Joysticks
   private static XboxController driver = new XboxController(0);
-  ;
   private static XboxController copilot = new XboxController(1);
 
   // copilot buttons
@@ -58,8 +56,10 @@ public class OI {
   private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, START);
   private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
 
-  //climber stuff
-
+  private static JoystickButton prepareToClimbButton = new JoystickButton(copilot, BACK);
+  private static JoystickButton startClimbingButton = new JoystickButton(copilot, 0);
+  private static JoystickButton climberResetButton = new JoystickButton(copilot, LB);
+  private static JoystickButton climberCylinderUp = new JoystickButton(copilot, 0);
 
   /**
    * Since we want to initialize stuff once the robot actually boots up (not as static
@@ -101,7 +101,10 @@ public class OI {
     getHatchFloorButton.whenPressed(new GetHatchFloor());
     placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
-    // climber stuff
+    prepareToClimbButton.whenPressed(new PrepareForClimb());
+    startClimbingButton.whenPressed(new RaiseUpGyroAssist());
+    climberResetButton.whenPressed(new ResetClimber());
+    climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized buttons in " + (end - start) + " ms");
