@@ -15,12 +15,12 @@ public class HatchMech extends Subsystem {
     hatchSlide.set(false);
   }
 
-  public void attatch() {
-    hatchGrabber.set(true);
+  public void attach() {
+    hatchGrabber.set(false);
   }
 
   public void release() {
-    hatchGrabber.set(false);
+    hatchGrabber.set(true);
   }
 
   @Override

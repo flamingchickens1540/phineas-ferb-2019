@@ -5,6 +5,9 @@ import org.team1540.rooster.preferencemanager.TuningClass;
 @TuningClass("ph_")
 public class Tuning {
 
+  // general
+  public static boolean isComp = true;
+
   // drive
   public static double driveVelocityP = 0;
   public static double driveVelocityI = 0;
@@ -27,7 +30,7 @@ public class Tuning {
   public static double driveControlRampUp = .2;
   public static double driveControlRampDown = .2;
 
-  public static double driveOpenLoopRamp = 0;
+  public static double driveOpenLoopRamp = 0.25;
   public static double driveClosedLoopRamp = 0;
 
   public static boolean invertDriveLeft = true;
@@ -45,9 +48,10 @@ public class Tuning {
   public static boolean invertElevatorA = true;
   public static boolean invertElevatorB = false;
 
-  public static double elevatorUpPosition = 0; // TODO: add these
-  public static double elevatorCargoShipPosition = 0;
+  public static double elevatorUpPosition = 28;
+  public static double elevatorCargoShipPosition = 14;
   public static double elevatorDownPosition = 0;
+  public static double elevatorClimbPosition = 14;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
   public static double elevatorInPerRotation = .929926125;
@@ -73,13 +77,16 @@ public class Tuning {
 
   public static double wristDownTravelPwrThrot = 0.7;
   public static double wristDownTravelBrakeThrot = 0.0;
+  // what's uptravel
   public static double wristUpTravelThrot = 0.55;
+  public static double wristHoldThrot = 0.1;
+  public static double wristLowerTimeout = 1;
 
   public static double wristTestDownTime;
   public static double wristTestUpTime;
 
   // intake
-  public static boolean intakeInvertTop = true;
+  public static boolean intakeInvertTop = false;
   public static boolean intakeInvertBtm = false;
 
   public static double intakeIntakeSpeedTop = 1;
@@ -93,8 +100,8 @@ public class Tuning {
   public static double intakeEjectTime = 1;
 
   // hatch mech
-  public static double hatchGetTime = 0.3; // DELETE IF NOT USING COMMAND
-  public static double hatchPlaceTime = 0.3; // DELETE IF NOT USING COMMAND
+  public static double hatchGetTime = 0.6;
+  public static double hatchPlaceTime = 0.6;
 
   // climber
   public static double climberArmSpeed = 10000;
@@ -112,7 +119,7 @@ public class Tuning {
   public static double climberGyroD = 0;
   public static double climberGyroStartPos = 30000;
   public static double climberGyroFF = 0.5;
-  public static double climberUpPosition = 53000;
+  public static double climberUpPosition = 53000; // arms
 
   public static double climberTolerance = 1000;
 }

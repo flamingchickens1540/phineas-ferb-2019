@@ -10,6 +10,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Tuning;
 
 public class Climber extends Subsystem {
@@ -49,11 +50,11 @@ public class Climber extends Subsystem {
   }
 
   public double getCurrentLeft() {
-    return climberArmLeft.getOutputCurrent();
+    return Hardware.getClimberLCurrent();
   }
 
   public double getCurrentRight() {
-    return climberArmRight.getOutputCurrent();
+    return Hardware.getClimberRCurrent();
   }
 
   @Override
@@ -67,5 +68,10 @@ public class Climber extends Subsystem {
   @Override
   public void periodic() {
     posEntry.forceSetNumber(getPosition());
+  }
+
+  public void setArmBrake(boolean brake) {
+    climberArmLeft.setBrake(brake);
+    climberArmRight.setBrake(brake);
   }
 }

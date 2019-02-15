@@ -16,7 +16,7 @@ public class GetHatch extends TimedCommand {
   }
 
   protected void end() {
-    Robot.hatchMech.attatch();
+    Robot.hatchMech.attach();
   }
 
 }
