@@ -64,7 +64,7 @@ public class Elevator extends Subsystem {
   }
 
   public double getVelocity() {
-    return elevatorA.getEncoder().getVelocity() * (elevatorInPerRotation / 60);
+    return -elevatorA.getEncoder().getVelocity() * (elevatorInPerRotation / 60);
   }
 
   public double getThrottle() {
