@@ -50,11 +50,11 @@ public class RobotMap {
   public static final int PDP_DRIVE_RIGHT_A = 0;
   public static final int PDP_DRIVE_RIGHT_B = 2;
   public static final int PDP_DRIVE_RIGHT_C = 1;
-  public static final int PDP_INTAKE_WRIST = 0;
-  public static final int PDP_INTAKE_TOP = 0;
-  public static final int PDP_INTAKE_BTM = 0;
-  public static final int PDP_CLIMBER_ARM_L = 0;
-  public static final int PDP_CLIMBER_ARM_R = 0;
+  public static final int PDP_INTAKE_WRIST = 7;
+  public static final int PDP_INTAKE_TOP = 5;
+  public static final int PDP_INTAKE_BTM = 4;
+  public static final int PDP_CLIMBER_ARM_L = 10;
+  public static final int PDP_CLIMBER_ARM_R = 11;
 
   public static final Port NAVX = Port.kMXP;
 }
