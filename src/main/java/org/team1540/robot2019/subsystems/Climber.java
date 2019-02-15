@@ -1,6 +1,7 @@
 package org.team1540.robot2019.subsystems;
 
 import static org.team1540.robot2019.Hardware.climberArmLeft;
+import static org.team1540.robot2019.Hardware.climberArmRight;
 import static org.team1540.robot2019.Hardware.climberCylinder;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
