@@ -6,7 +6,7 @@ import org.team1540.rooster.preferencemanager.TuningClass;
 public class Tuning {
 
   // general
-  public static boolean isComp;
+  public static boolean isComp = true;
 
   // drive
   public static double driveVelocityP = 0;
@@ -78,7 +78,7 @@ public class Tuning {
   public static double wristLowerTimeout = 1;
 
   // intake
-  public static boolean intakeInvertTop = true;
+  public static boolean intakeInvertTop = false;
   public static boolean intakeInvertBtm = false;
 
   public static double intakeIntakeSpeedTop = 1;
