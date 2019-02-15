@@ -6,13 +6,17 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.groups.*;
 import org.team1540.robot2019.commands.hatch.GetHatch;
+import org.team1540.robot2019.commands.wrist.LowerWrist;
+import org.team1540.robot2019.commands.wrist.WristDownTest;
 import org.team1540.rooster.Utilities;
+import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.triggers.StrictDPadButton;
 import org.team1540.rooster.util.SimpleCommand;
@@ -31,6 +35,8 @@ public class OI {
   public static final int RB = 6;
   public static final int BACK = 7;
   public static final int START = 8;
+  public static final int LEFT_STICK_PRESS = 9;
+  public static final int RIGHT_STICK_PRESS = 10;
 
   // Axes
   public static final int LEFT_X = 0;
@@ -57,9 +63,9 @@ public class OI {
   private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
 
   private static JoystickButton prepareToClimbButton = new JoystickButton(copilot, BACK);
-  private static JoystickButton startClimbingButton = new JoystickButton(copilot, 0);
-  private static JoystickButton climberResetButton = new JoystickButton(copilot, LB);
-  private static JoystickButton climberCylinderUp = new JoystickButton(copilot, 0);
+  private static JoystickButton startClimbingButton = new JoystickButton(copilot, RB);
+  private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB);
+  public static JoystickButton climberResetButton = new JoystickButton(copilot, LEFT_STICK_PRESS);
 
   /**
    * Since we want to initialize stuff once the robot actually boots up (not as static
@@ -89,9 +95,8 @@ public class OI {
     logger.info("Initializing buttons...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(28));
-    elevatorCargoShipButton
-        .whenPressed(new MoveElevatorToPosition(14));
+    elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+    elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
     elevatorDownButton.whenPressed(new MoveElevatorToZero());
 
     autoIntakeButton.whenPressed(new IntakeSequence());
@@ -103,8 +108,8 @@ public class OI {
 
     prepareToClimbButton.whenPressed(new PrepareForClimb());
     startClimbingButton.whenPressed(new RaiseUpGyroAssist());
-    climberResetButton.whenPressed(new ResetClimber());
     climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
+    climberResetButton.whenPressed(new ResetClimber());
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized buttons in " + (end - start) + " ms");

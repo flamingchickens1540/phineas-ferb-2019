@@ -4,15 +4,18 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class MoveArmsToStart extends Command {
+public class MoveArmsToPosition extends Command {
 
-  public MoveArmsToStart() {
+  private double setpoint;
+
+  public MoveArmsToPosition(double pos) {
     requires(Robot.climber);
+    setpoint = pos;
   }
 
   @Override
   protected void initialize() {
-    Robot.climber.setArmPosition(Tuning.climberGyroStartPos);
+    Robot.climber.setArmPosition(setpoint);
   }
 
   @Override
@@ -22,7 +25,7 @@ public class MoveArmsToStart extends Command {
 
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.climber.getPosition() - Tuning.climberGyroStartPos)
+    return Math.abs(Robot.climber.getPosition() - setpoint)
         < Tuning.climberTolerance;
   }
 }
