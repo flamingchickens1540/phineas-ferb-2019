@@ -259,7 +259,7 @@ public class Hardware {
     climberArmLeft.setBrake(true);
     climberArmRight.setBrake(true);
 
-    climberArmLeft.setInverted(false);
+    climberArmLeft.setInverted(true);
     climberArmRight.setInverted(true);
 
     climberArmLeft.configPeakOutputForward(1);

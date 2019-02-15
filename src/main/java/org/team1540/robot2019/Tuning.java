@@ -92,8 +92,9 @@ public class Tuning {
   public static double intakeEjectTime = 1;
 
   // hatch mech
-  public static double hatchGetTime = 0.6;
-  public static double hatchPlaceTime = 0.6;
+  public static double hatchGetTime = 0.4;
+  public static double hatchPlaceTime = 0.4;
+  public static double hatchFloorTime = 0.4;
 
   // climber
   public static double climberArmSpeed = 10000;
@@ -109,7 +110,10 @@ public class Tuning {
   public static double climberGyroP = 0.05;
   public static double climberGyroI = 0;
   public static double climberGyroD = 0;
+
   public static double climberGyroStartPos = 30000;
+  public static double climberBackPos = 0;
+
   public static double climberGyroFF = 0.5;
   public static double climberUpPosition = 53000; // arms
 
