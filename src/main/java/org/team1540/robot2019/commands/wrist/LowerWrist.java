@@ -13,6 +13,6 @@ public class LowerWrist extends Command {
 
   @Override
   protected boolean isFinished() {
-    return Robot.wrist.getState() == WristState.OFF_DOWN;
+    return Robot.wrist.getState() == WristState.HOLD_DOWN;
   }
 }

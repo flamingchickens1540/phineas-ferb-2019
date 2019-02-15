@@ -75,8 +75,6 @@ public class Robot extends TimedRobot {
     brakeTimer.start();
     disableBrakes = true;
 
-    wrist.handleDisable();
-
     if (DriverStation.getInstance().isFMSAttached()) {
       logger.debug("FMS is attached, auto-stopping recording");
       Shuffleboard.stopRecording();
