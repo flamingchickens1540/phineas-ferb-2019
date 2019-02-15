@@ -67,6 +67,11 @@ public class Tuning {
   public static double elevatorI = 0;
   public static double elevatorD = 5;
 
+  public static double elevatorMaxCurrDiscrepancy = 10;
+  public static double elevatorTestThrottle = 1;
+  public static double elevatorTestTime = 0.1;
+  public static double elevatorTestVelocityThresh = 1;
+
   // wrist
   public static boolean wristInvertMotor = true;
 

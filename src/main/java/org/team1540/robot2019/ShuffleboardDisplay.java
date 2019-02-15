@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.elevator.ZeroElevator;
+import org.team1540.robot2019.commands.groups.SelfTest;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleLoopCommand;
 
@@ -38,6 +39,9 @@ public class ShuffleboardDisplay {
     Command command = new SimpleLoopCommand("Shuffleboard Update", ShuffleboardDisplay::update);
     command.setRunWhenDisabled(true);
     command.start();
+
+    Shuffleboard.getTab("Phineas")
+        .add(new SelfTest());
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized Shuffleboard in " + (end - start) + " ms");
