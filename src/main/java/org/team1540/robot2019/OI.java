@@ -56,9 +56,9 @@ public class OI {
   private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, START);
   private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
 
-  private static JoystickButton prepareToClimbButton = new JoystickButton(copilot, 0);
+  private static JoystickButton prepareToClimbButton = new JoystickButton(copilot, BACK);
   private static JoystickButton startClimbingButton = new JoystickButton(copilot, 0);
-  private static JoystickButton climberArmsBackButton = new JoystickButton(copilot, 0);
+  private static JoystickButton climberResetButton = new JoystickButton(copilot, LB);
   private static JoystickButton climberCylinderUp = new JoystickButton(copilot, 0);
 
   /**
@@ -103,7 +103,7 @@ public class OI {
 
     prepareToClimbButton.whenPressed(new PrepareForClimb());
     startClimbingButton.whenPressed(new RaiseUpGyroAssist());
-    climberArmsBackButton.whenPressed(new SimpleCommand("Arms Back", () -> Robot.climber.setArms(0), Robot.climber));
+    climberResetButton.whenPressed(new ResetClimber());
     climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
 
     double end = RobotController.getFPGATime() / 1000.0;
