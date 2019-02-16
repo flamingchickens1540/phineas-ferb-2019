@@ -47,10 +47,12 @@ public class Intake extends Subsystem {
 
   @Override
   public void periodic() {
-    hasBallEntry.forceSetBoolean(hasBall());
-    topThrottleEntry.forceSetNumber(intakeTop.getMotorOutputPercent());
-    topCurrentEntry.forceSetNumber(Hardware.getIntakeTopCurrent());
-    btmThrottleEntry.forceSetNumber(intakeBtm.getMotorOutputPercent());
-    btmCurrentEntry.forceSetNumber(Hardware.getIntakeBtmCurrent());
+    if (Tuning.publishData) {
+      hasBallEntry.forceSetBoolean(hasBall());
+      topThrottleEntry.forceSetNumber(intakeTop.getMotorOutputPercent());
+      topCurrentEntry.forceSetNumber(Hardware.getIntakeTopCurrent());
+      btmThrottleEntry.forceSetNumber(intakeBtm.getMotorOutputPercent());
+      btmCurrentEntry.forceSetNumber(Hardware.getIntakeBtmCurrent());
+    }
   }
 }

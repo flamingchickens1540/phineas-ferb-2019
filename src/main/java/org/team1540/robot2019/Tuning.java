@@ -7,6 +7,7 @@ public class Tuning {
 
   // general
   public static boolean isComp = true;
+  public static boolean publishData = false;
 
   // drive
   public static double driveVelocityP = 0;
