@@ -3,9 +3,6 @@ package org.team1540.robot2019.subsystems;
 import static org.team1540.robot2019.Hardware.DRIVE_POSITION_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.DRIVE_VELOCITY_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.driveLeftMotorA;
-import static org.team1540.robot2019.Hardware.driveMotorAll;
-import static org.team1540.robot2019.Hardware.driveLeftMotorB;
-import static org.team1540.robot2019.Hardware.driveLeftMotorC;
 import static org.team1540.robot2019.Hardware.driveMotorMasters;
 import static org.team1540.robot2019.Hardware.driveRightMotorA;
 
@@ -307,23 +304,24 @@ public class Drivetrain extends Subsystem {
 
   @Override
   public void periodic() {
-    leftPositionEntry.setNumber(getLeftPosition());
-    rightPositionEntry.setNumber(getRightPosition());
+    if (Tuning.publishData) {
+      leftPositionEntry.setNumber(getLeftPosition());
+      rightPositionEntry.setNumber(getRightPosition());
 
-    leftVelocityEntry.setNumber(getLeftVelocity());
-    rightVelocityEntry.setNumber(getRightVelocity());
+      leftVelocityEntry.setNumber(getLeftVelocity());
+      rightVelocityEntry.setNumber(getRightVelocity());
 
-    leftThrottleEntry.setNumber(getLeftThrottle());
-    rightThrottleEntry.setNumber(getRightThrottle());
+      leftThrottleEntry.setNumber(getLeftThrottle());
+      rightThrottleEntry.setNumber(getRightThrottle());
 
-    leftCurrentAEntry.setNumber(Hardware.getDriveLeftACurrent());
-    leftCurrentBEntry.setNumber(Hardware.getDriveLeftBCurrent());
-    leftCurrentCEntry.setNumber(Hardware.getDriveLeftCCurrent());
+      leftCurrentAEntry.setNumber(Hardware.getDriveLeftACurrent());
+      leftCurrentBEntry.setNumber(Hardware.getDriveLeftBCurrent());
+      leftCurrentCEntry.setNumber(Hardware.getDriveLeftCCurrent());
 
-    rightCurrentAEntry.setNumber(Hardware.getDriveRightACurrent());
-    rightCurrentBEntry.setNumber(Hardware.getDriveRightBCurrent());
-    rightCurrentCEntry.setNumber(Hardware.getDriveRightCCurrent());
-
+      rightCurrentAEntry.setNumber(Hardware.getDriveRightACurrent());
+      rightCurrentBEntry.setNumber(Hardware.getDriveRightBCurrent());
+      rightCurrentCEntry.setNumber(Hardware.getDriveRightCCurrent());
+    }
     if (DriverStation.getInstance().isDisabled()) {
       leftRampAccum = 0;
       rightRampAccum = 0;

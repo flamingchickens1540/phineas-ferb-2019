@@ -85,17 +85,19 @@ public class Elevator extends Subsystem {
 
   @Override
   public void periodic() {
-    positionEntry.forceSetNumber(getPosition());
-    velocityEntry.forceSetNumber(getVelocity());
+    if (Tuning.publishData) {
+      positionEntry.forceSetNumber(getPosition());
+      velocityEntry.forceSetNumber(getVelocity());
 
-    throttleEntry.forceSetNumber(elevatorA.getAppliedOutput());
+      throttleEntry.forceSetNumber(elevatorA.getAppliedOutput());
 
-    currentAEntry.forceSetNumber(elevatorA.getOutputCurrent());
-    currentBEntry.forceSetNumber(elevatorB.getOutputCurrent());
+      currentAEntry.forceSetNumber(elevatorA.getOutputCurrent());
+      currentBEntry.forceSetNumber(elevatorB.getOutputCurrent());
 
-    offsetEntry.forceSetNumber(getOffset());
+      offsetEntry.forceSetNumber(getOffset());
 
-    limEntry.forceSetBoolean(isAtLimit());
+      limEntry.forceSetBoolean(isAtLimit());
+    }
   }
 
   public double getPosition() {

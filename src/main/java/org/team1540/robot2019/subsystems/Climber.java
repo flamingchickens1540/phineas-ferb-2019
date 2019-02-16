@@ -67,7 +67,9 @@ public class Climber extends Subsystem {
 
   @Override
   public void periodic() {
-    posEntry.forceSetNumber(getPosition());
+    if (Tuning.publishData) {
+      posEntry.forceSetNumber(getPosition());
+    }
   }
 
   public void setArmBrake(boolean brake) {
