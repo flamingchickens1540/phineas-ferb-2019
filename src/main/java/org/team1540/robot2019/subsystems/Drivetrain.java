@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.IMotorController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
@@ -55,7 +54,7 @@ public class Drivetrain extends Subsystem {
   @Override
   protected void initDefaultCommand() {
 //    setDefaultCommand(new PercentDrive(Robot.drivetrain));
-//    setDefaultCommand(new VelocityDrive(Robot.drivetrain));
+//    setDefaultCommand(new VelocityDrive());
       setDefaultCommand(new SimpleLoopCommand("Drive",
           new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
               OI::getDriveHardTurn)
