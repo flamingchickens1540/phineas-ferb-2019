@@ -35,7 +35,6 @@ import org.team1540.robot2019.utils.StateChangeDetector;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
 import org.team1540.robot2019.vision.commands.UDPAutoLineup;
 import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
-import org.team1540.rooster.adjustables.AdjustableManager;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
 
@@ -148,11 +147,8 @@ public class AutoAlignTuningRobot extends TimedRobot {
     tebConfigTable.getEntry("ResetTuningVals").setBoolean(true);
   }
 
-  long lastTime = System.currentTimeMillis();
   @Override
   public void robotPeriodic() {
-    System.out.println(System.currentTimeMillis() - lastTime);
-    lastTime = System.currentTimeMillis();
 
     Scheduler.getInstance().run();
 
