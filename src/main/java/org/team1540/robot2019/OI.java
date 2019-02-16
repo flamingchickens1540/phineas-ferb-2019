@@ -67,6 +67,7 @@ public class OI {
 
   private static JoystickButton prepareToClimbButton = new JoystickButton(copilot, BACK);
   private static JoystickButton startClimbingButton = new JoystickButton(copilot, RB);
+    private static AxisButton startClimbingSafety = new AxisButton(copilot, 0.3, LEFT_TRIG);
   private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB);
   public static JoystickButton climberResetButton = new JoystickButton(copilot, LEFT_STICK_PRESS);
 
@@ -114,7 +115,11 @@ public class OI {
     placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
     prepareToClimbButton.whenPressed(new PrepareForClimb());
-    startClimbingButton.whenPressed(new RaiseUpGyroAssist());
+      startClimbingButton.whenPressed(new SimpleCommand("Climb Safe", () -> {
+          if (startClimbingSafety.get()) {
+              new RaiseUpGyroAssist().start();
+          }
+      }));
     climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
     climberResetButton.whenPressed(new ResetClimber());
 
