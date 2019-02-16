@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -53,13 +52,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     // logging configuration
-    Logger.getRootLogger().setLevel(Level.ALL);
+    Logger.getRootLogger().setLevel(Level.DEBUG);
 
     logger.info("Initializing...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    //PreferenceManager.getInstance().add(new Tuning());
-
+    PreferenceManager.getInstance().add(new Tuning());
     Scheduler.getInstance().run();
 
     // initialize hardware after we run the scheduler once so that the preference manager can update its values
@@ -82,22 +80,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+//    long time = System.currentTimeMillis();
     Scheduler.getInstance().run();
-
-    // TODO: put this on shuffleboard properly
-    SmartDashboard.putNumber("System Pressure", 50 * (Hardware.pressureSensor.getVoltage() - 0.5));
+//    System.out.println(time - System.currentTimeMillis());
   }
 
   private Timer brakeTimer = new Timer();
 
   @Override
   public void disabledInit() {
-    logger.debug("Disabling drive brakes in 2 seconds...");
+    logger.debug("Disabling mechanism brakes in 2 seconds...");
     brakeTimer.reset();
     brakeTimer.start();
     disableBrakes = true;
-
-    wrist.handleDisable();
 
     if (DriverStation.getInstance().isFMSAttached()) {
       logger.debug("FMS is attached, auto-stopping recording");
@@ -113,17 +108,19 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     if (brakeTimer.hasPeriodPassed(2) && disableBrakes) {
       brakeTimer.stop();
-      drivetrain.setBrake(false);
-      logger.debug("Drive brakes disabled");
+      setMechanismBrakes(false);
+
+      logger.debug("Mechanism brakes disabled");
+
       disableBrakes = false;
 
-      Shuffleboard.addEventMarker("Drive brakes disabled", EventImportance.kTrivial);
+      Shuffleboard.addEventMarker("Mechanism brakes disabled", EventImportance.kTrivial);
     }
   }
 
   @Override
   public void autonomousInit() {
-    drivetrain.setBrake(true);
+    setMechanismBrakes(true);
 
     Hardware.checkStickyFaults();
 
@@ -138,6 +135,10 @@ public class Robot extends TimedRobot {
     }
 
     Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
+
+    if (elevator.getPosition() < 1) {
+      elevator.setRaw(0);
+    }
   }
 
   @Override
@@ -146,7 +147,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    drivetrain.setBrake(true);
+    setMechanismBrakes(true);
 
     Hardware.checkStickyFaults();
 
@@ -155,10 +156,24 @@ public class Robot extends TimedRobot {
     }
 
     Shuffleboard.addEventMarker("Teleop Start", EventImportance.kNormal);
+
+    if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
+      elevator.setRaw(0);
+    }
   }
 
   @Override
   public void teleopPeriodic() {
+    if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
+        && (Robot.climber.getCurrentCommand() == null)) {
+      if (Hardware.compressor.getClosedLoopControl()) {
+        logger.debug("Stopping compressor because elevator is up");
+        Hardware.compressor.stop();
+      }
+    } else if (!Hardware.compressor.getClosedLoopControl()) {
+      logger.debug("Restarting compressor");
+      Hardware.compressor.start();
+    }
   }
 
   @Override
@@ -167,5 +182,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+  }
+
+  private void setMechanismBrakes(boolean b) {
+    drivetrain.setBrake(b);
+    elevator.setBrake(b);
+    climber.setArmBrake(b);
+    wrist.setBrake(b);
   }
 }

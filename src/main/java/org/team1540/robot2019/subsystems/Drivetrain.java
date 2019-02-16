@@ -3,13 +3,11 @@ package org.team1540.robot2019.subsystems;
 import static org.team1540.robot2019.Hardware.DRIVE_POSITION_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.DRIVE_VELOCITY_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.driveLeftMotorA;
+import static org.team1540.robot2019.Hardware.driveMotorAll;
 import static org.team1540.robot2019.Hardware.driveLeftMotorB;
 import static org.team1540.robot2019.Hardware.driveLeftMotorC;
-import static org.team1540.robot2019.Hardware.driveMotorAll;
 import static org.team1540.robot2019.Hardware.driveMotorMasters;
 import static org.team1540.robot2019.Hardware.driveRightMotorA;
-import static org.team1540.robot2019.Hardware.driveRightMotorB;
-import static org.team1540.robot2019.Hardware.driveRightMotorC;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -21,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.drivetrain.VelocityDrive;
@@ -28,6 +27,8 @@ import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
+import org.team1540.rooster.util.SimpleLoopCommand;
+import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class Drivetrain extends Subsystem {
@@ -253,7 +254,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public void setBrake(boolean brake) {
-    for (ChickenTalon talon : driveMotorAll) {
+    for (ChickenController talon : driveMotorMasters) {
       talon.setBrake(brake);
     }
   }
@@ -341,16 +342,13 @@ public class Drivetrain extends Subsystem {
     leftThrottleEntry.setNumber(getLeftThrottle());
     rightThrottleEntry.setNumber(getRightThrottle());
 
-    leftErrEntry.forceSetNumber(driveLeftMotorA.getClosedLoopError());
-    leftErrEntry.forceSetNumber(driveRightMotorA.getClosedLoopError());
+    leftCurrentAEntry.setNumber(Hardware.getDriveLeftACurrent());
+    leftCurrentBEntry.setNumber(Hardware.getDriveLeftBCurrent());
+    leftCurrentCEntry.setNumber(Hardware.getDriveLeftCCurrent());
 
-    leftCurrentAEntry.setNumber(driveLeftMotorA.getOutputCurrent());
-    leftCurrentBEntry.setNumber(driveLeftMotorB.getOutputCurrent());
-    leftCurrentCEntry.setNumber(driveLeftMotorC.getOutputCurrent());
-
-    rightCurrentAEntry.setNumber(driveRightMotorA.getOutputCurrent());
-    rightCurrentBEntry.setNumber(driveRightMotorB.getOutputCurrent());
-    rightCurrentCEntry.setNumber(driveRightMotorC.getOutputCurrent());
+    rightCurrentAEntry.setNumber(Hardware.getDriveRightACurrent());
+    rightCurrentBEntry.setNumber(Hardware.getDriveRightBCurrent());
+    rightCurrentCEntry.setNumber(Hardware.getDriveRightCCurrent());
 
     if (DriverStation.getInstance().isDisabled()) {
       leftRampAccum = 0;

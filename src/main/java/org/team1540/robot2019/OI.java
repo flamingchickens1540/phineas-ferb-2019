@@ -6,13 +6,22 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.groups.EjectThenDown;
-import org.team1540.robot2019.commands.groups.IntakeSequence;
+import org.team1540.robot2019.commands.groups.*;
+import org.team1540.robot2019.commands.hatch.GetHatch;
+import org.team1540.robot2019.commands.wrist.LowerWrist;
+import org.team1540.robot2019.commands.wrist.WristDownTest;
 import org.team1540.rooster.Utilities;
+import org.team1540.rooster.triggers.AxisButton;
+import org.team1540.rooster.triggers.DPadAxis;
+import org.team1540.rooster.triggers.StrictDPadButton;
+import org.team1540.rooster.util.SimpleCommand;
 
 public class OI {
 
@@ -28,6 +37,8 @@ public class OI {
   public static final int RB = 6;
   public static final int BACK = 7;
   public static final int START = 8;
+  public static final int LEFT_STICK_PRESS = 9;
+  public static final int RIGHT_STICK_PRESS = 10;
 
   // Axes
   public static final int LEFT_X = 0;
@@ -39,22 +50,24 @@ public class OI {
 
   // Joysticks
   public static XboxController driver = new XboxController(0);
-    public static XboxController copilot = new XboxController(1);
+  public static XboxController copilot = new XboxController(1);
 
   // copilot buttons
-  private static JoystickButton elevatorMidRocketButton = new JoystickButton(copilot, X);
-  private static JoystickButton elevatorCargoShipButton = new JoystickButton(copilot, B);
-  private static JoystickButton elevatorDownButton = new JoystickButton(copilot, A);
+  private static Button elevatorMidRocketButton = new StrictDPadButton(copilot, 0, DPadAxis.UP);
+  private static Button elevatorCargoShipButton = new StrictDPadButton(copilot, 0, DPadAxis.LEFT);
+  private static Button elevatorDownButton = new StrictDPadButton(copilot, 0, DPadAxis.DOWN);
 
-  private static JoystickButton autoIntakeButton = new JoystickButton(copilot, LB);
-  private static JoystickButton ejectButton = new JoystickButton(copilot, RB);
+  private static JoystickButton autoIntakeButton = new JoystickButton(copilot, A);
+  private static JoystickButton ejectButton = new JoystickButton(copilot, B);
 
-  private static JoystickButton getHatchButton = new JoystickButton(copilot, START);
+  private static JoystickButton getHatchButton = new JoystickButton(copilot, X);
   private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, START);
-  private static JoystickButton placeHatchButton = new JoystickButton(copilot, START);
+  private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
 
-  private static JoystickButton startClimbingButton = new JoystickButton(copilot, 0);
-
+  private static JoystickButton prepareToClimbButton = new JoystickButton(copilot, BACK);
+  private static JoystickButton startClimbingButton = new JoystickButton(copilot, RB);
+  private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB);
+  public static JoystickButton climberResetButton = new JoystickButton(copilot, LEFT_STICK_PRESS);
 
   /**
    * Since we want to initialize stuff once the robot actually boots up (not as static
@@ -84,16 +97,21 @@ public class OI {
     logger.info("Initializing buttons...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(28));
-    elevatorCargoShipButton
-        .whenPressed(new MoveElevatorToPosition(14));
+    elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+    elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
     elevatorDownButton.whenPressed(new MoveElevatorToZero());
 
     autoIntakeButton.whenPressed(new IntakeSequence());
     ejectButton.whenPressed(new EjectThenDown());
 
-    // hatch stuff
-    // climber stuff
+    getHatchButton.whenPressed(new GetHatch());
+    getHatchFloorButton.whenPressed(new GetHatchFloor());
+    placeHatchButton.whenPressed(new PlaceHatchThenDown());
+
+    prepareToClimbButton.whenPressed(new PrepareForClimb());
+    startClimbingButton.whenPressed(new RaiseUpGyroAssist());
+    climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
+    climberResetButton.whenPressed(new ResetClimber());
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized buttons in " + (end - start) + " ms");

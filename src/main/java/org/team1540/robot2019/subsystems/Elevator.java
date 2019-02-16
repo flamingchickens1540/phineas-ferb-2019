@@ -5,6 +5,7 @@ import static org.team1540.robot2019.Hardware.elevatorB;
 import static org.team1540.robot2019.Hardware.elevatorLimitSensor;
 import static org.team1540.robot2019.Tuning.elevatorInPerRotation;
 
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -63,7 +64,7 @@ public class Elevator extends Subsystem {
   }
 
   public double getVelocity() {
-    return elevatorA.getEncoder().getVelocity() * (elevatorInPerRotation / 60);
+    return -elevatorA.getEncoder().getVelocity() * (elevatorInPerRotation / 60);
   }
 
   public double getThrottle() {
@@ -72,6 +73,14 @@ public class Elevator extends Subsystem {
 
   public double getVoltage() {
     return elevatorA.getBusVoltage() * elevatorA.getAppliedOutput();
+  }
+
+  public double getCurrentA() {
+    return elevatorA.getOutputCurrent();
+  }
+
+  public double getCurrentB() {
+    return elevatorB.getOutputCurrent();
   }
 
   @Override
@@ -96,5 +105,15 @@ public class Elevator extends Subsystem {
 
   public double getOffset() {
     return positionOffset;
+  }
+
+  public void setBrake(boolean brake) {
+    IdleMode mode = brake ? IdleMode.kBrake : IdleMode.kCoast;
+    elevatorA.setIdleMode(mode);
+    elevatorB.setIdleMode(mode);
+  }
+
+  public void stop() {
+    setRaw(0);
   }
 }
