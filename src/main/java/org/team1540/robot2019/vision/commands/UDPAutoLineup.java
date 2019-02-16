@@ -69,12 +69,12 @@ public class UDPAutoLineup extends Command {
     if (limeLoc.attemptUpdatePose()) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     } else {
-//      if (limeLoc.millisSinceLastAcquired() < 0) {
-//        updateGoal(lastOdomToLimelight);
-//      } else {
+      if (limeLoc.millisSinceLastAcquired() < 10000) {
+        updateGoal(lastOdomToLimelight);
+      } else {
   //      Robot.leds.set(ColorPattern.RED);
         cancel();
-//      }
+      }
     }
   }
 
