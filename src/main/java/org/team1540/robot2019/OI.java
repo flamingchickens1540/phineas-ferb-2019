@@ -11,12 +11,14 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.groups.*;
+import org.team1540.robot2019.commands.groups.EjectThenDown;
+import org.team1540.robot2019.commands.groups.GetHatchFloor;
+import org.team1540.robot2019.commands.groups.IntakeSequence;
+import org.team1540.robot2019.commands.groups.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.groups.PrepareForClimb;
+import org.team1540.robot2019.commands.groups.ResetClimber;
 import org.team1540.robot2019.commands.hatch.GetHatch;
-import org.team1540.robot2019.commands.wrist.LowerWrist;
-import org.team1540.robot2019.commands.wrist.WristDownTest;
 import org.team1540.rooster.Utilities;
-import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.triggers.StrictDPadButton;
 import org.team1540.rooster.util.SimpleCommand;
@@ -56,6 +58,7 @@ public class OI {
   private static Button elevatorDownButton = new StrictDPadButton(copilot, 0, DPadAxis.DOWN);
 
   private static JoystickButton autoIntakeButton = new JoystickButton(copilot, A);
+    private static JoystickButton cancelIntakeButton = new JoystickButton(copilot, RIGHT_STICK_PRESS);
   private static JoystickButton ejectButton = new JoystickButton(copilot, B);
 
   private static JoystickButton getHatchButton = new JoystickButton(copilot, X);
@@ -99,7 +102,9 @@ public class OI {
     elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
     elevatorDownButton.whenPressed(new MoveElevatorToZero());
 
-    autoIntakeButton.whenPressed(new IntakeSequence());
+      Command intakeCommand = new IntakeSequence();
+      autoIntakeButton.whenPressed(intakeCommand);
+      cancelIntakeButton.whenPressed(new SimpleCommand("cancel intake", () -> intakeCommand.cancel()));
     ejectButton.whenPressed(new EjectThenDown());
 
     getHatchButton.whenPressed(new GetHatch());
