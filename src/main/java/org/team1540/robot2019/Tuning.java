@@ -34,9 +34,9 @@ public class Tuning {
   public static double driveClosedLoopRamp = 0;
 
   public static boolean invertDriveLeft = true;
-  public static boolean invertDriveLeftSensor = true;
+    public static boolean invertDriveLeftSensor = !isComp;
   public static boolean invertDriveRight = false;
-  public static boolean invertDriveRightSensor = true;
+    public static boolean invertDriveRightSensor = !isComp;
     public static double drivetrainTicksPerMeter = 1017.3;
   public static double driveKV = 0.25975;
   public static double driveVIntercept = 0.054083333;

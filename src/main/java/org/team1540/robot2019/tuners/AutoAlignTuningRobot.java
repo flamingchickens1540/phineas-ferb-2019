@@ -77,7 +77,7 @@ public class AutoAlignTuningRobot extends TimedRobot {
       new Notifier(udpReceiver::attemptConnection).startSingle(1);
     });
 
-    udpSender = new UDPOdometryGoalSender("10.15.40.201", 5800, () -> {
+    udpSender = new UDPOdometryGoalSender(Tuning.isComp ? "10.15.40.202" : "10.15.40.201", 5800, () -> {
       new Notifier(udpSender::attemptConnection).startSingle(1);
     });
 
