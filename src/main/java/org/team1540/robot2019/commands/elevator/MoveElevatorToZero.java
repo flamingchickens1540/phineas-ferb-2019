@@ -9,6 +9,6 @@ public class MoveElevatorToZero extends CommandGroup {
   public MoveElevatorToZero() {
     addSequential(new MoveElevatorToPosition(0));
 //    addSequential(new ZeroElevator());
-    addSequential(new SimpleCommand("dfsf", () -> Robot.elevator.setRaw(0), Robot.elevator));
+    addSequential(new SimpleCommand("Stop Elevator", Robot.elevator::stop, Robot.elevator));
   }
 }

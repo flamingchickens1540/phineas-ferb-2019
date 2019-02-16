@@ -7,6 +7,9 @@ import org.team1540.rooster.adjustables.Tunable;
 //@TuningClass("ph_")
 public class Tuning {
 
+  // general
+  public static boolean isComp = true;
+
   // drive
   @Tunable("DriveTrain/VelocityPID/P")
   public static double driveVelocityP = 3;
@@ -32,7 +35,7 @@ public class Tuning {
   public static double driveControlRampUp = .2;
   public static double driveControlRampDown = .2;
 
-  public static double driveOpenLoopRamp = 0;
+  public static double driveOpenLoopRamp = 0.25;
   public static double driveClosedLoopRamp = 0;
 
   public static boolean invertDriveLeft = true;
@@ -50,12 +53,13 @@ public class Tuning {
   public static boolean invertElevatorA = true;
   public static boolean invertElevatorB = false;
 
-  public static double elevatorUpPosition = 0; // TODO: add these
-  public static double elevatorCargoShipPosition = 0;
+  public static double elevatorUpPosition = 28;
+  public static double elevatorCargoShipPosition = 14;
   public static double elevatorDownPosition = 0;
+  public static double elevatorClimbPosition = 14;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
-  public static double elevatorInPerRotation = 1.418332785;
+  public static double elevatorInPerRotation = .929926125;
 
   public static double elevatorTolerance = 0.5; // inches
   public static double elevatorVelocityTolerance = 1; // inches per second
@@ -68,15 +72,23 @@ public class Tuning {
   public static double elevatorI = 0;
   public static double elevatorD = 5;
 
+  public static double elevatorMaxCurrDiscrepancy = 10;
+  public static double elevatorTestThrottle = 1;
+  public static double elevatorTestTime = 0.1;
+  public static double elevatorTestVelocityThresh = 1;
+
   // wrist
   public static boolean wristInvertMotor = true;
 
   public static double wristDownTravelPwrThrot = 0.7;
   public static double wristDownTravelBrakeThrot = 0.0;
+  // what's uptravel
   public static double wristUpTravelThrot = 0.55;
+  public static double wristHoldThrot = 0.1;
+  public static double wristLowerTimeout = 1;
 
   // intake
-  public static boolean intakeInvertTop = true;
+  public static boolean intakeInvertTop = false;
   public static boolean intakeInvertBtm = false;
 
   public static double intakeIntakeSpeedTop = 1;
@@ -90,16 +102,32 @@ public class Tuning {
   public static double intakeEjectTime = 1;
 
   // hatch mech
-  public static double hatchGetTime = 0.3; // DELETE IF NOT USING COMMAND
-  public static double hatchPlaceTime = 0.3; // DELETE IF NOT USING COMMAND
+  public static double hatchGetTime = 0.4;
+  public static double hatchPlaceTime = 0.4;
+  public static double hatchFloorTime = 0.4;
 
   // climber
-  public static double climberArmSpeed = 0;
+  public static double climberArmSpeed = 10000;
   public static double climberArmHoldSpeed = 0;
-  public static double climberP = 0;
+  public static double climberP = 0.5;
   public static double climberI = 0;
   public static double climberD = 0;
+  public static double climberF = 0.1364;
 
+  public static int climberMaxVel = 7500;
+  public static int climberMaxAcc = 10000;
+
+  public static double climberGyroP = 0.05;
+  public static double climberGyroI = 0;
+  public static double climberGyroD = 0;
+
+  public static double climberGyroStartPos = 30000;
+  public static double climberBackPos = 0;
+
+  public static double climberGyroFF = 0.5;
+  public static double climberUpPosition = 53000; // arms
+
+  public static double climberTolerance = 1000;
   // auto-lineup
   public static double drivetrainRadius = 0.305; // This is for pandora
 
@@ -108,5 +136,5 @@ public class Tuning {
   public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
   public static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
   public static double axisDeadzone = 0.1;
-    public static double drivetrainMaxVelocity = 400;
+  public static double drivetrainMaxVelocity = 400;
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Tuning;
 
 public class Intake extends Subsystem {
@@ -48,8 +49,8 @@ public class Intake extends Subsystem {
   public void periodic() {
     hasBallEntry.forceSetBoolean(hasBall());
     topThrottleEntry.forceSetNumber(intakeTop.getMotorOutputPercent());
-    topCurrentEntry.forceSetNumber(intakeTop.getOutputCurrent());
+    topCurrentEntry.forceSetNumber(Hardware.getIntakeTopCurrent());
     btmThrottleEntry.forceSetNumber(intakeBtm.getMotorOutputPercent());
-    btmCurrentEntry.forceSetNumber(intakeBtm.getOutputCurrent());
+    btmCurrentEntry.forceSetNumber(Hardware.getIntakeBtmCurrent());
   }
 }

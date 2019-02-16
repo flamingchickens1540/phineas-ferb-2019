@@ -33,6 +33,10 @@ public class ElevatorTuningRobot extends TimedRobot {
     new JoystickButton(joystick, 3).whenPressed(new MoveElevatorToPosition(28));
   }
 
+  public void teleopInit() {
+    Robot.elevator.stop();
+  }
+
   @Override
   public void robotPeriodic() {
     Scheduler.getInstance().run();
