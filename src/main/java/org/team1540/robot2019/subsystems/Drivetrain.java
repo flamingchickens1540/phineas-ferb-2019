@@ -3,9 +3,6 @@ package org.team1540.robot2019.subsystems;
 import static org.team1540.robot2019.Hardware.DRIVE_POSITION_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.DRIVE_VELOCITY_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.driveLeftMotorA;
-import static org.team1540.robot2019.Hardware.driveMotorAll;
-import static org.team1540.robot2019.Hardware.driveLeftMotorB;
-import static org.team1540.robot2019.Hardware.driveLeftMotorC;
 import static org.team1540.robot2019.Hardware.driveMotorMasters;
 import static org.team1540.robot2019.Hardware.driveRightMotorA;
 
@@ -19,12 +16,13 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.drivetrain.VelocityDrive;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
+import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
+import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
+import org.team1540.rooster.drive.pipeline.FeedForwardToVelocityProcessor;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
 import org.team1540.rooster.util.SimpleLoopCommand;
@@ -46,9 +44,6 @@ public class Drivetrain extends Subsystem {
   private NetworkTableEntry leftThrottleEntry = table.getEntry("leftThrot");
   private NetworkTableEntry rightThrottleEntry = table.getEntry("rightThrot");
 
-  private NetworkTableEntry rightErrEntry = table.getEntry("leftErr");
-  private NetworkTableEntry leftErrEntry = table.getEntry("rightErr");
-
   private NetworkTableEntry leftCurrentAEntry = table.getEntry("leftCurrA");
   private NetworkTableEntry leftCurrentBEntry = table.getEntry("leftCurrB");
   private NetworkTableEntry leftCurrentCEntry = table.getEntry("leftCurrC");
@@ -60,13 +55,13 @@ public class Drivetrain extends Subsystem {
   @Override
   protected void initDefaultCommand() {
 //    setDefaultCommand(new PercentDrive(Robot.drivetrain));
-    setDefaultCommand(new VelocityDrive(Robot.drivetrain));
-//    setDefaultCommand(new SimpleLoopCommand("Drive",
-//        new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
-//            OI::getDriveHardTurn)
-//            .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
-//            .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
-//            .then(getPipelineOutput(false)), this));
+//    setDefaultCommand(new VelocityDrive(Robot.drivetrain));
+      setDefaultCommand(new SimpleLoopCommand("Drive",
+          new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
+              OI::getDriveHardTurn)
+              .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
+              .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
+              .then(getPipelineOutput(false)), this));
   }
 
   private static double calcRamp(double throttle, double rampAccum) {
