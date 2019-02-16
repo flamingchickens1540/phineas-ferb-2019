@@ -70,6 +70,8 @@ public class OI {
   private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB);
   public static JoystickButton climberResetButton = new JoystickButton(copilot, LEFT_STICK_PRESS);
 
+    public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
+
   /**
    * Since we want to initialize stuff once the robot actually boots up (not as static
    * initializers), we instantiate stuff here to get more informative error traces and less general
@@ -138,4 +140,8 @@ public class OI {
             - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
         Tuning.driveHardTurnExponent);
   }
+
+    public static boolean getDriveFine() {
+        return fineDriveButton.get();
+    }
 }
