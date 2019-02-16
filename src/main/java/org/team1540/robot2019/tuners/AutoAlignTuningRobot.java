@@ -53,7 +53,7 @@ public class AutoAlignTuningRobot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    AdjustableManager.getInstance().add(new Tuning());
+//    AdjustableManager.getInstance().add(new Tuning());
     PowerManager.getInstance().interrupt();
 //    PreferenceManager.getInstance().add(new Tuning());
       Scheduler.getInstance().run();
