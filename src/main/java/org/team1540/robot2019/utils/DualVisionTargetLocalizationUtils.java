@@ -1,5 +1,6 @@
 package org.team1540.robot2019.utils;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Line;
 import org.apache.commons.math3.geometry.euclidean.threed.Plane;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
@@ -78,7 +79,7 @@ public class DualVisionTargetLocalizationUtils {
 
     return new Transform3D(
         midpoint(leftPoint, rightPoint),
-        new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angleFromVisionTargets(
+        new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, SmartDashboard.getNumber("angleMultiplier", 1) * angleFromVisionTargets(
             xyFromVector3D(leftPoint),
             xyFromVector3D(rightPoint))));
   }

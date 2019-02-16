@@ -52,10 +52,10 @@ public class UDPVelocityTwistDrive extends Command {
             .then(new CTREOutput(Hardware.driveLeftMotorA, Hardware.driveRightMotorA, true));
 
         NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
+        tebConfigTable.getEntry("TEBReset").setBoolean(true);
         if (tebConfigTable.getEntry("ResetTuningVals").getBoolean(true)) {
 //      Robot.leds.set(ColorPattern.CHASE_BLUE);
 
-            tebConfigTable.getEntry("TEBReset").setBoolean(true);
             tebConfigTable.getEntry("MaxVelX").setNumber(1.5);
             tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.4);
             tebConfigTable.getEntry("AccLimX").setNumber(1.5);
@@ -110,7 +110,7 @@ public class UDPVelocityTwistDrive extends Command {
 
         boolean finished = Math.abs(xError) < 0.05 && // TODO: Make this a static function
             Math.abs(yError) < 0.05 &&
-            Math.abs(angleError) < Math.toRadians(5);
+            Math.abs(angleError) < Math.toRadians(3);
         if (finished) {
             System.out.println("Close to goalAvg: " + goal.getX() + " " + goal.getY());
             Robot.drivetrain.stop();
