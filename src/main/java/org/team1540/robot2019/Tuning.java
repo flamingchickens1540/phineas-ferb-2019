@@ -1,21 +1,16 @@
 package org.team1540.robot2019;
 
-//import org.team1540.rooster.preferencemanager.TuningClass;
+import org.team1540.rooster.preferencemanager.TuningClass;
 
-import org.team1540.rooster.adjustables.Tunable;
-
-//@TuningClass("ph_")
+@TuningClass("ph_")
 public class Tuning {
 
   // general
   public static boolean isComp = true;
 
   // drive
-  @Tunable("DriveTrain/VelocityPID/P")
   public static double driveVelocityP = 3;
-  @Tunable("DriveTrain/VelocityPID/I")
   public static double driveVelocityI = 0.02;
-  @Tunable("DriveTrain/VelocityPID/D")
   public static double driveVelocityD = 0;
   public static double driveVelocityF = 0;
 
@@ -129,7 +124,7 @@ public class Tuning {
 
   public static double climberTolerance = 1000;
   // auto-lineup
-  public static double drivetrainRadius = 0.305; // This is for pandora
+  public static double drivetrainRadius = 0.365; // This is for pandora TODO: Change this
 
   public static long drivetrainUDPTimeout = 500;
 

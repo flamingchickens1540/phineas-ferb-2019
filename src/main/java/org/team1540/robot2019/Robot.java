@@ -22,6 +22,7 @@ import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
+import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class Robot extends TimedRobot {
 
@@ -36,7 +37,6 @@ public class Robot extends TimedRobot {
 
   boolean disableBrakes;
 
-  public static Transform3D map_to_odom = Transform3D.IDENTITY;
   public static Transform3D odom_to_base_link = Transform3D.IDENTITY;
 
   public static TankDriveOdometryRunnable wheelOdometry;
