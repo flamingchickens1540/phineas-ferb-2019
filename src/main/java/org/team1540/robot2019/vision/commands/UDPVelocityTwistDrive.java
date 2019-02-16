@@ -66,7 +66,7 @@ public class UDPVelocityTwistDrive extends Command {
     }
 
     private void updateGoal() {
-        double xGoal = SmartDashboard.getNumber("test-goal/position/x", 2);
+        double xGoal = SmartDashboard.getNumber("test-goal/position/x", 1);
         double yGoal = SmartDashboard.getNumber("test-goal/position/y", 0);
         double angleGoal = SmartDashboard.getNumber("test-goal/orientation/z", 0);
         System.out.println("Updated goal!");
