@@ -61,20 +61,20 @@ public class UDPAutoLineup extends Command {
 
     NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
     tebConfigTable.getEntry("TEBReset").setBoolean(true);
-    tebConfigTable.getEntry("MaxVelX").setNumber(2.0);
-    tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.5);
-    tebConfigTable.getEntry("AccLimX").setNumber(0.8);
-    tebConfigTable.getEntry("MaxVelTheta").setNumber(6.0);
+      tebConfigTable.getEntry("MaxVelX").setNumber(1.5);
+      tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.4);
+      tebConfigTable.getEntry("AccLimX").setNumber(1.0);
+      tebConfigTable.getEntry("MaxVelTheta").setNumber(5.0);
     tebConfigTable.getEntry("AccLimTheta").setNumber(12.0);
     if (limeLoc.attemptUpdatePose()) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     } else {
-      if (limeLoc.millisSinceLastAcquired() < 2000) {
-        updateGoal(lastOdomToLimelight);
-      } else {
+//      if (limeLoc.millisSinceLastAcquired() < 0) {
+//        updateGoal(lastOdomToLimelight);
+//      } else {
   //      Robot.leds.set(ColorPattern.RED);
         cancel();
-      }
+//      }
     }
   }
 
@@ -85,7 +85,7 @@ public class UDPAutoLineup extends Command {
   private Transform3D computeGoal() {
     return driveOdometry.getOdomToBaseLink()
         .add(limeLoc.getBaseLinkToVisionTarget())
-        .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
+        .add(new Transform3D(new Vector3D(-0.65, -0.025, 0), Rotation.IDENTITY));
   }
 
   private void updateGoal(Transform3D newGoal) {
@@ -99,7 +99,7 @@ public class UDPAutoLineup extends Command {
 
   @Override
   protected void execute() {
-    if (limeLoc.attemptUpdatePose() && (getDistanceError() > 0.07)) { // TODO: Make this distance tunable
+      if (limeLoc.attemptUpdatePose() && (getDistanceError() > 0.05)) { // TODO: Make this distance tunable
       computeAndUpdateGoal();
     }
 

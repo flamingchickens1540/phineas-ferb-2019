@@ -10,6 +10,7 @@ import static org.team1540.robot2019.Robot.wheelOdometry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -32,6 +33,7 @@ import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.StateChangeDetector;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
+import org.team1540.robot2019.vision.commands.UDPAutoLineup;
 import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
 import org.team1540.rooster.adjustables.AdjustableManager;
 import org.team1540.rooster.power.PowerManager;
@@ -58,6 +60,8 @@ public class AutoAlignTuningRobot extends TimedRobot {
       Scheduler.getInstance().run();
       Hardware.initDrive();
       OI.initJoysticks();
+
+    SmartDashboard.putNumber("angleMultiplier", 1);
 
     drivetrain = new Drivetrain();
 
@@ -97,6 +101,13 @@ public class AutoAlignTuningRobot extends TimedRobot {
         Robot.lastOdomToLimelight = goal;
         goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
       }
+      if (alignCommand == null || !alignCommand.isRunning()) {
+        if (targetFound) {
+          OI.driver.setRumble(RumbleType.kLeftRumble, 1);
+        } else {
+          OI.driver.setRumble(RumbleType.kLeftRumble, 0);
+        }
+      }
       try {
         udpSender.sendIt();
       } catch (IOException e) {
@@ -123,8 +134,8 @@ public class AutoAlignTuningRobot extends TimedRobot {
       SmartDashboard.putData(resetWheelOdom);
 
     autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-//      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelight, Robot.navx);
-        alignCommand = new UDPVelocityTwistDrive();
+      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelight, Robot.navx);
+//        alignCommand = new UDPVelocityTwistDrive();
       alignCommand.start();
     }));
     autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {

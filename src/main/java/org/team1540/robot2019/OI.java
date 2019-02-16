@@ -38,9 +38,8 @@ public class OI {
   public static final int RIGHT_Y = 5;
 
   // Joysticks
-  private static XboxController driver = new XboxController(0);
-  ;
-  private static XboxController copilot = new XboxController(1);
+  public static XboxController driver = new XboxController(0);
+    public static XboxController copilot = new XboxController(1);
 
   // copilot buttons
   private static JoystickButton elevatorMidRocketButton = new JoystickButton(copilot, X);
