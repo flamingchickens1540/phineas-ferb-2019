@@ -1,8 +1,8 @@
 package org.team1540.robot2019;
 
-import org.team1540.rooster.preferencemanager.TuningClass;
+//import org.team1540.rooster.preferencemanager.TuningClass;
 
-@TuningClass("ph_")
+//@TuningClass("ph_")
 public class Tuning {
 
   // general
@@ -124,7 +124,7 @@ public class Tuning {
 
   public static double climberTolerance = 1000;
   // auto-lineup
-  public static double drivetrainRadius = 0.365; // This is for pandora TODO: Change this
+  public static double drivetrainRadius = 0.305; // This is for pandora TODO: Change this
 
   public static long drivetrainUDPTimeout = 500;
 
