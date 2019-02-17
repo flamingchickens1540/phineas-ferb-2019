@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
     double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
     logger.info("Robot ready. Initialization took " + (end - start) + " ms");
 
-      SmartDashboard.putBoolean("IsHatchPreload", false);
+    SmartDashboard.putBoolean("IsHatchPreload", false);
   }
 
   @Override
@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
     brakeTimer.start();
     disableBrakes = true;
 
-      Robot.hatchMech.slideIn();
+    Robot.hatchMech.slideIn();
 
     if (DriverStation.getInstance().isFMSAttached()) {
       logger.debug("FMS is attached, auto-stopping recording");
@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     setMechanismBrakes(true);
 
-      Robot.climber.cylinderUp();
+    Robot.climber.cylinderUp();
 
     Hardware.checkStickyFaults();
 
@@ -148,9 +148,9 @@ public class Robot extends TimedRobot {
       elevator.setRaw(0);
     }
 
-      if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
-          Robot.hatchMech.slideOut();
-      }
+    if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
+      Robot.hatchMech.slideOut();
+    }
   }
 
   @Override
