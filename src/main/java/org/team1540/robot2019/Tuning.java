@@ -53,14 +53,14 @@ public class Tuning {
   public static double elevatorCargoShipPosition = 14;
   public static double elevatorDownPosition = 0;
   public static double elevatorClimbPosition = 20;
-    public static double elevatorLoadingStationPosition = 18;
+  public static double elevatorLoadingStationPosition = 18;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
   public static double elevatorInPerRotation = .929926125;
 
-    public static double elevatorTolerance = 1; // inches
+  public static double elevatorTolerance = 1; // inches
   public static double elevatorVelocityTolerance = 1; // inches per second
-    public static double elevatorStaticFeedForward = 0.64; // volts
+  public static double elevatorStaticFeedForward = 0.64; // volts
   public static double elevatorZeroingThrottle = 0.1;
 
   public static double elevatorDelta = 28; // inches
@@ -100,9 +100,9 @@ public class Tuning {
 
   // hatch mech
   public static double hatchGetTime = 0.3;
-    public static double hatchPlaceTime = 0.3;
-    public static double hatchFloorTime = 0.5;
-    public static double hatchEjectThenDownTime = 0.3;
+  public static double hatchPlaceTime = 0.3;
+  public static double hatchFloorTime = 0.5;
+  public static double hatchEjectThenDownTime = 0.3;
 
   // climber
   public static double climberArmSpeed = 10000;

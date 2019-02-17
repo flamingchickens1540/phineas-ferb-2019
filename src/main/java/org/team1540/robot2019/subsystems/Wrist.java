@@ -34,7 +34,6 @@ public class Wrist extends Subsystem {
     Logger.getLogger(StateMachineLogger.class)
         .setLevel(Level.INFO); // this can be changed as needed
 
-
     wristMidSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
       @Override
       public void interruptFired(int i, Object o) {

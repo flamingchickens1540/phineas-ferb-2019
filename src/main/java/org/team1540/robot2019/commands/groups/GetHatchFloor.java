@@ -15,12 +15,12 @@ public class GetHatchFloor extends CommandGroup {
     addSequential(new MoveElevatorToZero());
     addSequential(new LowerWrist());
 //    addSequential(new WaitCommand(Tuning.hatchFloorTime));
-      addSequential(new SimpleCommand("out", Robot.hatchMech::slideOut, Robot.hatchMech));
-      addSequential(new Command() {
-          @Override
-          protected boolean isFinished() {
-              return false;
-          }
-      });
+    addSequential(new SimpleCommand("out", Robot.hatchMech::slideOut, Robot.hatchMech));
+    addSequential(new Command() {
+      @Override
+      protected boolean isFinished() {
+        return false;
+      }
+    });
   }
 }

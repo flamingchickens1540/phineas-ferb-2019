@@ -33,7 +33,7 @@ public class Drivetrain extends Subsystem {
   double leftRampAccum;
   double rightRampAccum;
 
-    boolean inFineDrive = false;
+  boolean inFineDrive = false;
 
   private NetworkTable table = NetworkTableInstance.getDefault().getTable("drivetrain");
   private NetworkTableEntry leftPositionEntry = table.getEntry("leftPos");
@@ -329,17 +329,17 @@ public class Drivetrain extends Subsystem {
       rightRampAccum = 0;
     }
 
-      if (OI.getDriveFine() && !inFineDrive) {
-          System.out.println("fine");
-          inFineDrive = true;
-          Hardware.driveLeftMotorA.configOpenloopRamp(0);
-          Hardware.driveRightMotorA.configOpenloopRamp(0);
-      } else if (!OI.getDriveFine() && inFineDrive) {
-          System.out.println("unfine");
-          inFineDrive = false;
-          Hardware.driveLeftMotorA.configOpenloopRamp(Tuning.driveOpenLoopRamp);
-          Hardware.driveRightMotorA.configOpenloopRamp(Tuning.driveOpenLoopRamp);
-      }
+    if (OI.getDriveFine() && !inFineDrive) {
+      System.out.println("fine");
+      inFineDrive = true;
+      Hardware.driveLeftMotorA.configOpenloopRamp(0);
+      Hardware.driveRightMotorA.configOpenloopRamp(0);
+    } else if (!OI.getDriveFine() && inFineDrive) {
+
+      inFineDrive = false;
+      Hardware.driveLeftMotorA.configOpenloopRamp(Tuning.driveOpenLoopRamp);
+      Hardware.driveRightMotorA.configOpenloopRamp(Tuning.driveOpenLoopRamp);
+    }
   }
 }
 
