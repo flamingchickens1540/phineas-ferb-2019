@@ -98,6 +98,14 @@ public class Wrist extends Subsystem {
 
   @Override
   protected void initDefaultCommand() {
+    /*
+    The command logic for this subsystem exploits various weird behaviors in how WPILib handles
+    command groups to ensure that the wrist is only ever down when we are doing something with it.
+    Essentially, if WristDown is used in a command group (such as IntakeSequence), that command
+    group "blocks" the wrist (i.e. prevents the default WristUp from running) for the entire
+    duration of the command group, not just the portions where wrist-related commands are actually
+    used. As soon as the command group finishes, the default command engages and moves the wrist up.
+     */
     setDefaultCommand(new WristUp());
   }
 
