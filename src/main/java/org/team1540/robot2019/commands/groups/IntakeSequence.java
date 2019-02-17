@@ -12,7 +12,7 @@ public class IntakeSequence extends CommandGroup {
   public IntakeSequence() {
       addParallel(new SimpleCommand("alaska's", Robot.hatchMech::slideIn, Robot.hatchMech));
     addSequential(new MoveElevatorToZero());
+    addParallel(new IntakeAuto());
     addSequential(new LowerWrist());
-    addSequential(new IntakeAuto());
   }
 }

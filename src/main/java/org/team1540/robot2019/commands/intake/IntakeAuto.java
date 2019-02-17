@@ -3,14 +3,13 @@ package org.team1540.robot2019.commands.intake;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.Tuning;
 
 public class IntakeAuto extends Command {
 
   private static final Logger logger = Logger.getLogger(IntakeAuto.class);
 
   public IntakeAuto() {
-    super(Tuning.intakeTimeout);
+//    super(Tuning.intakeTimeout);
     requires(Robot.intake);
   }
 

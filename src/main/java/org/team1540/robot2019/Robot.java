@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.subsystems.Climber;
@@ -15,7 +16,6 @@ import org.team1540.robot2019.subsystems.Elevator;
 import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.Wrist;
-import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class Robot extends TimedRobot {
 
@@ -38,8 +38,8 @@ public class Robot extends TimedRobot {
     logger.info("Initializing...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-    PreferenceManager.getInstance().add(new Tuning());
-    Scheduler.getInstance().run();
+//    PreferenceManager.getInstance().add(new Tuning());
+//    Scheduler.getInstance().run();
 
     // initialize hardware after we run the scheduler once so that the preference manager can update its values
     Hardware.initAll();
@@ -57,6 +57,8 @@ public class Robot extends TimedRobot {
 
     double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
     logger.info("Robot ready. Initialization took " + (end - start) + " ms");
+
+      SmartDashboard.putBoolean("IsHatchPreload", false);
   }
 
   @Override
@@ -74,6 +76,8 @@ public class Robot extends TimedRobot {
     brakeTimer.reset();
     brakeTimer.start();
     disableBrakes = true;
+
+      Robot.hatchMech.slideIn();
 
     if (DriverStation.getInstance().isFMSAttached()) {
       logger.debug("FMS is attached, auto-stopping recording");
@@ -130,6 +134,8 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     setMechanismBrakes(true);
 
+      Robot.climber.cylinderUp();
+
     Hardware.checkStickyFaults();
 
     if (DriverStation.getInstance().isFMSAttached()) {
@@ -141,6 +147,10 @@ public class Robot extends TimedRobot {
     if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
       elevator.setRaw(0);
     }
+
+      if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
+          Robot.hatchMech.slideOut();
+      }
   }
 
   @Override
