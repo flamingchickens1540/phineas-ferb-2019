@@ -1,8 +1,8 @@
 package org.team1540.robot2019;
 
-import org.team1540.rooster.preferencemanager.TuningClass;
+//import org.team1540.rooster.preferencemanager.TuningClass;
 
-@TuningClass("ph_")
+//@TuningClass("ph_")
 public class Tuning {
 
   // general
@@ -53,13 +53,14 @@ public class Tuning {
   public static double elevatorCargoShipPosition = 14;
   public static double elevatorDownPosition = 0;
   public static double elevatorClimbPosition = 20;
+    public static double elevatorLoadingStationPosition = 18;
 
   // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
   public static double elevatorInPerRotation = .929926125;
 
-  public static double elevatorTolerance = 0.5; // inches
+    public static double elevatorTolerance = 1; // inches
   public static double elevatorVelocityTolerance = 1; // inches per second
-  public static double elevatorStaticFeedForward = 1.3143; // volts
+    public static double elevatorStaticFeedForward = 0.64; // volts
   public static double elevatorZeroingThrottle = 0.1;
 
   public static double elevatorDelta = 28; // inches
