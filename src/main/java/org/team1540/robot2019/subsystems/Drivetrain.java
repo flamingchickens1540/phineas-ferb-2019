@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
@@ -29,6 +30,8 @@ import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class Drivetrain extends Subsystem {
+
+  public static final Logger logger = Logger.getLogger(Drivetrain.class);
 
   double leftRampAccum;
   double rightRampAccum;
@@ -330,12 +333,12 @@ public class Drivetrain extends Subsystem {
     }
 
     if (OI.getDriveFine() && !inFineDrive) {
-      System.out.println("fine");
+      logger.debug("Fine drive engaged");
       inFineDrive = true;
       Hardware.driveLeftMotorA.configOpenloopRamp(0);
       Hardware.driveRightMotorA.configOpenloopRamp(0);
     } else if (!OI.getDriveFine() && inFineDrive) {
-
+      logger.debug("Fine drive disengaged");
       inFineDrive = false;
       Hardware.driveLeftMotorA.configOpenloopRamp(Tuning.driveOpenLoopRamp);
       Hardware.driveRightMotorA.configOpenloopRamp(Tuning.driveOpenLoopRamp);
