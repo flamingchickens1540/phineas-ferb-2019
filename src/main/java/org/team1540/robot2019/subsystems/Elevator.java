@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
 public class Elevator extends Subsystem {
@@ -85,7 +86,7 @@ public class Elevator extends Subsystem {
 
   @Override
   public void periodic() {
-    if (Tuning.publishData) {
+    if (Robot.debugMode) {
       positionEntry.forceSetNumber(getPosition());
       velocityEntry.forceSetNumber(getVelocity());
 

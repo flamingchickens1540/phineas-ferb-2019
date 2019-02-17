@@ -28,6 +28,8 @@ public class Robot extends TimedRobot {
   public static HatchMech hatchMech;
   public static Climber climber;
 
+  public static boolean debugMode = false;
+
   boolean disableBrakes;
 
   @Override
@@ -59,6 +61,7 @@ public class Robot extends TimedRobot {
     logger.info("Robot ready. Initialization took " + (end - start) + " ms");
 
     SmartDashboard.putBoolean("IsHatchPreload", false);
+    SmartDashboard.putBoolean("Debug Mode", false);
   }
 
   @Override
@@ -66,6 +69,8 @@ public class Robot extends TimedRobot {
 //    long time = System.currentTimeMillis();
     Scheduler.getInstance().run();
 //    System.out.println(time - System.currentTimeMillis());
+
+    debugMode = SmartDashboard.getBoolean("Debug Moe", false);
   }
 
   private Timer brakeTimer = new Timer();

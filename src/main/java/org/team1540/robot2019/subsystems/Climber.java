@@ -11,7 +11,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.Robot;
 
 public class Climber extends Subsystem {
 
@@ -52,7 +52,7 @@ public class Climber extends Subsystem {
 
   @Override
   public void periodic() {
-    if (Tuning.publishData) {
+    if (Robot.debugMode) {
       posEntry.forceSetNumber(getPosition());
     }
   }
