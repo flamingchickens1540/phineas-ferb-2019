@@ -28,25 +28,10 @@ public class Climber extends Subsystem {
 
   public void setArms(double value) {
     climberArmLeft.set(ControlMode.PercentOutput, value);
-//        climberArmRight.set(ControlMode.PercentOutput, value);
   }
 
   public void setArmPosition(double pos) {
     climberArmLeft.set(ControlMode.MotionMagic, pos);
-  }
-
-  public void setArmsConstant(double speed) {
-    climberArmLeft.set(ControlMode.Velocity, speed);
-  }
-
-  public void startClimbing() {
-    cylinderDown();
-    setArmsConstant(Tuning.climberArmSpeed);
-  }
-
-  public void onPlatform() {
-    cylinderUp();
-    setArmsConstant(Tuning.climberArmHoldSpeed);
   }
 
   public double getCurrentLeft() {
