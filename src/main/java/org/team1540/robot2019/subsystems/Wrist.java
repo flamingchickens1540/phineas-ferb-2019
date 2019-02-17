@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.squirrelframework.foundation.fsm.StateMachineLogger;
-import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.wrist.WristUp;
 
 public class Wrist extends Subsystem {
@@ -111,7 +111,7 @@ public class Wrist extends Subsystem {
 
   @Override
   public void periodic() {
-    if (Tuning.publishData) {
+    if (Robot.debugMode) {
       isAtMidEntry.forceSetBoolean(isAtMid());
       isAtBtmEntry.forceSetBoolean(isAtBtm());
       motorEntry.forceSetNumber(wristMotor.getMotorOutputPercent());

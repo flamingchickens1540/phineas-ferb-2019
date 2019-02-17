@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
+import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
@@ -309,7 +310,7 @@ public class Drivetrain extends Subsystem {
 
   @Override
   public void periodic() {
-    if (Tuning.publishData) {
+    if (Robot.debugMode) {
       leftPositionEntry.setNumber(getLeftPosition());
       rightPositionEntry.setNumber(getRightPosition());
 
