@@ -23,6 +23,10 @@ public class HatchMech extends Subsystem {
         hatchGrabber.set(true);
     }
 
+    public boolean noHatch() {
+        return hatchGrabber.get();
+    }
+
     @Override
     protected void initDefaultCommand() {
     }
