@@ -15,8 +15,8 @@ public class PointLineupSimple extends Command {
 
     private static final double GOAL_TOLERANCE_ANGULAR = 0.3;
     private static final double MIN_VEL_THETA = 0.3;
-    private static final double MAX_VEL_THETA = 2.0;// how hard to turn toward the target
-    private static final double ANGULAR_KP = -10;
+    private static final double MAX_VEL_THETA = 2.0;
+    private static final double ANGULAR_KP = 10;
     private static final double ANGLE_OFFSET = Math.toRadians(7);
 
     private Executable pipeline;
@@ -90,6 +90,6 @@ public class PointLineupSimple extends Command {
     }
 
     private double getAngleError(double x) {
-        return TrigUtils.signedAngleError(x, Math.toRadians(-Robot.navx.getYaw()));
+        return TrigUtils.signedAngleError(Math.toRadians(-Robot.navx.getYaw()), x);
     }
 }
