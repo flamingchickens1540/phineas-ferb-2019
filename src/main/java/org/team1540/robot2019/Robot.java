@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
   public static LimelightLocalization limelightLocalization;
 
   public static Transform3D lastOdomToLimelight;
+    public static Transform3D lastOdomToVisionTarget;
 
   public static AHRS navx = new AHRS(Port.kMXP);
 
@@ -135,6 +136,8 @@ public class Robot extends TimedRobot {
             .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 
         Robot.lastOdomToLimelight = goal;
+          Robot.lastOdomToVisionTarget = wheelOdometry.getOdomToBaseLink()
+              .add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
         goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
       }
       // TODO: Clean this up
