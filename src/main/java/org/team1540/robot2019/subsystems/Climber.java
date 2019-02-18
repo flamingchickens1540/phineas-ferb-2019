@@ -15,50 +15,50 @@ import org.team1540.robot2019.Robot;
 
 public class Climber extends Subsystem {
 
-  private NetworkTable table = NetworkTableInstance.getDefault().getTable("climber");
-  private NetworkTableEntry posEntry = table.getEntry("pos");
+    private NetworkTable table = NetworkTableInstance.getDefault().getTable("climber");
+    private NetworkTableEntry posEntry = table.getEntry("pos");
 
-  public void cylinderDown() {
-    climberCylinder.set(Value.kReverse);
-  }
-
-  public void cylinderUp() {
-    climberCylinder.set(Value.kForward);
-  }
-
-  public void setArms(double value) {
-    climberArmLeft.set(ControlMode.PercentOutput, value);
-  }
-
-  public void setArmPosition(double pos) {
-    climberArmLeft.set(ControlMode.MotionMagic, pos);
-  }
-
-  public double getCurrentLeft() {
-    return Hardware.getClimberLCurrent();
-  }
-
-  public double getCurrentRight() {
-    return Hardware.getClimberRCurrent();
-  }
-
-  @Override
-  protected void initDefaultCommand() {
-  }
-
-  public double getPosition() {
-    return climberArmLeft.getSelectedSensorPosition();
-  }
-
-  @Override
-  public void periodic() {
-    if (Robot.debugMode) {
-      posEntry.forceSetNumber(getPosition());
+    public void cylinderDown() {
+        climberCylinder.set(Value.kReverse);
     }
-  }
 
-  public void setArmBrake(boolean brake) {
-    climberArmLeft.setBrake(brake);
-    climberArmRight.setBrake(brake);
-  }
+    public void cylinderUp() {
+        climberCylinder.set(Value.kForward);
+    }
+
+    public void setArms(double value) {
+        climberArmLeft.set(ControlMode.PercentOutput, value);
+    }
+
+    public void setArmPosition(double pos) {
+        climberArmLeft.set(ControlMode.MotionMagic, pos);
+    }
+
+    public double getCurrentLeft() {
+        return Hardware.getClimberLCurrent();
+    }
+
+    public double getCurrentRight() {
+        return Hardware.getClimberRCurrent();
+    }
+
+    @Override
+    protected void initDefaultCommand() {
+    }
+
+    public double getPosition() {
+        return climberArmLeft.getSelectedSensorPosition();
+    }
+
+    @Override
+    public void periodic() {
+        if (Robot.debugMode) {
+            posEntry.forceSetNumber(getPosition());
+        }
+    }
+
+    public void setArmBrake(boolean brake) {
+        climberArmLeft.setBrake(brake);
+        climberArmRight.setBrake(brake);
+    }
 }

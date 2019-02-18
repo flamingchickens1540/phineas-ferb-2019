@@ -7,28 +7,28 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class HatchMech extends Subsystem {
 
-  public void slideOut() {
-    hatchSlide.set(true);
-  }
+    public void extend() {
+        hatchSlide.set(true);
+    }
 
-  public void slideIn() {
-    hatchSlide.set(false);
-  }
+    public void retract() {
+        hatchSlide.set(false);
+    }
 
-  public void grab() {
-    hatchGrabber.set(false);
-  }
+    public void grab() {
+        hatchGrabber.set(false);
+    }
 
-  public void release() {
-    hatchGrabber.set(true);
-  }
+    public void release() {
+        hatchGrabber.set(true);
+    }
 
-  public boolean noHatch() {
-    return hatchGrabber.get();
-  }
+    public boolean noHatch() {
+        return hatchGrabber.get();
+    }
 
-  @Override
-  protected void initDefaultCommand() {
-  }
+    @Override
+    protected void initDefaultCommand() {
+    }
 
 }

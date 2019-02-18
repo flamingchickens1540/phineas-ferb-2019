@@ -9,9 +9,9 @@ import org.team1540.rooster.util.SimpleCommand;
 public class GrabHatch extends CommandGroup {
 
     public GrabHatch() {
-        addSequential(new SimpleCommand("grab", Robot.hatchMech::grab, Robot.hatchMech));
+        addSequential(new SimpleCommand("Hatch", Robot.hatch::grab, Robot.hatch));
         addSequential(new WaitCommand(Tuning.hatchGetTime));
-        addSequential(new HatchSlideIn());
+        addSequential(new SimpleCommand("Hatch", Robot.hatch::retract, Robot.hatch));
     }
 
 }
