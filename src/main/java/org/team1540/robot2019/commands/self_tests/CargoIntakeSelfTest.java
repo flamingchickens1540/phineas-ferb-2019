@@ -1,4 +1,4 @@
-package org.team1540.robot2019.commands.cargo;
+package org.team1540.robot2019.commands.self_tests;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;

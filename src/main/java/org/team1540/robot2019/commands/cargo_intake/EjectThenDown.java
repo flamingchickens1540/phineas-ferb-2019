@@ -1,7 +1,6 @@
-package org.team1540.robot2019.commands.groups;
+package org.team1540.robot2019.commands.cargo_intake;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import org.team1540.robot2019.commands.cargo.EjectCargo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 
 public class EjectThenDown extends CommandGroup {
