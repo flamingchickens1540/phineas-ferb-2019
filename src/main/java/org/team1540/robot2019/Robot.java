@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.subsystems.CargoIntake;
+import org.team1540.robot2019.subsystems.Cargo;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
@@ -24,7 +24,7 @@ public class Robot extends TimedRobot {
     public static Drivetrain drivetrain;
     public static Elevator elevator;
     public static Wrist wrist;
-    public static CargoIntake cargoIntake;
+    public static Cargo cargo;
     public static Hatch hatch;
     public static Climber climber;
 
@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
         drivetrain = new Drivetrain();
         elevator = new Elevator();
         wrist = new Wrist();
-        cargoIntake = new CargoIntake();
+        cargo = new Cargo();
         hatch = new Hatch();
         climber = new Climber();
 

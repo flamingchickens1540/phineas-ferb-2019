@@ -10,27 +10,27 @@ public class IntakeCargo extends Command {
 
     public IntakeCargo() {
 //    super(Tuning.intakeTimeout);
-        requires(Robot.cargoIntake);
+        requires(Robot.cargo);
     }
 
     @Override
     protected void initialize() {
-        logger.debug("CargoIntake starting");
-        Robot.cargoIntake.startIntaking();
+        logger.debug("Cargo starting");
+        Robot.cargo.startIntaking();
     }
 
     @Override
     protected void end() {
         if (isTimedOut()) {
-            logger.debug("CargoIntake stopping due to timeout");
+            logger.debug("Cargo stopping due to timeout");
         } else {
-            logger.debug("CargoIntake stopping due to detected ball");
+            logger.debug("Cargo stopping due to detected ball");
         }
-        Robot.cargoIntake.stop();
+        Robot.cargo.stop();
     }
 
     @Override
     protected boolean isFinished() {
-        return Robot.cargoIntake.hasBall() || isTimedOut();
+        return Robot.cargo.hasBall() || isTimedOut();
     }
 }
