@@ -11,67 +11,54 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.Robot;
 
 public class Climber extends Subsystem {
 
-  private NetworkTable table = NetworkTableInstance.getDefault().getTable("climber");
-  private NetworkTableEntry posEntry = table.getEntry("pos");
+    private NetworkTable table = NetworkTableInstance.getDefault().getTable("climber");
+    private NetworkTableEntry posEntry = table.getEntry("pos");
 
-  public void cylinderDown() {
-    climberCylinder.set(Value.kReverse);
-  }
+    public void cylinderDown() {
+        climberCylinder.set(Value.kReverse);
+    }
 
-  public void cylinderUp() {
-    climberCylinder.set(Value.kForward);
-  }
+    public void cylinderUp() {
+        climberCylinder.set(Value.kForward);
+    }
 
-  public void setArms(double value) {
-    climberArmLeft.set(ControlMode.PercentOutput, value);
-//        climberArmRight.set(ControlMode.PercentOutput, value);
-  }
+    public void setArms(double value) {
+        climberArmLeft.set(ControlMode.PercentOutput, value);
+    }
 
-  public void setArmPosition(double pos) {
-    climberArmLeft.set(ControlMode.MotionMagic, pos);
-  }
+    public void setArmPosition(double pos) {
+        climberArmLeft.set(ControlMode.MotionMagic, pos);
+    }
 
-  public void setArmsConstant(double speed) {
-    climberArmLeft.set(ControlMode.Velocity, speed);
-  }
+    public double getCurrentLeft() {
+        return Hardware.getClimberLCurrent();
+    }
 
-  public void startClimbing() {
-    cylinderDown();
-    setArmsConstant(Tuning.climberArmSpeed);
-  }
+    public double getCurrentRight() {
+        return Hardware.getClimberRCurrent();
+    }
 
-  public void onPlatform() {
-    cylinderUp();
-    setArmsConstant(Tuning.climberArmHoldSpeed);
-  }
+    @Override
+    protected void initDefaultCommand() {
+    }
 
-  public double getCurrentLeft() {
-    return Hardware.getClimberLCurrent();
-  }
+    public double getPosition() {
+        return climberArmLeft.getSelectedSensorPosition();
+    }
 
-  public double getCurrentRight() {
-    return Hardware.getClimberRCurrent();
-  }
+    @Override
+    public void periodic() {
+        if (Robot.debugMode) {
+            posEntry.forceSetNumber(getPosition());
+        }
+    }
 
-  @Override
-  protected void initDefaultCommand() {
-  }
-
-  public double getPosition() {
-    return climberArmLeft.getSelectedSensorPosition();
-  }
-
-  @Override
-  public void periodic() {
-    posEntry.forceSetNumber(getPosition());
-  }
-
-  public void setArmBrake(boolean brake) {
-    climberArmLeft.setBrake(brake);
-    climberArmRight.setBrake(brake);
-  }
+    public void setArmBrake(boolean brake) {
+        climberArmLeft.setBrake(brake);
+        climberArmRight.setBrake(brake);
+    }
 }

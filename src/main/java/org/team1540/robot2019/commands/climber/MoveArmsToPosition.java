@@ -6,26 +6,26 @@ import org.team1540.robot2019.Tuning;
 
 public class MoveArmsToPosition extends Command {
 
-  private double setpoint;
+    private double setpoint;
 
-  public MoveArmsToPosition(double pos) {
-    requires(Robot.climber);
-    setpoint = pos;
-  }
+    public MoveArmsToPosition(double pos) {
+        requires(Robot.climber);
+        setpoint = pos;
+    }
 
-  @Override
-  protected void initialize() {
-    Robot.climber.setArmPosition(setpoint);
-  }
+    @Override
+    protected void initialize() {
+        Robot.climber.setArmPosition(setpoint);
+    }
 
-  @Override
-  protected void end() {
-    Robot.climber.setArms(0);
-  }
+    @Override
+    protected void end() {
+        Robot.climber.setArms(0);
+    }
 
-  @Override
-  protected boolean isFinished() {
-    return Math.abs(Robot.climber.getPosition() - setpoint)
-        < Tuning.climberTolerance;
-  }
+    @Override
+    protected boolean isFinished() {
+        return Math.abs(Robot.climber.getPosition() - setpoint)
+            < Tuning.climberTolerance;
+    }
 }
