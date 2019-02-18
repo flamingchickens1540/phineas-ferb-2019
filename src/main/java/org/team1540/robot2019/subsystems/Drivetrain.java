@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.IMotorController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -366,14 +367,14 @@ public class Drivetrain extends Subsystem {
     @Override
     public void periodic() {
         if (Robot.debugMode) {
-            leftPositionEntry.setNumber(getLeftPosition());
-            rightPositionEntry.setNumber(getRightPosition());
+            leftPositionEntry.setNumber(getLeftPositionTPU());
+            rightPositionEntry.setNumber(getRightPositionTPU());
 
-            leftVelocityEntry.setNumber(getLeftVelocity());
-            rightVelocityEntry.setNumber(getRightVelocity());
+            leftVelocityEntry.setNumber(getLeftVelocityTPU());
+            rightVelocityEntry.setNumber(getRightVelocityTPU());
 
-            leftThrottleEntry.setNumber(getLeftThrottle());
-            rightThrottleEntry.setNumber(getRightThrottle());
+            leftThrottleEntry.setNumber(getLeftPercent());
+            rightThrottleEntry.setNumber(getRightPercent());
 
             leftCurrentAEntry.setNumber(Hardware.getDriveLeftACurrent());
             leftCurrentBEntry.setNumber(Hardware.getDriveLeftBCurrent());

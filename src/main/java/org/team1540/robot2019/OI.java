@@ -143,7 +143,8 @@ public class OI {
     }
 
     public static boolean getDriveFine() {
-        return fineDriveButton.get();
+        return false;
+//        return fineDriveButton.get();
     }
 
   public static double getDriveHardTurn() {

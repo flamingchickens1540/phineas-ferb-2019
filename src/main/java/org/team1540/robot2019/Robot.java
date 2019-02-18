@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
@@ -36,7 +35,7 @@ import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.NavxWrapper;
 import org.team1540.robot2019.utils.StateChangeDetector;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
-import org.team1540.robot2019.vision.commands.PurePursuitThenPoint;
+import org.team1540.robot2019.vision.commands.PointLineupSimple;
 import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
 import org.team1540.rooster.util.SimpleCommand;
 
@@ -63,7 +62,7 @@ public class Robot extends TimedRobot {
   public static UDPTwistReceiver udpReceiver;
   public static LimelightLocalization limelightLocalization;
 
-  public static Transform3D lastOdomToLimelight;
+    public static Transform3D lastOdomToLimelightGoal;
     public static Transform3D lastOdomToVisionTarget;
 
   public static NavxWrapper navx = new NavxWrapper();
@@ -133,7 +132,7 @@ public class Robot extends TimedRobot {
             .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
             .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 
-        Robot.lastOdomToLimelight = goal;
+          Robot.lastOdomToLimelightGoal = goal;
           Robot.lastOdomToVisionTarget = wheelOdometry.getOdomToBaseLink()
               .add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
         goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
@@ -173,8 +172,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(resetWheelOdom);
 
     autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-      alignCommand = new PurePursuitThenPoint();
-//      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelight, Robot.navx);
+//      alignCommand = new PurePursuitLineup(Robot.limelightLocalization, Robot.wheelOdometry);
+        alignCommand = new PointLineupSimple();
+//      alignCommand = new PurePursuitThenPoint();
+//      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelightGoal, Robot.navx);
 //        alignCommand = new UDPVelocityTwistDrive();
       alignCommand.start();
     }));
