@@ -45,7 +45,7 @@ public class UDPVelocityTwistDrive extends Command {
 //    Robot.drivetrain.reset();
         Robot.drivetrain.configTalonsForVelocity();
 
-        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadius);
+        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
@@ -84,8 +84,8 @@ public class UDPVelocityTwistDrive extends Command {
     @Override
     protected void execute() {
         Twist2D cmdVel = Robot.udpReceiver.getCmdVel();
-        double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadius) * Tuning.drivetrainTicksPerMeter / 10;
-        double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadius) * Tuning.drivetrainTicksPerMeter / 10;
+        double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadiusMeters) * Tuning.drivetrainTicksPerMeter / 10;
+        double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadiusMeters) * Tuning.drivetrainTicksPerMeter / 10;
         Robot.drivetrain.setLeftVelocityTPU(leftSetpoint);
         Robot.drivetrain.setRightVelocityTPU(rightSetpoint);
         SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
