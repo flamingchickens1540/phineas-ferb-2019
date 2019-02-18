@@ -226,6 +226,14 @@ public class Drivetrain extends Subsystem {
         .set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
   }
 
+    public void setLeftVelocityMetersPerSecond(double velocity) {
+        setLeftVelocityTPU(velocity / 10 * Tuning.drivetrainTicksPerMeter);
+    }
+
+    public void setRightVelocityMetersPerSecond(double velocity) {
+        setRightVelocityTPU(velocity / 10 * Tuning.drivetrainTicksPerMeter);
+    }
+
   public void setPercent(double left, double right) {
     setLeftPercent(left);
     setRightPercent(right);
@@ -279,7 +287,7 @@ public class Drivetrain extends Subsystem {
 
   public Twist2D getTwist() {
     double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
-    double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadiusMeters) / 2;
+      double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadiusMeters) / 2;
     return new Twist2D(xvel, 0, thetavel);
   }
 
