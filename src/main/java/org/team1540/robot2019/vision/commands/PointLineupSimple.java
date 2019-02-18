@@ -1,7 +1,7 @@
 package org.team1540.robot2019.vision.commands;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.PIDCommand;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
@@ -13,12 +13,14 @@ import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
-public class PointLineupSimple extends Command {
+public class PointLineupSimple extends PIDCommand {
 
-    private static final double GOAL_TOLERANCE_ANGULAR = 0.3;
+    private static final double GOAL_TOLERANCE_ANGULAR = 0.6;
     private static final double MIN_VEL_THETA = 0.1;
     private static final double MAX_VEL_THETA = 2.0;
-    private static final double ANGULAR_KP = 10;
+    private static final double ANGULAR_KP = -8;
+    private static final double ANGULAR_KI = 0;
+    private static final double ANGULAR_KD = -15;
     private static final double ANGLE_OFFSET = Math.toRadians(7);
 
     private Executable pipeline;
@@ -26,11 +28,18 @@ public class PointLineupSimple extends Command {
     private Double goal = null;
     private Transform3D prevGoal = null;
 
-    private boolean endFlag = false;
-
-
     public PointLineupSimple() {
+//        super(
+//            SmartDashboard.getNumber("pointkp", 0),
+//            SmartDashboard.getNumber("pointki", 0),
+//            SmartDashboard.getNumber("pointkd", 0));
+        super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
         requires(Robot.drivetrain);
+        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
+        pipeline = twist2DInput
+            .then(new FeedForwardProcessor(0, 0, 0))
+            .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
+            .then(Robot.drivetrain.getPipelineOutput());
     }
 
     @Override
@@ -52,11 +61,6 @@ public class PointLineupSimple extends Command {
             goal = x - Robot.navx.getYawRadians();
             System.out.println("Point lineup simple starting");
         }
-        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
-        pipeline = twist2DInput
-            .then(new FeedForwardProcessor(0, 0, 0))
-            .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
-            .then(Robot.drivetrain.getPipelineOutput());
         Robot.drivetrain.configTalonsForVelocity();
     }
 
@@ -69,22 +73,6 @@ public class PointLineupSimple extends Command {
         if (x != 0) {
             goal = -(x - ANGLE_OFFSET) + Robot.navx.getYawRadians();
         }
-
-        double angleError = getAngleError(goal);
-
-        double cmdVelTheta = angleError * ANGULAR_KP;
-        if (cmdVelTheta > MAX_VEL_THETA) {
-            cmdVelTheta = MAX_VEL_THETA;
-        } else if (cmdVelTheta < -MAX_VEL_THETA) {
-            cmdVelTheta = -MAX_VEL_THETA;
-        } else if (cmdVelTheta > -MIN_VEL_THETA && cmdVelTheta < MIN_VEL_THETA) {
-            cmdVelTheta = Math.copySign(MIN_VEL_THETA, cmdVelTheta);
-        }
-        System.out.printf("Angle error: %f Steer command: %f\n", angleError, cmdVelTheta);
-
-        Twist2D cmdVel = new Twist2D(0, 0, cmdVelTheta);
-        twist2DInput.setTwist(cmdVel);
-        pipeline.execute();
     }
 
     @Override
@@ -92,7 +80,7 @@ public class PointLineupSimple extends Command {
         System.out.println(Robot.drivetrain.getTwist().getOmega());
         return goal == null ||
             (Math.abs(getAngleError(goal)) < Math.toRadians(GOAL_TOLERANCE_ANGULAR)
-                && Math.abs(Robot.drivetrain.getTwist().getOmega()) < 0.2);
+                && Math.abs(Robot.drivetrain.getTwist().getOmega()) < 0.3);
     }
 
     @Override
@@ -102,5 +90,29 @@ public class PointLineupSimple extends Command {
 
     private double getAngleError(double x) {
         return TrigUtils.signedAngleError(x, Robot.navx.getYawRadians());
+    }
+
+    @Override
+    protected double returnPIDInput() {
+        double angleError = getAngleError(goal);
+        System.out.printf("Angle error: %f\n", angleError);
+
+        return angleError;
+    }
+
+    @Override
+    protected void usePIDOutput(double output) {
+        double cmdVelTheta = output * MAX_VEL_THETA;
+        if (cmdVelTheta > MAX_VEL_THETA) {
+            cmdVelTheta = MAX_VEL_THETA;
+        } else if (cmdVelTheta < -MAX_VEL_THETA) {
+            cmdVelTheta = -MAX_VEL_THETA;
+        } else if (cmdVelTheta > -MIN_VEL_THETA && cmdVelTheta < MIN_VEL_THETA) {
+            cmdVelTheta = Math.copySign(MIN_VEL_THETA, cmdVelTheta);
+        }
+
+        Twist2D cmdVel = new Twist2D(0, 0, cmdVelTheta);
+        twist2DInput.setTwist(cmdVel);
+        pipeline.execute();
     }
 }
