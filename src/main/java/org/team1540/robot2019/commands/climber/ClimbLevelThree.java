@@ -5,9 +5,9 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class ClimbLevelThreeGyro extends PIDCommand {
+public class ClimbLevelThree extends PIDCommand {
 
-    public ClimbLevelThreeGyro() {
+    public ClimbLevelThree() {
         super(Tuning.climberGyroP, Tuning.climberGyroI, Tuning.climberGyroD);
         requires(Robot.climber);
     }
