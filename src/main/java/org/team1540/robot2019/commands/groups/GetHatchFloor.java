@@ -11,7 +11,7 @@ public class GetHatchFloor extends CommandGroup {
 
   public GetHatchFloor() {
     addSequential(new SimpleCommand("in", Robot.hatchMech::slideIn, Robot.hatchMech));
-    addSequential(new SimpleCommand("close", Robot.hatchMech::release, Robot.hatchMech));
+    addSequential(new SimpleCommand("close", Robot.hatchMech::detach, Robot.hatchMech));
     addSequential(new MoveElevatorToZero());
     addSequential(new LowerWrist());
     addSequential(new SimpleCommand("out", Robot.hatchMech::slideOut, Robot.hatchMech));

@@ -19,7 +19,7 @@ public class HatchMech extends Subsystem {
     hatchGrabber.set(false);
   }
 
-  public void release() {
+    public void detach() {
     hatchGrabber.set(true);
   }
 
