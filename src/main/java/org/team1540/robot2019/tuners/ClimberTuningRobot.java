@@ -9,7 +9,6 @@ import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.ShuffleboardDisplay;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.climber.ExtendGyroStabilize;
-import org.team1540.robot2019.commands.climber.PrepareForClimb;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
