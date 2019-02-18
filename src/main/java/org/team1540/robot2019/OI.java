@@ -19,7 +19,7 @@ import org.team1540.robot2019.commands.groups.Level2Climb;
 import org.team1540.robot2019.commands.groups.PlaceHatchThenDown;
 import org.team1540.robot2019.commands.groups.PrepareForClimb;
 import org.team1540.robot2019.commands.groups.ResetClimber;
-import org.team1540.robot2019.commands.hatch.GetHatch;
+import org.team1540.robot2019.commands.hatch.PrepGetHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -117,7 +117,7 @@ public class OI {
             .whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
-        getHatchButton.whenPressed(new GetHatch());
+        getHatchButton.whenPressed(new PrepGetHatch());
         getHatchFloorButton.whenPressed(new GetHatchFloor());
         grabHatchButton.whenPressed(new SimpleCommand("Hatch Grab", Robot.hatchMech::attach, Robot.hatchMech));
         placeHatchButton.whenPressed(new PlaceHatchThenDown());

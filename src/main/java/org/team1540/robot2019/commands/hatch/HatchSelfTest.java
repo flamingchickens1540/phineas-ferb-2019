@@ -12,7 +12,7 @@ public class HatchSelfTest extends CommandGroup {
     addSequential(
         new SimpleCommand("Print status", () -> logger.info("Beginning hatch self-test")));
     addSequential(new SimpleCommand("Print status", () -> logger.info("Grabbing")));
-    addSequential(new GetHatch());
+      addSequential(new PrepGetHatch());
     addSequential(new SimpleCommand("Print status", () -> logger.info("Releasing")));
     addSequential(new PlaceHatch());
     addSequential(new SimpleCommand("Print status", () -> logger.info("Hatch self-test complete")));
