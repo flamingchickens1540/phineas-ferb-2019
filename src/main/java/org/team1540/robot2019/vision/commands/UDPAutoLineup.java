@@ -1,6 +1,5 @@
 package org.team1540.robot2019.vision.commands;
 
-import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
@@ -14,6 +13,7 @@ import org.team1540.robot2019.networking.UDPOdometryGoalSender;
 import org.team1540.robot2019.networking.UDPTwistReceiver;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.utils.LimelightLocalization;
+import org.team1540.robot2019.utils.NavxWrapper;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.robot2019.utils.TrigUtils;
@@ -29,14 +29,14 @@ public class UDPAutoLineup extends Command {
     private final LimelightLocalization limeLoc;
     private final TankDriveOdometryRunnable driveOdometry;
     private final Transform3D lastOdomToLimelight;
-    private final AHRS navx;
+    private final NavxWrapper navx;
 
     Transform3D goal;
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
 
     public UDPAutoLineup(Drivetrain dt, UDPOdometryGoalSender sender, UDPTwistReceiver receiver, LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry,
-        Transform3D lastOdomToLimelight, AHRS navx) {
+        Transform3D lastOdomToLimelight, NavxWrapper navx) {
         this.dt = dt;
         this.sender = sender;
         this.receiver = receiver;
@@ -128,6 +128,6 @@ public class UDPAutoLineup extends Command {
     }
 
     private double getAngleError() {
-        return TrigUtils.signedAngleError(goal.toTransform2D().getTheta(), Math.toRadians(-navx.getYaw()));
+        return TrigUtils.signedAngleError(navx.getYawRadians(), goal.toTransform2D().getTheta());
     }
 }

@@ -119,6 +119,6 @@ public class PurePursuitLineup extends Command {
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         return TrigUtils
-            .signedAngleError(Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), Math.toRadians(Robot.navx.getYaw()));
+            .signedAngleError(Math.atan2((-(goal.toTransform2D().getY()) - odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), Robot.navx.getYawRadians());
     }
 }
