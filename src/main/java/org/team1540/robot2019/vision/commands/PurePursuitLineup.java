@@ -89,13 +89,13 @@ public class PurePursuitLineup extends Command {
             cmdVelTheta = -MAX_VEL_THETA;
         }
 
-        double cmdVelX = distanceError * LINEAR_KP;
+        double cmdVelX = distanceError * (1 - Math.abs(angleError) / Math.PI * 2) * LINEAR_KP;
 
         if (cmdVelX > MAX_VEL_X) {
             cmdVelX = MAX_VEL_X;
         } else if (cmdVelX < MIN_VEL_X) {
             cmdVelX = MIN_VEL_X;
-        }
+        } // TODO: Allow negative vel
 
         Twist2D cmdVel = new Twist2D(cmdVelX, 0, cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
