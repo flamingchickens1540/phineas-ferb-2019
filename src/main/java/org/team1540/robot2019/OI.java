@@ -8,24 +8,14 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.climber.Level3Climb;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
-import org.team1540.robot2019.commands.climber.ClimbLevelThree;
-import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
-import org.team1540.robot2019.commands.climber.PrepareForClimb;
-import org.team1540.robot2019.commands.climber.ResetClimber;
+import org.team1540.robot2019.commands.climber.Level3Climb;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.groups.EjectThenDown;
 import org.team1540.robot2019.commands.groups.GetHatchFloor;
-import org.team1540.robot2019.commands.groups.IntakeLoadingStation;
-import org.team1540.robot2019.commands.groups.IntakeSequence;
 import org.team1540.robot2019.commands.groups.Level2Climb;
-import org.team1540.robot2019.commands.groups.PlaceHatchThenDown;
-import org.team1540.robot2019.commands.hatch.ExtendHatch;
-import org.team1540.robot2019.commands.hatch.FloorGrabHatch;
 import org.team1540.robot2019.commands.hatch.GrabHatch;
 import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
 import org.team1540.rooster.Utilities;
@@ -126,14 +116,14 @@ public class OI {
             .whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
-    prepGetHatchButton.whenPressed(new HatchSlideOut());
-    prepGetHatchFloorButton.whenPressed(new GetHatchFloor());
-    grabHatchButton.whenPressed(new GrabHatch());
-    placeHatchButton.whenPressed(new PlaceHatchThenDown());
+        prepGetHatchButton.whenPressed(new HatchSlideOut());
+        prepGetHatchFloorButton.whenPressed(new GetHatchFloor());
+        grabHatchButton.whenPressed(new GrabHatch());
+        placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
-    climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new Level3Climb()));
-    climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new Level2Climb()));
-    climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
+        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new Level3Climb()));
+        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new Level2Climb()));
+        climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized buttons in " + (end - start) + " ms");

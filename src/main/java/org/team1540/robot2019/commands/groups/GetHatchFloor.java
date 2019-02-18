@@ -13,18 +13,18 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class GetHatchFloor extends CommandGroup {
 
-  public GetHatchFloor() {
-    addParallel(new HatchSlideIn());
-    addParallel(new SimpleCommand("close", Robot.hatchMech::release, Robot.hatchMech));
-    addSequential(new MoveElevatorToZero());
-    addSequential(new LowerWrist());
-    addSequential(new WaitCommand(Tuning.hatchFloorTime));
-    addSequential(new HatchSlideOut());
-    addSequential(new Command() {
-      @Override
-      protected boolean isFinished() {
-        return false;
-      }
-    });
-  }
+    public GetHatchFloor() {
+        addParallel(new HatchSlideIn());
+        addParallel(new SimpleCommand("close", Robot.hatchMech::release, Robot.hatchMech));
+        addSequential(new MoveElevatorToZero());
+        addSequential(new LowerWrist());
+        addSequential(new WaitCommand(Tuning.hatchFloorTime));
+        addSequential(new HatchSlideOut());
+        addSequential(new Command() {
+            @Override
+            protected boolean isFinished() {
+                return false;
+            }
+        });
+    }
 }
