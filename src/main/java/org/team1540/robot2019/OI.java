@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.LoadingStationCargoIntake;
-import org.team1540.robot2019.commands.cargo.LowerThenCargoIntake;
+import org.team1540.robot2019.commands.cargo.LowerThenIntakeCargo;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.climber.PrepareForClimb;
@@ -112,7 +112,7 @@ public class OI {
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
         intakeLoadingStationButton.whenPressed(new LoadingStationCargoIntake());
 
-        Command intakeCommand = new LowerThenCargoIntake();
+        Command intakeCommand = new LowerThenIntakeCargo();
         autoIntakeButton.whenPressed(intakeCommand);
         cancelIntakeButton
             .whenPressed(new SimpleCommand("Cancel CargoIntake", intakeCommand::cancel));
