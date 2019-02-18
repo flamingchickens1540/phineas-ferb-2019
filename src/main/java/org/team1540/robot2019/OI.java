@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.cargo.EjectThenDown;
+import org.team1540.robot2019.commands.cargo.EjectCargoThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntakeCargo;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntakeCargo;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
@@ -116,7 +116,7 @@ public class OI {
         autoIntakeButton.whenPressed(intakeCommand);
         cancelIntakeButton
             .whenPressed(new SimpleCommand("Cancel CargoMech", intakeCommand::cancel));
-        ejectButton.whenPressed(new EjectThenDown());
+        ejectButton.whenPressed(new EjectCargoThenDown());
 
         getHatchButton.whenPressed(new ExtendHatch());
         getHatchFloorButton.whenPressed(new FloorGrabHatch());

@@ -6,11 +6,11 @@ import org.team1540.robot2019.commands.hatch.ExtendHatch;
 import org.team1540.robot2019.commands.hatch.PlaceHatch;
 import org.team1540.rooster.util.SimpleCommand;
 
-public class HatchSelfTest extends CommandGroup {
+public class HatchMechSelfTest extends CommandGroup {
 
-    public static final Logger logger = Logger.getLogger(HatchSelfTest.class);
+    public static final Logger logger = Logger.getLogger(HatchMechSelfTest.class);
 
-    public HatchSelfTest() {
+    public HatchMechSelfTest() {
         addSequential(
             new SimpleCommand("Print status", () -> logger.info("Beginning hatch self-test")));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Grabbing")));
