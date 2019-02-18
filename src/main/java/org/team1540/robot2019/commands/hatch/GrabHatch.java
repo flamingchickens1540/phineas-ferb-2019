@@ -6,7 +6,7 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class GrabHatch extends CommandGroup {
 
-    public GrabHatch() {
+    public GrabHatch() { // Note: this is a command group for future use
         // TODO: Slide out
         addSequential(new SimpleCommand("HatchMech Grab", Robot.hatch::grab, Robot.hatch));
         // TODO: Wait and slide in

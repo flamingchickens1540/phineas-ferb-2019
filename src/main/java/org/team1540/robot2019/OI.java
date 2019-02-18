@@ -17,10 +17,10 @@ import org.team1540.robot2019.commands.climber.PrepareForClimb;
 import org.team1540.robot2019.commands.climber.ResetClimber;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.GetHatchFloor;
+import org.team1540.robot2019.commands.hatch.ExtendHatch;
+import org.team1540.robot2019.commands.hatch.FloorGrabHatch;
 import org.team1540.robot2019.commands.hatch.GrabHatch;
 import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
-import org.team1540.robot2019.commands.hatch.PrepGetPlaceHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -118,8 +118,8 @@ public class OI {
             .whenPressed(new SimpleCommand("Cancel CargoMech", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
-        getHatchButton.whenPressed(new PrepGetPlaceHatch());
-        getHatchFloorButton.whenPressed(new GetHatchFloor());
+        getHatchButton.whenPressed(new ExtendHatch());
+        getHatchFloorButton.whenPressed(new FloorGrabHatch());
         grabHatchButton.whenPressed(new GrabHatch()); // TODO: Carry hatches with the hatch mechanism in (for vision)
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
