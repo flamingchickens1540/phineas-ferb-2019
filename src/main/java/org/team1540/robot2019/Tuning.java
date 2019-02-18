@@ -125,4 +125,6 @@ public class Tuning {
   public static double climberUpPosition = 53000; // arms
 
   public static double climberTolerance = 1000;
+
+  public static double axisButtonThreshold = 0.3;
 }
