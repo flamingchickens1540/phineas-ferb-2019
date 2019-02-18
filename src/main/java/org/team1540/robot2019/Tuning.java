@@ -124,7 +124,7 @@ public class Tuning {
 
   public static double climberTolerance = 1000;
   // auto-lineup
-  public static double drivetrainRadius = 0.305; // This is for pandora TODO: Change this
+  public static double drivetrainRadiusMeters = 0.305; // This is for pandora TODO: Change this
 
   public static long drivetrainUDPTimeout = 500;
 

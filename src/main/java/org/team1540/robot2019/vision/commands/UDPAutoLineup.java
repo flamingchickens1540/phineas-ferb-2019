@@ -44,7 +44,7 @@ public class UDPAutoLineup extends Command {
     this.lastOdomToLimelight = lastOdomToLimelight;
     this.navx = navx;
     requires(dt);
-    twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadius);
+      twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
     pipeline = twist2DInput
         .then(new FeedForwardProcessor(0, 0,0))
 //        .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))

@@ -279,7 +279,7 @@ public class Drivetrain extends Subsystem {
 
   public Twist2D getTwist() {
     double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
-    double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadius) / 2;
+    double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadiusMeters) / 2;
     return new Twist2D(xvel, 0, thetavel);
   }
 
