@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
         brakeTimer.start();
         disableBrakes = true;
 
-        Robot.hatch.slideIn();
+        Robot.hatch.retract();
 
         if (DriverStation.getInstance().isFMSAttached()) {
             logger.debug("FMS is attached, auto-stopping recording");
@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
         }
 
         if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
-            Robot.hatch.slideOut();
+            Robot.hatch.extend();
         }
     }
 

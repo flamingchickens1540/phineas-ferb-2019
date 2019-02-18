@@ -4,10 +4,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2019.Robot;
 import org.team1540.rooster.util.SimpleCommand;
 
-public class PrepGetHatch extends CommandGroup {
+public class GrabHatch extends CommandGroup {
 
-    public PrepGetHatch() {
-        addSequential(new SimpleCommand("Hatch Slide Out", Robot.hatch::slideOut, Robot.hatch));
+    public GrabHatch() {
+        // TODO: Slide out
+        addSequential(new SimpleCommand("Hatch Grab", Robot.hatch::grab, Robot.hatch));
+        // TODO: Wait and slide in
 //    addSequential(new GrabHatch());
 //    addSequential(new WaitCommand(0.3));
 //    addSequential(new HatchSlideIn());

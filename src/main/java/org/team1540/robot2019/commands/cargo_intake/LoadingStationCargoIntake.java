@@ -10,7 +10,7 @@ import org.team1540.rooster.util.SimpleCommand;
 public class LoadingStationCargoIntake extends CommandGroup {
 
     public LoadingStationCargoIntake() {
-        addParallel(new SimpleCommand("zAcH WoN'T NoTiCe tHiS In tHe pR", Robot.hatch::slideIn, Robot.hatch));
+        addParallel(new SimpleCommand("zAcH WoN'T NoTiCe tHiS In tHe pR", Robot.hatch::retract, Robot.hatch));
         addSequential(new MoveElevatorToPosition(Tuning.elevatorLoadingStationPosition));
         addSequential(new AutoIntakeCargo());
         addSequential(new MoveElevatorToZero());
