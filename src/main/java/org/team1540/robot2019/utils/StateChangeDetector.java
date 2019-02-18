@@ -1,37 +1,38 @@
 package org.team1540.robot2019.utils;
 
 public class StateChangeDetector {
-  public boolean oldState;
 
-  public StateChangeDetector(boolean startState) {
-    this.oldState = startState;
-  }
+    public boolean oldState;
 
-  public boolean getOldState() {
-    return oldState;
-  }
-
-  public boolean didChange(boolean currentState) {
-    if (currentState != oldState) {
-      oldState = currentState;
-      return true;
+    public StateChangeDetector(boolean startState) {
+        this.oldState = startState;
     }
-    return false;
-  }
 
-  public boolean didChangeToTrue(boolean currentState) {
-    if (!oldState && currentState) {
-      oldState = true;
-      return true;
+    public boolean getOldState() {
+        return oldState;
     }
-    return false;
-  }
 
-  public boolean didChangeToFalse(boolean currentState) {
-    if (oldState && !currentState) {
-      oldState = false;
-      return true;
+    public boolean didChange(boolean currentState) {
+        if (currentState != oldState) {
+            oldState = currentState;
+            return true;
+        }
+        return false;
     }
-    return false;
-  }
+
+    public boolean didChangeToTrue(boolean currentState) {
+        if (!oldState && currentState) {
+            oldState = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean didChangeToFalse(boolean currentState) {
+        if (oldState && !currentState) {
+            oldState = false;
+            return true;
+        }
+        return false;
+    }
 }

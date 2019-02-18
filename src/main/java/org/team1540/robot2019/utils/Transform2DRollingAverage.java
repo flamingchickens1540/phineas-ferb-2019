@@ -10,32 +10,32 @@ import org.team1540.robot2019.datastructures.twod.Transform2D;
 
 public class Transform2DRollingAverage {
 
-  private Queue<Transform2D> poseQueue;
+    private Queue<Transform2D> poseQueue;
 
-  public Transform2DRollingAverage(int numElements) {
-    this.poseQueue = EvictingQueue.create(numElements);
-  }
-
-  public void addTransform(Transform2D pose) {
-    poseQueue.add(pose);
-  }
-
-  public Transform2D getAverage() {
-    int listSize = poseQueue.size();
-    if (listSize == 0) {
-      return null;
+    public Transform2DRollingAverage(int numElements) {
+        this.poseQueue = EvictingQueue.create(numElements);
     }
-    double sumX = 0;
-    double sumY = 0;
-    double sumSin = 0;
-    double sumCos = 0;
-    for (Transform2D pose : poseQueue) {
-      sumX += pose.getX();
-      sumY += pose.getY();
-      sumSin += sin(pose.getTheta());
-      sumCos += cos(pose.getTheta());
+
+    public void addTransform(Transform2D pose) {
+        poseQueue.add(pose);
     }
-    return new Transform2D(
-        sumX / listSize, sumY / listSize, atan2(sumSin / listSize, sumCos / listSize));
-  }
+
+    public Transform2D getAverage() {
+        int listSize = poseQueue.size();
+        if (listSize == 0) {
+            return null;
+        }
+        double sumX = 0;
+        double sumY = 0;
+        double sumSin = 0;
+        double sumCos = 0;
+        for (Transform2D pose : poseQueue) {
+            sumX += pose.getX();
+            sumY += pose.getY();
+            sumSin += sin(pose.getTheta());
+            sumCos += cos(pose.getTheta());
+        }
+        return new Transform2D(
+            sumX / listSize, sumY / listSize, atan2(sumSin / listSize, sumCos / listSize));
+    }
 }
