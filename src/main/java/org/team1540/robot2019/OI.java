@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
-import org.team1540.robot2019.commands.climber.Level2Climb;
-import org.team1540.robot2019.commands.climber.Level3Climb;
+import org.team1540.robot2019.commands.climber.ClimbLevelThree;
+import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GetHatchFloor;
@@ -121,8 +121,8 @@ public class OI {
         grabHatchButton.whenPressed(new GrabHatch());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
-        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new Level3Climb()));
-        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new Level2Climb()));
+        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
+        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
 
         double end = RobotController.getFPGATime() / 1000.0;

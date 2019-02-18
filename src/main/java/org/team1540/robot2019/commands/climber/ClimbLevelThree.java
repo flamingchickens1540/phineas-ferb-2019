@@ -1,34 +1,12 @@
 package org.team1540.robot2019.commands.climber;
 
-import edu.wpi.first.wpilibj.command.PIDCommand;
-import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.Tuning;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class ClimbLevelThree extends PIDCommand {
+public class ClimbLevelThree extends CommandGroup {
 
     public ClimbLevelThree() {
-        super(Tuning.climberGyroP, Tuning.climberGyroI, Tuning.climberGyroD);
-        requires(Robot.climber);
+        addSequential(new PrepareForClimb());
+        addSequential(new ExtendGyroStabilize());
     }
 
-    @Override
-    protected void initialize() {
-        Robot.climber.cylinderDown();
-    }
-
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    protected double returnPIDInput() {
-        return Hardware.navx.getPitch();
-    }
-
-    @Override
-    protected void usePIDOutput(double v) {
-        Robot.climber.setArms(v + Tuning.climberGyroFF);
-    }
 }
