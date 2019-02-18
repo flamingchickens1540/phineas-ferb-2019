@@ -7,9 +7,9 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.wrist.WristDown;
 import org.team1540.rooster.util.SimpleCommand;
 
-public class GetHatchFloor extends CommandGroup {
+public class FloorGrabHatch extends CommandGroup {
 
-    public GetHatchFloor() {
+    public FloorGrabHatch() {
         addSequential(new SimpleCommand("in", Robot.hatch::retract, Robot.hatch));
         addSequential(new SimpleCommand("close", Robot.hatch::release, Robot.hatch));
         addSequential(new MoveElevatorToZero());
