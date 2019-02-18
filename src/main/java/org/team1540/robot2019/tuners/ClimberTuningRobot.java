@@ -8,8 +8,8 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.ShuffleboardDisplay;
 import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.commands.climber.ClimbLevelThreeGyro;
 import org.team1540.robot2019.commands.climber.PrepareForClimb;
-import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
@@ -42,7 +42,7 @@ public class ClimberTuningRobot extends TimedRobot {
         Robot.elevator = new Elevator();
         Robot.drivetrain = new Drivetrain();
 
-        button1.whenPressed(new RaiseUpGyroAssist());
+        button1.whenPressed(new ClimbLevelThreeGyro());
         button2.whenPressed(new PrepareForClimb());
         button3
             .whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));

@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.cargo_intake.EjectThenDown;
 import org.team1540.robot2019.commands.cargo_intake.LoadingStationCargoIntake;
 import org.team1540.robot2019.commands.cargo_intake.LowerThenCargoIntake;
+import org.team1540.robot2019.commands.climber.ClimbLevelThreeGyro;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.climber.PrepareForClimb;
-import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
 import org.team1540.robot2019.commands.climber.ResetClimber;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
@@ -125,7 +125,7 @@ public class OI {
         prepareToClimbButton.whenPressed(new PrepareForClimb());
         startClimbingButton.whenPressed(new SimpleCommand("Climb Safe", () -> {
             if (startClimbingSafety.get()) {
-                new RaiseUpGyroAssist().start();
+                new ClimbLevelThreeGyro().start();
             }
         }));
         climberCylinderUp
