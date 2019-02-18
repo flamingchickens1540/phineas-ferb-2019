@@ -128,6 +128,6 @@ public class UDPAutoLineup extends Command {
     }
 
     private double getAngleError() {
-        return TrigUtils.signedAngleDifference(goal.toTransform2D().getTheta(), Math.toRadians(-navx.getYaw()));
+        return TrigUtils.signedAngleError(goal.toTransform2D().getTheta(), Math.toRadians(-navx.getYaw()));
     }
 }

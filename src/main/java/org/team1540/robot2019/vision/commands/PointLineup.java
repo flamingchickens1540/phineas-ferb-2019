@@ -131,7 +131,7 @@ public class PointLineup extends Command {
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         return TrigUtils
-            .signedAngleDifference(Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), Math.toRadians(Robot.navx.getYaw()));
-//        return TrigUtils.signedAngleDifference(Math.atan2((-odomPosition.getY())-(-goal.toTransform2D().getY()), odomPosition.getX()-goal.toTransform2D().getX()), Math.toRadians(Robot.navx.getYaw()));
+            .signedAngleError(Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), Math.toRadians(Robot.navx.getYaw()));
+//        return TrigUtils.signedAngleError(Math.atan2((-odomPosition.getY())-(-goal.toTransform2D().getY()), odomPosition.getX()-goal.toTransform2D().getX()), Math.toRadians(Robot.navx.getYaw()));
     }
 }

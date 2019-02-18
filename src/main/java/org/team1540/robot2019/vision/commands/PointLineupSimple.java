@@ -90,6 +90,6 @@ public class PointLineupSimple extends Command {
     }
 
     private double getAngleError(double x) {
-        return TrigUtils.signedAngleDifference(x, Math.toRadians(-Robot.navx.getYaw()));
+        return TrigUtils.signedAngleError(x, Math.toRadians(-Robot.navx.getYaw()));
     }
 }
