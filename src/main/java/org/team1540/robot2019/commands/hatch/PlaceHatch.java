@@ -9,11 +9,11 @@ import org.team1540.rooster.util.SimpleCommand;
 public class PlaceHatch extends CommandGroup {
 
   public PlaceHatch() {
-    addSequential(new HatchSlideOut());
+    addSequential(new SimpleCommand("Hatch", Robot.hatch::extend, Robot.hatch));
     addSequential(new WaitCommand(Tuning.hatchPlaceTime1));
-    addSequential(new SimpleCommand("release", Robot.hatchMech::release, Robot.hatchMech));
+    addSequential(new SimpleCommand("Hatch", Robot.hatch::release, Robot.hatch));
     addSequential(new WaitCommand(Tuning.hatchPlaceTime2));
-    addSequential(new HatchSlideIn());
+    addSequential(new SimpleCommand("Hatch", Robot.hatch::retract, Robot.hatch));
   }
 
 }

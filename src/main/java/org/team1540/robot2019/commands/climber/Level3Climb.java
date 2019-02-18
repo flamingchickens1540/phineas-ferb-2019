@@ -6,7 +6,7 @@ public class Level3Climb extends CommandGroup {
 
     public Level3Climb() {
         addSequential(new PrepareForClimb());
-        addSequential(new RaiseUpGyroAssist());
+        addSequential(new ClimbLevelThree());
     }
 
 }
