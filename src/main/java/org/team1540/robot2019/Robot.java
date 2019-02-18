@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 //    System.out.println(time - System.currentTimeMillis());
 
-        debugMode = SmartDashboard.getBoolean("Debug Moe", false);
+        debugMode = SmartDashboard.getBoolean("Debug Mode", false);
     }
 
     private Timer brakeTimer = new Timer();
