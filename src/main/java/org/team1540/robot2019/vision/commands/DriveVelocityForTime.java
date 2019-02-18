@@ -19,8 +19,8 @@ public class DriveVelocityForTime extends TimedCommand {
 
     @Override
     protected void execute() {
-        Robot.drivetrain.setLeftVelocityTPU(velocity);
-        Robot.drivetrain.setRightVelocityTPU(velocity);
+        Robot.drivetrain.setLeftVelocityMetersPerSecond(velocity);
+        Robot.drivetrain.setRightVelocityMetersPerSecond(velocity);
     }
 
     @Override
