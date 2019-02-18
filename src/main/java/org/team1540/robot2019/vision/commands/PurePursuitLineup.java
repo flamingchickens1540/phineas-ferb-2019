@@ -17,7 +17,7 @@ import org.team1540.rooster.functional.Executable;
 
 public class PurePursuitLineup extends Command {
 
-    private static final double ANGULAR_KP = -6;
+    private static final double ANGULAR_KP = 6;
     private static final double LINEAR_KP = 4;
     private static final double MAX_VEL_X = 0.8;
     private static final double MIN_VEL_X = 0.2;
@@ -96,7 +96,7 @@ public class PurePursuitLineup extends Command {
             cmdVelX = MIN_VEL_X;
         }
 
-        Twist2D cmdVel = new Twist2D(cmdVelX, 0, -cmdVelTheta);
+        Twist2D cmdVel = new Twist2D(cmdVelX, 0, cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();
     }
