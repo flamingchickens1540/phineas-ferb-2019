@@ -317,17 +317,17 @@ public class Hardware {
     }
 
     public static void checkStickyFaults() {
-        PhineasUtilities.processStickyFaults("Drivetrain", "left A", driveLeftMotorA);
-        PhineasUtilities.processStickyFaults("Drivetrain", "left B", driveLeftMotorB);
-        PhineasUtilities.processStickyFaults("Drivetrain", "left C", driveLeftMotorC);
-        PhineasUtilities.processStickyFaults("Drivetrain", "right A", driveRightMotorA);
-        PhineasUtilities.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
-        PhineasUtilities.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
+        StickyFaultsProcessor.processStickyFaults("Drivetrain", "left A", driveLeftMotorA);
+        StickyFaultsProcessor.processStickyFaults("Drivetrain", "left B", driveLeftMotorB);
+        StickyFaultsProcessor.processStickyFaults("Drivetrain", "left C", driveLeftMotorC);
+        StickyFaultsProcessor.processStickyFaults("Drivetrain", "right A", driveRightMotorA);
+        StickyFaultsProcessor.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
+        StickyFaultsProcessor.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
 
-        PhineasUtilities.processStickyFaults("Wrist", "motor", wristMotor);
+        StickyFaultsProcessor.processStickyFaults("Wrist", "motor", wristMotor);
 
-        PhineasUtilities.processStickyFaults("CargoIntake", "top", intakeTop);
-        PhineasUtilities.processStickyFaults("CargoIntake", "bottom", intakeBtm);
+        StickyFaultsProcessor.processStickyFaults("CargoIntake", "top", intakeTop);
+        StickyFaultsProcessor.processStickyFaults("CargoIntake", "bottom", intakeBtm);
     }
 
     public static ChickenController createController(int id) {
