@@ -96,7 +96,7 @@ public class PointLineup extends Command {
         // These numbers must be tuned for your Robot!  Be careful!
         final double STEER_K = -10;                    // how hard to turn toward the target
         final double MAX_STEER = 2.0;
-        final double MIN_STEER = 0.5;
+        final double MIN_STEER = 0.3;
 
         double angleError = getAngleError();
 

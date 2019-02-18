@@ -52,7 +52,7 @@ public class PurePursuitLineup extends Command {
     private Transform3D computeGoal() {
         return driveOdometry.getOdomToBaseLink()
             .add(limeLoc.getBaseLinkToVisionTarget())
-            .add(new Transform3D(-0.55, -0.025, 0));
+            .add(new Transform3D(-0.65, -0.025, 0));
     }
 
     @Override
