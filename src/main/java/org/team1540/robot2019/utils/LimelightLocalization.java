@@ -29,7 +29,8 @@ public class LimelightLocalization {
     // TODO: Filter limelight contours using size, angle, etc.
 
     double upperLimit = 0.86;
-      double lowerLimit = 0.29;
+//      double lowerLimit = 0.29; // With U
+      double lowerLimit = -0.65;
     double leftAndRightLimit = 0.90;
 
     Vector2D point0 = limelightInterface.getRawPoint(0);
