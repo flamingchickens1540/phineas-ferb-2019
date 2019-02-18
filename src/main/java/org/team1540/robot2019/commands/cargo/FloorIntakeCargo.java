@@ -9,7 +9,7 @@ import org.team1540.rooster.util.SimpleCommand;
 public class FloorIntakeCargo extends CommandGroup {
 
     public FloorIntakeCargo() {
-        addParallel(new SimpleCommand("alaska's", Robot.hatch::retract, Robot.hatch));
+        addParallel(new SimpleCommand("Retract Hatch", Robot.hatch::retract, Robot.hatch));
         addSequential(new MoveElevatorToZero());
         addParallel(new IntakeCargo());
         addSequential(new WristDown());
