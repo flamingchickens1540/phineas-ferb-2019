@@ -1,22 +1,17 @@
 package org.team1540.robot2019.commands.hatch;
 
-import edu.wpi.first.wpilibj.command.TimedCommand;
-import org.team1540.robot2019.Robot;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.team1540.robot2019.Tuning;
 
-public class GetHatch extends TimedCommand {
+public class GetHatch extends CommandGroup {
 
   public GetHatch() {
-    super(Tuning.hatchGetTime);
-    requires(Robot.hatchMech);
-  }
-
-  protected void initialize() {
-    Robot.hatchMech.slideOut();
-  }
-
-  protected void end() {
-    Robot.hatchMech.attach();
+    addSequential(new HatchSlideOut());
+//    addSequential(new WaitCommand(Tuning.hatchGetTime));
+//    addSequential(new GrabHatch());
+//    addSequential(new WaitCommand(0.3));
+//    addSequential(new HatchSlideIn());
   }
 
 }
