@@ -4,27 +4,27 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 
-public class IntakeCargo extends Command {
+public class Intake extends Command {
 
-    private static final Logger logger = Logger.getLogger(IntakeCargo.class);
+    private static final Logger logger = Logger.getLogger(Intake.class);
 
-    public IntakeCargo() {
+    public Intake() {
 //    super(Tuning.intakeTimeout);
         requires(Robot.cargoMechanism);
     }
 
     @Override
     protected void initialize() {
-        logger.debug("CargoMech starting");
+        logger.debug("Intake starting");
         Robot.cargoMechanism.startIntaking();
     }
 
     @Override
     protected void end() {
         if (isTimedOut()) {
-            logger.debug("CargoMech stopping due to timeout");
+            logger.debug("Intake stopping due to timeout");
         } else {
-            logger.debug("CargoMech stopping due to detected ball");
+            logger.debug("Intake stopping due to detected ball");
         }
         Robot.cargoMechanism.stop();
     }

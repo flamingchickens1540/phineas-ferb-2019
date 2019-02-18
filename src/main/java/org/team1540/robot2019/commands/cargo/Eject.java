@@ -5,11 +5,11 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class EjectCargo extends TimedCommand {
+public class Eject extends TimedCommand {
 
-    private static final Logger logger = Logger.getLogger(EjectCargo.class);
+    private static final Logger logger = Logger.getLogger(Eject.class);
 
-    public EjectCargo() {
+    public Eject() {
         super(Tuning.intakeEjectTime);
         requires(Robot.cargoMechanism);
     }
