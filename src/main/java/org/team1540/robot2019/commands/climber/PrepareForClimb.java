@@ -1,14 +1,13 @@
-package org.team1540.robot2019.commands.groups;
+package org.team1540.robot2019.commands.climber;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.climber.MoveArmsToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 
-public class ClimbLevelTwo extends CommandGroup {
+public class PrepareForClimb extends CommandGroup {
 
-    public ClimbLevelTwo() {
+    public PrepareForClimb() {
         addSequential(new MoveElevatorToPosition(Tuning.elevatorClimbPosition));
-        addSequential(new MoveArmsToPosition(55000));
+        addSequential(new MoveArmsToPosition(Tuning.climberGyroStartPos));
     }
 }

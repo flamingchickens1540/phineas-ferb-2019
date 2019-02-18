@@ -8,17 +8,17 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.cargo_intake.EjectThenDown;
+import org.team1540.robot2019.commands.cargo_intake.LoadingStationCargoIntake;
+import org.team1540.robot2019.commands.cargo_intake.LowerThenCargoIntake;
+import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
+import org.team1540.robot2019.commands.climber.PrepareForClimb;
 import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
+import org.team1540.robot2019.commands.climber.ResetClimber;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.groups.ClimbLevelTwo;
-import org.team1540.robot2019.commands.groups.EjectThenDown;
-import org.team1540.robot2019.commands.groups.GetHatchFloor;
-import org.team1540.robot2019.commands.groups.IntakeLoadingStation;
-import org.team1540.robot2019.commands.groups.IntakeSequence;
-import org.team1540.robot2019.commands.groups.PlaceHatchThenDown;
-import org.team1540.robot2019.commands.groups.PrepareForClimb;
-import org.team1540.robot2019.commands.groups.ResetClimber;
+import org.team1540.robot2019.commands.hatch.GetHatchFloor;
+import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
 import org.team1540.robot2019.commands.hatch.PrepGetHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
@@ -109,9 +109,9 @@ public class OI {
         elevatorCargoShipButton
             .whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
-        intakeLoadingStationButton.whenPressed(new IntakeLoadingStation());
+        intakeLoadingStationButton.whenPressed(new LoadingStationCargoIntake());
 
-        Command intakeCommand = new IntakeSequence();
+        Command intakeCommand = new LowerThenCargoIntake();
         autoIntakeButton.whenPressed(intakeCommand);
         cancelIntakeButton
             .whenPressed(new SimpleCommand("Cancel CargoIntake", intakeCommand::cancel));

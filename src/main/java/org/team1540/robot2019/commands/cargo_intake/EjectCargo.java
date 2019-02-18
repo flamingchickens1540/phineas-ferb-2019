@@ -1,4 +1,4 @@
-package org.team1540.robot2019.commands.cargo;
+package org.team1540.robot2019.commands.cargo_intake;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.apache.log4j.Logger;

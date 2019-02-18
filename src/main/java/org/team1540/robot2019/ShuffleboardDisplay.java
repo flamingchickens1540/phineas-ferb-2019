@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.elevator.ZeroElevator;
-import org.team1540.robot2019.commands.groups.SelfTest;
+import org.team1540.robot2019.commands.self_tests.SelfTest;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleLoopCommand;
 

@@ -116,7 +116,7 @@ public class Elevator extends Subsystem {
         elevatorB.setIdleMode(mode);
     }
 
-    public void stop() {
+    public void prettyPleaseStopBothTheLeftAndTheRightElevatorMotorsSoWeDontWastePowerCauseWeDontHavePowerManagement() {
         setRaw(0);
     }
 }
