@@ -17,42 +17,54 @@ import org.team1540.rooster.functional.Executable;
 
 public class PurePursuitLineup extends Command {
 
-    private final TankDriveOdometryRunnable driveOdometry;
-    private final LimelightLocalization limeLoc;
+    private static final double ANGULAR_KP = -6;
+    private static final double LINEAR_KP = 4;
+    private static final double MAX_VEL_X = 0.8;
+    private static final double MIN_VEL_X = 0.2;
+    private static final double MAX_VEL_THETA = 2.0;
+    private static final double GOAL_DISTANCE_TOLERANCE = 0.1;
+    private static final Transform3D VISION_TARGET_OFFSET = new Transform3D(-0.65, -0.025, 0);
 
-    private double limelightDriveCommand = 0.0;
-    private double limelightSteerCommand = 0.0;
+    private final TankDriveOdometryRunnable driveOdometry;
+    private final LimelightLocalization limelightLocalization;
+    private Runnable onFail = null;
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
     private Transform3D goal;
 
-
-    public PurePursuitLineup(LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry) {
-        this.limeLoc = limeLoc;
+    public PurePursuitLineup(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry) {
+        this.limelightLocalization = limelightLocalization;
         this.driveOdometry = driveOdometry;
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(0, 0, 0))
-//        .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput());
+    }
+
+    public PurePursuitLineup(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry, Runnable onFail) {
+        this(limelightLocalization, driveOdometry);
+        this.onFail = onFail;
     }
 
     @Override
     protected void initialize() {
         Robot.drivetrain.configTalonsForVelocity();
-        if (!limeLoc.attemptUpdatePose()) {
-        } else {
+        if (limelightLocalization.attemptUpdatePose()) {
             goal = computeGoal();
+        } else {
+            if (onFail != null) {
+                onFail.run();
+            }
         }
     }
 
     private Transform3D computeGoal() {
         return driveOdometry.getOdomToBaseLink()
-            .add(limeLoc.getBaseLinkToVisionTarget())
-            .add(new Transform3D(-0.65, -0.025, 0));
+            .add(limelightLocalization.getBaseLinkToVisionTarget())
+            .add(VISION_TARGET_OFFSET);
     }
 
     @Override
@@ -60,48 +72,33 @@ public class PurePursuitLineup extends Command {
         if (goal == null) {
             return;
         }
-        updateLimelight();
-        Twist2D cmdVel = new Twist2D(limelightDriveCommand, 0, -limelightSteerCommand);
-        twist2DInput.setTwist(cmdVel);
-        pipeline.execute();
-    }
-
-    public void updateLimelight() {
-        if (limeLoc.attemptUpdatePose()) {
+        if (limelightLocalization.attemptUpdatePose()) {
             goal = computeGoal();
         }
-        // These numbers must be tuned for your Robot!  Be careful!
-        final double STEER_K = -6;                    // how hard to turn toward the target
-        final double DRIVE_K = 4;                    // how hard to drive fwd toward the target
-        final double MAX_DRIVE = 0.8;                   // Simple speed limit so we don't drive too fast
-        final double MIN_DRIVE = 0.2;
-        final double MAX_STEER = 2.0;
 
         double angleError = getAngleError();
         double distanceError = getDistanceError();
 
         System.out.printf("Angle error: %f Distance error: %f\n", angleError, distanceError);
 
-        // Start with proportional steering
-        double steer_cmd = angleError * STEER_K;
-        if (steer_cmd > MAX_STEER) {
-            steer_cmd = MAX_STEER;
-        } else if (steer_cmd < -MAX_STEER) {
-            steer_cmd = -MAX_STEER;
-        }
-        limelightSteerCommand = steer_cmd;
-
-        // try to drive forward until the target area reaches our desired area
-        double drive_cmd = distanceError * DRIVE_K;
-
-        // don't let the robot drive too fast into the goal
-        if (drive_cmd > MAX_DRIVE) {
-            drive_cmd = MAX_DRIVE;
-        } else if (drive_cmd < MIN_DRIVE) {
-            drive_cmd = MIN_DRIVE;
+        double cmdVelTheta = angleError * ANGULAR_KP;
+        if (cmdVelTheta > MAX_VEL_THETA) {
+            cmdVelTheta = MAX_VEL_THETA;
+        } else if (cmdVelTheta < -MAX_VEL_THETA) {
+            cmdVelTheta = -MAX_VEL_THETA;
         }
 
-        limelightDriveCommand = drive_cmd;
+        double cmdVelX = distanceError * LINEAR_KP;
+
+        if (cmdVelX > MAX_VEL_X) {
+            cmdVelX = MAX_VEL_X;
+        } else if (cmdVelX < MIN_VEL_X) {
+            cmdVelX = MIN_VEL_X;
+        }
+
+        Twist2D cmdVel = new Twist2D(cmdVelX, 0, -cmdVelTheta);
+        twist2DInput.setTwist(cmdVel);
+        pipeline.execute();
     }
 
     @Override
@@ -109,7 +106,7 @@ public class PurePursuitLineup extends Command {
         if (goal == null) {
             return true;
         }
-        if (getDistanceError() < 0.1) {
+        if (getDistanceError() < GOAL_DISTANCE_TOLERANCE) {
             Robot.drivetrain.stop();
             return true;
         }
@@ -125,6 +122,5 @@ public class PurePursuitLineup extends Command {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         return TrigUtils
             .signedAngleDifference(Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), Math.toRadians(Robot.navx.getYaw()));
-//        return TrigUtils.signedAngleDifference(Math.atan2((-odomPosition.getY())-(-goal.toTransform2D().getY()), odomPosition.getX()-goal.toTransform2D().getX()), Math.toRadians(Robot.navx.getYaw()));
     }
 }
