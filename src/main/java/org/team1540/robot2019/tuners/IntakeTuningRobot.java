@@ -5,13 +5,13 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.subsystems.Cargo;
+import org.team1540.robot2019.subsystems.CargoMech;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class IntakeTuningRobot extends TimedRobot {
 
     private Joystick joystick = new Joystick(0);
-    private Cargo cargo;
+    private CargoMech cargoMechanism;
 
     @Override
     public void robotInit() {
@@ -21,17 +21,17 @@ public class IntakeTuningRobot extends TimedRobot {
 
         Hardware.initIntake();
 
-        cargo = new Cargo();
+        cargoMechanism = new CargoMech();
     }
 
     @Override
     public void teleopPeriodic() {
         if (joystick.getRawButton(1)) {
-            cargo.startIntaking();
+            cargoMechanism.startIntaking();
         } else if (joystick.getRawButton(2)) {
-            cargo.startEjecting();
+            cargoMechanism.startEjecting();
         } else {
-            cargo.stop();
+            cargoMechanism.stop();
         }
     }
 

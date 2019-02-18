@@ -8,7 +8,7 @@ public class GrabHatch extends CommandGroup {
 
     public GrabHatch() {
         // TODO: Slide out
-        addSequential(new SimpleCommand("Hatch Grab", Robot.hatch::grab, Robot.hatch));
+        addSequential(new SimpleCommand("HatchMech Grab", Robot.hatch::grab, Robot.hatch));
         // TODO: Wait and slide in
 //    addSequential(new GrabHatch());
 //    addSequential(new WaitCommand(0.3));

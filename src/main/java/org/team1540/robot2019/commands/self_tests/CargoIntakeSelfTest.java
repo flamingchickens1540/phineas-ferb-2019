@@ -13,21 +13,21 @@ public class CargoIntakeSelfTest extends CommandGroup {
 
     public CargoIntakeSelfTest() {
         addSequential(
-            new SimpleCommand("Print status", () -> logger.info("Beginning cargo self-test")));
-        addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargo in")));
-        addSequential(new SimpleCommand("Run In", Robot.cargo::startIntaking, Robot.cargo));
+            new SimpleCommand("Print status", () -> logger.info("Beginning cargoMechanism self-test")));
+        addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargoMechanism in")));
+        addSequential(new SimpleCommand("Run In", Robot.cargoMechanism::startIntaking, Robot.cargoMechanism));
         addSequential(new TimedCommand(1));
-        addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargo out")));
-        addSequential(new SimpleCommand("Run Out", Robot.cargo::startEjecting, Robot.cargo));
+        addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargoMechanism out")));
+        addSequential(new SimpleCommand("Run Out", Robot.cargoMechanism::startEjecting, Robot.cargoMechanism));
         addSequential(new TimedCommand(1));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Stopping")));
-        addSequential(new SimpleCommand("Stop cargo", Robot.cargo::stop, Robot.cargo));
+        addSequential(new SimpleCommand("Stop cargoMechanism", Robot.cargoMechanism::stop, Robot.cargoMechanism));
         addSequential(new SimpleCommand("Check Sensor", () -> {
-            if (Robot.cargo.hasBall()) {
+            if (Robot.cargoMechanism.hasBall()) {
                 DriverStation.reportWarning("Ball sensor is still tripped after ejecting", false);
             }
-        }, Robot.cargo));
+        }, Robot.cargoMechanism));
         addSequential(
-            new SimpleCommand("Print status", () -> logger.info("Cargo self-test complete")));
+            new SimpleCommand("Print status", () -> logger.info("CargoMech self-test complete")));
     }
 }

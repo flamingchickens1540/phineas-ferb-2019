@@ -5,7 +5,7 @@ import static org.team1540.robot2019.Hardware.hatchSlide;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class Hatch extends Subsystem {
+public class HatchMech extends Subsystem {
 
     public void extend() {
         hatchSlide.set(true);
