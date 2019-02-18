@@ -11,7 +11,7 @@ public class LowerThenCargoIntake extends CommandGroup {
     public LowerThenCargoIntake() {
         addParallel(new SimpleCommand("alaska's", Robot.hatch::retract, Robot.hatch));
         addSequential(new MoveElevatorToZero());
-        addParallel(new AutoIntakeCargo());
+        addParallel(new IntakeCargo());
         addSequential(new WristDown());
     }
 }
