@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class LowerWrist extends Command {
+public class WristDown extends Command {
 
-    public LowerWrist() {
+    public WristDown() {
         super(Tuning.wristLowerTimeout);
 
         requires(Robot.wrist);

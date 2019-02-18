@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.wrist.LowerWrist;
+import org.team1540.robot2019.commands.wrist.WristDown;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.rooster.preferencemanager.PreferenceManager;
 
@@ -32,7 +32,7 @@ public class WristLogicTuningRobot extends TimedRobot {
 
     new JoystickButton(joystick, 1).whenPressed(new CommandGroup() {
       {
-        addSequential(new LowerWrist());
+        addSequential(new WristDown());
         addSequential(new TimedCommand(1));
       }
     });
