@@ -34,7 +34,8 @@ public class ElevatorTuningRobot extends TimedRobot {
     }
 
     public void teleopInit() {
-        Robot.elevator.prettyPleaseStopBothTheLeftAndTheRightElevatorMotorsSoWeDontWastePowerCauseWeDontHavePowerManagement();
+        Robot.elevator
+            .prettyPleaseStopBothTheLeftAndTheRightElevatorMotorsSoWeDontWastePowerCauseWeDontHavePowerManagementButDontActuallyStopThemThisCommandOnlySetsThePercentOutputToZeroNotTheVelocitySoItsZachsFaultIfYouGetThemMixedUp();
     }
 
     @Override
