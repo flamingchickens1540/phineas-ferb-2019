@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Hatch extends Subsystem {
 
-    public void slideOut() {
+    public void extend() {
         hatchSlide.set(true);
     }
 
-    public void slideIn() {
+    public void retract() {
         hatchSlide.set(false);
     }
 

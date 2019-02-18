@@ -11,9 +11,10 @@ public class PlaceHatch extends CommandGroup {
     public PlaceHatch() {
 //    addSequential(new HatchSlideOut());
 //    addSequential(new WaitCommand(0.3));
+        // TODO: Extend
         addSequential(new SimpleCommand("Hatch Release", Robot.hatch::release, Robot.hatch));
         addSequential(new WaitCommand(Tuning.hatchPlaceTime));
-        addSequential(new SimpleCommand("Hatch Slide In", Robot.hatch::slideIn, Robot.hatch));
+        addSequential(new SimpleCommand("Hatch Slide In", Robot.hatch::retract, Robot.hatch));
     }
 
 }
