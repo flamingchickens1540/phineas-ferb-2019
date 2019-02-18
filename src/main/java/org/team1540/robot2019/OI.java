@@ -15,6 +15,7 @@ import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
+import org.team1540.robot2019.commands.hatch.ExtendHatch;
 import org.team1540.robot2019.commands.hatch.GetHatchFloor;
 import org.team1540.robot2019.commands.hatch.GrabHatch;
 import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
@@ -114,7 +115,7 @@ public class OI {
         cancelIntakeButton.whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
-        prepGetHatchButton.whenPressed(new SimpleCommand("extend", Robot.hatch::extend, Robot.hatch));
+        prepGetHatchButton.whenPressed(new ExtendHatch());
         prepGetHatchFloorButton.whenPressed(new GetHatchFloor());
         grabHatchButton.whenPressed(new GrabHatch());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
