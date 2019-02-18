@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 
-public class AutoIntakeCargo extends Command {
+public class IntakeCargo extends Command {
 
-    private static final Logger logger = Logger.getLogger(AutoIntakeCargo.class);
+    private static final Logger logger = Logger.getLogger(IntakeCargo.class);
 
-    public AutoIntakeCargo() {
+    public IntakeCargo() {
 //    super(Tuning.intakeTimeout);
         requires(Robot.cargoIntake);
     }
