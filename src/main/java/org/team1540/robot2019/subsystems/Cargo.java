@@ -13,9 +13,9 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class CargoIntake extends Subsystem {
+public class Cargo extends Subsystem {
 
-    private NetworkTable table = NetworkTableInstance.getDefault().getTable("cargoIntake");
+    private NetworkTable table = NetworkTableInstance.getDefault().getTable("cargo");
     private NetworkTableEntry hasBallEntry = table.getEntry("hasBall");
     private NetworkTableEntry topThrottleEntry = table.getEntry("topThrot");
     private NetworkTableEntry topCurrentEntry = table.getEntry("topCurr");
