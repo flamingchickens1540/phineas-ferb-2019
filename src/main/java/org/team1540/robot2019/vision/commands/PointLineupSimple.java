@@ -33,7 +33,7 @@ public class PointLineupSimple extends Command {
             Robot.drivetrain.stop();
             endFlag = true;
         } else {
-            goal = x - Math.toRadians(-Robot.navx.getYaw());
+            goal = x - Robot.navx.getYawRadians();
         }
     }
 
@@ -59,7 +59,7 @@ public class PointLineupSimple extends Command {
         }
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
         if (x != 0) {
-            goal = -(x - ANGLE_OFFSET) + Math.toRadians(-Robot.navx.getYaw());
+            goal = -(x - ANGLE_OFFSET) + Robot.navx.getYawRadians();
         }
 
         double angleError = getAngleError(goal);
@@ -90,6 +90,6 @@ public class PointLineupSimple extends Command {
     }
 
     private double getAngleError(double x) {
-        return TrigUtils.signedAngleError(Math.toRadians(-Robot.navx.getYaw()), x);
+        return TrigUtils.signedAngleError(x, Robot.navx.getYawRadians());
     }
 }

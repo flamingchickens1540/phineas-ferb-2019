@@ -3,14 +3,11 @@ package org.team1540.robot2019;
 import static org.team1540.robot2019.OI.LB;
 import static org.team1540.robot2019.OI.RB;
 
-import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -35,9 +32,10 @@ import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.robot2019.utils.LimelightLocalization;
+import org.team1540.robot2019.utils.NavxWrapper;
 import org.team1540.robot2019.utils.StateChangeDetector;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
-import org.team1540.robot2019.vision.commands.UDPAutoLineup;
+import org.team1540.robot2019.vision.commands.PurePursuitThenPoint;
 import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
 import org.team1540.rooster.util.SimpleCommand;
 
@@ -65,7 +63,7 @@ public class Robot extends TimedRobot {
   public static Transform3D lastOdomToLimelight;
     public static Transform3D lastOdomToVisionTarget;
 
-  public static AHRS navx = new AHRS(Port.kMXP);
+  public static NavxWrapper navx = new NavxWrapper();
 
   // TODO: Move these to OI
   static JoystickButton autoAlignButton = new JoystickButton(OI.driver, RB);
@@ -101,13 +99,10 @@ public class Robot extends TimedRobot {
     // TODO: Clean this up
     SmartDashboard.putBoolean("rumbleEnabled", true);
 
-    Robot.navx.zeroYaw();
-    drivetrain.zeroEncoders();
-
     wheelOdometry = new TankDriveOdometryRunnable(
         drivetrain::getLeftPositionMeters,
         drivetrain::getRightPositionMeters,
-        () -> Math.toRadians(-Robot.navx.getAngle())
+        Robot.navx::getAngleRadians
     );
 
     udpReceiver = new UDPTwistReceiver(5801, () -> {
@@ -175,7 +170,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(resetWheelOdom);
 
     autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelight, Robot.navx);
+      alignCommand = new PurePursuitThenPoint();
+//      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelight, Robot.navx);
 //        alignCommand = new UDPVelocityTwistDrive();
       alignCommand.start();
     }));

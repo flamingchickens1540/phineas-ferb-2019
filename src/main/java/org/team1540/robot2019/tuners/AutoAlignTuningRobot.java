@@ -64,13 +64,10 @@ public class AutoAlignTuningRobot extends TimedRobot {
 
     drivetrain = new Drivetrain();
 
-    Robot.navx.zeroYaw();
-    drivetrain.zeroEncoders();
-
     wheelOdometry = new TankDriveOdometryRunnable(
         drivetrain::getLeftPositionMeters,
         drivetrain::getRightPositionMeters,
-        () -> Math.toRadians(-Robot.navx.getAngle())
+        Robot.navx::getYawRadians
     );
 
     udpReceiver = new UDPTwistReceiver(5801, () -> {

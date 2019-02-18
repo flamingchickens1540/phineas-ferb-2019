@@ -11,19 +11,29 @@ public class TankDriveOdometryAccumulator {
     private double distancePrevRight = 0;
     private double angleRadsPrev = 0;
 
+//    private boolean firstUpdate = true;
+
     /**
      * @param distanceLeft Absolute distance in meters of left wheels
      * @param distanceRight Absolute distance in meters of right wheels
-     * @param continuousAngle Continuous absolute angle in radians (should NOT jump from 2PI to 0)
+     * @param angleRadians Right-handed rotation about Z axis (up)
      */
-    public void update(double distanceLeft, double distanceRight, double continuousAngle) { // TODO: This angle should not need to be continuous
+    public void update(double distanceLeft, double distanceRight, double angleRadians) {
+//        if (firstUpdate) {
+//            distancePrevLeft = distanceLeft;
+//            distancePrevRight = distanceRight;
+//            angleRadsPrev = angleRadians;
+//            firstUpdate = false;
+//            return;
+//        }
+
         double deltaDistanceLeft = distanceLeft - distancePrevLeft;
         double deltaDistanceRight = distanceRight - distancePrevRight;
-        double deltaRads = continuousAngle - angleRadsPrev;
+        double deltaRads = TrigUtils.signedAngleError(angleRadians, angleRadsPrev);
 
         distancePrevLeft = distanceLeft;
         distancePrevRight = distanceRight;
-        angleRadsPrev = continuousAngle;
+        angleRadsPrev = angleRadians;
 
         Transform3D deltaDistance = TankDriveOdometry.calcDeltaTransformFromTankDriveDistances(deltaDistanceLeft, deltaDistanceRight, deltaRads);
 

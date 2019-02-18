@@ -84,7 +84,7 @@ public class PointLineup extends Command {
             return;
         }
         updateLimelight();
-        Twist2D cmdVel = new Twist2D(0, 0, -limelightSteerCommand);
+        Twist2D cmdVel = new Twist2D(0, 0, limelightSteerCommand);
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();
     }
@@ -131,7 +131,8 @@ public class PointLineup extends Command {
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         return TrigUtils
-            .signedAngleError(Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), Math.toRadians(Robot.navx.getYaw()));
-//        return TrigUtils.signedAngleError(Math.atan2((-odomPosition.getY())-(-goal.toTransform2D().getY()), odomPosition.getX()-goal.toTransform2D().getX()), Math.toRadians(Robot.navx.getYaw()));
+            .signedAngleError(-Robot.navx.getYawRadians(),
+                Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX())); // TODO: Remove negation
+//        return TrigUtils.signedAngleError(Math.atan2((-odomPosition.getY())-(-goal.toTransform2D().getY()), odomPosition.getX()-goal.toTransform2D().getX()), Math.toRadians(Robot.navx.getYawRadians()));
     }
 }

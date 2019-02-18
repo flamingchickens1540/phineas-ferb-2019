@@ -6,7 +6,7 @@ package org.team1540.robot2019;
 public class Tuning {
 
   // general
-  public static boolean isComp = true;
+  public static boolean isComp = false;
 
   // drive
   public static double driveVelocityP = 3;
