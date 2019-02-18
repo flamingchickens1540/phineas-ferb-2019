@@ -6,9 +6,9 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 
 public class ResetClimber extends CommandGroup {
 
-  public ResetClimber() {
-    addSequential(new MoveArmsToPosition(Tuning.climberBackPos));
-    addSequential(new MoveElevatorToZero());
-  }
+    public ResetClimber() {
+        addSequential(new MoveArmsToPosition(Tuning.climberBackPos));
+        addSequential(new MoveElevatorToZero());
+    }
 
 }

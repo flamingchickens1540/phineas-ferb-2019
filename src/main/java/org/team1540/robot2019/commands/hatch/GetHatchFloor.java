@@ -9,17 +9,17 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class GetHatchFloor extends CommandGroup {
 
-  public GetHatchFloor() {
-    addSequential(new SimpleCommand("in", Robot.hatch::slideIn, Robot.hatch));
-    addSequential(new SimpleCommand("close", Robot.hatch::release, Robot.hatch));
-    addSequential(new MoveElevatorToZero());
-    addSequential(new WristDown());
-    addSequential(new SimpleCommand("out", Robot.hatch::slideOut, Robot.hatch));
-    addSequential(new Command() {
-      @Override
-      protected boolean isFinished() {
-        return false;
-      }
-    });
-  }
+    public GetHatchFloor() {
+        addSequential(new SimpleCommand("in", Robot.hatch::slideIn, Robot.hatch));
+        addSequential(new SimpleCommand("close", Robot.hatch::release, Robot.hatch));
+        addSequential(new MoveElevatorToZero());
+        addSequential(new WristDown());
+        addSequential(new SimpleCommand("out", Robot.hatch::slideOut, Robot.hatch));
+        addSequential(new Command() {
+            @Override
+            protected boolean isFinished() {
+                return false;
+            }
+        });
+    }
 }

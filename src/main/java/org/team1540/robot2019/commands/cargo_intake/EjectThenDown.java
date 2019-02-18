@@ -5,9 +5,9 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 
 public class EjectThenDown extends CommandGroup {
 
-  public EjectThenDown() {
-    addSequential(new EjectCargo());
-    addSequential(new MoveElevatorToZero());
-  }
+    public EjectThenDown() {
+        addSequential(new EjectCargo());
+        addSequential(new MoveElevatorToZero());
+    }
 
 }
