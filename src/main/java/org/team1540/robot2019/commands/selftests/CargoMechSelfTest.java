@@ -7,11 +7,11 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.rooster.util.SimpleCommand;
 
-public class CargoIntakeSelfTest extends CommandGroup {
+public class CargoMechSelfTest extends CommandGroup {
 
-    public static final Logger logger = Logger.getLogger(CargoIntakeSelfTest.class);
+    public static final Logger logger = Logger.getLogger(CargoMechSelfTest.class);
 
-    public CargoIntakeSelfTest() {
+    public CargoMechSelfTest() {
         addSequential(
             new SimpleCommand("Print status", () -> logger.info("Beginning cargoMechanism self-test")));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargoMechanism in")));
