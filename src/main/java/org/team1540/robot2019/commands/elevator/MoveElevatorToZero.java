@@ -10,7 +10,7 @@ public class MoveElevatorToZero extends CommandGroup {
         addSequential(new MoveElevatorToPosition(0));
 //    addSequential(new ZeroElevator());
         addSequential(new SimpleCommand("Stop Elevator",
-            Robot.elevator::prettyPleaseStopBothTheLeftAndTheRightElevatorMotorsSoWeDontWastePowerCauseWeDontHavePowerManagementButDontActuallyStopThemThisCommandOnlySetsThePercentOutputToZeroNotTheVelocitySoItsZachsFaultIfYouGetThemMixedUp,
+            Robot.elevator::disableMotors,
             Robot.elevator));
     }
 }
