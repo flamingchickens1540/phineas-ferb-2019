@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.rooster.wrappers.ChickenController;
 
-public class PhineasUtilities {
+public class StickyFaultsProcessor {
 
     public static void processStickyFaults(String subsystemName, String motorName,
         @NotNull ChickenController controller) {
