@@ -105,15 +105,13 @@ public class OI {
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
         elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-        elevatorCargoShipButton
-            .whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
+        elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
         intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
 
         Command intakeCommand = new FloorIntake();
-        autoIntakeButton.whenPressed(intakeCommand);
-        cancelIntakeButton
-            .whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
+        autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::noHatch, intakeCommand));
+        cancelIntakeButton.whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
         prepGetHatchButton.whenPressed(new SimpleCommand("extend", Robot.hatch::extend, Robot.hatch));
