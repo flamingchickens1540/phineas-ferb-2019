@@ -23,16 +23,16 @@ public class VelocityDrive extends Command {
     double triggerValue = OI.getTankdriveForwardsAxis() - OI.getTankdriveBackwardsAxis();
     double leftSetpoint = (triggerValue - OI.getTankdriveLeftAxis()) * Tuning.drivetrainMaxVelocity;
     double rightSetpoint = (triggerValue - OI.getTankdriveRightAxis()) * Tuning.drivetrainMaxVelocity;
-      Robot.drivetrain.setLeftVelocity(leftSetpoint);
-      Robot.drivetrain.setRightVelocity(rightSetpoint);
+      Robot.drivetrain.setLeftVelocityTPU(leftSetpoint);
+      Robot.drivetrain.setRightVelocityTPU(rightSetpoint);
       SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
       SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
     SmartDashboard.putNumber("debug-setpoint-left-raw", leftSetpoint);
     SmartDashboard.putNumber("debug-setpoint-right-raw", rightSetpoint);
       SmartDashboard.putNumber("debug-velocity-left", Robot.drivetrain.getLeftVelocityMetersPerSecond());
       SmartDashboard.putNumber("debug-velocity-right", Robot.drivetrain.getRightVelocityMetersPerSecond());
-      SmartDashboard.putNumber("debug-velocity-left-raw", Robot.drivetrain.getLeftVelocity());
-      SmartDashboard.putNumber("debug-velocity-right-raw", Robot.drivetrain.getRightVelocity());
+      SmartDashboard.putNumber("debug-velocity-left-raw", Robot.drivetrain.getLeftVelocityTPU());
+      SmartDashboard.putNumber("debug-velocity-right-raw", Robot.drivetrain.getRightVelocityTPU());
     SmartDashboard.putNumber("debug-velocity-right-error", Hardware.driveRightMotorA.getClosedLoopError());
     SmartDashboard.putNumber("debug-velocity-left-error", Hardware.driveLeftMotorA.getClosedLoopError());
   }
