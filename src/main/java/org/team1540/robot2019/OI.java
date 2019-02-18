@@ -11,11 +11,11 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
+import org.team1540.robot2019.commands.groups.ClimbLevelTwo;
 import org.team1540.robot2019.commands.groups.EjectThenDown;
 import org.team1540.robot2019.commands.groups.GetHatchFloor;
 import org.team1540.robot2019.commands.groups.IntakeLoadingStation;
 import org.team1540.robot2019.commands.groups.IntakeSequence;
-import org.team1540.robot2019.commands.groups.Level2Climb;
 import org.team1540.robot2019.commands.groups.PlaceHatchThenDown;
 import org.team1540.robot2019.commands.groups.PrepareForClimb;
 import org.team1540.robot2019.commands.groups.ResetClimber;
@@ -133,7 +133,7 @@ public class OI {
         climberResetButton.whenPressed(new ResetClimber());
         climberCylinderUp.whenPressed(new SimpleCommand("Foo", () -> {
             if (startClimbingSafety.get()) {
-                new Level2Climb().start();
+                new ClimbLevelTwo().start();
             }
         }));
 
