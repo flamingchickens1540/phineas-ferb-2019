@@ -10,47 +10,50 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2019.Hardware;
+import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
 public class Intake extends Subsystem {
 
-  private NetworkTable table = NetworkTableInstance.getDefault().getTable("intake");
-  private NetworkTableEntry hasBallEntry = table.getEntry("hasBall");
-  private NetworkTableEntry topThrottleEntry = table.getEntry("topThrot");
-  private NetworkTableEntry topCurrentEntry = table.getEntry("topCurr");
-  private NetworkTableEntry btmThrottleEntry = table.getEntry("btmThrot");
-  private NetworkTableEntry btmCurrentEntry = table.getEntry("btmCurr");
+    private NetworkTable table = NetworkTableInstance.getDefault().getTable("cargoMechanism");
+    private NetworkTableEntry hasBallEntry = table.getEntry("hasBall");
+    private NetworkTableEntry topThrottleEntry = table.getEntry("topThrot");
+    private NetworkTableEntry topCurrentEntry = table.getEntry("topCurr");
+    private NetworkTableEntry btmThrottleEntry = table.getEntry("btmThrot");
+    private NetworkTableEntry btmCurrentEntry = table.getEntry("btmCurr");
 
-  @Override
-  protected void initDefaultCommand() {
+    @Override
+    protected void initDefaultCommand() {
 
-  }
+    }
 
-  public void startIntaking() {
-    intakeTop.set(ControlMode.PercentOutput, -Tuning.intakeIntakeSpeedTop);
-    intakeBtm.set(ControlMode.PercentOutput, -Tuning.intakeIntakeSpeedBtm);
-  }
+    public void startIntaking() {
+        intakeTop.set(ControlMode.PercentOutput, -Tuning.intakeIntakeSpeedTop);
+        intakeBtm.set(ControlMode.PercentOutput, -Tuning.intakeIntakeSpeedBtm);
+    }
 
-  public void startEjecting() {
-    intakeTop.set(ControlMode.PercentOutput, Tuning.intakeEjectSpeedTop);
-    intakeBtm.set(ControlMode.PercentOutput, Tuning.intakeEjectSpeedBtm);
-  }
+    public void startEjecting() {
+        intakeTop.set(ControlMode.PercentOutput, Tuning.intakeEjectSpeedTop);
+        intakeBtm.set(ControlMode.PercentOutput, Tuning.intakeEjectSpeedBtm);
+    }
 
-  public void stop() {
-    intakeTop.set(ControlMode.PercentOutput, 0);
-    intakeBtm.set(ControlMode.PercentOutput, 0);
-  }
+    public void stop() {
+        intakeTop.set(ControlMode.PercentOutput, 0);
+        intakeBtm.set(ControlMode.PercentOutput, 0);
+    }
 
-  public boolean hasBall() {
-    return intakeSensor.get();
-  }
+    public boolean hasBall() {
+        return intakeSensor.get();
+    }
 
-  @Override
-  public void periodic() {
-    hasBallEntry.forceSetBoolean(hasBall());
-    topThrottleEntry.forceSetNumber(intakeTop.getMotorOutputPercent());
-    topCurrentEntry.forceSetNumber(Hardware.getIntakeTopCurrent());
-    btmThrottleEntry.forceSetNumber(intakeBtm.getMotorOutputPercent());
-    btmCurrentEntry.forceSetNumber(Hardware.getIntakeBtmCurrent());
-  }
+    @Override
+    public void periodic() {
+        if (Robot.debugMode) {
+            hasBallEntry.forceSetBoolean(hasBall());
+            topThrottleEntry.forceSetNumber(intakeTop.getMotorOutputPercent());
+            topCurrentEntry.forceSetNumber(Hardware.getIntakeTopCurrent());
+            btmThrottleEntry.forceSetNumber(intakeBtm.getMotorOutputPercent());
+            btmCurrentEntry.forceSetNumber(Hardware.getIntakeBtmCurrent());
+        }
+    }
 }

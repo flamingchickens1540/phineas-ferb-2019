@@ -10,33 +10,33 @@ import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class IntakeTuningRobot extends TimedRobot {
 
-  private Joystick joystick = new Joystick(0);
-  private Intake intake;
+    private Joystick joystick = new Joystick(0);
+    private Intake cargoMechanism;
 
-  @Override
-  public void robotInit() {
-    PreferenceManager.getInstance().add(new Tuning());
+    @Override
+    public void robotInit() {
+        PreferenceManager.getInstance().add(new Tuning());
 
-    Scheduler.getInstance().run();
+        Scheduler.getInstance().run();
 
-    Hardware.initIntake();
+        Hardware.initIntake();
 
-    intake = new Intake();
-  }
-
-  @Override
-  public void teleopPeriodic() {
-    if (joystick.getRawButton(1)) {
-      intake.startIntaking();
-    } else if (joystick.getRawButton(2)) {
-      intake.startEjecting();
-    } else {
-      intake.stop();
+        cargoMechanism = new Intake();
     }
-  }
 
-  @Override
-  public void robotPeriodic() {
-    Scheduler.getInstance().run();
-  }
+    @Override
+    public void teleopPeriodic() {
+        if (joystick.getRawButton(1)) {
+            cargoMechanism.startIntaking();
+        } else if (joystick.getRawButton(2)) {
+            cargoMechanism.startEjecting();
+        } else {
+            cargoMechanism.stop();
+        }
+    }
+
+    @Override
+    public void robotPeriodic() {
+        Scheduler.getInstance().run();
+    }
 }

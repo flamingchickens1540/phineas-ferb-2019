@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
@@ -41,18 +42,20 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
 
-  private static final Logger logger = Logger.getLogger(Robot.class);
+    private static final Logger logger = Logger.getLogger(Robot.class);
 
-  public static Drivetrain drivetrain;
-  public static Elevator elevator;
-  public static Wrist wrist;
-  public static Intake intake;
-  public static HatchMech hatchMech;
-  public static Climber climber;
+    public static Drivetrain drivetrain;
+    public static Elevator elevator;
+    public static Wrist wrist;
+    public static Intake cargoMechanism;
+    public static HatchMech hatch;
+    public static Climber climber;
 
-  boolean disableBrakes;
+    public static boolean debugMode = false;
 
-  public static Transform3D odom_to_base_link = Transform3D.IDENTITY;
+    boolean disableBrakes;
+
+    public static Transform3D odom_to_base_link = Transform3D.IDENTITY;
 
   public static TankDriveOdometryRunnable wheelOdometry;
 
@@ -76,27 +79,27 @@ public class Robot extends TimedRobot {
     // logging configuration
     Logger.getRootLogger().setLevel(Level.DEBUG);
 
-    logger.info("Initializing...");
-    double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+        logger.info("Initializing...");
+        double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
 //    PreferenceManager.getInstance().add(new Tuning());
-    Scheduler.getInstance().run();
+//    Scheduler.getInstance().run();
 
-    // initialize hardware after we run the scheduler once so that the preference manager can update its values
-    Hardware.initAll();
+        // initialize hardware after we run the scheduler once so that the preference manager can update its values
+        Hardware.initAll();
 
-    drivetrain = new Drivetrain();
-    elevator = new Elevator();
-    wrist = new Wrist();
-    intake = new Intake();
-    hatchMech = new HatchMech();
-    climber = new Climber();
+        drivetrain = new Drivetrain();
+        elevator = new Elevator();
+        wrist = new Wrist();
+        cargoMechanism = new Intake();
+        hatch = new HatchMech();
+        climber = new Climber();
 
-    OI.init();
+        OI.init();
 
-    ShuffleboardDisplay.init();
+        ShuffleboardDisplay.init();
 
-    // TODO: Clean this up
+        // TODO: Clean this up
     SmartDashboard.putBoolean("rumbleEnabled", true);
 
     wheelOdometry = new TankDriveOdometryRunnable(
@@ -186,118 +189,130 @@ public class Robot extends TimedRobot {
 
     double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
     logger.info("Robot ready. Initialization took " + (end - start) + " ms");
-  }
+SmartDashboard.putBoolean("IsHatchPreload", false);
+        SmartDashboard.putBoolean("Debug Mode", false);
+    }
 
-  @Override
-  public void robotPeriodic() {
+    @Override
+    public void robotPeriodic() {
 //    long time = System.currentTimeMillis();
-    Scheduler.getInstance().run();
+        Scheduler.getInstance().run();
 //    System.out.println(time - System.currentTimeMillis());
-  }
 
-  private Timer brakeTimer = new Timer();
-
-  @Override
-  public void disabledInit() {
-    logger.debug("Disabling mechanism brakes in 2 seconds...");
-    brakeTimer.reset();
-    brakeTimer.start();
-    disableBrakes = true;
-
-    if (DriverStation.getInstance().isFMSAttached()) {
-      logger.debug("FMS is attached, auto-stopping recording");
-      Shuffleboard.stopRecording();
+        debugMode = SmartDashboard.getBoolean("Debug Moe", false);
     }
 
-    Shuffleboard.addEventMarker("Robot Disable", EventImportance.kNormal);
+    private Timer brakeTimer = new Timer();
 
-    Hardware.checkStickyFaults();
-  }
+    @Override
+    public void disabledInit() {
+        logger.debug("Disabling mechanism brakes in 2 seconds...");
+        brakeTimer.reset();
+        brakeTimer.start();
+        disableBrakes = true;
 
-  @Override
-  public void disabledPeriodic() {
-    if (brakeTimer.hasPeriodPassed(2) && disableBrakes) {
-      brakeTimer.stop();
-      setMechanismBrakes(false);
+        Robot.hatch.retract();
 
-      logger.debug("Mechanism brakes disabled");
+        if (DriverStation.getInstance().isFMSAttached()) {
+            logger.debug("FMS is attached, auto-stopping recording");
+            Shuffleboard.stopRecording();
+        }
 
-      disableBrakes = false;
+        Shuffleboard.addEventMarker("Robot Disable", EventImportance.kNormal);
 
-      Shuffleboard.addEventMarker("Mechanism brakes disabled", EventImportance.kTrivial);
-    }
-  }
-
-  @Override
-  public void autonomousInit() {
-    setMechanismBrakes(true);
-
-    Hardware.checkStickyFaults();
-
-    if (DriverStation.getInstance().isFMSAttached()) {
-      logger.debug("FMS is attached, auto-starting recording");
-      Shuffleboard.setRecordingFileNameFormat(
-          DriverStation.getInstance().getEventName() + "-" + DriverStation.getInstance()
-              .getMatchType() + "-" + DriverStation.getInstance().getMatchNumber()
-              + "-${date}-${time}");
-
-      Shuffleboard.startRecording();
+        Hardware.checkStickyFaults();
     }
 
-    Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
+    @Override
+    public void disabledPeriodic() {
+        if (brakeTimer.hasPeriodPassed(2) && disableBrakes) {
+            brakeTimer.stop();
+            setMechanismBrakes(false);
 
-    if (elevator.getPosition() < 1) {
-      elevator.setRaw(0);
-    }
-  }
+            logger.debug("Mechanism brakes disabled");
 
-  @Override
-  public void autonomousPeriodic() {
-  }
+            disableBrakes = false;
 
-  @Override
-  public void teleopInit() {
-    setMechanismBrakes(true);
-
-    Hardware.checkStickyFaults();
-
-    if (DriverStation.getInstance().isFMSAttached()) {
-      Shuffleboard.startRecording();
+            Shuffleboard.addEventMarker("Mechanism brakes disabled", EventImportance.kTrivial);
+        }
     }
 
-    Shuffleboard.addEventMarker("Teleop Start", EventImportance.kNormal);
+    @Override
+    public void autonomousInit() {
+        setMechanismBrakes(true);
 
-    if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
-      elevator.setRaw(0);
+        Hardware.checkStickyFaults();
+
+        if (DriverStation.getInstance().isFMSAttached()) {
+            logger.debug("FMS is attached, auto-starting recording");
+            Shuffleboard.setRecordingFileNameFormat(
+                DriverStation.getInstance().getEventName() + "-" + DriverStation.getInstance()
+                    .getMatchType() + "-" + DriverStation.getInstance().getMatchNumber()
+                    + "-${date}-${time}");
+
+            Shuffleboard.startRecording();
+        }
+
+        Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
+
+        if (elevator.getPosition() < 1) {
+            elevator.setRaw(0);
+        }
     }
-  }
 
-  @Override
-  public void teleopPeriodic() {
-    if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
-        && (Robot.climber.getCurrentCommand() == null)) {
-      if (Hardware.compressor.getClosedLoopControl()) {
-        logger.debug("Stopping compressor because elevator is up");
-        Hardware.compressor.stop();
-      }
-    } else if (!Hardware.compressor.getClosedLoopControl()) {
-      logger.debug("Restarting compressor");
-      Hardware.compressor.start();
+    @Override
+    public void autonomousPeriodic() {
     }
-  }
 
-  @Override
-  public void testInit() {
-  }
+    @Override
+    public void teleopInit() {
+        setMechanismBrakes(true);
 
-  @Override
-  public void testPeriodic() {
-  }
+        Robot.climber.cylinderUp();
 
-  private void setMechanismBrakes(boolean b) {
-    drivetrain.setBrake(b);
-    elevator.setBrake(b);
-    climber.setArmBrake(b);
-    wrist.setBrake(b);
-  }
+        Hardware.checkStickyFaults();
+
+        if (DriverStation.getInstance().isFMSAttached()) {
+            Shuffleboard.startRecording();
+        }
+
+        Shuffleboard.addEventMarker("Teleop Start", EventImportance.kNormal);
+
+        if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
+            elevator.setRaw(0);
+        }
+
+        if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
+            Robot.hatch.extend();
+        }
+    }
+
+    @Override
+    public void teleopPeriodic() {
+        if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
+            && (Robot.climber.getCurrentCommand() == null)) {
+            if (Hardware.compressor.getClosedLoopControl()) {
+                logger.debug("Stopping compressor because elevator is up");
+                Hardware.compressor.stop();
+            }
+        } else if (!Hardware.compressor.getClosedLoopControl()) {
+            logger.debug("Restarting compressor");
+            Hardware.compressor.start();
+        }
+    }
+
+    @Override
+    public void testInit() {
+    }
+
+    @Override
+    public void testPeriodic() {
+    }
+
+    private void setMechanismBrakes(boolean b) {
+        drivetrain.setBrake(b);
+        elevator.setBrake(b);
+        climber.setArmBrake(b);
+        wrist.setBrake(b);
+    }
 }

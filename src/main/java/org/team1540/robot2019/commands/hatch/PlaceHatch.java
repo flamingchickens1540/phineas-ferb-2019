@@ -1,22 +1,19 @@
 package org.team1540.robot2019.commands.hatch;
 
-import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
+import org.team1540.rooster.util.SimpleCommand;
 
-public class PlaceHatch extends TimedCommand {
+public class PlaceHatch extends CommandGroup {
 
   public PlaceHatch() {
-    super(Tuning.hatchPlaceTime);
-    requires(Robot.hatchMech);
-  }
-
-  protected void initialize() {
-    Robot.hatchMech.release();
-  }
-
-  protected void end() {
-    Robot.hatchMech.slideIn();
+    addSequential(new ExtendHatch());
+    addSequential(new WaitCommand(Tuning.hatchPlaceTime1));
+    addSequential(new SimpleCommand("Hatch", Robot.hatch::release, Robot.hatch));
+    addSequential(new WaitCommand(Tuning.hatchPlaceTime2));
+    addSequential(new RetractHatch());
   }
 
 }
