@@ -11,7 +11,7 @@ import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
-public class PointLineupDumb extends Command {
+public class PointLineupSimple extends Command {
 
     private double limelightSteerCommand = 0.0;
 
@@ -22,7 +22,7 @@ public class PointLineupDumb extends Command {
     private boolean endFlag = false;
 
 
-    public PointLineupDumb() {
+    public PointLineupSimple() {
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
@@ -39,7 +39,7 @@ public class PointLineupDumb extends Command {
         }
     }
 
-    public PointLineupDumb(double goal) {
+    public PointLineupSimple(double goal) {
         this.goal = goal;
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
