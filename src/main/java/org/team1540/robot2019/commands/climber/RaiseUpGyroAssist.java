@@ -7,28 +7,28 @@ import org.team1540.robot2019.Tuning;
 
 public class RaiseUpGyroAssist extends PIDCommand {
 
-  public RaiseUpGyroAssist() {
-    super(Tuning.climberGyroP, Tuning.climberGyroI, Tuning.climberGyroD);
-    requires(Robot.climber);
-  }
+    public RaiseUpGyroAssist() {
+        super(Tuning.climberGyroP, Tuning.climberGyroI, Tuning.climberGyroD);
+        requires(Robot.climber);
+    }
 
-  @Override
-  protected void initialize() {
-    Robot.climber.cylinderDown();
-  }
+    @Override
+    protected void initialize() {
+        Robot.climber.cylinderDown();
+    }
 
-  @Override
-  protected boolean isFinished() {
-    return false;
-  }
+    @Override
+    protected boolean isFinished() {
+        return false;
+    }
 
-  @Override
-  protected double returnPIDInput() {
-    return Hardware.navx.getPitch();
-  }
+    @Override
+    protected double returnPIDInput() {
+        return Hardware.navx.getPitch();
+    }
 
-  @Override
-  protected void usePIDOutput(double v) {
-    Robot.climber.setArms(v + Tuning.climberGyroFF);
-  }
+    @Override
+    protected void usePIDOutput(double v) {
+        Robot.climber.setArms(v + Tuning.climberGyroFF);
+    }
 }

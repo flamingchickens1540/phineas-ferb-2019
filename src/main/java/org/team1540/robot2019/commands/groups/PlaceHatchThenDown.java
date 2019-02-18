@@ -8,10 +8,10 @@ import org.team1540.robot2019.commands.hatch.PlaceHatch;
 
 public class PlaceHatchThenDown extends CommandGroup {
 
-  public PlaceHatchThenDown() {
-    addSequential(new PlaceHatch());
-    addSequential(new WaitCommand(Tuning.hatchEjectThenDownTime));
-    addSequential(new MoveElevatorToZero());
-  }
+    public PlaceHatchThenDown() {
+        addSequential(new PlaceHatch());
+        addSequential(new WaitCommand(Tuning.hatchEjectThenDownTime));
+        addSequential(new MoveElevatorToZero());
+    }
 
 }

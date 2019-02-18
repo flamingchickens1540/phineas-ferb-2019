@@ -16,29 +16,29 @@ import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class ElevatorTuningRobot extends TimedRobot {
 
-  private Joystick joystick = new Joystick(0);
+    private Joystick joystick = new Joystick(0);
 
-  @Override
-  public void robotInit() {
-    Logger.getRootLogger().setLevel(Level.DEBUG);
-    PreferenceManager.getInstance().add(new Tuning());
-    Scheduler.getInstance().run();
+    @Override
+    public void robotInit() {
+        Logger.getRootLogger().setLevel(Level.DEBUG);
+        PreferenceManager.getInstance().add(new Tuning());
+        Scheduler.getInstance().run();
 
-    Hardware.initElevator();
+        Hardware.initElevator();
 
-    Robot.elevator = new Elevator();
+        Robot.elevator = new Elevator();
 
-    new JoystickButton(joystick, 1).whenPressed(new MoveElevatorToZero());
-    new JoystickButton(joystick, 2).whenPressed(new MoveElevatorToPosition(20));
-    new JoystickButton(joystick, 3).whenPressed(new MoveElevatorToPosition(28));
-  }
+        new JoystickButton(joystick, 1).whenPressed(new MoveElevatorToZero());
+        new JoystickButton(joystick, 2).whenPressed(new MoveElevatorToPosition(20));
+        new JoystickButton(joystick, 3).whenPressed(new MoveElevatorToPosition(28));
+    }
 
-  public void teleopInit() {
-    Robot.elevator.stop();
-  }
+    public void teleopInit() {
+        Robot.elevator.stop();
+    }
 
-  @Override
-  public void robotPeriodic() {
-    Scheduler.getInstance().run();
-  }
+    @Override
+    public void robotPeriodic() {
+        Scheduler.getInstance().run();
+    }
 }

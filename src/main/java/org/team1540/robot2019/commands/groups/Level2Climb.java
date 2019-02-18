@@ -7,8 +7,8 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 
 public class Level2Climb extends CommandGroup {
 
-  public Level2Climb() {
-    addSequential(new MoveElevatorToPosition(Tuning.elevatorClimbPosition));
-    addSequential(new MoveArmsToPosition(55000));
-  }
+    public Level2Climb() {
+        addSequential(new MoveElevatorToPosition(Tuning.elevatorClimbPosition));
+        addSequential(new MoveArmsToPosition(55000));
+    }
 }

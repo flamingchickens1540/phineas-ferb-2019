@@ -7,8 +7,8 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 
 public class PrepareForClimb extends CommandGroup {
 
-  public PrepareForClimb() {
-    addSequential(new MoveElevatorToPosition(Tuning.elevatorClimbPosition));
-    addSequential(new MoveArmsToPosition(Tuning.climberGyroStartPos));
-  }
+    public PrepareForClimb() {
+        addSequential(new MoveElevatorToPosition(Tuning.elevatorClimbPosition));
+        addSequential(new MoveArmsToPosition(Tuning.climberGyroStartPos));
+    }
 }

@@ -7,23 +7,23 @@ import org.team1540.robot2019.Tuning;
 
 public class EjectCargo extends TimedCommand {
 
-  private static final Logger logger = Logger.getLogger(EjectCargo.class);
+    private static final Logger logger = Logger.getLogger(EjectCargo.class);
 
-  public EjectCargo() {
-    super(Tuning.intakeEjectTime);
-    requires(Robot.cargoIntake);
-  }
+    public EjectCargo() {
+        super(Tuning.intakeEjectTime);
+        requires(Robot.cargoIntake);
+    }
 
-  @Override
-  protected void initialize() {
-    logger.debug("Ejecting ball");
-    Robot.cargoIntake.startEjecting();
-  }
+    @Override
+    protected void initialize() {
+        logger.debug("Ejecting ball");
+        Robot.cargoIntake.startEjecting();
+    }
 
-  @Override
-  protected void end() {
-    logger.debug("Stopped ejecting");
+    @Override
+    protected void end() {
+        logger.debug("Stopped ejecting");
 
-    Robot.cargoIntake.stop();
-  }
+        Robot.cargoIntake.stop();
+    }
 }

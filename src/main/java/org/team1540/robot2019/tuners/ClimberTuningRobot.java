@@ -18,44 +18,44 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class ClimberTuningRobot extends TimedRobot {
 
-  private Joystick joystick = new Joystick(1);
-  private JoystickButton button1 = new JoystickButton(joystick, 1);
-  private JoystickButton button2 = new JoystickButton(joystick, 2);
-  private JoystickButton button3 = new JoystickButton(joystick, 3);
-  private JoystickButton button4 = new JoystickButton(joystick, 4);
+    private Joystick joystick = new Joystick(1);
+    private JoystickButton button1 = new JoystickButton(joystick, 1);
+    private JoystickButton button2 = new JoystickButton(joystick, 2);
+    private JoystickButton button3 = new JoystickButton(joystick, 3);
+    private JoystickButton button4 = new JoystickButton(joystick, 4);
 
-  @Override
-  public void robotInit() {
-    PreferenceManager.getInstance().add(new Tuning());
+    @Override
+    public void robotInit() {
+        PreferenceManager.getInstance().add(new Tuning());
 
-    Scheduler.getInstance().run();
+        Scheduler.getInstance().run();
 
-    Hardware.initClimber();
-    Hardware.initNavX();
-    Hardware.initElevator();
-    Hardware.initDrive();
-    Hardware.initPressureSensor();
+        Hardware.initClimber();
+        Hardware.initNavX();
+        Hardware.initElevator();
+        Hardware.initDrive();
+        Hardware.initPressureSensor();
 
-    ShuffleboardDisplay.init();
+        ShuffleboardDisplay.init();
 
-    Robot.climber = new Climber();
-    Robot.elevator = new Elevator();
-    Robot.drivetrain = new Drivetrain();
+        Robot.climber = new Climber();
+        Robot.elevator = new Elevator();
+        Robot.drivetrain = new Drivetrain();
 
-    button1.whenPressed(new RaiseUpGyroAssist());
-    button2.whenPressed(new PrepareForClimb());
-    button3
-        .whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
-    button3.whenPressed(new SimpleCommand("stahp", () -> Robot.climber.setArms(0), Robot.climber));
-  }
+        button1.whenPressed(new RaiseUpGyroAssist());
+        button2.whenPressed(new PrepareForClimb());
+        button3
+            .whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
+        button3.whenPressed(new SimpleCommand("stahp", () -> Robot.climber.setArms(0), Robot.climber));
+    }
 
-  @Override
-  public void teleopPeriodic() {
+    @Override
+    public void teleopPeriodic() {
 
-  }
+    }
 
-  @Override
-  public void robotPeriodic() {
-    Scheduler.getInstance().run();
-  }
+    @Override
+    public void robotPeriodic() {
+        Scheduler.getInstance().run();
+    }
 }

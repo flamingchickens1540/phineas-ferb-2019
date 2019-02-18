@@ -6,19 +6,19 @@ import org.team1540.robot2019.Tuning;
 
 public class MoveWristUp extends Command {
 
-  @Override
-  protected void initialize() {
-    Robot.wrist.clearMidFlag();
-    Robot.wrist.set(Tuning.wristUpTravelThrot);
-  }
+    @Override
+    protected void initialize() {
+        Robot.wrist.clearMidFlag();
+        Robot.wrist.set(Tuning.wristUpTravelThrot);
+    }
 
-  @Override
-  protected void end() {
-    Robot.wrist.set(Tuning.wristHoldThrot);
-  }
+    @Override
+    protected void end() {
+        Robot.wrist.set(Tuning.wristHoldThrot);
+    }
 
-  @Override
-  protected boolean isFinished() {
-    return Robot.wrist.getMidFlag();
-  }
+    @Override
+    protected boolean isFinished() {
+        return Robot.wrist.getMidFlag();
+    }
 }

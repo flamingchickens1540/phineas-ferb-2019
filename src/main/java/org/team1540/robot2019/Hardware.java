@@ -17,9 +17,8 @@ import org.team1540.rooster.wrappers.ChickenTalon;
 import org.team1540.rooster.wrappers.ChickenVictor;
 
 /**
- * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I
- * centralize the motors themselves. This also means we don't have to redo loads of config when
- * making alternative robots or funky testing code.
+ * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I centralize the motors themselves. This also means we don't have to redo loads of config when making
+ * alternative robots or funky testing code.
  */
 public class Hardware {
 
@@ -214,7 +213,7 @@ public class Hardware {
   }
 
   public static void initIntake() {
-      logger.info("Initializing cargoIntake...");
+    logger.info("Initializing cargoIntake...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     intakeTop = createController(RobotMap.INTAKE_TOP);
@@ -235,7 +234,7 @@ public class Hardware {
     intakeSensor = new DigitalInput(RobotMap.INTAKE_SENSOR);
 
     double end = RobotController.getFPGATime() / 1000.0;
-      logger.info("Initialized cargoIntake in " + (end - start) + " ms");
+    logger.info("Initialized cargoIntake in " + (end - start) + " ms");
   }
 
   public static void initHatchMech() {
@@ -327,8 +326,8 @@ public class Hardware {
 
     PhineasUtilities.processStickyFaults("Wrist", "motor", wristMotor);
 
-      PhineasUtilities.processStickyFaults("CargoIntake", "top", intakeTop);
-      PhineasUtilities.processStickyFaults("CargoIntake", "bottom", intakeBtm);
+    PhineasUtilities.processStickyFaults("CargoIntake", "top", intakeTop);
+    PhineasUtilities.processStickyFaults("CargoIntake", "bottom", intakeBtm);
   }
 
   public static ChickenController createController(int id) {
