@@ -67,12 +67,12 @@ public class PointLineupDumb extends Command {
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
         if (x != 0) {
 //        if (goal == 0) {
-            goal = -(x - Math.toRadians(6.6)) + Math.toRadians(-Robot.navx.getYaw());
+            goal = -(x - Math.toRadians(7)) + Math.toRadians(-Robot.navx.getYaw());
         }
         // These numbers must be tuned for your Robot!  Be careful!
         final double STEER_K = -10;                    // how hard to turn toward the target
         final double MAX_STEER = 2.0;
-        final double MIN_STEER = 0.5;
+        final double MIN_STEER = 0.3;
 
         double angleError = getAngleError(goal);
 

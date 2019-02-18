@@ -7,9 +7,11 @@ public class PurePursuitThenPoint extends CommandGroup {
 
     public PurePursuitThenPoint() {
         addSequential(new PurePursuitLineup(Robot.limelightLocalization, Robot.wheelOdometry));
-        addSequential(new PointLineup(Robot.limelightLocalization, Robot.wheelOdometry, Robot.lastOdomToVisionTarget));
+
+        addSequential(new PointLineupDumb());
+//        addSequential(new PointLineup(Robot.limelightLocalization, Robot.wheelOdometry, Robot.lastOdomToVisionTarget));
+
         addSequential(new DriveVelocityForTime(0.4, 0.5));
-//    addSequential(new DrivePercentForTime(0.3, 0.2));
     }
 
 }
