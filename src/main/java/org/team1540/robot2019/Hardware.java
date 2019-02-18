@@ -326,8 +326,8 @@ public class Hardware {
 
         StickyFaultsProcessor.processStickyFaults("Wrist", "motor", wristMotor);
 
-        StickyFaultsProcessor.processStickyFaults("CargoMech", "top", intakeTop);
-        StickyFaultsProcessor.processStickyFaults("CargoMech", "bottom", intakeBtm);
+        StickyFaultsProcessor.processStickyFaults("Intake", "top", intakeTop);
+        StickyFaultsProcessor.processStickyFaults("Intake", "bottom", intakeBtm);
     }
 
     public static ChickenController createController(int id) {

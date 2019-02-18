@@ -28,6 +28,6 @@ public class CargoMechSelfTest extends CommandGroup {
             }
         }, Robot.cargoMechanism));
         addSequential(
-            new SimpleCommand("Print status", () -> logger.info("CargoMech self-test complete")));
+            new SimpleCommand("Print status", () -> logger.info("Intake self-test complete")));
     }
 }

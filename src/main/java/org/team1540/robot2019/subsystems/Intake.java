@@ -13,7 +13,7 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class CargoMech extends Subsystem {
+public class Intake extends Subsystem {
 
     private NetworkTable table = NetworkTableInstance.getDefault().getTable("cargoMechanism");
     private NetworkTableEntry hasBallEntry = table.getEntry("hasBall");

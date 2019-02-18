@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.cargo.EjectCargoThenDown;
-import org.team1540.robot2019.commands.cargo.FloorIntakeCargo;
-import org.team1540.robot2019.commands.cargo.LoadingStationIntakeCargo;
+import org.team1540.robot2019.commands.cargo.EjectThenDown;
+import org.team1540.robot2019.commands.cargo.FloorIntake;
+import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.climber.PrepareForClimb;
@@ -110,13 +110,13 @@ public class OI {
         elevatorCargoShipButton
             .whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
-        intakeLoadingStationButton.whenPressed(new LoadingStationIntakeCargo());
+        intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
 
-        Command intakeCommand = new FloorIntakeCargo();
+        Command intakeCommand = new FloorIntake();
         autoIntakeButton.whenPressed(intakeCommand);
         cancelIntakeButton
-            .whenPressed(new SimpleCommand("Cancel CargoMech", intakeCommand::cancel));
-        ejectButton.whenPressed(new EjectCargoThenDown());
+            .whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
+        ejectButton.whenPressed(new EjectThenDown());
 
         getHatchButton.whenPressed(new ExtendHatch());
         getHatchFloorButton.whenPressed(new FloorGrabHatch());
