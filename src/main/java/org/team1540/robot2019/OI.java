@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.climber.RaiseUpGyroAssist;
+import org.team1540.robot2019.commands.climber.Level3Climb;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.groups.EjectThenDown;
@@ -17,9 +17,6 @@ import org.team1540.robot2019.commands.groups.IntakeLoadingStation;
 import org.team1540.robot2019.commands.groups.IntakeSequence;
 import org.team1540.robot2019.commands.groups.Level2Climb;
 import org.team1540.robot2019.commands.groups.PlaceHatchThenDown;
-import org.team1540.robot2019.commands.groups.PrepareForClimb;
-import org.team1540.robot2019.commands.groups.ResetClimber;
-import org.team1540.robot2019.commands.hatch.GetHatch;
 import org.team1540.robot2019.commands.hatch.GrabHatch;
 import org.team1540.robot2019.commands.hatch.HatchSlideOut;
 import org.team1540.rooster.Utilities;
@@ -27,6 +24,7 @@ import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.triggers.StrictDPadButton;
 import org.team1540.rooster.util.SimpleCommand;
+import org.team1540.rooster.util.SimpleConditionalCommand;
 
 public class OI {
 
@@ -42,8 +40,6 @@ public class OI {
   public static final int RB = 6;
   public static final int BACK = 7;
   public static final int START = 8;
-  public static final int LEFT_STICK_PRESS = 9;
-  public static final int RIGHT_STICK_PRESS = 10;
 
   // Axes
   public static final int LEFT_X = 0;
@@ -68,16 +64,17 @@ public class OI {
   private static Button cancelIntakeButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_Y);
   private static JoystickButton ejectButton = new JoystickButton(copilot, B);
 
-  private static JoystickButton getHatchButton = new JoystickButton(copilot, X);
-  private static JoystickButton getHatchFloorButton = new JoystickButton(copilot, START);
+  private static JoystickButton prepGetHatchButton = new JoystickButton(copilot, X);
+  private static JoystickButton prepGetHatchFloorButton = new JoystickButton(copilot, START);
   private static Button grabHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_TRIG);
   private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
 
-  private static JoystickButton prepareToClimbButton = new JoystickButton(copilot, BACK);
-  private static JoystickButton startClimbingButton = new JoystickButton(copilot, RB);
-  private static AxisButton startClimbingSafety = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
-  private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB);
-  public static JoystickButton climberResetButton = new JoystickButton(copilot, LEFT_STICK_PRESS);
+  private static Button climbingSafety = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
+  private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
+  private static JoystickButton climbLevel2Button = new JoystickButton(copilot, LB); // + safety
+  private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB); // also use this for end of lvl 2 climb
+
+  // driver buttons
 
   public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
 
@@ -121,25 +118,14 @@ public class OI {
         .whenPressed(new SimpleCommand("cancel intake", () -> intakeCommand.cancel()));
     ejectButton.whenPressed(new EjectThenDown());
 
-    getHatchButton.whenPressed(new GetHatch());
-    getHatchFloorButton.whenPressed(new GetHatchFloor());
+    prepGetHatchButton.whenPressed(new HatchSlideOut());
+    prepGetHatchFloorButton.whenPressed(new GetHatchFloor());
     grabHatchButton.whenPressed(new GrabHatch());
     placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
-    prepareToClimbButton.whenPressed(new PrepareForClimb());
-    startClimbingButton.whenPressed(new SimpleCommand("Climb Safe", () -> {
-      if (startClimbingSafety.get()) {
-        new RaiseUpGyroAssist().start();
-      }
-    }));
-    climberCylinderUp
-        .whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
-    climberResetButton.whenPressed(new ResetClimber());
-    climberCylinderUp.whenPressed(new SimpleCommand("Foo", () -> {
-      if (startClimbingSafety.get()) {
-        new Level2Climb().start();
-      }
-    }));
+    climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new Level3Climb()));
+    climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new Level2Climb()));
+    climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
 
     double end = RobotController.getFPGATime() / 1000.0;
     logger.info("Initialized buttons in " + (end - start) + " ms");

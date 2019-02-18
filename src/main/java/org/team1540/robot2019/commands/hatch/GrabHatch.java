@@ -1,16 +1,17 @@
 package org.team1540.robot2019.commands.hatch;
 
-import edu.wpi.first.wpilibj.command.InstantCommand;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.Tuning;
+import org.team1540.rooster.util.SimpleCommand;
 
-public class GrabHatch extends InstantCommand {
+public class GrabHatch extends CommandGroup {
 
     public GrabHatch() {
-        requires(Robot.hatchMech);
-    }
-
-    protected void initialize() {
-        Robot.hatchMech.attach();
+        addSequential(new SimpleCommand("grab", Robot.hatchMech::grab, Robot.hatchMech));
+        addSequential(new WaitCommand(Tuning.hatchGetTime));
+        addSequential(new HatchSlideIn());
     }
 
 }
