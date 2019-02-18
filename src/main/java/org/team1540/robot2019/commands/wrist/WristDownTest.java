@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 
 public class WristDownTest extends CommandGroup {
 
-  public WristDownTest() {
-    addSequential(new LowerWrist());
-    addSequential(new TimedCommand(10000));
-  }
+    public WristDownTest() {
+        addSequential(new LowerWrist());
+        addSequential(new TimedCommand(10000));
+    }
 
 }

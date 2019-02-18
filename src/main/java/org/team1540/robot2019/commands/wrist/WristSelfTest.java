@@ -7,15 +7,15 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class WristSelfTest extends CommandGroup {
 
-  public static final Logger logger = Logger.getLogger(WristSelfTest.class);
+    public static final Logger logger = Logger.getLogger(WristSelfTest.class);
 
-  public WristSelfTest() {
-    addSequential(
-        new SimpleCommand("Print status", () -> logger.info("Beginning wrist self-test")));
-    addSequential(new LowerWrist());
-    addParallel(new WristUp());
-    addSequential(new TimedCommand(1));
-    addSequential(new SimpleCommand("Print status", () -> logger.info("Wrist self-test complete")));
-  }
+    public WristSelfTest() {
+        addSequential(
+            new SimpleCommand("Print status", () -> logger.info("Beginning wrist self-test")));
+        addSequential(new LowerWrist());
+        addParallel(new WristUp());
+        addSequential(new TimedCommand(1));
+        addSequential(new SimpleCommand("Print status", () -> logger.info("Wrist self-test complete")));
+    }
 
 }
