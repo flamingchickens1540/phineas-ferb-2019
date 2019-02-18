@@ -17,7 +17,7 @@ import org.team1540.rooster.functional.Executable;
 
 public class PurePursuitLineup extends Command {
 
-    private static final double ANGULAR_KP = 6;
+    private static final double ANGULAR_KP = -5;
     private static final double LINEAR_KP = 4;
     private static final double MAX_VEL_X = 0.8;
     private static final double MIN_VEL_X = 0.2;
@@ -42,6 +42,7 @@ public class PurePursuitLineup extends Command {
             .then(new FeedForwardProcessor(0, 0, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput());
+        System.out.println("Pure pursuit starting");
     }
 
     public PurePursuitLineup(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry, Runnable onFail) {
@@ -119,6 +120,7 @@ public class PurePursuitLineup extends Command {
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         return TrigUtils
-            .signedAngleError(Math.atan2((-(goal.toTransform2D().getY()) - odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), Robot.navx.getYawRadians());
+//            .signedAngleError(Math.atan2(goal.toTransform2D().getX() - odomPosition.getX(), goal.toTransform2D().getY() - odomPosition.getY()), -Robot.navx.getYawRadians());
+            .signedAngleError(Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), -Robot.navx.getYawRadians());
     }
 }

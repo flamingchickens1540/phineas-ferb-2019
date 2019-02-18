@@ -94,7 +94,7 @@ public class AutoAlignTuningRobot extends TimedRobot {
             .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
             .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 
-        Robot.lastOdomToLimelight = goal;
+          Robot.lastOdomToLimelightGoal = goal;
         goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
       }
       if (alignCommand == null || !alignCommand.isRunning()) {
@@ -130,7 +130,7 @@ public class AutoAlignTuningRobot extends TimedRobot {
       SmartDashboard.putData(resetWheelOdom);
 
     autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelight, Robot.navx);
+        alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelightGoal, Robot.navx);
 //        alignCommand = new UDPVelocityTwistDrive();
       alignCommand.start();
     }));

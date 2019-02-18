@@ -1,20 +1,17 @@
 package org.team1540.robot2019.utils;
 
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI.Port;
+import org.team1540.robot2019.Hardware;
 
 public class NavxWrapper {
-
-    private AHRS navx = new AHRS(Port.kMXP);
 
     /**
      * @return Navx yaw counter-clockwise in radians
      */
     public double getYawRadians() {
-        return -Math.toRadians(navx.getYaw());
+        return -Math.toRadians(Hardware.navx.getYaw());
     }
 
     public double getAngleRadians() {
-        return -Math.toRadians(navx.getAngle());
+        return -Math.toRadians(Hardware.navx.getAngle());
     }
 }

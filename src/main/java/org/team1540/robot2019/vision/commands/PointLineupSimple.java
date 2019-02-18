@@ -2,8 +2,10 @@ package org.team1540.robot2019.vision.commands;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.robot2019.utils.TrigUtils;
@@ -14,7 +16,7 @@ import org.team1540.rooster.functional.Executable;
 public class PointLineupSimple extends Command {
 
     private static final double GOAL_TOLERANCE_ANGULAR = 0.3;
-    private static final double MIN_VEL_THETA = 0.3;
+    private static final double MIN_VEL_THETA = 0.1;
     private static final double MAX_VEL_THETA = 2.0;
     private static final double ANGULAR_KP = 10;
     private static final double ANGLE_OFFSET = Math.toRadians(7);
@@ -22,28 +24,34 @@ public class PointLineupSimple extends Command {
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
     private Double goal = null;
+    private Transform3D prevGoal = null;
 
     private boolean endFlag = false;
 
 
     public PointLineupSimple() {
         requires(Robot.drivetrain);
-        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
-        if (x == 0) {
-            Robot.drivetrain.stop();
-            endFlag = true;
-        } else {
-            goal = x - Robot.navx.getYawRadians();
-        }
-    }
-
-    public PointLineupSimple(double goal) {
-        this.goal = goal;
-        requires(Robot.drivetrain);
     }
 
     @Override
     protected void initialize() {
+        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
+        if (x == 0) {
+            prevGoal = Robot.lastOdomToVisionTarget;
+            if (prevGoal == null) {
+                Robot.drivetrain.stop();
+                System.out.println("Point lineup simple: Unable to find target and no alternative specified");
+                return;
+            }
+            System.out.println("Point lineup simple: Unable to find target. Using alternative goal");
+            Vector3D odomPosition = Robot.wheelOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
+            goal = prevGoal.toTransform2D().getTheta();
+//            goal = -Math.atan2((-prevGoal.toTransform2D().getY()) - (-odomPosition.getY()), prevGoal.toTransform2D().getX() - odomPosition.getX());
+            System.out.println(goal);
+        } else {
+            goal = x - Robot.navx.getYawRadians();
+            System.out.println("Point lineup simple starting");
+        }
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(0, 0, 0))
@@ -81,7 +89,10 @@ public class PointLineupSimple extends Command {
 
     @Override
     protected boolean isFinished() {
-        return goal == null || Math.abs(getAngleError(goal)) < Math.toRadians(GOAL_TOLERANCE_ANGULAR);
+        System.out.println(Robot.drivetrain.getTwist().getOmega());
+        return goal == null ||
+            (Math.abs(getAngleError(goal)) < Math.toRadians(GOAL_TOLERANCE_ANGULAR)
+                && Math.abs(Robot.drivetrain.getTwist().getOmega()) < 0.2);
     }
 
     @Override
