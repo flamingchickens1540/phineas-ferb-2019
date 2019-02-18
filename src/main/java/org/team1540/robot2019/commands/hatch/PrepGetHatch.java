@@ -7,7 +7,7 @@ import org.team1540.rooster.util.SimpleCommand;
 public class PrepGetHatch extends CommandGroup {
 
     public PrepGetHatch() {
-      addSequential(new SimpleCommand("Hatch Slide Out", Robot.hatchMech::slideOut, Robot.hatchMech));
+        addSequential(new SimpleCommand("Hatch Slide Out", Robot.hatch::slideOut, Robot.hatch));
 //    addSequential(new GrabHatch());
 //    addSequential(new WaitCommand(0.3));
 //    addSequential(new HatchSlideIn());
