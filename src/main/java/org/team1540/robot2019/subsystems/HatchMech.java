@@ -15,11 +15,11 @@ public class HatchMech extends Subsystem {
         hatchSlide.set(false);
     }
 
-    public void attach() {
+    public void grab() {
         hatchGrabber.set(false);
     }
 
-    public void detach() {
+    public void release() {
         hatchGrabber.set(true);
     }
 
