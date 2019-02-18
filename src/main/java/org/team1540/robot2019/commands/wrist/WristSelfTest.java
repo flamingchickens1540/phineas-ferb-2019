@@ -12,8 +12,8 @@ public class WristSelfTest extends CommandGroup {
     public WristSelfTest() {
         addSequential(
             new SimpleCommand("Print status", () -> logger.info("Beginning wrist self-test")));
-        addSequential(new LowerWrist());
-        addParallel(new WristUp());
+        addSequential(new WristDown());
+        addParallel(new WristUpOrHold());
         addSequential(new TimedCommand(1));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Wrist self-test complete")));
     }
