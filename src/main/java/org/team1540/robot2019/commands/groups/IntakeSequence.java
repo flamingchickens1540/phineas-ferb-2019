@@ -10,7 +10,7 @@ import org.team1540.rooster.util.SimpleCommand;
 public class IntakeSequence extends CommandGroup {
 
   public IntakeSequence() {
-    addParallel(new SimpleCommand("alaska's", Robot.hatchMech::slideIn, Robot.hatchMech));
+    addParallel(new SimpleCommand("alaska's", Robot.hatch::slideIn, Robot.hatch));
     addSequential(new MoveElevatorToZero());
     addParallel(new IntakeAuto());
     addSequential(new LowerWrist());

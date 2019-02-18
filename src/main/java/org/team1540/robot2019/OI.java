@@ -119,7 +119,7 @@ public class OI {
 
         getHatchButton.whenPressed(new PrepGetHatch());
         getHatchFloorButton.whenPressed(new GetHatchFloor());
-        grabHatchButton.whenPressed(new SimpleCommand("Hatch Grab", Robot.hatchMech::grab, Robot.hatchMech));
+        grabHatchButton.whenPressed(new SimpleCommand("Hatch Grab", Robot.hatch::grab, Robot.hatch));
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
         prepareToClimbButton.whenPressed(new PrepareForClimb());

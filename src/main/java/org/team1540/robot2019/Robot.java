@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
-import org.team1540.robot2019.subsystems.HatchMech;
+import org.team1540.robot2019.subsystems.Hatch;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.Wrist;
 
@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
   public static Elevator elevator;
   public static Wrist wrist;
   public static Intake intake;
-  public static HatchMech hatchMech;
+  public static Hatch hatch;
   public static Climber climber;
 
   public static boolean debugMode = false;
@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
     elevator = new Elevator();
     wrist = new Wrist();
     intake = new Intake();
-    hatchMech = new HatchMech();
+    hatch = new Hatch();
     climber = new Climber();
 
     OI.init();
@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
     brakeTimer.start();
     disableBrakes = true;
 
-    Robot.hatchMech.slideIn();
+    Robot.hatch.slideIn();
 
     if (DriverStation.getInstance().isFMSAttached()) {
       logger.debug("FMS is attached, auto-stopping recording");
@@ -154,7 +154,7 @@ public class Robot extends TimedRobot {
     }
 
     if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
-      Robot.hatchMech.slideOut();
+      Robot.hatch.slideOut();
     }
   }
 
