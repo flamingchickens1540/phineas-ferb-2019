@@ -143,9 +143,9 @@ public class Robot extends TimedRobot {
       // TODO: Clean this up
       if (alignCommand == null || !alignCommand.isRunning()) {
         if (targetFound && DriverStation.getInstance().isEnabled() && SmartDashboard.getBoolean("rumbleEnabled", true)) {
-          OI.driver.setRumble(RumbleType.kLeftRumble, 1);
+//          OI.driver.setRumble(RumbleType.kLeftRumble, 1);
         } else {
-          OI.driver.setRumble(RumbleType.kLeftRumble, 0);
+//          OI.driver.setRumble(RumbleType.kLeftRumble, 0);
         }
       }
       try {
