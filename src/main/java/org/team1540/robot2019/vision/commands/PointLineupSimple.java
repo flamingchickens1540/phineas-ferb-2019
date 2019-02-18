@@ -13,23 +13,21 @@ import org.team1540.rooster.functional.Executable;
 
 public class PointLineupSimple extends Command {
 
-    private double limelightSteerCommand = 0.0;
+    private static final double GOAL_TOLERANCE_ANGULAR = 0.3;
+    private static final double MIN_VEL_THETA = 0.3;
+    private static final double MAX_VEL_THETA = 2.0;// how hard to turn toward the target
+    private static final double ANGULAR_KP = -10;
+    private static final double ANGLE_OFFSET = Math.toRadians(7);
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
-    private double goal;
+    private Double goal = null;
 
     private boolean endFlag = false;
 
 
     public PointLineupSimple() {
         requires(Robot.drivetrain);
-        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
-        pipeline = twist2DInput
-            .then(new FeedForwardProcessor(0, 0, 0))
-//        .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
-            .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
-            .then(Robot.drivetrain.getPipelineOutput());
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
         if (x == 0) {
             Robot.drivetrain.stop();
@@ -42,64 +40,53 @@ public class PointLineupSimple extends Command {
     public PointLineupSimple(double goal) {
         this.goal = goal;
         requires(Robot.drivetrain);
-        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
-        pipeline = twist2DInput
-            .then(new FeedForwardProcessor(0, 0, 0))
-//        .then(new FeedForwardProcessor(0.27667, 0.054083,0.08694))
-            .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
-            .then(Robot.drivetrain.getPipelineOutput());
     }
 
     @Override
     protected void initialize() {
+        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
+        pipeline = twist2DInput
+            .then(new FeedForwardProcessor(0, 0, 0))
+            .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
+            .then(Robot.drivetrain.getPipelineOutput());
         Robot.drivetrain.configTalonsForVelocity();
     }
 
     @Override
     protected void execute() {
-        updateLimelight();
-        Twist2D cmdVel = new Twist2D(0, 0, limelightSteerCommand);
+        if (goal == null) {
+            return;
+        }
+        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
+        if (x != 0) {
+            goal = -(x - ANGLE_OFFSET) + Math.toRadians(-Robot.navx.getYaw());
+        }
+
+        double angleError = getAngleError(goal);
+
+        double cmdVelTheta = angleError * ANGULAR_KP;
+        if (cmdVelTheta > MAX_VEL_THETA) {
+            cmdVelTheta = MAX_VEL_THETA;
+        } else if (cmdVelTheta < -MAX_VEL_THETA) {
+            cmdVelTheta = -MAX_VEL_THETA;
+        } else if (cmdVelTheta > -MIN_VEL_THETA && cmdVelTheta < MIN_VEL_THETA) {
+            cmdVelTheta = Math.copySign(MIN_VEL_THETA, cmdVelTheta);
+        }
+        System.out.printf("Angle error: %f Steer command: %f\n", angleError, cmdVelTheta);
+
+        Twist2D cmdVel = new Twist2D(0, 0, cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();
     }
 
-    public void updateLimelight() {
-        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
-        if (x != 0) {
-//        if (goal == 0) {
-            goal = -(x - Math.toRadians(7)) + Math.toRadians(-Robot.navx.getYaw());
-        }
-        // These numbers must be tuned for your Robot!  Be careful!
-        final double STEER_K = -10;                    // how hard to turn toward the target
-        final double MAX_STEER = 2.0;
-        final double MIN_STEER = 0.3;
-
-        double angleError = getAngleError(goal);
-
-        // Start with proportional steering
-        double steer_cmd = angleError * STEER_K;
-        if (steer_cmd > MAX_STEER) {
-            steer_cmd = MAX_STEER;
-        } else if (steer_cmd < -MAX_STEER) {
-            steer_cmd = -MAX_STEER;
-        } else if (steer_cmd > -MIN_STEER && steer_cmd < MIN_STEER) {
-            steer_cmd = Math.copySign(MIN_STEER, steer_cmd);
-        }
-        System.out.printf("Angle error: %f Steer command: %f\n", angleError, steer_cmd);
-        limelightSteerCommand = steer_cmd;
+    @Override
+    protected boolean isFinished() {
+        return goal == null || Math.abs(getAngleError(goal)) < Math.toRadians(GOAL_TOLERANCE_ANGULAR);
     }
 
     @Override
-    protected boolean isFinished() {
-        if (endFlag) {
-            Robot.drivetrain.stop();
-            return true;
-        }
-        if (Math.abs(getAngleError(goal)) < Math.toRadians(0.3)) {
-            Robot.drivetrain.stop();
-            return true;
-        }
-        return false;
+    protected void end() {
+        Robot.drivetrain.stop();
     }
 
     private double getAngleError(double x) {

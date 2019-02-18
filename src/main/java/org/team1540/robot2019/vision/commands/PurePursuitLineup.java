@@ -103,14 +103,12 @@ public class PurePursuitLineup extends Command {
 
     @Override
     protected boolean isFinished() {
-        if (goal == null) {
-            return true;
-        }
-        if (getDistanceError() < GOAL_DISTANCE_TOLERANCE) {
-            Robot.drivetrain.stop();
-            return true;
-        }
-        return false;
+        return goal == null || getDistanceError() < GOAL_DISTANCE_TOLERANCE;
+    }
+
+    @Override
+    protected void end() {
+        Robot.drivetrain.stop();
     }
 
     private double getDistanceError() {
