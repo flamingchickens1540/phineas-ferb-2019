@@ -11,11 +11,11 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
+import org.team1540.robot2019.commands.climber.Level2Climb;
 import org.team1540.robot2019.commands.climber.Level3Climb;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.groups.GetHatchFloor;
-import org.team1540.robot2019.commands.groups.Level2Climb;
+import org.team1540.robot2019.commands.hatch.GetHatchFloor;
 import org.team1540.robot2019.commands.hatch.GrabHatch;
 import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
 import org.team1540.rooster.Utilities;
@@ -116,7 +116,7 @@ public class OI {
             .whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
-        prepGetHatchButton.whenPressed(new HatchSlideOut());
+        prepGetHatchButton.whenPressed(new SimpleCommand("extend", Robot.hatch::extend, Robot.hatch));
         prepGetHatchFloorButton.whenPressed(new GetHatchFloor());
         grabHatchButton.whenPressed(new GrabHatch());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
