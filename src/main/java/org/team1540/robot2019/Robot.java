@@ -35,7 +35,7 @@ import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.NavxWrapper;
 import org.team1540.robot2019.utils.StateChangeDetector;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
-import org.team1540.robot2019.vision.commands.PointLineupSimple;
+import org.team1540.robot2019.vision.commands.PurePursuitThenPoint;
 import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
 import org.team1540.rooster.util.SimpleCommand;
 
@@ -177,8 +177,8 @@ public class Robot extends TimedRobot {
 
     autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
 //      alignCommand = new PurePursuitLineup(Robot.limelightLocalization, Robot.wheelOdometry);
-        alignCommand = new PointLineupSimple();
-//      alignCommand = new PurePursuitThenPoint();
+//        alignCommand = new PointLineupSimple();
+        alignCommand = new PurePursuitThenPoint();
 //      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelightGoal, Robot.navx);
 //        alignCommand = new UDPVelocityTwistDrive();
       alignCommand.start();
@@ -294,16 +294,18 @@ SmartDashboard.putBoolean("IsHatchPreload", false);
 
     @Override
     public void teleopPeriodic() {
-        if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
-            && (Robot.climber.getCurrentCommand() == null)) {
-            if (Hardware.compressor.getClosedLoopControl()) {
-                logger.debug("Stopping compressor because elevator is up");
-                Hardware.compressor.stop();
-            }
-        } else if (!Hardware.compressor.getClosedLoopControl()) {
-            logger.debug("Restarting compressor");
-            Hardware.compressor.start();
-        }
+        Hardware.compressor.stop();
+
+//        if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
+//            && (Robot.climber.getCurrentCommand() == null)) {
+//            if (Hardware.compressor.getClosedLoopControl()) {
+//                logger.debug("Stopping compressor because elevator is up");
+//                Hardware.compressor.stop();
+//            }
+//        } else if (!Hardware.compressor.getClosedLoopControl()) {
+//            logger.debug("Restarting compressor");
+//            Hardware.compressor.start();
+//        }
     }
 
     @Override
