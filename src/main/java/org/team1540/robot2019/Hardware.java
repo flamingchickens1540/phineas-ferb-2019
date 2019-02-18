@@ -71,6 +71,8 @@ public class Hardware {
 
     public static DoubleSolenoid climberCylinder;
 
+    public static Solenoid redLEDs;
+    public static Solenoid greenLEDs;
 
     public static AnalogInput pressureSensor;
 
@@ -94,6 +96,7 @@ public class Hardware {
         initCompressor();
         initPressureSensor();
         initNavX();
+        initLEDs();
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized robot hardware in " + (end - start) + " ms");
@@ -314,6 +317,17 @@ public class Hardware {
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized NavX-MXP in " + (end - start) + " ms");
+    }
+
+    public static void initLEDs() {
+        logger.info("Initializing LEDs...");
+        double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+        redLEDs = new Solenoid(RobotMap.LEDS_RED);
+        greenLEDs = new Solenoid(RobotMap.LEDS_GREEN);
+
+        double end = RobotController.getFPGATime() / 1000.0;
+        logger.info("Initialized LEDs in " + (end - start) + " ms");
     }
 
     public static void checkStickyFaults() {
