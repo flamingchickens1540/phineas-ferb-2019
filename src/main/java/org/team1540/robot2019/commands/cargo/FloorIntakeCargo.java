@@ -6,9 +6,9 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.wrist.WristDown;
 import org.team1540.rooster.util.SimpleCommand;
 
-public class LowerThenIntakeCargo extends CommandGroup {
+public class FloorIntakeCargo extends CommandGroup {
 
-    public LowerThenIntakeCargo() {
+    public FloorIntakeCargo() {
         addParallel(new SimpleCommand("alaska's", Robot.hatch::retract, Robot.hatch));
         addSequential(new MoveElevatorToZero());
         addParallel(new IntakeCargo());

@@ -7,9 +7,9 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.rooster.util.SimpleCommand;
 
-public class LoadingStationCargoIntake extends CommandGroup {
+public class LoadingStationIntakeCargo extends CommandGroup {
 
-    public LoadingStationCargoIntake() {
+    public LoadingStationIntakeCargo() {
         addParallel(new SimpleCommand("Retract Hatch", Robot.hatch::retract, Robot.hatch));
         addSequential(new MoveElevatorToPosition(Tuning.elevatorLoadingStationPosition));
         addSequential(new IntakeCargo());

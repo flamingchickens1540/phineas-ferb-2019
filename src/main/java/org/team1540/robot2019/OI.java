@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
-import org.team1540.robot2019.commands.cargo.LoadingStationCargoIntake;
-import org.team1540.robot2019.commands.cargo.LowerThenIntakeCargo;
+import org.team1540.robot2019.commands.cargo.FloorIntakeCargo;
+import org.team1540.robot2019.commands.cargo.LoadingStationIntakeCargo;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.climber.PrepareForClimb;
@@ -110,9 +110,9 @@ public class OI {
         elevatorCargoShipButton
             .whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
-        intakeLoadingStationButton.whenPressed(new LoadingStationCargoIntake());
+        intakeLoadingStationButton.whenPressed(new LoadingStationIntakeCargo());
 
-        Command intakeCommand = new LowerThenIntakeCargo();
+        Command intakeCommand = new FloorIntakeCargo();
         autoIntakeButton.whenPressed(intakeCommand);
         cancelIntakeButton
             .whenPressed(new SimpleCommand("Cancel CargoMech", intakeCommand::cancel));
