@@ -99,7 +99,8 @@ public class Tuning {
 
   // hatch mech
   public static double hatchGetTime = 0.3;
-  public static double hatchPlaceTime = 0.3;
+  public static double hatchPlaceTime1 = 0.3;
+  public static double hatchPlaceTime2 = 0.3;
   public static double hatchFloorTime = 0.5;
   public static double hatchEjectThenDownTime = 0.3;
 
