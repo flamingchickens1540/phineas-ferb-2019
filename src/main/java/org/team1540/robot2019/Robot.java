@@ -163,6 +163,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("test-goal/position/y", 0);
     SmartDashboard.putNumber("test-goal/orientation/z", 0);
 
+      SmartDashboard.putNumber("pointkp", 0);
+      SmartDashboard.putNumber("pointki", 0);
+      SmartDashboard.putNumber("pointkd", 0);
+
     // Testing code
     Command resetWheelOdom = new SimpleCommand("Update PID Values", () -> {
       drivetrain.updatePIDValues();
