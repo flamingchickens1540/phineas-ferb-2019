@@ -12,12 +12,12 @@ import org.team1540.rooster.util.SimpleCommand;
 public class GetHatchFloor extends CommandGroup {
 
     public GetHatchFloor() {
-        addParallel(new SimpleCommand("Hatch", Robot.hatch::retract, Robot.hatch));
-        addParallel(new SimpleCommand("Hatch", Robot.hatch::release, Robot.hatch));
+        addParallel(new RetractHatch());
+        addParallel(new SimpleCommand("close grabber", Robot.hatch::release, Robot.hatch));
         addSequential(new MoveElevatorToZero());
         addSequential(new WristDown());
         addSequential(new WaitCommand(Tuning.hatchFloorTime));
-        addSequential(new SimpleCommand("Hatch", Robot.hatch::extend, Robot.hatch));
+        addSequential(new ExtendHatch());
         addSequential(new Command() {
             @Override
             protected boolean isFinished() {

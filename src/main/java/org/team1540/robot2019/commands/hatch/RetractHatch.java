@@ -3,14 +3,14 @@ package org.team1540.robot2019.commands.hatch;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import org.team1540.robot2019.Robot;
 
-public class ExtendHatch extends InstantCommand {
+public class RetractHatch extends InstantCommand {
 
-    public ExtendHatch() {
+    public RetractHatch() {
         requires(Robot.hatch);
     }
 
     protected void initialize() {
-        Robot.hatch.extend();
+        Robot.hatch.retract();
     }
 
 }
