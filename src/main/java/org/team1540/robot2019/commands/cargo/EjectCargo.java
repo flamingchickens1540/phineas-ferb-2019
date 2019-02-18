@@ -1,29 +1,29 @@
-package org.team1540.robot2019.commands.intake;
+package org.team1540.robot2019.commands.cargo;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class Eject extends TimedCommand {
+public class EjectCargo extends TimedCommand {
 
-  private static final Logger logger = Logger.getLogger(Eject.class);
+  private static final Logger logger = Logger.getLogger(EjectCargo.class);
 
-  public Eject() {
+  public EjectCargo() {
     super(Tuning.intakeEjectTime);
-    requires(Robot.intake);
+    requires(Robot.cargoIntake);
   }
 
   @Override
   protected void initialize() {
     logger.debug("Ejecting ball");
-    Robot.intake.startEjecting();
+    Robot.cargoIntake.startEjecting();
   }
 
   @Override
   protected void end() {
     logger.debug("Stopped ejecting");
 
-    Robot.intake.stop();
+    Robot.cargoIntake.stop();
   }
 }
