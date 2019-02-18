@@ -9,23 +9,23 @@ import org.team1540.rooster.Utilities;
 
 public class WristTuningRobot extends TimedRobot {
 
-  private static Wrist wrist;
-  private Joystick joystick = new Joystick(0);
+    private static Wrist wrist;
+    private Joystick joystick = new Joystick(0);
 
-  @Override
-  public void robotInit() {
-    Hardware.initWrist();
+    @Override
+    public void robotInit() {
+        Hardware.initWrist();
 
-    wrist = new Wrist();
-  }
+        wrist = new Wrist();
+    }
 
-  @Override
-  public void teleopPeriodic() {
-    wrist.set(Utilities.processDeadzone(joystick.getRawAxis(1), 0.1));
-  }
+    @Override
+    public void teleopPeriodic() {
+        wrist.set(Utilities.processDeadzone(joystick.getRawAxis(1), 0.1));
+    }
 
-  @Override
-  public void robotPeriodic() {
-    Scheduler.getInstance().run();
-  }
+    @Override
+    public void robotPeriodic() {
+        Scheduler.getInstance().run();
+    }
 }
