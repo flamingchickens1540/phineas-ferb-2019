@@ -17,7 +17,7 @@ public class HatchSelfTest extends CommandGroup {
         addSequential(new PrepGetPlaceHatch());
         addSequential(new SimpleCommand("Print status", () -> logger.info("Releasing")));
         addSequential(new PlaceHatch());
-        addSequential(new SimpleCommand("Print status", () -> logger.info("Hatch self-test complete")));
+        addSequential(new SimpleCommand("Print status", () -> logger.info("HatchMech self-test complete")));
     }
 
 }

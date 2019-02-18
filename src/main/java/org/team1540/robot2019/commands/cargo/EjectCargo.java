@@ -11,19 +11,19 @@ public class EjectCargo extends TimedCommand {
 
     public EjectCargo() {
         super(Tuning.intakeEjectTime);
-        requires(Robot.cargo);
+        requires(Robot.cargoMechanism);
     }
 
     @Override
     protected void initialize() {
         logger.debug("Ejecting ball");
-        Robot.cargo.startEjecting();
+        Robot.cargoMechanism.startEjecting();
     }
 
     @Override
     protected void end() {
         logger.debug("Stopped ejecting");
 
-        Robot.cargo.stop();
+        Robot.cargoMechanism.stop();
     }
 }
