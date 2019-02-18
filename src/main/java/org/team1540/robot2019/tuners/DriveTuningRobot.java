@@ -11,23 +11,23 @@ import org.team1540.rooster.preferencemanager.PreferenceManager;
 
 public class DriveTuningRobot extends TimedRobot {
 
-  private static Drivetrain drivetrain;
-  private Joystick joystick = new Joystick(0);
+    private static Drivetrain drivetrain;
+    private Joystick joystick = new Joystick(0);
 
-  @Override
-  public void robotInit() {
-    PreferenceManager.getInstance().add(new Tuning());
+    @Override
+    public void robotInit() {
+        PreferenceManager.getInstance().add(new Tuning());
 
-    Scheduler.getInstance().run();
+        Scheduler.getInstance().run();
 
-    Hardware.initDrive();
-    OI.initJoysticks();
+        Hardware.initDrive();
+        OI.initJoysticks();
 
-    drivetrain = new Drivetrain();
-  }
+        drivetrain = new Drivetrain();
+    }
 
-  @Override
-  public void robotPeriodic() {
-    Scheduler.getInstance().run();
-  }
+    @Override
+    public void robotPeriodic() {
+        Scheduler.getInstance().run();
+    }
 }
