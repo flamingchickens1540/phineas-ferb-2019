@@ -114,7 +114,7 @@ public class OI {
         Command intakeCommand = new IntakeSequence();
         autoIntakeButton.whenPressed(intakeCommand);
         cancelIntakeButton
-            .whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
+            .whenPressed(new SimpleCommand("Cancel CargoIntake", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
         getHatchButton.whenPressed(new PrepGetHatch());

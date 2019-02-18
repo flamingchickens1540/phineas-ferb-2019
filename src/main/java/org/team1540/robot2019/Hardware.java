@@ -214,7 +214,7 @@ public class Hardware {
   }
 
   public static void initIntake() {
-    logger.info("Initializing intake...");
+      logger.info("Initializing cargoIntake...");
     double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
     intakeTop = createController(RobotMap.INTAKE_TOP);
@@ -235,7 +235,7 @@ public class Hardware {
     intakeSensor = new DigitalInput(RobotMap.INTAKE_SENSOR);
 
     double end = RobotController.getFPGATime() / 1000.0;
-    logger.info("Initialized intake in " + (end - start) + " ms");
+      logger.info("Initialized cargoIntake in " + (end - start) + " ms");
   }
 
   public static void initHatchMech() {
@@ -327,8 +327,8 @@ public class Hardware {
 
     PhineasUtilities.processStickyFaults("Wrist", "motor", wristMotor);
 
-    PhineasUtilities.processStickyFaults("Intake", "top", intakeTop);
-    PhineasUtilities.processStickyFaults("Intake", "bottom", intakeBtm);
+      PhineasUtilities.processStickyFaults("CargoIntake", "top", intakeTop);
+      PhineasUtilities.processStickyFaults("CargoIntake", "bottom", intakeBtm);
   }
 
   public static ChickenController createController(int id) {
