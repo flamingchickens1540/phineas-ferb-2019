@@ -57,39 +57,39 @@ public class Robot extends TimedRobot {
 
     public static Transform3D odom_to_base_link = Transform3D.IDENTITY;
 
-  public static TankDriveOdometryRunnable wheelOdometry;
+    public static TankDriveOdometryRunnable wheelOdometry;
 
-  public static UDPOdometryGoalSender udpSender;
-  public static UDPTwistReceiver udpReceiver;
-  public static LimelightLocalization limelightLocalization;
+    public static UDPOdometryGoalSender udpSender;
+    public static UDPTwistReceiver udpReceiver;
+    public static LimelightLocalization limelightLocalization;
 
     public static Transform3D lastOdomToLimelightGoal;
     public static Transform3D lastOdomToVisionTarget;
 
     public static LimelightInterface limelight;
 
-  public static NavxWrapper navx = new NavxWrapper();
+    public static NavxWrapper navx = new NavxWrapper();
 
-  // TODO: Move these to OI
-  static JoystickButton autoAlignButton = new JoystickButton(OI.driver, RB);
-  static JoystickButton autoAlignCancelButton = new JoystickButton(OI.driver, LB);
+    // TODO: Move these to OI
+    static JoystickButton autoAlignButton = new JoystickButton(OI.driver, RB);
+    static JoystickButton autoAlignCancelButton = new JoystickButton(OI.driver, LB);
 
-  static Command alignCommand = null;
+    static Command alignCommand = null;
 
-  @Override
-  public void robotInit() {
+    @Override
+    public void robotInit() {
 
-      // TODO: Clean this up
-      SmartDashboard.putNumber("test-goal/position/x", 2);
-      SmartDashboard.putNumber("test-goal/position/y", 0);
-      SmartDashboard.putNumber("test-goal/orientation/z", 0);
+        // TODO: Clean this up
+        SmartDashboard.putNumber("test-goal/position/x", 2);
+        SmartDashboard.putNumber("test-goal/position/y", 0);
+        SmartDashboard.putNumber("test-goal/orientation/z", 0);
 
-      SmartDashboard.putNumber("pointkp", 0);
-      SmartDashboard.putNumber("pointki", 0);
-      SmartDashboard.putNumber("pointkd", 0);
+        SmartDashboard.putNumber("pointkp", 0);
+        SmartDashboard.putNumber("pointki", 0);
+        SmartDashboard.putNumber("pointkd", 0);
 
-    // logging configuration
-    Logger.getRootLogger().setLevel(Level.DEBUG);
+        // logging configuration
+        Logger.getRootLogger().setLevel(Level.DEBUG);
 
         logger.info("Initializing...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
@@ -112,93 +112,92 @@ public class Robot extends TimedRobot {
         ShuffleboardDisplay.init();
 
         // TODO: Clean this up
-    SmartDashboard.putBoolean("rumbleEnabled", true);
+        SmartDashboard.putBoolean("rumbleEnabled", true);
 
-    wheelOdometry = new TankDriveOdometryRunnable(
-        drivetrain::getLeftPositionMeters,
-        drivetrain::getRightPositionMeters,
-        Robot.navx::getAngleRadians
-    );
+        wheelOdometry = new TankDriveOdometryRunnable(
+            drivetrain::getLeftPositionMeters,
+            drivetrain::getRightPositionMeters,
+            Robot.navx::getAngleRadians
+        );
 
-    udpReceiver = new UDPTwistReceiver(5801, () -> {
-      new Notifier(udpReceiver::attemptConnection).startSingle(1);
-    });
+        udpReceiver = new UDPTwistReceiver(5801, () -> {
+            new Notifier(udpReceiver::attemptConnection).startSingle(1);
+        });
 
-    udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800, () -> {
-      new Notifier(udpSender::attemptConnection).startSingle(1);
-    });
+        udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800, () -> {
+            new Notifier(udpSender::attemptConnection).startSingle(1);
+        });
 
-    Robot.limelightLocalization = new LimelightLocalization("limelight-a");
-      limelight = new LimelightInterface("limelight-a");
+        Robot.limelightLocalization = new LimelightLocalization("limelight-a");
+        limelight = new LimelightInterface("limelight-a");
 
+        StateChangeDetector limelightStateDetector = new StateChangeDetector(false);
 
-    StateChangeDetector limelightStateDetector = new StateChangeDetector(false);
+        // TODO: Clean this up
+        new Notifier(() -> {
+            wheelOdometry.run();
+            Robot.odom_to_base_link = wheelOdometry.getOdomToBaseLink();
+            udpSender.setOdometry(new Odometry(Robot.odom_to_base_link, drivetrain.getTwist()));
+            Robot.odom_to_base_link.toTransform2D().putToNetworkTable("Odometry/Debug/WheelOdometry");
+            boolean targetFound = Robot.limelightLocalization.attemptUpdatePose();
+            if (targetFound) {
+                Robot.limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
+                Transform3D goal = wheelOdometry.getOdomToBaseLink()
+                    .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
+                    .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 
-    // TODO: Clean this up
-    new Notifier(() -> {
-      wheelOdometry.run();
-      Robot.odom_to_base_link = wheelOdometry.getOdomToBaseLink();
-      udpSender.setOdometry(new Odometry(Robot.odom_to_base_link, drivetrain.getTwist()));
-      Robot.odom_to_base_link.toTransform2D().putToNetworkTable("Odometry/Debug/WheelOdometry");
-      boolean targetFound = Robot.limelightLocalization.attemptUpdatePose();
-      if (targetFound) {
-        Robot.limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
-        Transform3D goal = wheelOdometry.getOdomToBaseLink()
-            .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
-            .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
-
-          Robot.lastOdomToLimelightGoal = goal;
-          Robot.lastOdomToVisionTarget = wheelOdometry.getOdomToBaseLink()
-              .add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
-        goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
-      }
-      // TODO: Clean this up
-      if (alignCommand == null || !alignCommand.isRunning()) {
-        if (targetFound && DriverStation.getInstance().isEnabled() && SmartDashboard.getBoolean("rumbleEnabled", true)) {
+                Robot.lastOdomToLimelightGoal = goal;
+                Robot.lastOdomToVisionTarget = wheelOdometry.getOdomToBaseLink()
+                    .add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
+                goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
+            }
+            // TODO: Clean this up
+            if (alignCommand == null || !alignCommand.isRunning()) {
+                if (targetFound && DriverStation.getInstance().isEnabled() && SmartDashboard.getBoolean("rumbleEnabled", true)) {
 //          OI.driver.setRumble(RumbleType.kLeftRumble, 1);
-        } else {
+                } else {
 //          OI.driver.setRumble(RumbleType.kLeftRumble, 0);
-        }
-      }
-      try {
-        udpSender.sendIt();
-      } catch (IOException e) {
-        DriverStation.reportWarning("Unable to send Odometry packet!", false);
-      }
-    }).startPeriodic(0.011);
+                }
+            }
+            try {
+                udpSender.sendIt();
+            } catch (IOException e) {
+                DriverStation.reportWarning("Unable to send Odometry packet!", false);
+            }
+        }).startPeriodic(0.011);
 
-    // Testing code
-    Command testTEB = new SimpleCommand("Test TEB", () -> {
-      new UDPVelocityTwistDrive().start();
-    });
-    SmartDashboard.putData(testTEB);
+        // Testing code
+        Command testTEB = new SimpleCommand("Test TEB", () -> {
+            new UDPVelocityTwistDrive().start();
+        });
+        SmartDashboard.putData(testTEB);
 
-    // Testing code
-    Command resetWheelOdom = new SimpleCommand("Update PID Values", () -> {
-      drivetrain.updatePIDValues();
-      System.out.println(Tuning.driveVelocityP);
-    });
-    resetWheelOdom.setRunWhenDisabled(true);
-    SmartDashboard.putData(resetWheelOdom);
+        // Testing code
+        Command resetWheelOdom = new SimpleCommand("Update PID Values", () -> {
+            drivetrain.updatePIDValues();
+            System.out.println(Tuning.driveVelocityP);
+        });
+        resetWheelOdom.setRunWhenDisabled(true);
+        SmartDashboard.putData(resetWheelOdom);
 
-    autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
+        autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
 //      alignCommand = new PurePursuitToVisionTarget(Robot.limelightLocalization, Robot.wheelOdometry);
 //        alignCommand = new SimplePointToVisionTarget();
-        alignCommand = new PurePursuitThenPointToVisionTarget();
-      alignCommand.start();
-    }));
-    autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {
-      if (alignCommand != null) {
-        alignCommand.cancel();
-      }
-    }));
+            alignCommand = new PurePursuitThenPointToVisionTarget();
+            alignCommand.start();
+        }));
+        autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {
+            if (alignCommand != null) {
+                alignCommand.cancel();
+            }
+        }));
 
-    NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
-    tebConfigTable.getEntry("ResetTuningVals").setBoolean(true);
+        NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
+        tebConfigTable.getEntry("ResetTuningVals").setBoolean(true);
 
-    double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
-    logger.info("Robot ready. Initialization took " + (end - start) + " ms");
-SmartDashboard.putBoolean("IsHatchPreload", false);
+        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
+        SmartDashboard.putBoolean("IsHatchPreload", false);
         SmartDashboard.putBoolean("Debug Mode", false);
     }
 
