@@ -56,7 +56,6 @@ public class PointLineupSimple extends PIDCommand {
             Vector3D odomPosition = Robot.wheelOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
             goal = prevGoal.toTransform2D().getTheta();
 //            goal = -Math.atan2((-prevGoal.toTransform2D().getY()) - (-odomPosition.getY()), prevGoal.toTransform2D().getX() - odomPosition.getX());
-            System.out.println(goal);
         } else {
             goal = x - Robot.navx.getYawRadians();
             System.out.println("Point lineup simple starting");
@@ -77,7 +76,6 @@ public class PointLineupSimple extends PIDCommand {
 
     @Override
     protected boolean isFinished() {
-        System.out.println(Robot.drivetrain.getTwist().getOmega());
         return goal == null ||
             (Math.abs(getAngleError(goal)) < Math.toRadians(GOAL_TOLERANCE_ANGULAR)
                 && Math.abs(Robot.drivetrain.getTwist().getOmega()) < 0.3);
@@ -95,7 +93,6 @@ public class PointLineupSimple extends PIDCommand {
     @Override
     protected double returnPIDInput() {
         double angleError = getAngleError(goal);
-        System.out.printf("Angle error: %f\n", angleError);
 
         return angleError;
     }

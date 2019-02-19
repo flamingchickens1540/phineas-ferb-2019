@@ -54,10 +54,15 @@ public class PurePursuitLineup extends Command {
     protected void initialize() {
         Robot.drivetrain.configTalonsForVelocity();
         if (limelightLocalization.attemptUpdatePose()) {
+            System.out.println("PurePursuitLineup: Limelight pose found.");
             goal = computeGoal();
         } else {
+            System.out.println("PurePursuitLineup: Limelight pose not found!");
             if (onFail != null) {
+                System.out.println("Calling onFail method!");
                 onFail.run();
+            } else {
+                System.out.println("PurePursuitLineup: No onFail method specified");
             }
         }
     }
@@ -79,8 +84,6 @@ public class PurePursuitLineup extends Command {
 
         double angleError = getAngleError();
         double distanceError = getDistanceError();
-
-        System.out.printf("Angle error: %f Distance error: %f\n", angleError, distanceError);
 
         double cmdVelTheta = angleError * ANGULAR_KP;
         if (cmdVelTheta > MAX_VEL_THETA) {
