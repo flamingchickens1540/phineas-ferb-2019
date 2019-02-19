@@ -18,4 +18,9 @@ public class LimelightInterface {
             limelightTable.getEntry("ty" + id).getDouble(0)
         );
     }
+
+    public void setLeds(boolean on) {
+        limelightTable.getEntry("ledMode").setNumber(on ? 0 : 1);
+        NetworkTableInstance.getDefault().flush();
+    }
 }

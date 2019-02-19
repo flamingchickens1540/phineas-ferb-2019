@@ -31,6 +31,7 @@ import org.team1540.robot2019.subsystems.Elevator;
 import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.Wrist;
+import org.team1540.robot2019.utils.LimelightInterface;
 import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.NavxWrapper;
 import org.team1540.robot2019.utils.StateChangeDetector;
@@ -64,6 +65,8 @@ public class Robot extends TimedRobot {
 
     public static Transform3D lastOdomToLimelightGoal;
     public static Transform3D lastOdomToVisionTarget;
+
+    public static LimelightInterface limelight;
 
   public static NavxWrapper navx = new NavxWrapper();
 
@@ -116,6 +119,8 @@ public class Robot extends TimedRobot {
     });
 
     Robot.limelightLocalization = new LimelightLocalization("limelight-a");
+      limelight = new LimelightInterface("limelight-a");
+
 
     StateChangeDetector limelightStateDetector = new StateChangeDetector(false);
 
@@ -294,18 +299,18 @@ SmartDashboard.putBoolean("IsHatchPreload", false);
 
     @Override
     public void teleopPeriodic() {
-        Hardware.compressor.stop();
+//        Hardware.compressor.stop();
 
-//        if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
-//            && (Robot.climber.getCurrentCommand() == null)) {
-//            if (Hardware.compressor.getClosedLoopControl()) {
-//                logger.debug("Stopping compressor because elevator is up");
-//                Hardware.compressor.stop();
-//            }
-//        } else if (!Hardware.compressor.getClosedLoopControl()) {
-//            logger.debug("Restarting compressor");
-//            Hardware.compressor.start();
-//        }
+        if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
+            && (Robot.climber.getCurrentCommand() == null)) {
+            if (Hardware.compressor.getClosedLoopControl()) {
+                logger.debug("Stopping compressor because elevator is up");
+                Hardware.compressor.stop();
+            }
+        } else if (!Hardware.compressor.getClosedLoopControl()) {
+            logger.debug("Restarting compressor");
+            Hardware.compressor.start();
+        }
     }
 
     @Override
