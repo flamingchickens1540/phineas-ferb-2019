@@ -14,7 +14,7 @@ import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
-public class PointLineupSimple extends PIDCommand {
+public class SimplePointToVisionTarget extends PIDCommand {
 
     // Max/Min angular velocity
     private static final double MIN_VEL_THETA = 0.1;
@@ -36,7 +36,7 @@ public class PointLineupSimple extends PIDCommand {
     private Double goal = null;
     private Transform3D prevGoal = null;
 
-    public PointLineupSimple() {
+    public SimplePointToVisionTarget() {
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
@@ -50,7 +50,7 @@ public class PointLineupSimple extends PIDCommand {
     protected void initialize() {
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
         if (x == 0) {
-            prevGoal = Robot.lastOdomToVisionTarget;
+            prevGoal = Robot.lastOdomToVisionTarget; // TODO: This should not rely on others to update vision target pose
             if (prevGoal == null) {
                 Robot.drivetrain.stop();
                 System.out.println("Point lineup simple: Unable to find target and no alternative specified");
