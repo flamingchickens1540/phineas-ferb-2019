@@ -36,7 +36,7 @@ public class LimelightLocalization {
         Vector2D point0 = limelightInterface.getRawPoint(0);
         Vector2D point1 = limelightInterface.getRawPoint(1);
 
-        if (point0.equals(Vector2D.ZERO) || point1.equals(Vector2D.ZERO)
+        if (!limelightInterface.isTargetFound()
             || !VisionUtils.isWithinBounds(point0, upperLimit, lowerLimit, leftAndRightLimit, -leftAndRightLimit)
             || !VisionUtils.isWithinBounds(point1, upperLimit, lowerLimit, leftAndRightLimit, -leftAndRightLimit)) {
             return false;

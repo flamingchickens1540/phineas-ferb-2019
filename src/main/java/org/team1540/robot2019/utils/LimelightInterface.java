@@ -23,4 +23,8 @@ public class LimelightInterface {
         limelightTable.getEntry("ledMode").setNumber(on ? 0 : 1);
         NetworkTableInstance.getDefault().flush();
     }
+
+    public boolean isTargetFound() {
+        return (double) limelightTable.getEntry("tv").getNumber(0) > 0;
+    }
 }
