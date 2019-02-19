@@ -36,7 +36,7 @@ import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.NavxWrapper;
 import org.team1540.robot2019.utils.StateChangeDetector;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
-import org.team1540.robot2019.vision.commands.PurePursuitThenPoint;
+import org.team1540.robot2019.vision.commands.PurePursuitThenPointToVisionTarget;
 import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
 import org.team1540.rooster.util.SimpleCommand;
 
@@ -181,9 +181,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(resetWheelOdom);
 
     autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-//      alignCommand = new PurePursuitLineup(Robot.limelightLocalization, Robot.wheelOdometry);
-//        alignCommand = new PointLineupSimple();
-        alignCommand = new PurePursuitThenPoint();
+//      alignCommand = new PurePursuitToVisionTarget(Robot.limelightLocalization, Robot.wheelOdometry);
+//        alignCommand = new SimplePointToVisionTarget();
+        alignCommand = new PurePursuitThenPointToVisionTarget();
 //      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelightGoal, Robot.navx);
 //        alignCommand = new UDPVelocityTwistDrive();
       alignCommand.start();

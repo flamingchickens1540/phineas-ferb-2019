@@ -15,7 +15,7 @@ import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
-public class PurePursuitLineup extends Command {
+public class PurePursuitToVisionTarget extends Command {
 
     private static final double ANGULAR_KP = -5;
     private static final double LINEAR_KP = 4;
@@ -33,7 +33,7 @@ public class PurePursuitLineup extends Command {
     private TankDriveTwist2DInput twist2DInput;
     private Transform3D goal;
 
-    public PurePursuitLineup(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry) {
+    public PurePursuitToVisionTarget(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry) {
         this.limelightLocalization = limelightLocalization;
         this.driveOdometry = driveOdometry;
         requires(Robot.drivetrain);
@@ -45,7 +45,7 @@ public class PurePursuitLineup extends Command {
         System.out.println("Pure pursuit starting");
     }
 
-    public PurePursuitLineup(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry, Runnable onFail) {
+    public PurePursuitToVisionTarget(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry, Runnable onFail) {
         this(limelightLocalization, driveOdometry);
         this.onFail = onFail;
     }
@@ -54,15 +54,15 @@ public class PurePursuitLineup extends Command {
     protected void initialize() {
         Robot.drivetrain.configTalonsForVelocity();
         if (limelightLocalization.attemptUpdatePose()) {
-            System.out.println("PurePursuitLineup: Limelight pose found.");
+            System.out.println("PurePursuitToVisionTarget: Limelight pose found.");
             goal = computeGoal();
         } else {
-            System.out.println("PurePursuitLineup: Limelight pose not found!");
+            System.out.println("PurePursuitToVisionTarget: Limelight pose not found!");
             if (onFail != null) {
                 System.out.println("Calling onFail method!");
                 onFail.run();
             } else {
-                System.out.println("PurePursuitLineup: No onFail method specified");
+                System.out.println("PurePursuitToVisionTarget: No onFail method specified");
             }
         }
     }
@@ -123,7 +123,6 @@ public class PurePursuitLineup extends Command {
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         return TrigUtils
-//            .signedAngleError(Math.atan2(goal.toTransform2D().getX() - odomPosition.getX(), goal.toTransform2D().getY() - odomPosition.getY()), -Robot.navx.getYawRadians());
             .signedAngleError(Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), -Robot.navx.getYawRadians());
     }
 }
