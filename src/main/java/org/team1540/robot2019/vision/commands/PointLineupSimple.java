@@ -7,6 +7,7 @@ import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
+import org.team1540.robot2019.utils.ControlUtils;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.robot2019.utils.TrigUtils;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
@@ -15,13 +16,20 @@ import org.team1540.rooster.functional.Executable;
 
 public class PointLineupSimple extends PIDCommand {
 
-    private static final double GOAL_TOLERANCE_ANGULAR = 0.6;
+    // Max/Min angular velocity
     private static final double MIN_VEL_THETA = 0.1;
-    private static final double MAX_VEL_THETA = 2.0;
+    private static final double MAX_VEL_THETA = 1.8;
+
+    // Constants for angular VPID controller
     private static final double ANGULAR_KP = -6;
     private static final double ANGULAR_KI = 0;
-    private static final double ANGULAR_KD = -18;
-    private static final double ANGLE_OFFSET = Math.toRadians(5.5);
+    private static final double ANGULAR_KD = -10;
+
+    private static final double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
+
+    // Goal tolerances for angle
+    private static final double GOAL_TOLERANCE_ANGULAR_POSITION = 0.6;
+    private static final double GOAL_TOLERANCE_ANGULAR_VELOCITY = 0.3;
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
@@ -29,10 +37,6 @@ public class PointLineupSimple extends PIDCommand {
     private Transform3D prevGoal = null;
 
     public PointLineupSimple() {
-//        super(
-//            SmartDashboard.getNumber("pointkp", 0),
-//            SmartDashboard.getNumber("pointki", 0),
-//            SmartDashboard.getNumber("pointkd", 0));
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
@@ -55,7 +59,6 @@ public class PointLineupSimple extends PIDCommand {
             System.out.println("Point lineup simple: Unable to find target. Using alternative goal");
             Vector3D odomPosition = Robot.wheelOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
             goal = prevGoal.toTransform2D().getTheta();
-//            goal = -Math.atan2((-prevGoal.toTransform2D().getY()) - (-odomPosition.getY()), prevGoal.toTransform2D().getX() - odomPosition.getX());
         } else {
             goal = x - Robot.navx.getYawRadians();
             System.out.println("Point lineup simple starting");
@@ -77,8 +80,8 @@ public class PointLineupSimple extends PIDCommand {
     @Override
     protected boolean isFinished() {
         return goal == null ||
-            (Math.abs(getAngleError(goal)) < Math.toRadians(GOAL_TOLERANCE_ANGULAR)
-                && Math.abs(Robot.drivetrain.getTwist().getOmega()) < 0.3);
+            (Math.abs(getAngleError(goal)) < Math.toRadians(GOAL_TOLERANCE_ANGULAR_POSITION)
+                && Math.abs(Robot.drivetrain.getTwist().getOmega()) < GOAL_TOLERANCE_ANGULAR_VELOCITY);
     }
 
     @Override
@@ -99,14 +102,8 @@ public class PointLineupSimple extends PIDCommand {
 
     @Override
     protected void usePIDOutput(double output) {
-        double cmdVelTheta = output * MAX_VEL_THETA;
-        if (cmdVelTheta > MAX_VEL_THETA) {
-            cmdVelTheta = MAX_VEL_THETA;
-        } else if (cmdVelTheta < -MAX_VEL_THETA) {
-            cmdVelTheta = -MAX_VEL_THETA;
-        } else if (cmdVelTheta > -MIN_VEL_THETA && cmdVelTheta < MIN_VEL_THETA) {
-            cmdVelTheta = Math.copySign(MIN_VEL_THETA, cmdVelTheta);
-        }
+        output *= MAX_VEL_THETA;
+        double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
 
         Twist2D cmdVel = new Twist2D(0, 0, cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
