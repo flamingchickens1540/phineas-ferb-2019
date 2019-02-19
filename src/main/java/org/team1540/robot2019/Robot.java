@@ -78,6 +78,16 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
+      // TODO: Clean this up
+      SmartDashboard.putNumber("test-goal/position/x", 2);
+      SmartDashboard.putNumber("test-goal/position/y", 0);
+      SmartDashboard.putNumber("test-goal/orientation/z", 0);
+
+      SmartDashboard.putNumber("pointkp", 0);
+      SmartDashboard.putNumber("pointki", 0);
+      SmartDashboard.putNumber("pointkd", 0);
+
     // logging configuration
     Logger.getRootLogger().setLevel(Level.DEBUG);
 
@@ -163,15 +173,6 @@ public class Robot extends TimedRobot {
     });
     SmartDashboard.putData(testTEB);
 
-    // TODO: Clean this up
-    SmartDashboard.putNumber("test-goal/position/x", 2);
-    SmartDashboard.putNumber("test-goal/position/y", 0);
-    SmartDashboard.putNumber("test-goal/orientation/z", 0);
-
-      SmartDashboard.putNumber("pointkp", 0);
-      SmartDashboard.putNumber("pointki", 0);
-      SmartDashboard.putNumber("pointkd", 0);
-
     // Testing code
     Command resetWheelOdom = new SimpleCommand("Update PID Values", () -> {
       drivetrain.updatePIDValues();
@@ -184,8 +185,6 @@ public class Robot extends TimedRobot {
 //      alignCommand = new PurePursuitToVisionTarget(Robot.limelightLocalization, Robot.wheelOdometry);
 //        alignCommand = new SimplePointToVisionTarget();
         alignCommand = new PurePursuitThenPointToVisionTarget();
-//      alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelightGoal, Robot.navx);
-//        alignCommand = new UDPVelocityTwistDrive();
       alignCommand.start();
     }));
     autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {
@@ -299,8 +298,6 @@ SmartDashboard.putBoolean("IsHatchPreload", false);
 
     @Override
     public void teleopPeriodic() {
-//        Hardware.compressor.stop();
-
         if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
             && (Robot.climber.getCurrentCommand() == null)) {
             if (Hardware.compressor.getClosedLoopControl()) {
