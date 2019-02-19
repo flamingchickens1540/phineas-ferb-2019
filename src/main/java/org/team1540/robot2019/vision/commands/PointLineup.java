@@ -127,6 +127,6 @@ public class PointLineup extends Command {
 //        return TrigUtils
 //            .signedAngleError(-Robot.navx.getYawRadians(),
 //                Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX())); // TODO: Remove negation
-////        return TrigUtils.signedAngleError(Math.atan2((-odomPosition.getY())-(-goal.toTransform2D().getY()), odomPosition.getX()-goal.toTransform2D().getX()), Math.toRadians(Robot.navx.getYawRadians()));
+////        return TrigUtils.signedAngleError(Math.atan2((-odomPosition.getY())-(-goal.toTransform2D().getY()), odomPosition.getX()-goal.toTransform2D().getX()), -Robot.navx.getYawRadians());
 //    }
 }
