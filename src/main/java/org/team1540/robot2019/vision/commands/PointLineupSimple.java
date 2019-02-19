@@ -18,9 +18,9 @@ public class PointLineupSimple extends PIDCommand {
     private static final double GOAL_TOLERANCE_ANGULAR = 0.6;
     private static final double MIN_VEL_THETA = 0.1;
     private static final double MAX_VEL_THETA = 2.0;
-    private static final double ANGULAR_KP = -7;
+    private static final double ANGULAR_KP = -6;
     private static final double ANGULAR_KI = 0;
-    private static final double ANGULAR_KD = -15;
+    private static final double ANGULAR_KD = -18;
     private static final double ANGLE_OFFSET = Math.toRadians(5.5);
 
     private Executable pipeline;
