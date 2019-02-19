@@ -79,7 +79,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
 
-        // TODO: Clean this up
+        // TODO: Everything below can be deleted
+
         SmartDashboard.putNumber("test-goal/position/x", 2);
         SmartDashboard.putNumber("test-goal/position/y", 0);
         SmartDashboard.putNumber("test-goal/orientation/z", 0);
@@ -87,6 +88,8 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("pointkp", 0);
         SmartDashboard.putNumber("pointki", 0);
         SmartDashboard.putNumber("pointkd", 0);
+
+        // TODO: Everything above can be deleted
 
         // logging configuration
         Logger.getRootLogger().setLevel(Level.DEBUG);

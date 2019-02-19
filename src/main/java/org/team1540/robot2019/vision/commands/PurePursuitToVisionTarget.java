@@ -85,7 +85,7 @@ public class PurePursuitToVisionTarget extends Command {
         double angleError = getAngleError();
         double distanceError = getDistanceError();
 
-        double cmdVelTheta = angleError * ANGULAR_KP;
+        double cmdVelTheta = angleError * ANGULAR_KP; // TODO: Replace this with ControlUtils.velocityPosNegConstrain
         if (cmdVelTheta > MAX_VEL_THETA) {
             cmdVelTheta = MAX_VEL_THETA;
         } else if (cmdVelTheta < -MAX_VEL_THETA) {
@@ -94,7 +94,7 @@ public class PurePursuitToVisionTarget extends Command {
 
         double cmdVelX = distanceError * (1 - Math.abs(angleError) / Math.PI * 2) * LINEAR_KP;
 
-        if (cmdVelX > MAX_VEL_X) {
+        if (cmdVelX > MAX_VEL_X) { // TODO: Replace this with ControlUtils.velocityPosNegConstrain
             cmdVelX = MAX_VEL_X;
         } else if (cmdVelX < MIN_VEL_X) {
             cmdVelX = MIN_VEL_X;
