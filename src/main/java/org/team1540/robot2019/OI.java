@@ -14,10 +14,7 @@ import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
 import org.team1540.robot2019.commands.climber.*;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.ExtendHatch;
-import org.team1540.robot2019.commands.hatch.GetHatchFloor;
-import org.team1540.robot2019.commands.hatch.GrabHatch;
-import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.hatch.*;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -64,7 +61,8 @@ public class OI {
     private static Button cancelIntakeButton = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_Y);
     private static JoystickButton ejectButton = new JoystickButton(copilot, B);
 
-    private static JoystickButton prepGetHatchButton = new JoystickButton(copilot, X);
+    private static JoystickButton extendHatchButton = new JoystickButton(copilot, X);
+    private static JoystickButton retractHatchButton = new JoystickButton(copilot, BACK);
     private static JoystickButton prepGetHatchFloorButton = new JoystickButton(copilot, START);
     private static Button grabHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_TRIG);
     private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
@@ -114,7 +112,8 @@ public class OI {
         cancelIntakeButton.whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
-        prepGetHatchButton.whenPressed(new ExtendHatch());
+        extendHatchButton.whenPressed(new ExtendHatch());
+        retractHatchButton.whenPressed(new RetractHatch());
         prepGetHatchFloorButton.whenPressed(new GetHatchFloor());
         grabHatchButton.whenPressed(new GrabHatch());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());

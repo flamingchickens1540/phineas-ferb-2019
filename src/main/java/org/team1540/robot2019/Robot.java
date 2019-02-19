@@ -152,6 +152,9 @@ public class Robot extends TimedRobot {
         if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
             Robot.hatch.extend();
         }
+        if (!SmartDashboard.getBoolean("IsHatchPreload", true)) {
+            Robot.hatch.release();
+        }
     }
 
     @Override
