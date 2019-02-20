@@ -9,12 +9,11 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.function.Supplier;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.twod.Transform2D;
+import org.team1540.robot2019.datastructures.utils.RotationUtils;
 
 // TODO: Use logging class
 public class UDPOdometryGoalSender {
@@ -83,7 +82,7 @@ public class UDPOdometryGoalSender {
         byte[] data = ByteBuffer.allocate(Double.BYTES * 10) // TODO: Send a timestamp/counter
             .putDouble(odometry.getPose().getPosition().getX())
             .putDouble(odometry.getPose().getPosition().getY())
-            .putDouble(odometry.getPose().getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2])
+            .putDouble(RotationUtils.getRPYVec(odometry.getPose().getOrientation()).getZ())
             .putDouble(odometry.getTwist().getX())
             .putDouble(odometry.getTwist().getOmega())
             .putDouble(goal.getX())
