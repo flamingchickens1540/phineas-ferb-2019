@@ -24,7 +24,7 @@ public class ExtendGyroStabilize extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        return Hardware.navx.getPitch();
+        return Hardware.navx.getRawPitchDegrees();
     }
 
     @Override

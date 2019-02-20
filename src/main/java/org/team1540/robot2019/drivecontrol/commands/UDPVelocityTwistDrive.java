@@ -111,7 +111,7 @@ public class UDPVelocityTwistDrive extends Command {
         double xError = goal.getX() - odomPosition.getX();
         double yError = goal.getY() - odomPosition.getY();
         double angleError = TrigUtils
-            .signedAngleError(Robot.navx.getYawRadians(), goal.getTheta()); // TODO: If this is the proper way to calculate signed angle, this should be moved to the TrigUtils class
+            .signedAngleError(Hardware.navx.getYawRadians(), goal.getTheta()); // TODO: If this is the proper way to calculate signed angle, this should be moved to the TrigUtils class
 
         boolean finished = Math.abs(xError) < 0.05 && // TODO: Make this a static function
             Math.abs(yError) < 0.05 &&

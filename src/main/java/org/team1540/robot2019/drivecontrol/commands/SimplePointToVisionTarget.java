@@ -3,6 +3,7 @@ package org.team1540.robot2019.drivecontrol.commands;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -60,7 +61,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
             goal = prevGoal.toTransform2D().getTheta();
             logger.info("Unable to find target. Using alternative goal angle: " + goal);
         } else {
-            goal = x - Robot.navx.getYawRadians();
+            goal = x - Hardware.navx.getYawRadians();
             logger.info("Point lineup simple starting. Initial goal angle: " + goal);
         }
         Robot.drivetrain.configTalonsForVelocity();
@@ -73,7 +74,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
         }
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
         if (x != 0) {
-            goal = -(x - ANGLE_OFFSET) + Robot.navx.getYawRadians();
+            goal = -(x - ANGLE_OFFSET) + Hardware.navx.getYawRadians();
         }
     }
 
@@ -94,7 +95,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
     }
 
     private double getAngleError(double x) {
-        return TrigUtils.signedAngleError(x, Robot.navx.getYawRadians());
+        return TrigUtils.signedAngleError(x, Hardware.navx.getYawRadians());
     }
 
     @Override

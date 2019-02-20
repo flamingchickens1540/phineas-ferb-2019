@@ -31,7 +31,7 @@ public class AutoAlignTuningRobot extends TimedRobot {
 //    odometry = new TankDriveOdometryRunnable(
 //        drivetrain::getLeftPositionMeters,
 //        drivetrain::getRightPositionMeters,
-//        Robot.navx::getYawRadians
+//        Hardware.navx::getYawRadians
 //    );
 //
 //    udpReceiver = new UDPTwistReceiver(5801);
@@ -90,7 +90,7 @@ public class AutoAlignTuningRobot extends TimedRobot {
 //      SmartDashboard.putData(resetWheelOdom);
 //
 //    autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-////        alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, odometry, Robot.lastOdomToLimelightGoal, Robot.navx);
+////        alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, odometry, Robot.lastOdomToLimelightGoal, Hardware.navx);
 ////        alignCommand = new UDPVelocityTwistDrive();
 //      alignCommand.start();
 //    }));
