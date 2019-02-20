@@ -47,6 +47,10 @@ public class Transform3D {
   }
 
   public Transform3D subtract(Transform3D other) {
-    return new Transform3D(this.position.subtract(this.orientation.applyInverseTo(other.position)), this.orientation.applyInverseTo(other.orientation));
+      return add(other.negate());
   }
+
+    public Transform3D negate() {
+        return new Transform3D(orientation.applyTo(position.negate()), orientation.revert());
+    }
 }
