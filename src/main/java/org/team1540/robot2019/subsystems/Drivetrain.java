@@ -60,15 +60,15 @@ public class Drivetrain extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-    //    setDefaultCommand(new PercentDrive(Robot.drivetrain));
+        //    setDefaultCommand(new PercentDrive(Robot.drivetrain));
 //    setDefaultCommand(new VelocityDrive());
-      setDefaultCommand(new SimpleLoopCommand("Drive",
-          new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
-              OI::getDriveHardTurn)
-              .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
-              .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
-              .then(getPipelineOutput(false)), this));
-  }
+        setDefaultCommand(new SimpleLoopCommand("Drive",
+            new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
+                OI::getDriveHardTurn)
+                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
+                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
+                .then(getPipelineOutput(false)), this));
+    }
 
     private static double calcRamp(double throttle, double rampAccum) {
         double ramp;
@@ -154,11 +154,11 @@ public class Drivetrain extends Subsystem {
         }
     }
 
-  private void configTalonsForPosition() {
-    for (ChickenTalon t : driveMotorMasters) {
-      t.selectProfileSlot(DRIVE_POSITION_SLOT_IDX);
+    private void configTalonsForPosition() {
+        for (ChickenTalon t : driveMotorMasters) {
+            t.selectProfileSlot(DRIVE_POSITION_SLOT_IDX);
+        }
     }
-  }
 
     public void configTalonsForVelocity() {
         for (ChickenTalon t : driveMotorMasters) {
@@ -241,7 +241,7 @@ public class Drivetrain extends Subsystem {
         setRightVelocityTPU(velocity / 10 * Tuning.drivetrainTicksPerMeter);
     }
 
-  public void setPercent(double left, double right) {
+    public void setPercent(double left, double right) {
         setLeftPercent(left);
         setRightPercent(right);
     }
@@ -269,56 +269,56 @@ public class Drivetrain extends Subsystem {
     }
 
     public double getLeftPositionMeters() {
-    return getLeftPositionTPU() / Tuning.drivetrainTicksPerMeter;
-  }
+        return getLeftPositionTPU() / Tuning.drivetrainTicksPerMeter;
+    }
 
-  public double getRightPositionMeters() {
-    return getRightPositionTPU() / Tuning.drivetrainTicksPerMeter;
-  }
+    public double getRightPositionMeters() {
+        return getRightPositionTPU() / Tuning.drivetrainTicksPerMeter;
+    }
 
-  public double getLeftVelocityTPU() {
-    return driveLeftMotorA.getSelectedSensorVelocity();
-  }
+    public double getLeftVelocityTPU() {
+        return driveLeftMotorA.getSelectedSensorVelocity();
+    }
 
-  public double getRightVelocityTPU() {
+    public double getRightVelocityTPU() {
         return driveRightMotorA.getSelectedSensorVelocity();
     }
 
     public double getLeftVelocityMetersPerSecond() {
-    return getLeftVelocityTPU() * 10 / Tuning.drivetrainTicksPerMeter;
-  }
+        return getLeftVelocityTPU() * 10 / Tuning.drivetrainTicksPerMeter;
+    }
 
-  public double getRightVelocityMetersPerSecond() {
-    return getRightVelocityTPU() * 10 / Tuning.drivetrainTicksPerMeter;
-  }
+    public double getRightVelocityMetersPerSecond() {
+        return getRightVelocityTPU() * 10 / Tuning.drivetrainTicksPerMeter;
+    }
 
-  public Twist2D getTwist() {
-    double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
-      double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadiusMeters) / 2;
-    return new Twist2D(xvel, 0, thetavel);
-  }
+    public Twist2D getTwist() {
+        double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
+        double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadiusMeters) / 2;
+        return new Twist2D(xvel, 0, thetavel);
+    }
 
-  public double getLeftPercent() {
-    return driveLeftMotorA.getMotorOutputPercent();
-  }
+    public double getLeftPercent() {
+        return driveLeftMotorA.getMotorOutputPercent();
+    }
 
-  public double getRightPercent() {
+    public double getRightPercent() {
         return driveRightMotorA.getMotorOutputPercent();
     }
 
     public void zeroEncoders() {
-    Hardware.driveLeftMotorA.setSelectedSensorPosition(0);
-    Hardware.driveRightMotorA.setSelectedSensorPosition(0);
-  }
+        Hardware.driveLeftMotorA.setSelectedSensorPosition(0);
+        Hardware.driveRightMotorA.setSelectedSensorPosition(0);
+    }
 
-  public void stop() {
-    setLeftVelocityTPU(0);
-    setRightVelocityTPU(0);
-  }
+    public void stop() {
+        setLeftVelocityTPU(0);
+        setRightVelocityTPU(0);
+    }
 
-  public NetworkTableEntry getLeftPositionEntry() {
-    return leftPositionEntry;
-  }
+    public NetworkTableEntry getLeftPositionEntry() {
+        return leftPositionEntry;
+    }
 
     public NetworkTableEntry getRightPositionEntry() {
         return rightPositionEntry;
