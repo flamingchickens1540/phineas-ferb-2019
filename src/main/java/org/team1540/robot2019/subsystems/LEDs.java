@@ -2,29 +2,29 @@ package org.team1540.robot2019.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-import static org.team1540.robot2019.Hardware.greenLEDs;
 import static org.team1540.robot2019.Hardware.redLEDs;
+import static org.team1540.robot2019.Hardware.blueLEDs;
 
 public class LEDs extends Subsystem {
 
     public void red() {
+        blueLEDs.set(false);
         redLEDs.set(true);
-        greenLEDs.set(false);
     }
 
-    public void green() {
+    public void blue() {
+        blueLEDs.set(true);
         redLEDs.set(false);
-        greenLEDs.set(false);
     }
 
-//    public void yellow() {
-//        redLEDs.set(true);
-//        greenLEDs.set(true);
-//    }
+    public void purple() {
+        blueLEDs.set(true);
+        redLEDs.set(true);
+    }
 
     public void off() {
+        blueLEDs.set(false);
         redLEDs.set(false);
-        greenLEDs.set(false);
     }
 
     @Override
