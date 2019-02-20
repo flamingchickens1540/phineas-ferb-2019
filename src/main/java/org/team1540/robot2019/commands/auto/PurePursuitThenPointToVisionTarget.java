@@ -3,7 +3,7 @@ package org.team1540.robot2019.commands.auto;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.commands.drivetrain.DriveForTimeVelocity;
+import org.team1540.robot2019.commands.drivetrain.TankDriveForTimeVelocity;
 import org.team1540.rooster.util.SimpleCommand;
 
 public class PurePursuitThenPointToVisionTarget extends CommandGroup {
@@ -15,7 +15,7 @@ public class PurePursuitThenPointToVisionTarget extends CommandGroup {
 
         addSequential(new SimplePointToVisionTarget());
 
-        addSequential(new DriveForTimeVelocity(0.6, 0.5)); // TODO: Straight driving with navx
+        addSequential(new TankDriveForTimeVelocity(0.6, 0.5)); // TODO: Straight driving with navx
     }
 
     @Override
