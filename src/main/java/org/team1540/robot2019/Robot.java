@@ -126,12 +126,9 @@ public class Robot extends TimedRobot {
         );
 
         udpReceiver = new UDPTwistReceiver(5801, () -> {
-            new Notifier(udpReceiver::attemptConnection).startSingle(1);
         });
 
-        udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800, () -> {
-            new Notifier(udpSender::attemptConnection).startSingle(1);
-        });
+        udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800);
 
         Robot.limelightLocalization = new LimelightLocalization("limelight-a");
         limelight = new LimelightInterface("limelight-a");
