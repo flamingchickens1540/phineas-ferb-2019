@@ -58,17 +58,17 @@ public class PurePursuitToVisionTarget extends Command {
 
     @Override
     protected void initialize() {
-        logger.info("Pure pursuit starting...");
+        logger.debug("Pure pursuit starting...");
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
-            logger.info("Vision target pose acquired!");
+            logger.debug("Vision target pose acquired!");
             goal = computeGoal();
         } else {
             logger.warn("Unable to get vision target pose!");
             if (onFail != null) {
-                logger.info("Calling onFail method!");
+                logger.debug("Calling onFail method!");
                 onFail.run();
             } else {
-                logger.info("No onFail method specified!");
+                logger.debug("No onFail method specified!");
             }
         }
     }
@@ -107,7 +107,7 @@ public class PurePursuitToVisionTarget extends Command {
         double distanceError = getDistanceError();
         boolean isFinished = goal == null || distanceError < GOAL_DISTANCE_TOLERANCE;
         if (isFinished) {
-            logger.info("Pure pursuit goal reached! Distance error remaining: " + distanceError);
+            logger.debug("Pure pursuit goal reached! Distance error remaining: " + distanceError);
         }
         return isFinished;
     }
