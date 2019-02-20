@@ -70,13 +70,9 @@ public class AutoAlignTuningRobot extends TimedRobot {
         Robot.navx::getYawRadians
     );
 
-    udpReceiver = new UDPTwistReceiver(5801, () -> {
-      new Notifier(udpReceiver::attemptConnection).startSingle(1);
-    });
+    udpReceiver = new UDPTwistReceiver(5801);
 
-    udpSender = new UDPOdometryGoalSender(Tuning.isComp ? "10.15.40.202" : "10.15.40.201", 5800, () -> {
-      new Notifier(udpSender::attemptConnection).startSingle(1);
-    });
+    udpSender = new UDPOdometryGoalSender(Tuning.isComp ? "10.15.40.202" : "10.15.40.201", 5800);
 
     Robot.limelightLocalization = new LimelightLocalization("limelight-a");
 

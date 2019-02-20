@@ -1,5 +1,6 @@
 package org.team1540.robot2019.networking;
 
+import edu.wpi.first.wpilibj.Notifier;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -12,16 +13,14 @@ import org.team1540.robot2019.datastructures.twod.Twist2D;
 
 public class UDPTwistReceiver implements Runnable {
 
-  private Runnable onException;
-  private int port;
+    private int port;
 
   private long lastReceivedTime = 0;
 
   private double cmdVelX = 0;
   private double cmdVelTheta = 0;
 
-  public UDPTwistReceiver(int port, Runnable onException) {
-    this.onException = onException;
+    public UDPTwistReceiver(int port) {
     this.port = port;
     attemptConnection();
   }
@@ -36,7 +35,7 @@ public class UDPTwistReceiver implements Runnable {
     try {
       serverSocket = new DatagramSocket(port);
     } catch (SocketException e) {
-      onException.run();
+        waitAndReconnect();
       return;
     }
     byte[] data = new byte[Double.SIZE * 2];
@@ -45,7 +44,7 @@ public class UDPTwistReceiver implements Runnable {
         try {
           serverSocket.receive(receivePacket);
         } catch (IOException e) {
-          onException.run();
+            waitAndReconnect();
           return;
         }
         data = receivePacket.getData();
@@ -64,4 +63,8 @@ public class UDPTwistReceiver implements Runnable {
       return Twist2D.ZERO;
     }
   }
+
+    private void waitAndReconnect() {
+        new Notifier(this::attemptConnection).startSingle(1);
+    }
 }

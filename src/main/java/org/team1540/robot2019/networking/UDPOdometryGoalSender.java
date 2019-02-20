@@ -1,5 +1,6 @@
 package org.team1540.robot2019.networking;
 
+import edu.wpi.first.wpilibj.Notifier;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -19,16 +20,14 @@ public class UDPOdometryGoalSender {
   private InetAddress address;
   private String addressString;
   private int port;
-  private Runnable onException;
 
   private Transform2D goal;
   private Odometry odometry;
   private Vector2D viaPoint;
 
-  public UDPOdometryGoalSender(String address, int port, Runnable onException) {
+    public UDPOdometryGoalSender(String address, int port) {
     addressString = address;
     this.port = port;
-    this.onException = onException;
     attemptConnection();
   }
 
@@ -40,7 +39,7 @@ public class UDPOdometryGoalSender {
     } catch (UnknownHostException | SocketException e) {
       System.out.println("[UDP Sender]: Couldn't connect to " + addressString);
       e.printStackTrace();
-      onException.run();
+        autoReconnect();
     }
   }
 
@@ -75,4 +74,8 @@ public class UDPOdometryGoalSender {
     DatagramPacket sendPacket = new DatagramPacket(data, data.length, address, port);
     clientSocket.send(sendPacket);
   }
+
+    private void autoReconnect() {
+        new Notifier(this::attemptConnection).startSingle(1);
+    }
 }
