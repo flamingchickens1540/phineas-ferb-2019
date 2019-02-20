@@ -33,8 +33,8 @@ public class LimelightLocalization {
         double lowerLimit = -0.65;
         double leftAndRightLimit = 0.90;
 
-        Vector2D point0 = limelightInterface.getRawPoint(0);
-        Vector2D point1 = limelightInterface.getRawPoint(1);
+        Vector2D point0 = limelightInterface.getRawContour(0);
+        Vector2D point1 = limelightInterface.getRawContour(1);
 
         if (!limelightInterface.isTargetFound()
             || !VisionUtils.isWithinBounds(point0, upperLimit, lowerLimit, leftAndRightLimit, -leftAndRightLimit)
