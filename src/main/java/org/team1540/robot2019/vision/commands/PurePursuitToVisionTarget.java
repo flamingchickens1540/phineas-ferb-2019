@@ -24,7 +24,7 @@ public class PurePursuitToVisionTarget extends Command {
     private static final double MAX_VEL_X = 0.8;
     private static final double MIN_VEL_X = 0.2;
     private static final double MAX_VEL_THETA = 2.0;
-    private static final double GOAL_DISTANCE_TOLERANCE = 0.1;
+    private static final double GOAL_DISTANCE_TOLERANCE = 0.05;
     private static final Transform3D VISION_TARGET_OFFSET = new Transform3D(-0.65, -0.025, 0);
 
     private final TankDriveOdometryRunnable driveOdometry;
