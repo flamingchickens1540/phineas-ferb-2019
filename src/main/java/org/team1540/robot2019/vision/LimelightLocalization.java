@@ -14,11 +14,11 @@ import org.team1540.robot2019.datastructures.threed.Transform3D;
 public class LimelightLocalization {
 
     private Transform3D baseLinkToVisionTarget;
-    private LimelightInterface limelightInterface;
+    private LimelightInterface limelight;
     private long timeLastAcquired = 0;
 
-    public LimelightLocalization(String limeTableName) {
-        limelightInterface = new LimelightInterface(limeTableName);
+    public LimelightLocalization(LimelightInterface limelight) {
+        this.limelight = limelight;
     }
 
     public boolean attemptUpdatePose() {
@@ -34,10 +34,10 @@ public class LimelightLocalization {
         double lowerLimit = -0.65;
         double leftAndRightLimit = 0.90;
 
-        Vector2D point0 = limelightInterface.getRawContour(0);
-        Vector2D point1 = limelightInterface.getRawContour(1);
+        Vector2D point0 = limelight.getRawContour(0);
+        Vector2D point1 = limelight.getRawContour(1);
 
-        if (!limelightInterface.isTargetFound()
+        if (!limelight.isTargetFound()
             || !VisionUtils.isWithinBounds(point0, upperLimit, lowerLimit, leftAndRightLimit, -leftAndRightLimit)
             || !VisionUtils.isWithinBounds(point1, upperLimit, lowerLimit, leftAndRightLimit, -leftAndRightLimit)) {
             return false;

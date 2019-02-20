@@ -113,8 +113,8 @@ public class Robot extends TimedRobot {
 
         udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800, 0.01, () -> new Odometry(Robot.odomToBaseLink, drivetrain.getTwist()));
 
-        Robot.limelightLocalization = new LimelightLocalization("limelight-a");
         limelight = new LimelightInterface("limelight-a");
+        Robot.limelightLocalization = new LimelightLocalization(limelight);
 
         // TODO: Clean this up
         new Notifier(() -> {
