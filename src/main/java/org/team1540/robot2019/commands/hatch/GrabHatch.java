@@ -10,8 +10,8 @@ public class GrabHatch extends CommandGroup {
 
     public GrabHatch() {
         addSequential(new SimpleCommand("Hatch", Robot.hatch::grab, Robot.hatch));
-        addSequential(new WaitCommand(Tuning.hatchGetTime));
-        addSequential(new RetractHatch());
+//        addSequential(new WaitCommand(Tuning.hatchGetTime));
+//        addSequential(new RetractHatch());
     }
 
 }

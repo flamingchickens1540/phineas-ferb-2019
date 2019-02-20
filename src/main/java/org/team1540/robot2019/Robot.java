@@ -21,6 +21,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.subsystems.*;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.networking.UDPOdometryGoalSender;
@@ -50,6 +51,7 @@ public class Robot extends TimedRobot {
     public static Intake cargoMechanism;
     public static HatchMech hatch;
     public static Climber climber;
+    public static LEDs leds;
 
     public static boolean debugMode = false;
 
@@ -200,6 +202,7 @@ public class Robot extends TimedRobot {
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
+
         SmartDashboard.putBoolean("IsHatchPreload", false);
         SmartDashboard.putBoolean("Debug Mode", false);
     }
@@ -210,7 +213,7 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 //    System.out.println(time - System.currentTimeMillis());
 
-        debugMode = SmartDashboard.getBoolean("Debug Moe", false);
+        debugMode = SmartDashboard.getBoolean("Debug Mode", false);
     }
 
     private Timer brakeTimer = new Timer();
@@ -295,6 +298,9 @@ public class Robot extends TimedRobot {
 
         if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
             Robot.hatch.extend();
+        }
+        if (!SmartDashboard.getBoolean("IsHatchPreload", true)) {
+            Robot.hatch.release();
         }
     }
 
