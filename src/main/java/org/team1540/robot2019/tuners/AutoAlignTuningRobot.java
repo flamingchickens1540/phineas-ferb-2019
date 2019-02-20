@@ -28,7 +28,7 @@ public class AutoAlignTuningRobot extends TimedRobot {
 //
 //    drivetrain = new Drivetrain();
 //
-//    wheelOdometry = new TankDriveOdometryRunnable(
+//    odometry = new TankDriveOdometryRunnable(
 //        drivetrain::getLeftPositionMeters,
 //        drivetrain::getRightPositionMeters,
 //        Robot.navx::getYawRadians
@@ -43,14 +43,14 @@ public class AutoAlignTuningRobot extends TimedRobot {
 //    StateChangeDetector limelightStateDetector = new StateChangeDetector(false);
 //
 //    new Notifier(() -> {
-//      wheelOdometry.run();
-//      Robot.odomToBaseLink = wheelOdometry.getOdomToBaseLink();
+//      odometry.run();
+//      Robot.odomToBaseLink = odometry.getOdomToBaseLink();
 //      udpSender.setOdometry(new Odometry(Robot.odomToBaseLink, drivetrain.getTwist()));
 //      Robot.odomToBaseLink.toTransform2D().putToNetworkTable("Odometry/Debug/WheelOdometry");
 //      boolean targetFound = Robot.limelightLocalization.attemptUpdatePose();
 //      if (targetFound) {
 //        Robot.limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
-//        Transform3D goal = wheelOdometry.getOdomToBaseLink()
+//        Transform3D goal = odometry.getOdomToBaseLink()
 //            .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
 //            .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 //
@@ -90,7 +90,7 @@ public class AutoAlignTuningRobot extends TimedRobot {
 //      SmartDashboard.putData(resetWheelOdom);
 //
 //    autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-////        alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, wheelOdometry, Robot.lastOdomToLimelightGoal, Robot.navx);
+////        alignCommand = new UDPAutoLineup(drivetrain, udpSender, udpReceiver, Robot.limelightLocalization, odometry, Robot.lastOdomToLimelightGoal, Robot.navx);
 ////        alignCommand = new UDPVelocityTwistDrive();
 //      alignCommand.start();
 //    }));

@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
 
     public static Transform3D odomToBaseLink = Transform3D.IDENTITY;
 
-    public static TankDriveOdometryRunnable wheelOdometry;
+    public static TankDriveOdometryRunnable odometry;
 
     public static UDPOdometryGoalSender udpSender;
     public static UDPTwistReceiver udpReceiver;
@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
 
         ShuffleboardDisplay.init();
 
-        wheelOdometry = new TankDriveOdometryRunnable(
+        odometry = new TankDriveOdometryRunnable(
             drivetrain::getLeftPositionMeters,
             drivetrain::getRightPositionMeters,
             Robot.navx::getAngleRadians
@@ -118,13 +118,13 @@ public class Robot extends TimedRobot {
 
         // TODO: Clean this up
         new Notifier(() -> {
-            wheelOdometry.run();
-            Robot.odomToBaseLink = wheelOdometry.getOdomToBaseLink();
+            odometry.run();
+            Robot.odomToBaseLink = odometry.getOdomToBaseLink();
 
             boolean targetFound = Robot.limelightLocalization.attemptUpdatePose();
             if (targetFound) {
                 Robot.limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
-                Robot.lastOdomToVisionTarget = wheelOdometry.getOdomToBaseLink().add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
+                Robot.lastOdomToVisionTarget = odometry.getOdomToBaseLink().add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
             }
         }).startPeriodic(0.011);
 
