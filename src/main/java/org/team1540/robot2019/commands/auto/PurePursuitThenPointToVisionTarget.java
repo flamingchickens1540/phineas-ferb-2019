@@ -20,7 +20,7 @@ public class PurePursuitThenPointToVisionTarget extends CommandGroup {
 
     @Override
     protected void interrupted() {
-        end();
+        end(); // CommandGroups don't call end by default on interrupted
     }
 
     @Override
