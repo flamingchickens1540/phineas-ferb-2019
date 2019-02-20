@@ -12,7 +12,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
-import org.team1540.robot2019.odometry.TankDriveOdometryRunnable;
+import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;

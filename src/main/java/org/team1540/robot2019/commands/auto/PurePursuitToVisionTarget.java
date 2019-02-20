@@ -1,4 +1,4 @@
-package org.team1540.robot2019.drivecontrol.commands;
+package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
@@ -10,7 +10,7 @@ import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
-import org.team1540.robot2019.odometry.TankDriveOdometryRunnable;
+import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
 import org.team1540.robot2019.utils.ControlUtils;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.robot2019.vision.LimelightLocalization;

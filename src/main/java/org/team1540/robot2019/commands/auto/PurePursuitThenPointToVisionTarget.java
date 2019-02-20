@@ -1,4 +1,4 @@
-package org.team1540.robot2019.drivecontrol.commands;
+package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
