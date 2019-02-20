@@ -28,6 +28,10 @@ public class UDPVelocityTwistDrive extends Command {
     boolean checkEnd;
 
     public UDPVelocityTwistDrive(Transform2D goal, boolean freeGoalVel) {
+        SmartDashboard.setDefaultNumber("test-goal/position/x", 2);
+        SmartDashboard.setDefaultNumber("test-goal/position/y", 0);
+        SmartDashboard.setDefaultNumber("test-goal/orientation/z", 0);
+
         this.goal = goal;
         this.freeGoalVel = freeGoalVel;
 

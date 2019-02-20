@@ -45,34 +45,14 @@ public class Robot extends TimedRobot {
     boolean disableBrakes;
 
     public static TankDriveOdometryRunnable odometry;
-
     public static LimelightLocalization limelightLocalization;
-
     public static Transform3D lastOdomToVisionTarget;
-
     public static Limelight limelight;
-
     public static TEBPlanner tebPlanner;
-
     public static Navx navx = new Navx();
 
     @Override
     public void robotInit() {
-
-        // TODO: Everything below can be deleted
-
-        SmartDashboard.putNumber("test-goal/position/x", 2);
-        SmartDashboard.putNumber("test-goal/position/y", 0);
-        SmartDashboard.putNumber("test-goal/orientation/z", 0);
-
-        SmartDashboard.putNumber("pointkp", 0);
-        SmartDashboard.putNumber("pointki", 0);
-        SmartDashboard.putNumber("pointkd", 0);
-
-        SmartDashboard.putBoolean("rumbleEnabled", true);
-
-
-        // TODO: Everything above can be deleted
 
         // logging configuration
         Logger.getRootLogger().setLevel(Level.DEBUG);
@@ -105,7 +85,7 @@ public class Robot extends TimedRobot {
 
         tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
 
-        // Testing code
+        // Testing
         Command testTEB = new SimpleCommand("Test TEB", () -> {
             new UDPVelocityTwistDrive().start();
         });
