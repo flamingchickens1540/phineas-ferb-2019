@@ -1,7 +1,5 @@
 package org.team1540.robot2019;
 
-import static org.team1540.rooster.Utilities.scale;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
@@ -55,8 +53,8 @@ public class OI {
     public static final int RIGHT_Y = 5;
 
     // Joysticks
-    public static XboxController driver = new XboxController(0);
-    public static XboxController copilot = new XboxController(1);
+    private static XboxController driver = new XboxController(0);
+    private static XboxController copilot = new XboxController(1);
 
     // copilot buttons
 
@@ -85,7 +83,6 @@ public class OI {
     public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
     public static JoystickButton autoAlignButton = new JoystickButton(OI.driver, RB);
     public static JoystickButton autoAlignCancelButton = new JoystickButton(OI.driver, LB);
-
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -142,47 +139,46 @@ public class OI {
     }
 
     public static double getDriveThrottle() {
-        return scale(
+        return Utilities.scale(
             -Utilities.processDeadzone(driver.getY(GenericHID.Hand.kLeft), Tuning.driveDeadzone),
             Tuning.driveThrottleExponent);
     }
 
     public static double getDriveSoftTurn() {
-        return scale(
+        return Utilities.scale(
             Utilities.processDeadzone(driver.getX(Hand.kRight), Tuning.driveDeadzone),
             Tuning.driveSoftTurnExponent);
+    }
+
+    public static double getDriveHardTurn() {
+        return Utilities.scale(
+            Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kRight), 0.1)
+                - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
+            Tuning.driveHardTurnExponent);
     }
 
     public static boolean getDriveFine() {
         return fineDriveButton.get();
     }
 
-  public static double getDriveHardTurn() {
-    return scale(
-        Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kRight), 0.1)
-            - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
-        Tuning.driveHardTurnExponent);
-  }
-
-
     public static double getClimbAxis() {
         return Utilities.processDeadzone(-copilot.getY(Hand.kRight), Tuning.driveDeadzone);
     }
 
-  // DRIVETRAIN
-  public static double getTankdriveLeftAxis() {
-    return scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_Y), Tuning.axisDeadzone), 2);
-  }
+    // DRIVETRAIN
+    public static double getTankdriveLeftAxis() {
+        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_Y), Tuning.driveDeadzone), 2);
+    }
 
-  public static double getTankdriveRightAxis() {
-    return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_Y), Tuning.axisDeadzone), 2);
-  }
+    public static double getTankdriveRightAxis() {
+        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_Y), Tuning.driveDeadzone), 2);
+    }
 
-  public static double getTankdriveBackwardsAxis() {
-    return scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_TRIG), Tuning.axisDeadzone), 2);
-  }
+    public static double getTankdriveBackwardsAxis() {
+        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_TRIG), Tuning.driveDeadzone), 2);
+    }
 
-  public static double getTankdriveForwardsAxis() {
-    return scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.axisDeadzone), 2);
-  }
+    public static double getTankdriveForwardsAxis() {
+        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.driveDeadzone), 2);
+    }
 }

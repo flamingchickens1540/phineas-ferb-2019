@@ -8,6 +8,9 @@ import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 
 public class Limelight {
 
+    public static double HORIZONTAL_FOV = Math.toRadians(59.6);
+    public static double VERTICAL_FOV = Math.toRadians(45.7);
+
     private final NetworkTable limelightTable;
 
     /**
