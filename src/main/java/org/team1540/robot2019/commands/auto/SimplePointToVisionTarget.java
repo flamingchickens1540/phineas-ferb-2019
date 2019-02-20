@@ -64,7 +64,6 @@ public class SimplePointToVisionTarget extends PIDCommand {
             goal = x - Hardware.navx.getYawRadians();
             logger.info("Point lineup simple starting. Initial goal angle: " + goal);
         }
-        Robot.drivetrain.configTalonsForVelocity();
     }
 
     @Override

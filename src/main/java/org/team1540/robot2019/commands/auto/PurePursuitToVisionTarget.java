@@ -59,7 +59,6 @@ public class PurePursuitToVisionTarget extends Command {
     @Override
     protected void initialize() {
         logger.info("Pure pursuit starting...");
-        Robot.drivetrain.configTalonsForVelocity();
         if (limelightLocalization.attemptUpdatePose()) {
             logger.info("Vision target pose acquired!");
             goal = computeGoal();
