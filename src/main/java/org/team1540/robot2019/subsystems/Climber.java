@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.commands.climber.JoystickClimberArms;
 
 public class Climber extends Subsystem {
 
@@ -44,6 +45,7 @@ public class Climber extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
+        setDefaultCommand(new JoystickClimberArms());
     }
 
     public double getPosition() {

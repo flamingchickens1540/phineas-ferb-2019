@@ -13,14 +13,10 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
-import org.team1540.robot2019.commands.climber.ClimbLevelThree;
-import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
+import org.team1540.robot2019.commands.climber.*;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.ExtendHatch;
-import org.team1540.robot2019.commands.hatch.GetHatchFloor;
-import org.team1540.robot2019.commands.hatch.GrabHatch;
-import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.hatch.*;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -64,10 +60,11 @@ public class OI {
     private static Button intakeLoadingStationButton = new StrictDPadButton(copilot, 0, DPadAxis.RIGHT);
 
     private static JoystickButton autoIntakeButton = new JoystickButton(copilot, A);
-    private static Button cancelIntakeButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_Y);
+    private static Button cancelIntakeButton = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_Y);
     private static JoystickButton ejectButton = new JoystickButton(copilot, B);
 
-    private static JoystickButton prepGetHatchButton = new JoystickButton(copilot, X);
+    private static JoystickButton extendHatchButton = new JoystickButton(copilot, X);
+    private static JoystickButton retractHatchButton = new JoystickButton(copilot, BACK);
     private static JoystickButton prepGetHatchFloorButton = new JoystickButton(copilot, START);
     private static Button grabHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_TRIG);
     private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
@@ -75,7 +72,7 @@ public class OI {
     private static Button climbingSafety = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
     private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
     private static JoystickButton climbLevel2Button = new JoystickButton(copilot, LB); // + safety
-    private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB);// also use this for end of lvl 2 climb
+    private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB);
 
     // driver buttons
 
@@ -117,7 +114,8 @@ public class OI {
         cancelIntakeButton.whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
         ejectButton.whenPressed(new EjectThenDown());
 
-        prepGetHatchButton.whenPressed(new ExtendHatch());
+        extendHatchButton.whenPressed(new ExtendHatch());
+        retractHatchButton.whenPressed(new RetractHatch());
         prepGetHatchFloorButton.whenPressed(new GetHatchFloor());
         grabHatchButton.whenPressed(new GrabHatch());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
@@ -153,6 +151,11 @@ public class OI {
             - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
         Tuning.driveHardTurnExponent);
   }
+
+
+    public static double getClimbAxis() {
+        return Utilities.processDeadzone(-copilot.getY(Hand.kRight), Tuning.driveDeadzone);
+    }
 
   // DRIVETRAIN
   public static double getTankdriveLeftAxis() {
