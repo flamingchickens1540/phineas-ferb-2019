@@ -134,7 +134,7 @@ public class Tuning {
     // auto-lineup
     public static double drivetrainRadiusMeters = 0.305; // This is for pandora (Seems to work... hmmm) TODO: Change this
 
-  public static long drivetrainUDPTimeout = 500;
+    public static long drivetrainUDPTimeout = 500;
 
-  public static double drivetrainMaxVelocity = 400;
+    public static double drivetrainMaxVelocity = 400;
 }
