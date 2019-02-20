@@ -49,9 +49,9 @@ public class AutoAlignTuningRobot extends TimedRobot {
 //      Robot.odomToBaseLink.toTransform2D().putToNetworkTable("Odometry/Debug/WheelOdometry");
 //      boolean targetFound = Robot.limelightLocalization.attemptUpdatePose();
 //      if (targetFound) {
-//        Robot.limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
+//        Robot.limelightLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
 //        Transform3D goal = odometry.getOdomToBaseLink()
-//            .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
+//            .add(Robot.limelightLocalization.getLastBaseLinkToVisionTarget())
 //            .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 //
 //          Robot.lastOdomToLimelightGoal = goal;

@@ -73,18 +73,18 @@ public class UDPVelocityTwistDrive extends Command {
         System.out.println("Updated goal!");
 
         goal = Robot.odometry.getOdomToBaseLink().toTransform2D().add(new Transform2D(xGoal, yGoal, angleGoal));
-//        .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
+//        .add(Robot.limelightLocalization.getLastBaseLinkToVisionTarget())
 //        .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
 
 //    Robot.odometry.reset();
-        Robot.udpSender.setGoal(goal);
-        Robot.udpSender.setViaPoint(goal.getPositionVector());
+        Robot.tebPlanner.setGoal(goal);
+        Robot.tebPlanner.setViaPoint(goal.getPositionVector());
 //    Robot.udpSender.setViaPoint(new Vector2D(1, -1));
     }
 
     @Override
     protected void execute() {
-        Twist2D cmdVel = Robot.udpReceiver.getCmdVel();
+        Twist2D cmdVel = Robot.tebPlanner.getCmdVel();
         double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadiusMeters) * Tuning.drivetrainTicksPerMeter / 10;
         double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadiusMeters) * Tuning.drivetrainTicksPerMeter / 10;
         Robot.drivetrain.setLeftVelocityTPU(leftSetpoint);
