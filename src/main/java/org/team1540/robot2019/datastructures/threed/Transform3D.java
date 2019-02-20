@@ -1,10 +1,9 @@
 package org.team1540.robot2019.datastructures.threed;
 
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.team1540.robot2019.datastructures.twod.Transform2D;
+import org.team1540.robot2019.datastructures.utils.RotationUtils;
 
 public class Transform3D {
 
@@ -27,7 +26,7 @@ public class Transform3D {
     }
 
     public Transform3D(double x, double y, double z, double roll, double pitch, double yaw) {
-        this(new Vector3D(x, y, z), new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, roll, pitch, yaw));
+        this(new Vector3D(x, y, z), RotationUtils.fromRPY(roll, pitch, yaw));
     }
 
     public Transform3D(double x, double y, double yaw) {
@@ -35,7 +34,7 @@ public class Transform3D {
     }
 
     public Transform2D toTransform2D() {
-        return new Transform2D(this.position.getX(), this.position.getY(), this.orientation.getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM)[2]);
+        return new Transform2D(this.position.getX(), this.position.getY(), RotationUtils.getRPYVec(this.orientation).getZ());
     }
 
     public Vector3D getPosition() {
