@@ -15,6 +15,8 @@ import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
+// TODO: Use proper logging class
+// TODO: Make this a generic pure pursuit command
 public class PurePursuitToVisionTarget extends Command {
 
     private static final double ANGULAR_KP = 5;
