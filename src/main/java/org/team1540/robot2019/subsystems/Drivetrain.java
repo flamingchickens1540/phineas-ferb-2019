@@ -60,8 +60,6 @@ public class Drivetrain extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        //    setDefaultCommand(new PercentDrive(Robot.drivetrain));
-//    setDefaultCommand(new VelocityDrive());
         setDefaultCommand(new SimpleLoopCommand("Drive",
             new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
                 OI::getDriveHardTurn)
@@ -139,19 +137,6 @@ public class Drivetrain extends Subsystem {
                 }
             }
         };
-    }
-
-    public void updatePIDValues() {
-        for (ChickenTalon talon : driveMotorMasters) {
-            talon.config_kP(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionP);
-            talon.config_kI(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionI);
-            talon.config_kD(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionD);
-            talon.config_kF(DRIVE_POSITION_SLOT_IDX, Tuning.drivePositionF);
-            talon.config_kP(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityP);
-            talon.config_kI(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityI);
-            talon.config_kD(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityD);
-            talon.config_kF(DRIVE_VELOCITY_SLOT_IDX, Tuning.driveVelocityF);
-        }
     }
 
     private void configTalonsForPosition() {
