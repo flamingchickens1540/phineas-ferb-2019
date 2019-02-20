@@ -145,7 +145,7 @@ public class Drivetrain extends Subsystem {
         }
     }
 
-    public void configTalonsForVelocity() {
+    private void configTalonsForVelocity() {
         for (ChickenTalon t : driveMotorMasters) {
             t.selectProfileSlot(DRIVE_VELOCITY_SLOT_IDX);
         }

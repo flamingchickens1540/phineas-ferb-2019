@@ -47,9 +47,6 @@ public class UDPVelocityTwistDrive extends Command {
 
     @Override
     protected void initialize() {
-//    Robot.drivetrain.reset();
-        Robot.drivetrain.configTalonsForVelocity();
-
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
@@ -59,8 +56,6 @@ public class UDPVelocityTwistDrive extends Command {
         NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
         tebConfigTable.getEntry("TEBReset").setBoolean(true);
         if (tebConfigTable.getEntry("ResetTuningVals").getBoolean(true)) {
-//      Robot.leds.set(ColorPattern.CHASE_BLUE);
-
             tebConfigTable.getEntry("MaxVelX").setNumber(1.5);
             tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.4);
             tebConfigTable.getEntry("AccLimX").setNumber(1.5);

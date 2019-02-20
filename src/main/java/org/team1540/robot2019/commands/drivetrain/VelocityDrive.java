@@ -15,7 +15,6 @@ public class VelocityDrive extends Command {
 
     @Override
     protected void initialize() {
-        Robot.drivetrain.configTalonsForVelocity();
     }
 
     @Override

@@ -53,9 +53,6 @@ public class UDPAutoLineup extends Command {
 
     @Override
     protected void initialize() {
-//    dt.reset();
-        dt.configTalonsForVelocity();
-
         NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
         tebConfigTable.getEntry("TEBReset").setBoolean(true);
         tebConfigTable.getEntry("MaxVelX").setNumber(1.5);
