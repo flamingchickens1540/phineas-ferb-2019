@@ -8,39 +8,59 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.util.function.Supplier;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.twod.Transform2D;
 
 // TODO: Use logging class
 public class UDPOdometryGoalSender {
 
+    public static final Logger logger = Logger.getLogger(UDPOdometryGoalSender.class);
+
     private DatagramSocket clientSocket;
     private InetAddress address;
     private String addressString;
     private int port;
 
+    private final double period;
+    private final Supplier<Odometry> odometrySupplier;
+
     private Transform2D goal;
     private Odometry odometry;
     private Vector2D viaPoint;
 
-    public UDPOdometryGoalSender(String address, int port) {
+    public UDPOdometryGoalSender(String address, int port, double period, Supplier<Odometry> odometrySupplier) {
         addressString = address;
         this.port = port;
+        this.period = period;
+        this.odometrySupplier = odometrySupplier;
         attemptConnection();
     }
 
     public void attemptConnection() {
+        logger.info("Attempting to connect... Address: " + addressString);
         try {
             this.address = InetAddress.getByName(addressString);
             this.clientSocket = new DatagramSocket();
-            System.out.println("[UDP Sender]: Connected to " + addressString);
+            logger.info("Connected to address: " + addressString);
+            new Notifier(this::updateData).startPeriodic(period);
         } catch (UnknownHostException | SocketException e) {
-            System.out.println("[UDP Sender]: Couldn't connect to " + addressString);
+            logger.warn("Unable to connect connect to address: " + addressString);
             e.printStackTrace();
             autoReconnect();
+        }
+    }
+
+    private void updateData() {
+        setOdometry(odometrySupplier.get());
+        try {
+            this.sendIt();
+        } catch (IOException e) {
+            logger.warn("Unable to send Odometry packet!");
         }
     }
 
@@ -52,7 +72,7 @@ public class UDPOdometryGoalSender {
         this.viaPoint = viaPoint;
     }
 
-    public void setOdometry(Odometry odometry) {
+    private void setOdometry(Odometry odometry) {
         this.odometry = odometry;
     }
 

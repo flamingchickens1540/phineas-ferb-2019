@@ -1,8 +1,5 @@
 package org.team1540.robot2019;
 
-import static org.team1540.robot2019.OI.LB;
-import static org.team1540.robot2019.OI.RB;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -10,20 +7,15 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import java.io.IOException;
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
-import org.team1540.robot2019.drivecontrol.commands.PurePursuitThenPointToVisionTarget;
 import org.team1540.robot2019.drivecontrol.commands.UDPVelocityTwistDrive;
 import org.team1540.robot2019.networking.UDPOdometryGoalSender;
 import org.team1540.robot2019.networking.UDPTwistReceiver;
@@ -35,7 +27,6 @@ import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
-import org.team1540.robot2019.utils.StateChangeDetector;
 import org.team1540.robot2019.vision.LimelightInterface;
 import org.team1540.robot2019.vision.LimelightLocalization;
 import org.team1540.robot2019.wrappers.Navx;
@@ -57,7 +48,7 @@ public class Robot extends TimedRobot {
 
     boolean disableBrakes;
 
-    public static Transform3D odom_to_base_link = Transform3D.IDENTITY;
+    public static Transform3D odomToBaseLink = Transform3D.IDENTITY;
 
     public static TankDriveOdometryRunnable wheelOdometry;
 
@@ -65,18 +56,11 @@ public class Robot extends TimedRobot {
     public static UDPTwistReceiver udpReceiver;
     public static LimelightLocalization limelightLocalization;
 
-    public static Transform3D lastOdomToLimelightGoal;
     public static Transform3D lastOdomToVisionTarget;
 
     public static LimelightInterface limelight;
 
     public static Navx navx = new Navx();
-
-    // TODO: Move these to OI
-    static JoystickButton autoAlignButton = new JoystickButton(OI.driver, RB);
-    static JoystickButton autoAlignCancelButton = new JoystickButton(OI.driver, LB);
-
-    static Command alignCommand = null;
 
     @Override
     public void robotInit() {
@@ -90,6 +74,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("pointkp", 0);
         SmartDashboard.putNumber("pointki", 0);
         SmartDashboard.putNumber("pointkd", 0);
+
+        SmartDashboard.putBoolean("rumbleEnabled", true);
+
 
         // TODO: Everything above can be deleted
 
@@ -116,55 +103,28 @@ public class Robot extends TimedRobot {
 
         ShuffleboardDisplay.init();
 
-        // TODO: Clean this up
-        SmartDashboard.putBoolean("rumbleEnabled", true);
-
         wheelOdometry = new TankDriveOdometryRunnable(
             drivetrain::getLeftPositionMeters,
             drivetrain::getRightPositionMeters,
             Robot.navx::getAngleRadians
         );
 
-        udpReceiver = new UDPTwistReceiver(5801, () -> {
-        });
+        udpReceiver = new UDPTwistReceiver(5801);
 
-        udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800);
+        udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800, 0.01, () -> new Odometry(Robot.odomToBaseLink, drivetrain.getTwist()));
 
         Robot.limelightLocalization = new LimelightLocalization("limelight-a");
         limelight = new LimelightInterface("limelight-a");
 
-        StateChangeDetector limelightStateDetector = new StateChangeDetector(false);
-
         // TODO: Clean this up
         new Notifier(() -> {
             wheelOdometry.run();
-            Robot.odom_to_base_link = wheelOdometry.getOdomToBaseLink();
-            udpSender.setOdometry(new Odometry(Robot.odom_to_base_link, drivetrain.getTwist()));
-            Robot.odom_to_base_link.toTransform2D().putToNetworkTable("Odometry/Debug/WheelOdometry");
+            Robot.odomToBaseLink = wheelOdometry.getOdomToBaseLink();
+
             boolean targetFound = Robot.limelightLocalization.attemptUpdatePose();
             if (targetFound) {
                 Robot.limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
-                Transform3D goal = wheelOdometry.getOdomToBaseLink()
-                    .add(Robot.limelightLocalization.getBaseLinkToVisionTarget())
-                    .add(new Transform3D(new Vector3D(-0.65, 0, 0), Rotation.IDENTITY));
-
-                Robot.lastOdomToLimelightGoal = goal;
-                Robot.lastOdomToVisionTarget = wheelOdometry.getOdomToBaseLink()
-                    .add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
-                goal.toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToGoal");
-            }
-            // TODO: Clean this up
-            if (alignCommand == null || !alignCommand.isRunning()) {
-                if (targetFound && DriverStation.getInstance().isEnabled() && SmartDashboard.getBoolean("rumbleEnabled", true)) {
-//          OI.driver.setRumble(RumbleType.kLeftRumble, 1);
-                } else {
-//          OI.driver.setRumble(RumbleType.kLeftRumble, 0);
-                }
-            }
-            try {
-                udpSender.sendIt();
-            } catch (IOException e) {
-                DriverStation.reportWarning("Unable to send Odometry packet!", false);
+                Robot.lastOdomToVisionTarget = wheelOdometry.getOdomToBaseLink().add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
             }
         }).startPeriodic(0.011);
 
@@ -173,26 +133,6 @@ public class Robot extends TimedRobot {
             new UDPVelocityTwistDrive().start();
         });
         SmartDashboard.putData(testTEB);
-
-        // Testing code
-        Command resetWheelOdom = new SimpleCommand("Update PID Values", () -> {
-            drivetrain.updatePIDValues();
-            System.out.println(Tuning.driveVelocityP);
-        });
-        resetWheelOdom.setRunWhenDisabled(true);
-        SmartDashboard.putData(resetWheelOdom);
-
-        autoAlignButton.whenPressed(new SimpleCommand("Start Lineup", () -> {
-//      alignCommand = new PurePursuitToVisionTarget(Robot.limelightLocalization, Robot.wheelOdometry);
-//        alignCommand = new SimplePointToVisionTarget();
-            alignCommand = new PurePursuitThenPointToVisionTarget();
-            alignCommand.start();
-        }));
-        autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Lineup", () -> {
-            if (alignCommand != null) {
-                alignCommand.cancel();
-            }
-        }));
 
         NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
         tebConfigTable.getEntry("ResetTuningVals").setBoolean(true);
@@ -206,11 +146,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-//    long time = System.currentTimeMillis();
         Scheduler.getInstance().run();
-//    System.out.println(time - System.currentTimeMillis());
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
+        Robot.odomToBaseLink.toTransform2D().putToNetworkTable("Odometry/Debug");
     }
 
     private Timer brakeTimer = new Timer();
