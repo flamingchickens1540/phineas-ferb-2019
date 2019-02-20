@@ -30,10 +30,19 @@ public class LimelightInterface {
      *
      * @return a {@link Vector2D} containing the output angles of the limelight targeting in radians
      */
-    public Vector2D getAngles() {
+    public Vector2D getTargetAngles() {
         double x = Math.toRadians(limelightTable.getEntry("tx").getDouble(0));
         double y = Math.toRadians(limelightTable.getEntry("ty").getDouble(0));
         return new Vector2D(x, y);
+    }
+
+    /**
+     * Queries whether the limelight target has been found.
+     *
+     * @return the state of the target
+     */
+    public boolean isTargetFound() {
+        return (double) limelightTable.getEntry("tv").getNumber(0) > 0;
     }
 
     /**
@@ -49,15 +58,21 @@ public class LimelightInterface {
         );
     }
 
-    public void setLeds(boolean on) {
-        limelightTable.getEntry("ledMode").setNumber(on ? 0 : 1);
+    /**
+     * Sets limelight's green LEDs on or off.
+     *
+     * @param isOn the new state of the LEDs
+     */
+    public void setLeds(boolean isOn) {
+        limelightTable.getEntry("ledMode").setNumber(isOn ? 0 : 1);
         NetworkTableInstance.getDefault().flush();
     }
 
-    public boolean isTargetFound() {
-        return (double) limelightTable.getEntry("tv").getNumber(0) > 0;
-    }
-
+    /**
+     * Attempts to get the published SolvePNP transform from the vision target to the limelight (not the other way around).
+     *
+     * @return the transform from the vision target to the limelight
+     */
     public Transform3D getVisionTargetToLimelightTransformOrNull() {
         Double[] rawTransformation = limelightTable.getEntry("camtran").getDoubleArray(new Double[]{});
         if (rawTransformation[2] == 0) {
