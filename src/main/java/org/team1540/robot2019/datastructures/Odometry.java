@@ -4,7 +4,8 @@ import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 
 public class Odometry {
-  public static final Odometry ZERO = new Odometry(Transform3D.IDENTITY, Twist2D.ZERO);
+
+  public static final Odometry IDENTITY = new Odometry(Transform3D.IDENTITY, Twist2D.ZERO);
 
   private final Transform3D pose;
   private final Twist2D twist;

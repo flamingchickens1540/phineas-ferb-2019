@@ -1,4 +1,4 @@
-package org.team1540.robot2019.utils;
+package org.team1540.robot2019.datastructures.utils;
 
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;

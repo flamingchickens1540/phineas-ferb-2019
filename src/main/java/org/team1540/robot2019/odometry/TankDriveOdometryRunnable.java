@@ -1,4 +1,4 @@
-package org.team1540.robot2019.utils;
+package org.team1540.robot2019.odometry;
 
 import java.util.function.DoubleSupplier;
 import org.team1540.robot2019.datastructures.threed.Transform3D;

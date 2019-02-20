@@ -1,8 +1,8 @@
-package org.team1540.robot2019.utils;
+package org.team1540.robot2019.wrappers;
 
 import org.team1540.robot2019.Hardware;
 
-public class NavxWrapper {
+public class Navx {
 
     /**
      * @return Navx yaw counter-clockwise in radians
