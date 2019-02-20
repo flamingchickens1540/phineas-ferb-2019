@@ -50,7 +50,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected void initialize() {
-        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
+        double x = Robot.limelight.getTargetAngles().getX();
         if (x == 0) {
             Transform3D prevGoal = Robot.lastOdomToVisionTargetTracker.getOdomToVisionTarget();
             if (prevGoal == null) {
