@@ -13,10 +13,16 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
-import org.team1540.robot2019.commands.climber.*;
+import org.team1540.robot2019.commands.climber.ClimbLevelThree;
+import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.*;
+import org.team1540.robot2019.commands.hatch.ExtendHatch;
+import org.team1540.robot2019.commands.hatch.GetHatchFloor;
+import org.team1540.robot2019.commands.hatch.GrabHatch;
+import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.hatch.RetractHatch;
+import org.team1540.robot2019.drivecontrol.commands.PurePursuitThenPointToVisionTarget;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -77,6 +83,9 @@ public class OI {
     // driver buttons
 
     public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
+    public static JoystickButton autoAlignButton = new JoystickButton(OI.driver, RB);
+    public static JoystickButton autoAlignCancelButton = new JoystickButton(OI.driver, LB);
+
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -124,6 +133,10 @@ public class OI {
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
 
+        Command alignCommand = new PurePursuitThenPointToVisionTarget();
+        autoAlignButton.whenPressed(alignCommand);
+        autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
+
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized buttons in " + (end - start) + " ms");
     }
@@ -141,8 +154,7 @@ public class OI {
     }
 
     public static boolean getDriveFine() {
-        return false;
-//        return fineDriveButton.get();
+        return fineDriveButton.get();
     }
 
   public static double getDriveHardTurn() {
