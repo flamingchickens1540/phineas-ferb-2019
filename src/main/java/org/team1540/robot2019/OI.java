@@ -117,7 +117,7 @@ public class OI {
 
         Command intakeCommand = new FloorIntake();
         autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::noHatch, intakeCommand));
-        cancelIntakeButton.whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
+        cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ejectButton.whenPressed(new EjectThenDown());
 
         extendHatchButton.whenPressed(new ExtendHatch());
@@ -132,7 +132,7 @@ public class OI {
 
         Command alignCommand = new PurePursuitThenPointToVisionTarget();
         autoAlignButton.whenPressed(alignCommand);
-        autoAlignCancelButton.whenPressed(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
+        autoAlignCancelButton.cancelWhenPressed(alignCommand);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized buttons in " + (end - start) + " ms");
