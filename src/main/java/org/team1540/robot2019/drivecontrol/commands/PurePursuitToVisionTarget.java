@@ -75,7 +75,7 @@ public class PurePursuitToVisionTarget extends Command {
 
     private Transform3D computeGoal() {
         return driveOdometry.getOdomToBaseLink()
-            .add(limelightLocalization.getBaseLinkToVisionTarget())
+            .add(limelightLocalization.getLastBaseLinkToVisionTarget())
             .add(VISION_TARGET_OFFSET);
     }
 

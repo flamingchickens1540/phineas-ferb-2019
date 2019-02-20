@@ -1,31 +1,48 @@
 package org.team1540.robot2019.vision;
 
+import edu.wpi.first.wpilibj.Notifier;
+import java.util.function.Supplier;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
-import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.wrappers.Limelight;
 
 /**
  * Class for localization with a Limelight over NetworkTables.
  */
 public class LimelightLocalization {
 
+    private static final Vector3D CAMERA_POSITION = new Vector3D(0.086, 0.099, 1.12);
+    private static final double PLANE_HEIGHT = 0.71;
+    private static final double CAMERA_ROLL = Math.toRadians(0);
+    private static final double CAMERA_TILT = Math.toRadians(-37.5);
+
+    private Supplier<Transform3D> odomSupplier = null;
+
+    private Transform3D odomToVisionTarget;
     private Transform3D baseLinkToVisionTarget;
-    private LimelightInterface limelight;
+    private Limelight limelight;
     private long timeLastAcquired = 0;
 
-    public LimelightLocalization(LimelightInterface limelight) {
+    public LimelightLocalization(Limelight limelight) {
         this.limelight = limelight;
     }
 
+    public LimelightLocalization(Limelight limelight, double updatePeriod) {
+        this(limelight);
+        new Notifier(this::attemptUpdatePose).startPeriodic(updatePeriod);
+    }
+
+    public LimelightLocalization(Limelight limelight, double updatePeriod, Supplier<Transform3D> odomSupplier) {
+        this(limelight);
+        this.odomSupplier = odomSupplier;
+        new Notifier(this::attemptUpdatePose).startPeriodic(updatePeriod);
+    }
+
     public boolean attemptUpdatePose() {
-        double CAMERA_TILT = Math.toRadians(-37.5);
-        double CAMERA_ROLL = Math.toRadians(0);
-        double PLANE_HEIGHT = 0.71; // Height of vision targets in meters
-        Vector3D CAMERA_POSITION = new Vector3D(0.086, 0.099, 1.12); // Position of camera in meters
 
         // TODO: Filter limelight contours using size, angle, etc.
 
@@ -46,10 +63,14 @@ public class LimelightLocalization {
         Rotation cameraTilt = new Rotation(Vector3D.PLUS_J, CAMERA_TILT, RotationConvention.FRAME_TRANSFORM);
         Rotation cameraRoll = new Rotation(Vector3D.PLUS_I, CAMERA_ROLL, RotationConvention.FRAME_TRANSFORM);
 
-        Rotation cameraRotation = new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, CAMERA_ROLL, CAMERA_TILT, 0);
-//        Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
+//        Rotation cameraRotation = new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, CAMERA_ROLL, CAMERA_TILT, 0);
+        Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
         baseLinkToVisionTarget = DualVisionTargetLocalizationUtils
             .poseFromTwoCamPoints(point0, point1, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, Tuning.LIMELIGHT_HORIZONTAL_FOV, Tuning.LIMELIGHT_VERTICAL_FOV);
+
+        if (odomSupplier != null) {
+            odomToVisionTarget = odomSupplier.get().add(baseLinkToVisionTarget);
+        }
 
         timeLastAcquired = System.currentTimeMillis();
         return true;
@@ -59,8 +80,12 @@ public class LimelightLocalization {
         return baseLinkToVisionTarget != null;
     }
 
-    public Transform3D getBaseLinkToVisionTarget() {
+    public Transform3D getLastBaseLinkToVisionTarget() {
         return baseLinkToVisionTarget;
+    }
+
+    public Transform3D getLastOdomToVisionTarget() {
+        return odomToVisionTarget;
     }
 
     public long millisSinceLastAcquired() {

@@ -1,4 +1,4 @@
-package org.team1540.robot2019.vision;
+package org.team1540.robot2019.wrappers;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -6,7 +6,7 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 
-public class LimelightInterface {
+public class Limelight {
 
     private final NetworkTable limelightTable;
 
@@ -15,14 +15,14 @@ public class LimelightInterface {
      *
      * @param name hostname of the new limelight
      */
-    public LimelightInterface(String name) {
+    public Limelight(String name) {
         limelightTable = NetworkTableInstance.getDefault().getTable(name);
     }
 
     /**
      * Constructs a new limelight interface with the default hostname.
      */
-    public LimelightInterface() {
+    public Limelight() {
         this("limelight");
     }
 

@@ -10,13 +10,12 @@ import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
-import org.team1540.robot2019.networking.UDPOdometryGoalSender;
-import org.team1540.robot2019.networking.UDPTwistReceiver;
 import org.team1540.robot2019.odometry.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.robot2019.vision.LimelightLocalization;
 import org.team1540.robot2019.wrappers.Navx;
+import org.team1540.robot2019.wrappers.TEBPlanner;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
@@ -24,8 +23,7 @@ import org.team1540.rooster.functional.Executable;
 public class UDPAutoLineup extends Command {
 
     private final Drivetrain dt;
-    private final UDPOdometryGoalSender sender;
-    private final UDPTwistReceiver receiver;
+    private final TEBPlanner planner;
     private final LimelightLocalization limeLoc;
     private final TankDriveOdometryRunnable driveOdometry;
     private final Transform3D lastOdomToLimelight;
@@ -35,11 +33,10 @@ public class UDPAutoLineup extends Command {
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
 
-    public UDPAutoLineup(Drivetrain dt, UDPOdometryGoalSender sender, UDPTwistReceiver receiver, LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry,
+    public UDPAutoLineup(Drivetrain dt, TEBPlanner planner, LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry,
         Transform3D lastOdomToLimelight, Navx navx) {
         this.dt = dt;
-        this.sender = sender;
-        this.receiver = receiver;
+        this.planner = planner;
         this.limeLoc = limeLoc;
         this.driveOdometry = driveOdometry;
         this.lastOdomToLimelight = lastOdomToLimelight;
@@ -84,17 +81,17 @@ public class UDPAutoLineup extends Command {
 
     private Transform3D computeGoal() {
         return driveOdometry.getOdomToBaseLink()
-            .add(limeLoc.getBaseLinkToVisionTarget())
+            .add(limeLoc.getLastBaseLinkToVisionTarget())
             .add(new Transform3D(new Vector3D(-0.65, -0.025, 0), Rotation.IDENTITY));
     }
 
     private void updateGoal(Transform3D newGoal) {
         this.goal = newGoal;
-        sender.setGoal(goal.toTransform2D());
+        planner.setGoal(goal.toTransform2D());
         System.out.println("Goal updated");
 
         Transform3D via_point = goal.add(new Transform3D(-0.7, 0, 0));
-        sender.setViaPoint(via_point.toTransform2D().getPositionVector());
+        planner.setViaPoint(via_point.toTransform2D().getPositionVector());
     }
 
     @Override
@@ -104,7 +101,7 @@ public class UDPAutoLineup extends Command {
         }
 
         // Send velocity command
-        Twist2D cmdVel = receiver.getCmdVel();
+        Twist2D cmdVel = planner.getCmdVel();
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();
     }

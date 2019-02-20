@@ -1,9 +1,6 @@
 package org.team1540.robot2019;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,8 +14,6 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.drivecontrol.commands.UDPVelocityTwistDrive;
-import org.team1540.robot2019.networking.UDPOdometryGoalSender;
-import org.team1540.robot2019.networking.UDPTwistReceiver;
 import org.team1540.robot2019.odometry.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
@@ -27,9 +22,10 @@ import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
-import org.team1540.robot2019.vision.LimelightInterface;
 import org.team1540.robot2019.vision.LimelightLocalization;
+import org.team1540.robot2019.wrappers.Limelight;
 import org.team1540.robot2019.wrappers.Navx;
+import org.team1540.robot2019.wrappers.TEBPlanner;
 import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
@@ -48,17 +44,15 @@ public class Robot extends TimedRobot {
 
     boolean disableBrakes;
 
-    public static Transform3D odomToBaseLink = Transform3D.IDENTITY;
-
     public static TankDriveOdometryRunnable odometry;
 
-    public static UDPOdometryGoalSender udpSender;
-    public static UDPTwistReceiver udpReceiver;
     public static LimelightLocalization limelightLocalization;
 
     public static Transform3D lastOdomToVisionTarget;
 
-    public static LimelightInterface limelight;
+    public static Limelight limelight;
+
+    public static TEBPlanner tebPlanner;
 
     public static Navx navx = new Navx();
 
@@ -99,34 +93,17 @@ public class Robot extends TimedRobot {
         hatch = new HatchMech();
         climber = new Climber();
 
-        OI.init();
-
-        ShuffleboardDisplay.init();
-
         odometry = new TankDriveOdometryRunnable(
             drivetrain::getLeftPositionMeters,
             drivetrain::getRightPositionMeters,
-            Robot.navx::getAngleRadians
+            Robot.navx::getAngleRadians,
+            0.011
         );
 
-        udpReceiver = new UDPTwistReceiver(5801);
+        limelight = new Limelight("limelight-a");
+        limelightLocalization = new LimelightLocalization(limelight, 0.05); // Doesn't have to be very frequent if things that use it also call update
 
-        udpSender = new UDPOdometryGoalSender("10.15.40.202", 5800, 0.01, () -> new Odometry(Robot.odomToBaseLink, drivetrain.getTwist()));
-
-        limelight = new LimelightInterface("limelight-a");
-        Robot.limelightLocalization = new LimelightLocalization(limelight);
-
-        // TODO: Clean this up
-        new Notifier(() -> {
-            odometry.run();
-            Robot.odomToBaseLink = odometry.getOdomToBaseLink();
-
-            boolean targetFound = Robot.limelightLocalization.attemptUpdatePose();
-            if (targetFound) {
-                Robot.limelightLocalization.getBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
-                Robot.lastOdomToVisionTarget = odometry.getOdomToBaseLink().add(Robot.limelightLocalization.getBaseLinkToVisionTarget());
-            }
-        }).startPeriodic(0.011);
+        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
 
         // Testing code
         Command testTEB = new SimpleCommand("Test TEB", () -> {
@@ -134,8 +111,9 @@ public class Robot extends TimedRobot {
         });
         SmartDashboard.putData(testTEB);
 
-        NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
-        tebConfigTable.getEntry("ResetTuningVals").setBoolean(true);
+        OI.init();
+
+        ShuffleboardDisplay.init();
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
@@ -149,7 +127,9 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
-        Robot.odomToBaseLink.toTransform2D().putToNetworkTable("Odometry/Debug");
+        odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
+        limelightLocalization.getLastOdomToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/OdomToVisionTarget");
+        limelightLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
     }
 
     private Timer brakeTimer = new Timer();
