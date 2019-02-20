@@ -19,7 +19,7 @@ public class TankDriveOdometryRunnable implements Runnable {
     /**
      * @param leftPosSupplier Supplier for left tank drive position in meters
      * @param rightPosSupplier Supplier for right tank drive position in meters
-     * @param angleSupplier Supplier for continuous angle measurement in radians // TODO: This should not require angles to be continuous
+     * @param angleSupplier Supplier for continuous angle measurement in radians
      */
     public TankDriveOdometryRunnable(
         DoubleSupplier leftPosSupplier,
