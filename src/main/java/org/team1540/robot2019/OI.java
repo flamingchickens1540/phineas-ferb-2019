@@ -150,7 +150,7 @@ public class OI {
     }
 
     public static double getClimbAxis() {
-        return Utilities.processDeadzone(-copilot.getY(Hand.kRight), 0.1);
+        return Utilities.processDeadzone(-copilot.getY(Hand.kRight), Tuning.driveDeadzone);
     }
 
 }
