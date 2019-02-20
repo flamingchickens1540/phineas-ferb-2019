@@ -2,6 +2,7 @@ package org.team1540.robot2019.vision.commands;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.PIDCommand;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -15,6 +16,8 @@ import org.team1540.rooster.functional.Executable;
 
 public class SimplePointToVisionTarget extends PIDCommand {
 
+    public static final Logger logger = Logger.getLogger(SimplePointToVisionTarget.class);
+
     // Max/Min angular velocity
     private static final double MIN_VEL_THETA = 0.1;
     private static final double MAX_VEL_THETA = 1.8;
@@ -27,7 +30,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
     private static final double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
     // Goal tolerances for angle
-    private static final double GOAL_TOLERANCE_ANGULAR_POSITION = 0.6;
+    private static final double GOAL_TOLERANCE_ANGULAR_POSITION = Math.toRadians(0.6);
     private static final double GOAL_TOLERANCE_ANGULAR_VELOCITY = 0.3;
 
     private Executable pipeline;
@@ -51,14 +54,14 @@ public class SimplePointToVisionTarget extends PIDCommand {
             Transform3D prevGoal = Robot.lastOdomToVisionTarget;
             if (prevGoal == null) {
                 Robot.drivetrain.stop();
-                System.out.println("Point lineup simple: Unable to find target and no alternative specified");
+                logger.warn("Unable to find target and no alternative specified! Ending...");
                 return;
             }
-            System.out.println("Point lineup simple: Unable to find target. Using alternative goal");
             goal = prevGoal.toTransform2D().getTheta();
+            logger.info("Unable to find target. Using alternative goal angle: " + goal);
         } else {
             goal = x - Robot.navx.getYawRadians();
-            System.out.println("Point lineup simple starting");
+            logger.info("Point lineup simple starting. Initial goal angle: " + goal);
         }
         Robot.drivetrain.configTalonsForVelocity();
     }
@@ -76,9 +79,13 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected boolean isFinished() {
-        return goal == null ||
-            (Math.abs(getAngleError(goal)) < Math.toRadians(GOAL_TOLERANCE_ANGULAR_POSITION)
-                && Math.abs(Robot.drivetrain.getTwist().getOmega()) < GOAL_TOLERANCE_ANGULAR_VELOCITY);
+        double anglePosError = Math.abs(getAngleError(goal));
+        double angleVelError = Math.abs(Robot.drivetrain.getTwist().getOmega());
+        boolean isFinished = goal == null || (anglePosError < GOAL_TOLERANCE_ANGULAR_POSITION && angleVelError < GOAL_TOLERANCE_ANGULAR_VELOCITY);
+        if (isFinished) {
+            logger.info(String.format("Simple point goal reached! Angle error remaining: %f Angular velocity error remaining: %f", anglePosError, angleVelError));
+        }
+        return isFinished;
     }
 
     @Override
@@ -92,9 +99,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        double angleError = getAngleError(goal);
-
-        return angleError;
+        return getAngleError(goal);
     }
 
     @Override

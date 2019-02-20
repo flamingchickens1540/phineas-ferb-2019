@@ -3,6 +3,7 @@ package org.team1540.robot2019.vision.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -20,6 +21,8 @@ import org.team1540.rooster.functional.Executable;
 // TODO: Make this a generic pure pursuit command
 public class PurePursuitToVisionTarget extends Command {
 
+    public static final Logger logger = Logger.getLogger(PurePursuitToVisionTarget.class);
+
     private static final double ANGULAR_KP = 5;
     private static final double LINEAR_KP = 4;
     private static final double MAX_VEL_X = 0.8;
@@ -27,7 +30,6 @@ public class PurePursuitToVisionTarget extends Command {
     private static final double MAX_VEL_THETA = 2.0;
     private static final double GOAL_DISTANCE_TOLERANCE = 0.05;
     private static final Transform3D VISION_TARGET_OFFSET = new Transform3D(-0.65, -0.025, 0);
-    private static final boolean GO_TO_LAST_TARGET = false;
 
     private final TankDriveOdometryRunnable driveOdometry;
     private final LimelightLocalization limelightLocalization;
@@ -38,15 +40,14 @@ public class PurePursuitToVisionTarget extends Command {
     private Transform3D goal;
 
     public PurePursuitToVisionTarget(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry) {
+        requires(Robot.drivetrain);
         this.limelightLocalization = limelightLocalization;
         this.driveOdometry = driveOdometry;
-        requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(0, 0, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput());
-        System.out.println("Pure pursuit starting");
     }
 
     public PurePursuitToVisionTarget(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry, Runnable onFail) {
@@ -56,17 +57,18 @@ public class PurePursuitToVisionTarget extends Command {
 
     @Override
     protected void initialize() {
+        logger.info("Pure pursuit starting...");
         Robot.drivetrain.configTalonsForVelocity();
         if (limelightLocalization.attemptUpdatePose()) {
-            System.out.println("PurePursuitToVisionTarget: Limelight pose found.");
+            logger.info("Vision target pose acquired!");
             goal = computeGoal();
         } else {
-            System.out.println("PurePursuitToVisionTarget: Limelight pose not found!");
+            logger.warn("Unable to get vision target pose!");
             if (onFail != null) {
-                System.out.println("Calling onFail method!");
+                logger.info("Calling onFail method!");
                 onFail.run();
             } else {
-                System.out.println("PurePursuitToVisionTarget: No onFail method specified");
+                logger.info("No onFail method specified!");
             }
         }
     }
@@ -102,7 +104,12 @@ public class PurePursuitToVisionTarget extends Command {
 
     @Override
     protected boolean isFinished() {
-        return goal == null || getDistanceError() < GOAL_DISTANCE_TOLERANCE;
+        double distanceError = getDistanceError();
+        boolean isFinished = goal == null || distanceError < GOAL_DISTANCE_TOLERANCE;
+        if (isFinished) {
+            logger.info("Pure pursuit goal reached! Distance error remaining: " + distanceError);
+        }
+        return isFinished;
     }
 
     @Override
