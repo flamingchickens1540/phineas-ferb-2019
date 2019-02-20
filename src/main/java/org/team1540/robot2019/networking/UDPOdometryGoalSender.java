@@ -48,7 +48,7 @@ public class UDPOdometryGoalSender {
             logger.info("Connected to address: " + addressString);
             new Notifier(this::updateData).startPeriodic(period);
         } catch (UnknownHostException | SocketException e) {
-            logger.warn("Unable to connect connect to address: " + addressString);
+            logger.warn("Unable to connect to address: " + addressString);
             e.printStackTrace();
             autoReconnect();
         }
