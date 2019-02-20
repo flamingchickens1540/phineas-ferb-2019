@@ -11,7 +11,7 @@ public class PurePursuitThenPointToVisionTarget extends CommandGroup {
     public PurePursuitThenPointToVisionTarget() {
         addSequential(new SimpleCommand("LEDs ON", () -> Robot.limelight.setLeds(true)));
         addSequential(new WaitCommand(0.05)); // Wait for leds to turn on
-        addSequential(new PurePursuitToVisionTarget(Robot.limelightLocalization, Robot.odometry, this::cancel));
+        addSequential(new PurePursuitToVisionTarget(Robot.deepSpaceVisionTargetLocalization, Robot.odometry, this::cancel));
 
         addSequential(new SimplePointToVisionTarget());
 

@@ -52,7 +52,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
     protected void initialize() {
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
         if (x == 0) {
-            Transform3D prevGoal = Robot.lastOdomToVisionTarget;
+            Transform3D prevGoal = Robot.lastOdomToVisionTargetTracker.getOdomToVisionTarget();
             if (prevGoal == null) {
                 Robot.drivetrain.stop();
                 logger.warn("Unable to find target and no alternative specified! Ending...");

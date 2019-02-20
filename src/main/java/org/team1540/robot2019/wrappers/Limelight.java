@@ -5,28 +5,41 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
+import org.team1540.robot2019.vision.VisionUtils;
+import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetCamera;
+import org.team1540.robot2019.vision.deepspace.RawDeepSpaceVisionTarget;
 
-public class Limelight {
+public class Limelight implements DeepSpaceVisionTargetCamera {
 
-    public static double HORIZONTAL_FOV = Math.toRadians(59.6);
-    public static double VERTICAL_FOV = Math.toRadians(45.7);
+    private static final double HORIZONTAL_FOV = Math.toRadians(59.6);
+    private static final double VERTICAL_FOV = Math.toRadians(45.7);
 
     private final NetworkTable limelightTable;
-
-    /**
-     * Constructs a new limelight interface with hostname {@code name}.
-     *
-     * @param name hostname of the new limelight
-     */
-    public Limelight(String name) {
-        limelightTable = NetworkTableInstance.getDefault().getTable(name);
-    }
+    private Transform3D baseLinkToCamera;
 
     /**
      * Constructs a new limelight interface with the default hostname.
+     * @param name hostname of the limelight
+     * @param baseLinkToCamera baseLinkToCamera of the limelight
      */
-    public Limelight() {
-        this("limelight");
+    public Limelight(String name, Transform3D baseLinkToCamera) {
+        limelightTable = NetworkTableInstance.getDefault().getTable(name);
+        this.baseLinkToCamera = baseLinkToCamera;
+    }
+
+    @Override
+    public double getHorizontalFov() {
+        return HORIZONTAL_FOV;
+    }
+
+    @Override
+    public double getVerticalFov() {
+        return VERTICAL_FOV;
+    }
+
+    @Override
+    public Transform3D getBaseLinkToCamera() {
+        return baseLinkToCamera;
     }
 
     /**
@@ -63,6 +76,26 @@ public class Limelight {
     }
 
     /**
+     * Gets additional raw contour centers published by the limelight. SendRawContours in the limelight web interface must be turned on.
+     *
+     * @param id the index of the raw contour
+     * @return a {@link Vector2D} containing the center of the contour in screen-space coordinates or null if the contour does not pass the filters
+     */
+    public Vector2D getFilteredRawContourOrNull(int id) {
+        double upperLimit = 0.86;
+//      double lowerLimit = 0.29; // With U
+        double lowerLimit = -0.65;
+        double rightLimit = 0.90;
+        double leftLimit = -0.90;
+        Vector2D vector2D = getRawContour(id);
+        if (vector2D.equals(Vector2D.ZERO)
+            || !VisionUtils.isWithinBounds(vector2D, upperLimit, lowerLimit, rightLimit, leftLimit)) {
+            return null;
+        }
+        return vector2D;
+    }
+
+    /**
      * Sets limelight's green LEDs on or off.
      *
      * @param isOn the new state of the LEDs
@@ -90,5 +123,17 @@ public class Limelight {
             -Math.toRadians(rawTransformation[5]),
             Math.toRadians(rawTransformation[3]),
             Math.toRadians(rawTransformation[4]));
+    }
+
+    @Override
+    public RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull() {
+        Vector2D point0 = getFilteredRawContourOrNull(0);
+        Vector2D point1 = getFilteredRawContourOrNull(1);
+
+        if (point0 == null || point1 == null) {
+            return null;
+        }
+
+        return new RawDeepSpaceVisionTarget(point0, point1);
     }
 }

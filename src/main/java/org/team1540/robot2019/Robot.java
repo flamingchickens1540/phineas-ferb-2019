@@ -20,7 +20,8 @@ import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
-import org.team1540.robot2019.vision.LimelightLocalization;
+import org.team1540.robot2019.utils.LastValidTransformTracker;
+import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
 import org.team1540.robot2019.wrappers.TEBPlanner;
 
@@ -41,10 +42,10 @@ public class Robot extends TimedRobot {
     boolean disableBrakes;
 
     public static TankDriveOdometryRunnable odometry;
-    public static LimelightLocalization limelightLocalization;
-    public static Transform3D lastOdomToVisionTarget;
+    public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
     public static Limelight limelight;
     public static TEBPlanner tebPlanner;
+    public static LastValidTransformTracker lastOdomToVisionTargetTracker;
 
     @Override
     public void robotInit() {
@@ -74,8 +75,10 @@ public class Robot extends TimedRobot {
             0.011
         );
 
-        limelight = new Limelight("limelight-a");
-        limelightLocalization = new LimelightLocalization(limelight, 0.05); // Doesn't have to be very frequent if things that use it also call update
+        limelight = new Limelight("limelight-a", new Transform3D(0.086, 0.099, 1.12, Tuning.CAM_ROLL, Tuning.CAM_PITCH, 0));
+        lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
+        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight, 0.71, 0.05,
+            lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
         tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
 
@@ -96,8 +99,8 @@ public class Robot extends TimedRobot {
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
         odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
-        limelightLocalization.getLastOdomToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/OdomToVisionTarget");
-        limelightLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("LimelightLocalization/Debug/BaseLinkToVisionTarget");
+        lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
+        deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
     }
 
     private Timer brakeTimer = new Timer();

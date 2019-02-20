@@ -13,7 +13,7 @@ import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
-import org.team1540.robot2019.vision.LimelightLocalization;
+import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.NavX;
 import org.team1540.robot2019.wrappers.TEBPlanner;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
@@ -24,7 +24,7 @@ public class UDPAutoLineup extends Command {
 
     private final Drivetrain dt;
     private final TEBPlanner planner;
-    private final LimelightLocalization limeLoc;
+    private final DeepSpaceVisionTargetLocalization limeLoc;
     private final TankDriveOdometryRunnable driveOdometry;
     private final Transform3D lastOdomToLimelight;
     private final NavX navx;
@@ -33,7 +33,7 @@ public class UDPAutoLineup extends Command {
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
 
-    public UDPAutoLineup(Drivetrain dt, TEBPlanner planner, LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry,
+    public UDPAutoLineup(Drivetrain dt, TEBPlanner planner, DeepSpaceVisionTargetLocalization limeLoc, TankDriveOdometryRunnable driveOdometry,
         Transform3D lastOdomToLimelight, NavX navx) {
         this.dt = dt;
         this.planner = planner;
