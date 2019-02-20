@@ -82,7 +82,7 @@ public class OI {
 
     public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
     public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
-    public static JoystickButton autoAlignCancelButton = new JoystickButton(driver, LB);
+    public static JoystickButton autoAlignCancelButton = new JoystickButton(driver, A);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
