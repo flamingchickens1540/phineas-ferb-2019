@@ -1,7 +1,8 @@
-package org.team1540.robot2019.utils;
+package org.team1540.robot2019.odometry;
 
 
 import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.datastructures.utils.TrigUtils;
 
 public class TankDriveOdometryAccumulator {
 
@@ -19,7 +20,7 @@ public class TankDriveOdometryAccumulator {
      * @param angleRadians Right-handed rotation about Z axis (up)
      */
     public void update(double distanceLeft, double distanceRight, double angleRadians) {
-//        if (firstUpdate) {
+//        if (firstUpdate) { // TODO: Prevent having to reset distances
 //            distancePrevLeft = distanceLeft;
 //            distancePrevRight = distanceRight;
 //            angleRadsPrev = angleRadians;
@@ -35,7 +36,7 @@ public class TankDriveOdometryAccumulator {
         distancePrevRight = distanceRight;
         angleRadsPrev = angleRadians;
 
-        Transform3D deltaDistance = TankDriveOdometry.calcDeltaTransformFromTankDriveDistances(deltaDistanceLeft, deltaDistanceRight, deltaRads);
+        Transform3D deltaDistance = TankDriveOdometryUtils.calcDeltaTransformFromTankDriveDistances(deltaDistanceLeft, deltaDistanceRight, deltaRads);
 
         odomToBaseLink = odomToBaseLink.add(deltaDistance); // TODO: Should the absolute angle replace the calculated one?
     }

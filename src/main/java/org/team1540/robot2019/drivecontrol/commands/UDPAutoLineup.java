@@ -1,4 +1,4 @@
-package org.team1540.robot2019.vision.commands;
+package org.team1540.robot2019.drivecontrol.commands;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -9,14 +9,14 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
+import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.networking.UDPOdometryGoalSender;
 import org.team1540.robot2019.networking.UDPTwistReceiver;
+import org.team1540.robot2019.odometry.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Drivetrain;
-import org.team1540.robot2019.utils.LimelightLocalization;
-import org.team1540.robot2019.utils.NavxWrapper;
-import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
-import org.team1540.robot2019.utils.TrigUtils;
+import org.team1540.robot2019.vision.LimelightLocalization;
+import org.team1540.robot2019.wrappers.Navx;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
@@ -29,14 +29,14 @@ public class UDPAutoLineup extends Command {
     private final LimelightLocalization limeLoc;
     private final TankDriveOdometryRunnable driveOdometry;
     private final Transform3D lastOdomToLimelight;
-    private final NavxWrapper navx;
+    private final Navx navx;
 
     Transform3D goal;
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
 
     public UDPAutoLineup(Drivetrain dt, UDPOdometryGoalSender sender, UDPTwistReceiver receiver, LimelightLocalization limeLoc, TankDriveOdometryRunnable driveOdometry,
-        Transform3D lastOdomToLimelight, NavxWrapper navx) {
+        Transform3D lastOdomToLimelight, Navx navx) {
         this.dt = dt;
         this.sender = sender;
         this.receiver = receiver;

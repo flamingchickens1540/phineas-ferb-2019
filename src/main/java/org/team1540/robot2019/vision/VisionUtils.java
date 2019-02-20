@@ -1,4 +1,4 @@
-package org.team1540.robot2019.utils;
+package org.team1540.robot2019.vision;
 
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 

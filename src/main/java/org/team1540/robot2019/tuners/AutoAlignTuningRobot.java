@@ -27,14 +27,14 @@ import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.drivecontrol.commands.UDPAutoLineup;
+import org.team1540.robot2019.drivecontrol.commands.UDPVelocityTwistDrive;
 import org.team1540.robot2019.networking.UDPOdometryGoalSender;
 import org.team1540.robot2019.networking.UDPTwistReceiver;
+import org.team1540.robot2019.odometry.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Drivetrain;
-import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.StateChangeDetector;
-import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
-import org.team1540.robot2019.vision.commands.UDPAutoLineup;
-import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
+import org.team1540.robot2019.vision.LimelightLocalization;
 import org.team1540.rooster.power.PowerManager;
 import org.team1540.rooster.util.SimpleCommand;
 

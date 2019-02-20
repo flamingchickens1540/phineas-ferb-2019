@@ -1,9 +1,10 @@
-package org.team1540.robot2019.utils;
+package org.team1540.robot2019.odometry;
 
 
 import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.datastructures.utils.TrigUtils;
 
-public class TankDriveOdometry {
+public class TankDriveOdometryUtils {
 
     public static Transform3D calcDeltaTransformFromTankDriveDistances(double deltaDistanceLeft, double deltaDistanceRight, double deltaAngle) {
         double deltaX;

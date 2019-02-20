@@ -1,4 +1,4 @@
-package org.team1540.robot2019.utils;
+package org.team1540.robot2019.vision;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Line;

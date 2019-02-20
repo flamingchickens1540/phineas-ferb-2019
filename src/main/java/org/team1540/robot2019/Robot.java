@@ -21,24 +21,24 @@ import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.subsystems.*;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.drivecontrol.commands.PurePursuitThenPointToVisionTarget;
+import org.team1540.robot2019.drivecontrol.commands.UDPVelocityTwistDrive;
 import org.team1540.robot2019.networking.UDPOdometryGoalSender;
 import org.team1540.robot2019.networking.UDPTwistReceiver;
+import org.team1540.robot2019.odometry.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
 import org.team1540.robot2019.subsystems.HatchMech;
 import org.team1540.robot2019.subsystems.Intake;
+import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
-import org.team1540.robot2019.utils.LimelightInterface;
-import org.team1540.robot2019.utils.LimelightLocalization;
-import org.team1540.robot2019.utils.NavxWrapper;
 import org.team1540.robot2019.utils.StateChangeDetector;
-import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
-import org.team1540.robot2019.vision.commands.PurePursuitThenPointToVisionTarget;
-import org.team1540.robot2019.vision.commands.UDPVelocityTwistDrive;
+import org.team1540.robot2019.vision.LimelightInterface;
+import org.team1540.robot2019.vision.LimelightLocalization;
+import org.team1540.robot2019.wrappers.Navx;
 import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
 
     public static LimelightInterface limelight;
 
-    public static NavxWrapper navx = new NavxWrapper();
+    public static Navx navx = new Navx();
 
     // TODO: Move these to OI
     static JoystickButton autoAlignButton = new JoystickButton(OI.driver, RB);
