@@ -9,7 +9,6 @@ import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.ShuffleboardDisplay;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.climber.ExtendGyroStabilize;
-import org.team1540.robot2019.commands.climber.PrepareForClimb;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
@@ -43,7 +42,7 @@ public class ClimberTuningRobot extends TimedRobot {
         Robot.drivetrain = new Drivetrain();
 
         button1.whenPressed(new ExtendGyroStabilize());
-        button2.whenPressed(new PrepareForClimb());
+//        button2.whenPressed(new PrepareForClimb());
         button3
             .whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
         button3.whenPressed(new SimpleCommand("stahp", () -> Robot.climber.setArms(0), Robot.climber));
