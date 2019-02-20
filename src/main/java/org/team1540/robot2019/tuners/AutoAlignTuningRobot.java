@@ -110,8 +110,8 @@ public class AutoAlignTuningRobot extends TimedRobot {
 //    Scheduler.getInstance().run();
 //
 //      NetworkTableInstance nt = NetworkTableInstance.getDefault();
-//    nt.getTable("Drivetrain/Debug/Position").getEntry("Left").setNumber(drivetrain.getLeftPositionTPU());
-//    nt.getTable("Drivetrain/Debug/Position").getEntry("Right").setNumber(drivetrain.getRightPositionTPU());
+//    nt.getTable("Drivetrain/Debug/Position").getEntry("Left").setNumber(drivetrain.getLeftPositionTicks());
+//    nt.getTable("Drivetrain/Debug/Position").getEntry("Right").setNumber(drivetrain.getRightPositionTicks());
 //  }
 //
 //  @Override

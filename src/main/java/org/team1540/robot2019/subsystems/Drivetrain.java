@@ -151,79 +151,79 @@ public class Drivetrain extends Subsystem {
         }
     }
 
-    public void setPositionTPU(double left, double right) {
-        setLeftPositionTPU(left);
-        setRightPositionTPU(right);
+    public void setPositionTicks(double left, double right) {
+        setLeftPositionTicks(left);
+        setRightPositionTicks(right);
     }
 
-    public void setLeftPositionTPU(double position) {
+    public void setLeftPositionTicks(double position) {
         configTalonsForPosition();
         driveLeftMotorA.set(ControlMode.Position, position);
     }
 
-    public void setRightPositionTPU(double position) {
+    public void setRightPositionTicks(double position) {
         configTalonsForPosition();
         driveRightMotorA.set(ControlMode.Position, position);
     }
 
-    public void setPositionTPU(double left, double right, double leftFeedForward,
+    public void setPositionTicks(double left, double right, double leftFeedForward,
         double rightFeedForward) {
-        setLeftPositionTPU(left, leftFeedForward);
-        setRightPositionTPU(right, rightFeedForward);
+        setLeftPositionTicks(left, leftFeedForward);
+        setRightPositionTicks(right, rightFeedForward);
     }
 
-    public void setLeftPositionTPU(double position, double feedForward) {
+    public void setLeftPositionTicks(double position, double feedForward) {
         configTalonsForPosition();
         driveLeftMotorA
             .set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
     }
 
-    public void setRightPositionTPU(double position, double feedForward) {
+    public void setRightPositionTicks(double position, double feedForward) {
         configTalonsForPosition();
         driveRightMotorA
             .set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
     }
 
 
-    public void setVelocityTPU(double left, double right) {
-        setLeftVelocityTPU(left);
-        setRightVelocityTPU(right);
+    public void setVelocityTicks(double left, double right) {
+        setLeftVelocityTicks(left);
+        setRightVelocityTicks(right);
     }
 
-    public void setLeftVelocityTPU(double velocity) {
+    public void setLeftVelocityTicks(double velocity) {
         configTalonsForVelocity();
         driveLeftMotorA.set(ControlMode.Velocity, velocity);
     }
 
-    public void setRightVelocityTPU(double velocity) {
+    public void setRightVelocityTicks(double velocity) {
         configTalonsForVelocity();
         driveRightMotorA.set(ControlMode.Velocity, velocity);
     }
 
-    public void setVelocityTPU(double left, double right, double leftFeedForward,
+    public void setVelocityTicks(double left, double right, double leftFeedForward,
         double rightFeedForward) {
-        setLeftVelocityTPU(left, leftFeedForward);
-        setRightVelocityTPU(right, rightFeedForward);
+        setLeftVelocityTicks(left, leftFeedForward);
+        setRightVelocityTicks(right, rightFeedForward);
     }
 
-    public void setLeftVelocityTPU(double velocity, double feedForward) {
+    public void setLeftVelocityTicks(double velocity, double feedForward) {
         configTalonsForVelocity();
         driveLeftMotorA
             .set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
     }
 
-    public void setRightVelocityTPU(double velocity, double feedForward) {
+    public void setRightVelocityTicks(double velocity, double feedForward) {
         configTalonsForVelocity();
         driveRightMotorA
             .set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
     }
 
     public void setLeftVelocityMetersPerSecond(double velocity) {
-        setLeftVelocityTPU(velocity / 10 * Tuning.drivetrainTicksPerMeter);
+        setLeftVelocityTicks(velocity / 10 * Tuning.drivetrainTicksPerMeter);
     }
 
     public void setRightVelocityMetersPerSecond(double velocity) {
-        setRightVelocityTPU(velocity / 10 * Tuning.drivetrainTicksPerMeter);
+        setRightVelocityTicks(velocity / 10 * Tuning.drivetrainTicksPerMeter);
     }
 
     public void setPercent(double left, double right) {
@@ -245,36 +245,36 @@ public class Drivetrain extends Subsystem {
         }
     }
 
-    public double getLeftPositionTPU() {
+    public double getLeftPositionTicks() {
         return driveLeftMotorA.getSelectedSensorPosition();
     }
 
-    public double getRightPositionTPU() {
+    public double getRightPositionTicks() {
         return driveRightMotorA.getSelectedSensorPosition();
     }
 
     public double getLeftPositionMeters() {
-        return getLeftPositionTPU() / Tuning.drivetrainTicksPerMeter;
+        return getLeftPositionTicks() / Tuning.drivetrainTicksPerMeter;
     }
 
     public double getRightPositionMeters() {
-        return getRightPositionTPU() / Tuning.drivetrainTicksPerMeter;
+        return getRightPositionTicks() / Tuning.drivetrainTicksPerMeter;
     }
 
-    public double getLeftVelocityTPU() {
+    public double getLeftVelocityTicks() {
         return driveLeftMotorA.getSelectedSensorVelocity();
     }
 
-    public double getRightVelocityTPU() {
+    public double getRightVelocityTicks() {
         return driveRightMotorA.getSelectedSensorVelocity();
     }
 
     public double getLeftVelocityMetersPerSecond() {
-        return getLeftVelocityTPU() * 10 / Tuning.drivetrainTicksPerMeter;
+        return getLeftVelocityTicks() * 10 / Tuning.drivetrainTicksPerMeter;
     }
 
     public double getRightVelocityMetersPerSecond() {
-        return getRightVelocityTPU() * 10 / Tuning.drivetrainTicksPerMeter;
+        return getRightVelocityTicks() * 10 / Tuning.drivetrainTicksPerMeter;
     }
 
     public Twist2D getTwist() {
@@ -297,8 +297,8 @@ public class Drivetrain extends Subsystem {
     }
 
     public void stop() {
-        setLeftVelocityTPU(0);
-        setRightVelocityTPU(0);
+        setLeftVelocityTicks(0);
+        setRightVelocityTicks(0);
     }
 
     public NetworkTableEntry getLeftPositionEntry() {
@@ -352,11 +352,11 @@ public class Drivetrain extends Subsystem {
     @Override
     public void periodic() {
         if (Robot.debugMode) {
-            leftPositionEntry.setNumber(getLeftPositionTPU());
-            rightPositionEntry.setNumber(getRightPositionTPU());
+            leftPositionEntry.setNumber(getLeftPositionTicks());
+            rightPositionEntry.setNumber(getRightPositionTicks());
 
-            leftVelocityEntry.setNumber(getLeftVelocityTPU());
-            rightVelocityEntry.setNumber(getRightVelocityTPU());
+            leftVelocityEntry.setNumber(getLeftVelocityTicks());
+            rightVelocityEntry.setNumber(getRightVelocityTicks());
 
             leftThrottleEntry.setNumber(getLeftPercent());
             rightThrottleEntry.setNumber(getRightPercent());
