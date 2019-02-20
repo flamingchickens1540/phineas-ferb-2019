@@ -23,7 +23,7 @@ public class Tuning {
     public static double driveSoftTurnExponent = 3;
     public static double driveHardTurnExponent = 3;
 
-    public static double driveDeadzone = 0.1;
+    public static double driveDeadzone = 0.15;
 
     // this unit is [-1,1] throttle per 20ms, which is kind of terrible but makes for nicer drive code
     // divide 0.02 by this to get seconds from neutral to full throttle
