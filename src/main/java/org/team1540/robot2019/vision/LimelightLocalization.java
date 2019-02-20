@@ -6,7 +6,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.wrappers.Limelight;
 
@@ -66,7 +65,7 @@ public class LimelightLocalization {
 //        Rotation cameraRotation = new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, CAMERA_ROLL, CAMERA_TILT, 0);
         Rotation cameraRotation = cameraTilt.applyTo(cameraRoll);
         baseLinkToVisionTarget = DualVisionTargetLocalizationUtils
-            .poseFromTwoCamPoints(point0, point1, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, Tuning.LIMELIGHT_HORIZONTAL_FOV, Tuning.LIMELIGHT_VERTICAL_FOV);
+            .poseFromTwoCamPoints(point0, point1, PLANE_HEIGHT, CAMERA_POSITION, cameraRotation, Limelight.HORIZONTAL_FOV, Limelight.VERTICAL_FOV);
 
         if (odomSupplier != null) {
             odomToVisionTarget = odomSupplier.get().add(baseLinkToVisionTarget);

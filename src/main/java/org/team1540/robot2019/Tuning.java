@@ -130,13 +130,11 @@ public class Tuning {
     public static double climberTolerance = 1000;
 
     public static double axisButtonThreshold = 0.3;
-  // auto-lineup
-  public static double drivetrainRadiusMeters = 0.305; // This is for pandora TODO: Change this
+
+    // auto-lineup
+    public static double drivetrainRadiusMeters = 0.305; // This is for pandora (Seems to work... hmmm) TODO: Change this
 
   public static long drivetrainUDPTimeout = 500;
 
-  public static double LIMELIGHT_HORIZONTAL_FOV = Math.toRadians(59.6);
-  public static double LIMELIGHT_VERTICAL_FOV = Math.toRadians(45.7);
-  public static double axisDeadzone = 0.1;
   public static double drivetrainMaxVelocity = 400;
 }
