@@ -20,12 +20,10 @@ import org.team1540.rooster.functional.Executable;
 // TODO: Use proper logging class
 public class UDPVelocityTwistDrive extends Command {
 
-    Transform2D goal;
-    private Executable pipeline;
-    private TankDriveTwist2DInput twist2DInput;
+    private Transform2D goal;
 
-    boolean freeGoalVel;
-    boolean checkEnd;
+    private boolean freeGoalVel;
+    private boolean checkEnd;
 
     public UDPVelocityTwistDrive(Transform2D goal, boolean freeGoalVel) {
         SmartDashboard.setDefaultNumber("test-goal/position/x", 2);
@@ -47,8 +45,8 @@ public class UDPVelocityTwistDrive extends Command {
 
     @Override
     protected void initialize() {
-        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
-        pipeline = twist2DInput
+        TankDriveTwist2DInput twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
+        Executable pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(new CTREOutput(Hardware.driveLeftMotorA, Hardware.driveRightMotorA, true));

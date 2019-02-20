@@ -29,7 +29,7 @@ public class UDPAutoLineup extends Command {
     private final Transform3D lastOdomToLimelight;
     private final NavX navx;
 
-    Transform3D goal;
+    private Transform3D goal;
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
 
