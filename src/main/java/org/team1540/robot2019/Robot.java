@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
+import org.team1540.robot2019.datastructures.TransformManager;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Climber;
@@ -46,6 +47,7 @@ public class Robot extends TimedRobot {
     public static Limelight limelight;
     public static TEBPlanner tebPlanner;
     public static LastValidTransformTracker lastOdomToVisionTargetTracker;
+    public static TransformManager tf;
 
     @Override
     public void robotInit() {
@@ -61,6 +63,7 @@ public class Robot extends TimedRobot {
         // initialize hardware after we run the scheduler once so that the preference manager can update its values
         Hardware.initAll();
 
+        // SUBSYSTEMS
         drivetrain = new Drivetrain();
         elevator = new Elevator();
         wrist = new Wrist();
@@ -68,19 +71,28 @@ public class Robot extends TimedRobot {
         hatch = new HatchMech();
         climber = new Climber();
 
+        // TRANSFORMS
+        tf = new TransformManager();
+
+        // ODOMETRY
         odometry = new TankDriveOdometryRunnable(
             drivetrain::getLeftPositionMeters,
             drivetrain::getRightPositionMeters,
             Hardware.navx::getAngleRadians,
+            "odom",
+            "base_link",
+            tf,
             0.011
         );
 
+        // VISION
         limelight = new Limelight("limelight-a", new Transform3D(0.086, 0.099, 1.12, Tuning.CAM_ROLL, Tuning.CAM_PITCH, 0));
-        lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
+        lastOdomToVisionTargetTracker = new LastValidTransformTracker(() -> tf.getTransform("odom", "base_link"));
         deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight, 0.71, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
-        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
+        // PLANNING
+        tebPlanner = new TEBPlanner(() -> new Odometry(tf.getTransform("odom", "base_link"), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
 
         OI.init();
 
@@ -98,7 +110,7 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
-        odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
+        tf.getTransform("odom", "base_link").toTransform2D().putToNetworkTable("Odometry/Debug");
         lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
         deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
     }

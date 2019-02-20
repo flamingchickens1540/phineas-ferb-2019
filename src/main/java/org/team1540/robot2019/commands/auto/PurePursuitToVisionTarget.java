@@ -74,7 +74,7 @@ public class PurePursuitToVisionTarget extends Command {
     }
 
     private Transform3D computeGoal() {
-        return driveOdometry.getOdomToBaseLink()
+        return Robot.tf.getTransform("odom", "base_link")
             .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget())
             .add(VISION_TARGET_OFFSET);
     }
@@ -118,12 +118,12 @@ public class PurePursuitToVisionTarget extends Command {
     }
 
     private double getDistanceError() {
-        Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
+        Vector3D odomPosition = Robot.tf.getTransform("odom", "base_link").getPosition(); // TODO: This should use javaTF
         return goal.toTransform2D().getPositionVector().distance(new Vector2D(odomPosition.getX(), odomPosition.getY()));
     }
 
     private double getAngleError() {
-        Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
+        Vector3D odomPosition = Robot.tf.getTransform("odom", "base_link").getPosition(); // TODO: This should use javaTF
         double targetAngle = Math.atan2(goal.toTransform2D().getY() - odomPosition.getY(), goal.toTransform2D().getX() - odomPosition.getX());
         double currentAngle = Hardware.navx.getYawRadians();
         return TrigUtils.signedAngleError(targetAngle, currentAngle);

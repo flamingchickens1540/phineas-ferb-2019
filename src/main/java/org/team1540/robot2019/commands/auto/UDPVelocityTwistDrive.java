@@ -69,7 +69,7 @@ public class UDPVelocityTwistDrive extends Command {
         double angleGoal = SmartDashboard.getNumber("test-goal/orientation/z", 0);
         System.out.println("Updated goal!");
 
-        goal = Robot.odometry.getOdomToBaseLink().toTransform2D().add(new Transform2D(xGoal, yGoal, angleGoal));
+        goal = Robot.tf.getTransform("odom", "base_link").toTransform2D().add(new Transform2D(xGoal, yGoal, angleGoal));
 //        .add(Robot.deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget())
 //        .add(new Transform3D(new Vector3D(-0.65, 0, 0), RotationUtils.IDENTITY));
 
@@ -100,7 +100,7 @@ public class UDPVelocityTwistDrive extends Command {
             return false;
         }
         // isFinished Checking
-        Vector3D odomPosition = Robot.odometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
+        Vector3D odomPosition = Robot.tf.getTransform("odom", "base_link").getPosition(); // TODO: This should use javaTF
         double xError = goal.getX() - odomPosition.getX();
         double yError = goal.getY() - odomPosition.getY();
         double angleError = TrigUtils

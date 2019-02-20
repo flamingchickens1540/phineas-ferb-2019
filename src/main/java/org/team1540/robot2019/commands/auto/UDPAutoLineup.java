@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
@@ -77,7 +78,7 @@ public class UDPAutoLineup extends Command {
     }
 
     private Transform3D computeGoal() {
-        return driveOdometry.getOdomToBaseLink()
+        return Robot.tf.getTransform("odom", "base_link")
             .add(limeLoc.getLastBaseLinkToVisionTarget())
             .add(new Transform3D(new Vector3D(-0.65, -0.025, 0), Rotation.IDENTITY));
     }
@@ -117,7 +118,7 @@ public class UDPAutoLineup extends Command {
     }
 
     private double getDistanceError() {
-        Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
+        Vector3D odomPosition = Robot.tf.getTransform("odom", "base_link").getPosition(); // TODO: This should use javaTF
         return goal.toTransform2D().getPositionVector().distance(new Vector2D(odomPosition.getX(), odomPosition.getY()));
     }
 
