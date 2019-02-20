@@ -2,7 +2,6 @@ package org.team1540.robot2019.vision.commands;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.PIDCommand;
-import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -34,7 +33,6 @@ public class SimplePointToVisionTarget extends PIDCommand {
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
     private Double goal = null;
-    private Transform3D prevGoal = null;
 
     public SimplePointToVisionTarget() {
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
@@ -50,14 +48,13 @@ public class SimplePointToVisionTarget extends PIDCommand {
     protected void initialize() {
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
         if (x == 0) {
-            prevGoal = Robot.lastOdomToVisionTarget; // TODO: This should not rely on others to update vision target pose
+            Transform3D prevGoal = Robot.lastOdomToVisionTarget;
             if (prevGoal == null) {
                 Robot.drivetrain.stop();
                 System.out.println("Point lineup simple: Unable to find target and no alternative specified");
                 return;
             }
             System.out.println("Point lineup simple: Unable to find target. Using alternative goal");
-            Vector3D odomPosition = Robot.wheelOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
             goal = prevGoal.toTransform2D().getTheta();
         } else {
             goal = x - Robot.navx.getYawRadians();
