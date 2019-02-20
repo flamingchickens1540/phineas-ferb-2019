@@ -59,10 +59,10 @@ public class SimplePointToVisionTarget extends PIDCommand {
                 return;
             }
             goal = prevGoal.toTransform2D().getTheta();
-            logger.info("Unable to find target. Using alternative goal angle: " + goal);
+            logger.debug("Unable to find target. Using alternative goal angle: " + goal);
         } else {
             goal = x - Hardware.navx.getYawRadians();
-            logger.info("Point lineup simple starting. Initial goal angle: " + goal);
+            logger.debug("Point lineup simple starting. Initial goal angle: " + goal);
         }
     }
 
@@ -83,7 +83,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
         double angleVelError = Math.abs(Robot.drivetrain.getTwist().getOmega());
         boolean isFinished = goal == null || (anglePosError < GOAL_TOLERANCE_ANGULAR_POSITION && angleVelError < GOAL_TOLERANCE_ANGULAR_VELOCITY);
         if (isFinished) {
-            logger.info(String.format("Simple point goal reached! Angle error remaining: %f Angular velocity error remaining: %f", anglePosError, angleVelError));
+            logger.debug(String.format("Simple point goal reached! Angle error remaining: %f Angular velocity error remaining: %f", anglePosError, angleVelError));
         }
         return isFinished;
     }
