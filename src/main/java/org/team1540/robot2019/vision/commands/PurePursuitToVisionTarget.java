@@ -7,6 +7,7 @@ import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
+import org.team1540.robot2019.utils.ControlUtils;
 import org.team1540.robot2019.utils.LimelightLocalization;
 import org.team1540.robot2019.utils.TankDriveOdometryRunnable;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
@@ -26,6 +27,7 @@ public class PurePursuitToVisionTarget extends Command {
     private static final double MAX_VEL_THETA = 2.0;
     private static final double GOAL_DISTANCE_TOLERANCE = 0.05;
     private static final Transform3D VISION_TARGET_OFFSET = new Transform3D(-0.65, -0.025, 0);
+    private static final boolean GO_TO_LAST_TARGET = false;
 
     private final TankDriveOdometryRunnable driveOdometry;
     private final LimelightLocalization limelightLocalization;
@@ -88,19 +90,10 @@ public class PurePursuitToVisionTarget extends Command {
         double distanceError = getDistanceError();
 
         double cmdVelTheta = angleError * ANGULAR_KP; // TODO: Replace this with ControlUtils.velocityPosNegConstrain
-        if (cmdVelTheta > MAX_VEL_THETA) {
-            cmdVelTheta = MAX_VEL_THETA;
-        } else if (cmdVelTheta < -MAX_VEL_THETA) {
-            cmdVelTheta = -MAX_VEL_THETA;
-        }
+        cmdVelTheta = ControlUtils.velocityPosNegConstrain(cmdVelTheta, MAX_VEL_THETA, 0);
 
         double cmdVelX = distanceError * (1 - Math.abs(angleError) / Math.PI * 2) * LINEAR_KP;
-
-        if (cmdVelX > MAX_VEL_X) { // TODO: Replace this with ControlUtils.velocityPosNegConstrain
-            cmdVelX = MAX_VEL_X;
-        } else if (cmdVelX < MIN_VEL_X) {
-            cmdVelX = MIN_VEL_X;
-        } // TODO: Allow negative vel
+        cmdVelX = ControlUtils.velocityPosNegConstrain(cmdVelX, MAX_VEL_X, MIN_VEL_X);
 
         Twist2D cmdVel = new Twist2D(cmdVelX, 0, cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
