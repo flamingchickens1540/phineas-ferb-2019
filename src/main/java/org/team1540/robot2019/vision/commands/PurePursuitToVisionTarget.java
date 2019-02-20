@@ -17,7 +17,7 @@ import org.team1540.rooster.functional.Executable;
 
 public class PurePursuitToVisionTarget extends Command {
 
-    private static final double ANGULAR_KP = -5;
+    private static final double ANGULAR_KP = 5;
     private static final double LINEAR_KP = 4;
     private static final double MAX_VEL_X = 0.8;
     private static final double MIN_VEL_X = 0.2;
@@ -122,7 +122,8 @@ public class PurePursuitToVisionTarget extends Command {
 
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
-        return TrigUtils
-            .signedAngleError(Math.atan2((-goal.toTransform2D().getY()) - (-odomPosition.getY()), goal.toTransform2D().getX() - odomPosition.getX()), -Robot.navx.getYawRadians());
+        double targetAngle = Math.atan2(goal.toTransform2D().getY() - odomPosition.getY(), goal.toTransform2D().getX() - odomPosition.getX());
+        double currentAngle = Robot.navx.getYawRadians();
+        return TrigUtils.signedAngleError(targetAngle, currentAngle);
     }
 }
