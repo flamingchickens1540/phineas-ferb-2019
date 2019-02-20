@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -13,7 +12,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
-import org.team1540.robot2019.drivecontrol.commands.UDPVelocityTwistDrive;
 import org.team1540.robot2019.odometry.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
@@ -24,9 +22,7 @@ import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.robot2019.vision.LimelightLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
-import org.team1540.robot2019.wrappers.Navx;
 import org.team1540.robot2019.wrappers.TEBPlanner;
-import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
 
@@ -49,7 +45,6 @@ public class Robot extends TimedRobot {
     public static Transform3D lastOdomToVisionTarget;
     public static Limelight limelight;
     public static TEBPlanner tebPlanner;
-    public static Navx navx = new Navx();
 
     @Override
     public void robotInit() {
@@ -76,7 +71,7 @@ public class Robot extends TimedRobot {
         odometry = new TankDriveOdometryRunnable(
             drivetrain::getLeftPositionMeters,
             drivetrain::getRightPositionMeters,
-            Robot.navx::getAngleRadians,
+            Hardware.navx::getAngleRadians,
             0.011
         );
 
@@ -84,12 +79,6 @@ public class Robot extends TimedRobot {
         limelightLocalization = new LimelightLocalization(limelight, 0.05); // Doesn't have to be very frequent if things that use it also call update
 
         tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
-
-        // Testing
-        Command testTEB = new SimpleCommand("Test TEB", () -> {
-            new UDPVelocityTwistDrive().start();
-        });
-        SmartDashboard.putData(testTEB);
 
         OI.init();
 

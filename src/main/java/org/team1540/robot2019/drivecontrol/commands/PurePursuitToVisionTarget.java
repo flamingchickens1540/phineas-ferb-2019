@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -125,7 +126,7 @@ public class PurePursuitToVisionTarget extends Command {
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         double targetAngle = Math.atan2(goal.toTransform2D().getY() - odomPosition.getY(), goal.toTransform2D().getX() - odomPosition.getX());
-        double currentAngle = Robot.navx.getYawRadians();
+        double currentAngle = Hardware.navx.getYawRadians();
         return TrigUtils.signedAngleError(targetAngle, currentAngle);
     }
 }
