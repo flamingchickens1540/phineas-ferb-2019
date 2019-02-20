@@ -4,9 +4,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 
-public class PercentDrive extends Command {
+public class PercentTankDrive extends Command {
 
-    public PercentDrive() {
+    public PercentTankDrive() {
         requires(Robot.drivetrain);
     }
 

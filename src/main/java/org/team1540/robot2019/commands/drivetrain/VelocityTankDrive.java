@@ -7,9 +7,9 @@ import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class VelocityDrive extends Command {
+public class VelocityTankDrive extends Command {
 
-    public VelocityDrive() {
+    public VelocityTankDrive() {
         requires(Robot.drivetrain);
     }
 

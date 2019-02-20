@@ -3,7 +3,7 @@ package org.team1540.robot2019.commands.drivetrain;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2019.Robot;
 
-public class DriveForTimeVelocity extends TimedCommand {
+public class TankDriveForTimeVelocity extends TimedCommand {
 
     private final double velocity;
 
@@ -11,7 +11,7 @@ public class DriveForTimeVelocity extends TimedCommand {
      * @param timeoutSecs Seconds to drive
      * @param velocityMetersPerSecond Velocity in meters per second
      */
-    public DriveForTimeVelocity(double timeoutSecs, double velocityMetersPerSecond) {
+    public TankDriveForTimeVelocity(double timeoutSecs, double velocityMetersPerSecond) {
         super(timeoutSecs);
         this.velocity = velocityMetersPerSecond;
         requires(Robot.drivetrain);
