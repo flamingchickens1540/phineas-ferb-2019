@@ -27,6 +27,5 @@ public class TankDriveTwist2DInput implements Input<TankDriveData> {
         double leftSetpoint = (twist.getX() - twist.getOmega() * tankDriveRadius);
         double rightSetpoint = (twist.getX() + twist.getOmega() * tankDriveRadius);
         return new TankDriveData(new DriveData(OptionalDouble.of(leftSetpoint)), new DriveData(OptionalDouble.of(rightSetpoint)), OptionalDouble.empty(), OptionalDouble.empty());
-        // return new TankDriveData(new DriveData(OptionalDouble.of(leftSetpoint)), new DriveData(OptionalDouble.of(rightSetpoint)), OptionalDouble.empty(), OptionalDouble.of(twist.getOmega()));
     }
 }
