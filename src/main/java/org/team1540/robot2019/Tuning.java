@@ -137,4 +137,7 @@ public class Tuning {
     public static long drivetrainUDPTimeout = 500;
 
     public static double drivetrainMaxVelocity = 400;
+
+    public static final double CAM_PITCH = Math.toRadians(-37.5);
+    public static final double CAM_ROLL = Math.toRadians(0);
 }

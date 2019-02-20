@@ -13,7 +13,7 @@ import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
 import org.team1540.robot2019.utils.ControlUtils;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
-import org.team1540.robot2019.vision.LimelightLocalization;
+import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
@@ -33,16 +33,16 @@ public class PurePursuitToVisionTarget extends Command {
     private static final Transform3D VISION_TARGET_OFFSET = new Transform3D(-0.65, -0.025, 0);
 
     private final TankDriveOdometryRunnable driveOdometry;
-    private final LimelightLocalization limelightLocalization;
+    private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
     private Runnable onFail = null;
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
     private Transform3D goal;
 
-    public PurePursuitToVisionTarget(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry) {
+    public PurePursuitToVisionTarget(DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, TankDriveOdometryRunnable driveOdometry) {
         requires(Robot.drivetrain);
-        this.limelightLocalization = limelightLocalization;
+        this.deepSpaceVisionTargetLocalization = deepSpaceVisionTargetLocalization;
         this.driveOdometry = driveOdometry;
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
@@ -51,15 +51,15 @@ public class PurePursuitToVisionTarget extends Command {
             .then(Robot.drivetrain.getPipelineOutput());
     }
 
-    public PurePursuitToVisionTarget(LimelightLocalization limelightLocalization, TankDriveOdometryRunnable driveOdometry, Runnable onFail) {
-        this(limelightLocalization, driveOdometry);
+    public PurePursuitToVisionTarget(DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, TankDriveOdometryRunnable driveOdometry, Runnable onFail) {
+        this(deepSpaceVisionTargetLocalization, driveOdometry);
         this.onFail = onFail;
     }
 
     @Override
     protected void initialize() {
         logger.info("Pure pursuit starting...");
-        if (limelightLocalization.attemptUpdatePose()) {
+        if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
             logger.info("Vision target pose acquired!");
             goal = computeGoal();
         } else {
@@ -75,7 +75,7 @@ public class PurePursuitToVisionTarget extends Command {
 
     private Transform3D computeGoal() {
         return driveOdometry.getOdomToBaseLink()
-            .add(limelightLocalization.getLastBaseLinkToVisionTarget())
+            .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget())
             .add(VISION_TARGET_OFFSET);
     }
 
@@ -84,7 +84,7 @@ public class PurePursuitToVisionTarget extends Command {
         if (goal == null) {
             return;
         }
-        if (limelightLocalization.attemptUpdatePose()) {
+        if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
             goal = computeGoal();
         }
 
