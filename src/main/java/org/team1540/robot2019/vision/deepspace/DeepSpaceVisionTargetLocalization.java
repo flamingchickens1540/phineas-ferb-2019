@@ -1,6 +1,7 @@
 package org.team1540.robot2019.vision.deepspace;
 
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.function.Consumer;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
@@ -23,6 +24,7 @@ public class DeepSpaceVisionTargetLocalization {
     public boolean attemptUpdatePose() {
         RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull();
 
+        SmartDashboard.putBoolean("DeepSpaceVisionTargetLocalization/Debug/HasFound", rawVisionTarget != null);
         if (rawVisionTarget == null) {
             return false;
         }
