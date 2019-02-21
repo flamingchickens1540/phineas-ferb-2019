@@ -79,9 +79,12 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected boolean isFinished() {
+        if (goal == null) {
+            return true;
+        }
         double anglePosError = Math.abs(getAngleError(goal));
         double angleVelError = Math.abs(Robot.drivetrain.getTwist().getOmega());
-        boolean isFinished = goal == null || (anglePosError < GOAL_TOLERANCE_ANGULAR_POSITION && angleVelError < GOAL_TOLERANCE_ANGULAR_VELOCITY);
+        boolean isFinished = anglePosError < GOAL_TOLERANCE_ANGULAR_POSITION && angleVelError < GOAL_TOLERANCE_ANGULAR_VELOCITY;
         if (isFinished) {
             logger.debug(String.format("Simple point goal reached! Angle error remaining: %f Angular velocity error remaining: %f", anglePosError, angleVelError));
         }
