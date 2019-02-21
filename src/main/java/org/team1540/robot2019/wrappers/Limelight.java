@@ -127,6 +127,9 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 
     @Override
     public RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull() {
+        if (!isTargetFound()) {
+            return null;
+        }
         Vector2D point0 = getFilteredRawContourOrNull(0);
         Vector2D point1 = getFilteredRawContourOrNull(1);
 
