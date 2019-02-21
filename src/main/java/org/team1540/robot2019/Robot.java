@@ -10,7 +10,20 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.subsystems.*;
+import org.team1540.robot2019.datastructures.Odometry;
+import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
+import org.team1540.robot2019.subsystems.Climber;
+import org.team1540.robot2019.subsystems.Drivetrain;
+import org.team1540.robot2019.subsystems.Elevator;
+import org.team1540.robot2019.subsystems.HatchMech;
+import org.team1540.robot2019.subsystems.Intake;
+import org.team1540.robot2019.subsystems.LEDs;
+import org.team1540.robot2019.subsystems.Wrist;
+import org.team1540.robot2019.utils.LastValidTransformTracker;
+import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
+import org.team1540.robot2019.wrappers.Limelight;
+import org.team1540.robot2019.wrappers.TEBPlanner;
 
 public class Robot extends TimedRobot {
 
@@ -27,6 +40,12 @@ public class Robot extends TimedRobot {
     public static boolean debugMode = false;
 
     boolean disableBrakes;
+
+    public static TankDriveOdometryRunnable odometry;
+    public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
+    public static Limelight limelight;
+    public static TEBPlanner tebPlanner;
+    public static LastValidTransformTracker lastOdomToVisionTargetTracker;
 
     @Override
     public void robotInit() {
@@ -49,6 +68,20 @@ public class Robot extends TimedRobot {
         hatch = new HatchMech();
         climber = new Climber();
 
+        odometry = new TankDriveOdometryRunnable(
+            drivetrain::getLeftPositionMeters,
+            drivetrain::getRightPositionMeters,
+            Hardware.navx::getAngleRadians,
+            0.011
+        );
+
+        limelight = new Limelight("limelight-a", new Transform3D(Tuning.CAM_X, Tuning.CAM_Y, Tuning.CAM_Z, Tuning.CAM_ROLL, Tuning.CAM_PITCH, Tuning.CAM_YAW));
+        lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
+        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight, Tuning.PLANE_HEIGHT, 0.05,
+            lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
+
+        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
+
         OI.init();
 
         ShuffleboardDisplay.init();
@@ -62,11 +95,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
-//    long time = System.currentTimeMillis();
         Scheduler.getInstance().run();
-//    System.out.println(time - System.currentTimeMillis());
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
+        odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
+        if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
+            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
+            deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+        }
     }
 
     private Timer brakeTimer = new Timer();

@@ -1,6 +1,5 @@
 package org.team1540.robot2019;
 
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -12,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.wrappers.NavX;
 import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
 import org.team1540.rooster.wrappers.ChickenVictor;
@@ -76,7 +76,7 @@ public class Hardware {
 
     public static AnalogInput pressureSensor;
 
-    public static AHRS navx;
+    public static NavX navx;
 
     // initialized statically as there's literally no scenario where the PDP wouldn't be connected
     public static PowerDistributionPanel pdp = new PowerDistributionPanel();
@@ -313,7 +313,7 @@ public class Hardware {
         logger.info("Initializing NavX-MXP...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        navx = new AHRS(RobotMap.NAVX);
+        navx = new NavX(RobotMap.NAVX);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized NavX-MXP in " + (end - start) + " ms");
