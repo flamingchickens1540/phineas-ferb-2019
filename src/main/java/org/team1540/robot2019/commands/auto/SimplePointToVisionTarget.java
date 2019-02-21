@@ -93,6 +93,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected void end() {
+        logger.debug("SimplePointToTarget Ended!");
         Robot.drivetrain.stop();
     }
 
@@ -102,6 +103,9 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
+        if (goal == null) {
+            return 0;
+        }
         return getAngleError(goal);
     }
 
