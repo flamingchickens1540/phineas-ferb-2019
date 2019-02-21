@@ -20,6 +20,7 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
@@ -150,84 +151,92 @@ public class Drivetrain extends Subsystem {
         }
     }
 
-    public void setPosition(double left, double right) {
-        setLeftPosition(left);
-        setRightPosition(right);
+    public void setPositionTicks(double left, double right) {
+        setLeftPositionTicks(left);
+        setRightPositionTicks(right);
     }
 
-    public void setLeftPosition(double position) {
+    public void setLeftPositionTicks(double position) {
         configTalonsForPosition();
         driveLeftMotorA.set(ControlMode.Position, position);
     }
 
-    public void setRightPosition(double position) {
+    public void setRightPositionTicks(double position) {
         configTalonsForPosition();
         driveRightMotorA.set(ControlMode.Position, position);
     }
 
-    public void setPosition(double left, double right, double leftFeedForward,
+    public void setPositionTicks(double left, double right, double leftFeedForward,
         double rightFeedForward) {
-        setLeftPosition(left, leftFeedForward);
-        setRightPosition(right, rightFeedForward);
+        setLeftPositionTicks(left, leftFeedForward);
+        setRightPositionTicks(right, rightFeedForward);
     }
 
-    public void setLeftPosition(double position, double feedForward) {
+    public void setLeftPositionTicks(double position, double feedForward) {
         configTalonsForPosition();
         driveLeftMotorA
             .set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
     }
 
-    public void setRightPosition(double position, double feedForward) {
+    public void setRightPositionTicks(double position, double feedForward) {
         configTalonsForPosition();
         driveRightMotorA
             .set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, feedForward);
     }
 
 
-    public void setVelocity(double left, double right) {
-        setLeftVelocity(left);
-        setRightVelocity(right);
+    public void setVelocityTicks(double left, double right) {
+        setLeftVelocityTicks(left);
+        setRightVelocityTicks(right);
     }
 
-    public void setLeftVelocity(double velocity) {
+    public void setLeftVelocityTicks(double velocity) {
         configTalonsForVelocity();
         driveLeftMotorA.set(ControlMode.Velocity, velocity);
     }
 
-    public void setRightVelocity(double velocity) {
+    public void setRightVelocityTicks(double velocity) {
         configTalonsForVelocity();
         driveRightMotorA.set(ControlMode.Velocity, velocity);
     }
 
-    public void setVelocity(double left, double right, double leftFeedForward,
+    public void setVelocityTicks(double left, double right, double leftFeedForward,
         double rightFeedForward) {
-        setLeftVelocity(left, leftFeedForward);
-        setRightVelocity(right, rightFeedForward);
+        setLeftVelocityTicks(left, leftFeedForward);
+        setRightVelocityTicks(right, rightFeedForward);
     }
 
-    public void setLeftVelocity(double velocity, double feedForward) {
+    public void setLeftVelocityTicks(double velocity, double feedForward) {
         configTalonsForVelocity();
         driveLeftMotorA
             .set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
     }
 
-    public void setRightVelocity(double velocity, double feedForward) {
+    public void setRightVelocityTicks(double velocity, double feedForward) {
         configTalonsForVelocity();
         driveRightMotorA
             .set(ControlMode.Velocity, velocity, DemandType.ArbitraryFeedForward, feedForward);
     }
 
-    public void setThrottle(double left, double right) {
-        setLeftThrottle(left);
-        setRightThrottle(right);
+    public void setLeftVelocityMetersPerSecond(double velocity) {
+        setLeftVelocityTicks(velocity / 10 * Tuning.drivetrainTicksPerMeter);
     }
 
-    public void setLeftThrottle(double throttle) {
-        driveLeftMotorA.set(ControlMode.PercentOutput, throttle);
+    public void setRightVelocityMetersPerSecond(double velocity) {
+        setRightVelocityTicks(velocity / 10 * Tuning.drivetrainTicksPerMeter);
     }
 
-    public void setRightThrottle(double throttle) {
-        driveRightMotorA.set(ControlMode.PercentOutput, throttle);
+    public void setPercent(double left, double right) {
+        setLeftPercent(left);
+        setRightPercent(right);
+    }
+
+    public void setLeftPercent(double percent) {
+        driveLeftMotorA.set(ControlMode.PercentOutput, percent);
+    }
+
+    public void setRightPercent(double percent) {
+        driveRightMotorA.set(ControlMode.PercentOutput, percent);
     }
 
     public void setBrake(boolean brake) {
@@ -236,28 +245,60 @@ public class Drivetrain extends Subsystem {
         }
     }
 
-    public double getLeftPosition() {
+    public double getLeftPositionTicks() {
         return driveLeftMotorA.getSelectedSensorPosition();
     }
 
-    public double getLeftVelocity() {
-        return driveLeftMotorA.getSelectedSensorVelocity();
-    }
-
-    public double getLeftThrottle() {
-        return driveLeftMotorA.getMotorOutputPercent();
-    }
-
-    public double getRightPosition() {
+    public double getRightPositionTicks() {
         return driveRightMotorA.getSelectedSensorPosition();
     }
 
-    public double getRightVelocity() {
+    public double getLeftPositionMeters() {
+        return getLeftPositionTicks() / Tuning.drivetrainTicksPerMeter;
+    }
+
+    public double getRightPositionMeters() {
+        return getRightPositionTicks() / Tuning.drivetrainTicksPerMeter;
+    }
+
+    public double getLeftVelocityTicks() {
+        return driveLeftMotorA.getSelectedSensorVelocity();
+    }
+
+    public double getRightVelocityTicks() {
         return driveRightMotorA.getSelectedSensorVelocity();
     }
 
-    public double getRightThrottle() {
+    public double getLeftVelocityMetersPerSecond() {
+        return getLeftVelocityTicks() * 10 / Tuning.drivetrainTicksPerMeter;
+    }
+
+    public double getRightVelocityMetersPerSecond() {
+        return getRightVelocityTicks() * 10 / Tuning.drivetrainTicksPerMeter;
+    }
+
+    public Twist2D getTwist() {
+        double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
+        double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadiusMeters) / 2;
+        return new Twist2D(xvel, 0, thetavel);
+    }
+
+    public double getLeftPercent() {
+        return driveLeftMotorA.getMotorOutputPercent();
+    }
+
+    public double getRightPercent() {
         return driveRightMotorA.getMotorOutputPercent();
+    }
+
+    public void zeroEncoders() {
+        Hardware.driveLeftMotorA.setSelectedSensorPosition(0);
+        Hardware.driveRightMotorA.setSelectedSensorPosition(0);
+    }
+
+    public void stop() {
+        setLeftVelocityTicks(0);
+        setRightVelocityTicks(0);
     }
 
     public NetworkTableEntry getLeftPositionEntry() {
@@ -311,14 +352,14 @@ public class Drivetrain extends Subsystem {
     @Override
     public void periodic() {
         if (Robot.debugMode) {
-            leftPositionEntry.setNumber(getLeftPosition());
-            rightPositionEntry.setNumber(getRightPosition());
+            leftPositionEntry.setNumber(getLeftPositionTicks());
+            rightPositionEntry.setNumber(getRightPositionTicks());
 
-            leftVelocityEntry.setNumber(getLeftVelocity());
-            rightVelocityEntry.setNumber(getRightVelocity());
+            leftVelocityEntry.setNumber(getLeftVelocityTicks());
+            rightVelocityEntry.setNumber(getRightVelocityTicks());
 
-            leftThrottleEntry.setNumber(getLeftThrottle());
-            rightThrottleEntry.setNumber(getRightThrottle());
+            leftThrottleEntry.setNumber(getLeftPercent());
+            rightThrottleEntry.setNumber(getRightPercent());
 
             leftCurrentAEntry.setNumber(Hardware.getDriveLeftACurrent());
             leftCurrentBEntry.setNumber(Hardware.getDriveLeftBCurrent());

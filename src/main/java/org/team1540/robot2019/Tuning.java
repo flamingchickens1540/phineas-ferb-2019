@@ -9,8 +9,8 @@ public class Tuning {
     public static boolean isComp = true;
 
     // drive
-    public static double driveVelocityP = 0;
-    public static double driveVelocityI = 0;
+    public static double driveVelocityP = 3;
+    public static double driveVelocityI = 0.02;
     public static double driveVelocityD = 0;
     public static double driveVelocityF = 0;
 
@@ -23,7 +23,7 @@ public class Tuning {
     public static double driveSoftTurnExponent = 3;
     public static double driveHardTurnExponent = 3;
 
-    public static double driveDeadzone = 0.15;
+    public static double driveDeadzone = 0.13;
 
     // this unit is [-1,1] throttle per 20ms, which is kind of terrible but makes for nicer drive code
     // divide 0.02 by this to get seconds from neutral to full throttle
@@ -34,10 +34,10 @@ public class Tuning {
     public static double driveClosedLoopRamp = 0;
 
     public static boolean invertDriveLeft = true;
-    public static boolean invertDriveLeftSensor = false;
+    public static boolean invertDriveLeftSensor = !isComp;
     public static boolean invertDriveRight = false;
-    public static boolean invertDriveRightSensor = false;
-    public static double driveTicksPerMeter = 1047.8;
+    public static boolean invertDriveRightSensor = !isComp;
+    public static double drivetrainTicksPerMeter = 1017.3;
     public static double driveKV = 0.25975;
     public static double driveVIntercept = 0.054083333;
     public static double driveMaxVel = 3.645171639;
@@ -130,4 +130,20 @@ public class Tuning {
     public static double climberTolerance = 1000;
 
     public static double axisButtonThreshold = 0.3;
+
+    // auto-lineup
+    public static double drivetrainRadiusMeters = 0.305; // This is for pandora (Seems to work... hmmm) TODO: Change this
+
+    public static long drivetrainUDPTimeout = 500;
+
+    public static double drivetrainMaxVelocity = 400;
+
+    public static final double CAM_X = 0.086;
+    public static final double CAM_Y = 0.099;
+    public static final double CAM_Z = 1.12;
+    public static final double CAM_PITCH = Math.toRadians(-37.5);
+    public static final double CAM_ROLL = Math.toRadians(0);
+    public static final double CAM_YAW = Math.toRadians(0);
+
+    public static final double PLANE_HEIGHT = 0.71;
 }

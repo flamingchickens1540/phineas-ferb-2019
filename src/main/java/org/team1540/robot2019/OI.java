@@ -8,13 +8,19 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.auto.PurePursuitThenPointToVisionTarget;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
-import org.team1540.robot2019.commands.climber.*;
+import org.team1540.robot2019.commands.climber.ClimbLevelThree;
+import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.*;
+import org.team1540.robot2019.commands.hatch.ExtendHatch;
+import org.team1540.robot2019.commands.hatch.GetHatchFloor;
+import org.team1540.robot2019.commands.hatch.GrabHatch;
+import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.hatch.RetractHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -75,6 +81,8 @@ public class OI {
     // driver buttons
 
     public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
+    public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
+    public static JoystickButton autoAlignCancelButton = new JoystickButton(driver, A);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -109,7 +117,7 @@ public class OI {
 
         Command intakeCommand = new FloorIntake();
         autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::noHatch, intakeCommand));
-        cancelIntakeButton.whenPressed(new SimpleCommand("Cancel Intake", intakeCommand::cancel));
+        cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ejectButton.whenPressed(new EjectThenDown());
 
         extendHatchButton.whenPressed(new ExtendHatch());
@@ -121,6 +129,10 @@ public class OI {
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
+
+        Command alignCommand = new PurePursuitThenPointToVisionTarget();
+        autoAlignButton.whenPressed(alignCommand);
+        autoAlignCancelButton.cancelWhenPressed(alignCommand);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized buttons in " + (end - start) + " ms");
@@ -153,4 +165,20 @@ public class OI {
         return Utilities.processDeadzone(-copilot.getY(Hand.kRight), Tuning.driveDeadzone);
     }
 
+    // DRIVETRAIN
+    public static double getTankdriveLeftAxis() {
+        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_Y), Tuning.driveDeadzone), 2);
+    }
+
+    public static double getTankdriveRightAxis() {
+        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_Y), Tuning.driveDeadzone), 2);
+    }
+
+    public static double getTankdriveBackwardsAxis() {
+        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_TRIG), Tuning.driveDeadzone), 2);
+    }
+
+    public static double getTankdriveForwardsAxis() {
+        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.driveDeadzone), 2);
+    }
 }
