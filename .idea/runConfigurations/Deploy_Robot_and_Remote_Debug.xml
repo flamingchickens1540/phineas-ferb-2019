@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Deploy Robot and Remote Debug" type="Remote" factoryName="Remote">
+    <module name="phineas-ferb-2019_main" />
+    <option name="USE_SOCKET_TRANSPORT" value="true" />
+    <option name="SERVER_MODE" value="false" />
+    <option name="SHMEM_ADDRESS" />
+    <option name="HOST" value="roborio-1540-frc.local" />
+    <option name="PORT" value="8349" />
+    <RunnerSettings RunnerId="Debug">
+      <option name="DEBUG_PORT" value="8349" />
+      <option name="LOCAL" value="false" />
+    </RunnerSettings>
+    <method v="2">
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="deploy" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="-p debugMode" />
+    </method>
+  </configuration>
+</component>
