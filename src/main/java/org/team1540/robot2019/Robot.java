@@ -75,9 +75,9 @@ public class Robot extends TimedRobot {
             0.011
         );
 
-        limelight = new Limelight("limelight-a", new Transform3D(0.086, 0.099, 1.12, Tuning.CAM_ROLL, Tuning.CAM_PITCH, 0));
+        limelight = new Limelight("limelight-a", new Transform3D(Tuning.CAM_X, Tuning.CAM_Y, Tuning.CAM_Z, Tuning.CAM_ROLL, Tuning.CAM_PITCH, Tuning.CAM_YAW));
         lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
-        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight, 0.71, 0.05,
+        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight, Tuning.PLANE_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
         tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
@@ -99,8 +99,10 @@ public class Robot extends TimedRobot {
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
         odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
-        lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
-        deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+        if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
+            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
+            deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+        }
     }
 
     private Timer brakeTimer = new Timer();
