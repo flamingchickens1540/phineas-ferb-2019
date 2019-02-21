@@ -104,8 +104,11 @@ public class PurePursuitToVisionTarget extends Command {
 
     @Override
     protected boolean isFinished() {
+        if (goal == null) {
+            return true;
+        }
         double distanceError = getDistanceError();
-        boolean isFinished = goal == null || distanceError < GOAL_DISTANCE_TOLERANCE;
+        boolean isFinished = distanceError < GOAL_DISTANCE_TOLERANCE;
         if (isFinished) {
             logger.debug("Pure pursuit goal reached! Distance error remaining: " + distanceError);
         }
