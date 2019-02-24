@@ -16,11 +16,7 @@ import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.ExtendHatchMech;
-import org.team1540.robot2019.commands.hatch.GrabHatch;
-import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
-import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
-import org.team1540.robot2019.commands.hatch.RetractHatchMech;
+import org.team1540.robot2019.commands.hatch.*;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -72,6 +68,7 @@ public class OI {
     private static JoystickButton prepGetHatchFloorButton = new JoystickButton(copilot, START);
     private static Button grabHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_TRIG);
     private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
+    private static Button releaseHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
 
     private static Button climbingSafety = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
     private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
@@ -107,6 +104,7 @@ public class OI {
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
         grabHatchButton.whenPressed(new GrabHatch());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
+        releaseHatchButton.whenPressed(new ReleaseHatch());
 
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
