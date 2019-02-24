@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.utils.StickyFaultsUtils;
 import org.team1540.robot2019.wrappers.NavX;
 import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
@@ -327,17 +328,17 @@ public class Hardware {
     }
 
     public static void checkStickyFaults() {
-        StickyFaultsProcessor.processStickyFaults("Drivetrain", "left A", driveLeftMotorA);
-        StickyFaultsProcessor.processStickyFaults("Drivetrain", "left B", driveLeftMotorB);
-        StickyFaultsProcessor.processStickyFaults("Drivetrain", "left C", driveLeftMotorC);
-        StickyFaultsProcessor.processStickyFaults("Drivetrain", "right A", driveRightMotorA);
-        StickyFaultsProcessor.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
-        StickyFaultsProcessor.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
+        StickyFaultsUtils.processStickyFaults("Drivetrain", "left A", driveLeftMotorA);
+        StickyFaultsUtils.processStickyFaults("Drivetrain", "left B", driveLeftMotorB);
+        StickyFaultsUtils.processStickyFaults("Drivetrain", "left C", driveLeftMotorC);
+        StickyFaultsUtils.processStickyFaults("Drivetrain", "right A", driveRightMotorA);
+        StickyFaultsUtils.processStickyFaults("Drivetrain", "right B", driveRightMotorB);
+        StickyFaultsUtils.processStickyFaults("Drivetrain", "right C", driveRightMotorC);
 
-        StickyFaultsProcessor.processStickyFaults("Wrist", "motor", wristMotor);
+        StickyFaultsUtils.processStickyFaults("Wrist", "motor", wristMotor);
 
-        StickyFaultsProcessor.processStickyFaults("Intake", "top", intakeTop);
-        StickyFaultsProcessor.processStickyFaults("Intake", "bottom", intakeBtm);
+        StickyFaultsUtils.processStickyFaults("Intake", "top", intakeTop);
+        StickyFaultsUtils.processStickyFaults("Intake", "bottom", intakeBtm);
     }
 
     public static ChickenController createController(int id) {

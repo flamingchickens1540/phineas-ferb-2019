@@ -1,4 +1,4 @@
-package org.team1540.robot2019;
+package org.team1540.robot2019.utils;
 
 import com.ctre.phoenix.motorcontrol.StickyFaults;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.rooster.wrappers.ChickenController;
 
-public class StickyFaultsProcessor {
+public class StickyFaultsUtils {
 
     public static void processStickyFaults(String subsystemName, String motorName,
         @NotNull ChickenController controller) {
