@@ -91,32 +91,15 @@ public class OI {
         logger.info("Initializing operator interface...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        initJoysticks();
-        initButtons();
-
-        double end = RobotController.getFPGATime() / 1000.0;
-        logger.info("Initialized operator interface in " + (end - start) + " ms");
-    }
-
-    public static void initJoysticks() {
-        logger.info("Initializing joysticks...");
-        double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
-
-        double end = RobotController.getFPGATime() / 1000.0;
-        logger.info("Initialized joysticks in " + (end - start) + " ms");
-    }
-
-    public static void initButtons() {
-        logger.info("Initializing buttons...");
-        double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
-
         elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-        elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
+        elevatorCargoShipButton
+            .whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
         intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
 
         Command intakeCommand = new FloorIntake();
-        autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::noHatch, intakeCommand));
+        autoIntakeButton
+            .whenPressed(new SimpleConditionalCommand(Robot.hatch::noHatch, intakeCommand));
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ejectButton.whenPressed(new EjectThenDown());
 
@@ -126,16 +109,19 @@ public class OI {
         grabHatchButton.whenPressed(new GrabHatch());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
-        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
-        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
-        climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
+        climbLevel3Button
+            .whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
+        climbLevel2Button
+            .whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
+        climberCylinderUp.whenPressed(
+            new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
 
         Command alignCommand = new PurePursuitThenPointToVisionTarget();
         autoAlignButton.whenPressed(alignCommand);
         autoAlignCancelButton.cancelWhenPressed(alignCommand);
 
         double end = RobotController.getFPGATime() / 1000.0;
-        logger.info("Initialized buttons in " + (end - start) + " ms");
+        logger.info("Initialized operator interface in " + (end - start) + " ms");
     }
 
     public static double getDriveThrottle() {
