@@ -82,11 +82,11 @@ public class Robot extends TimedRobot {
 
         ShuffleboardDisplay.init();
 
-        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
-        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
-
         SmartDashboard.putBoolean("IsHatchPreload", false);
         SmartDashboard.putBoolean("Debug Mode", false);
+
+        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
     }
 
     @Override
