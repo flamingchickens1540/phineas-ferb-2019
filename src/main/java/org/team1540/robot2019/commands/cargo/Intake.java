@@ -9,7 +9,6 @@ public class Intake extends Command {
     private static final Logger logger = Logger.getLogger(Intake.class);
 
     public Intake() {
-//    super(Tuning.intakeTimeout);
         requires(Robot.cargoMechanism);
     }
 
