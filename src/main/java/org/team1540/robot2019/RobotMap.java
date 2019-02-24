@@ -16,7 +16,7 @@ public class RobotMap {
     public static final int ELEVATOR_L = 6;
     public static final int ELEVATOR_R = 7;
 
-    public static final int INTAKE_WRIST = 8;
+    public static final int WRIST_MOTOR = 8;
 
     public static final int INTAKE_TOP = 9;
     public static final int INTAKE_BTM = 10;
@@ -53,7 +53,7 @@ public class RobotMap {
     public static final int PDP_DRIVE_RIGHT_A = 0;
     public static final int PDP_DRIVE_RIGHT_B = 2;
     public static final int PDP_DRIVE_RIGHT_C = 1;
-    public static final int PDP_INTAKE_WRIST = 7;
+    public static final int PDP_WRIST_MOTOR = 7;
     public static final int PDP_INTAKE_TOP = 5;
     public static final int PDP_INTAKE_BTM = 4;
     public static final int PDP_CLIMBER_ARM_L = 10;
