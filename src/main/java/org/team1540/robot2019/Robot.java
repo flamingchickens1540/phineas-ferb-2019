@@ -40,6 +40,7 @@ public class Robot extends TimedRobot {
     public static boolean debugMode = false;
 
     boolean disableBrakes;
+    private Timer brakeTimer = new Timer();
 
     public static TankDriveOdometryRunnable odometry;
     public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
@@ -100,8 +101,6 @@ public class Robot extends TimedRobot {
             deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
         }
     }
-
-    private Timer brakeTimer = new Timer();
 
     @Override
     public void disabledInit() {
