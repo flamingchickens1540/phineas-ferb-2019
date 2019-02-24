@@ -2,7 +2,6 @@ package org.team1540.robot2019.subsystems;
 
 import static org.team1540.robot2019.Hardware.elevatorA;
 import static org.team1540.robot2019.Hardware.elevatorB;
-import static org.team1540.robot2019.Hardware.elevatorLimitSensor;
 import static org.team1540.robot2019.Tuning.elevatorInPerRotation;
 
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -33,7 +32,6 @@ public class Elevator extends Subsystem {
     private NetworkTableEntry targetPosEntry = table.getEntry("tgtPos");
     private NetworkTableEntry targetVelEntry = table.getEntry("tgtVel");
 
-    private NetworkTableEntry limEntry = table.getEntry("limit");
     private NetworkTableEntry offsetEntry = table.getEntry("offset");
 
     private double positionOffset;
@@ -42,10 +40,6 @@ public class Elevator extends Subsystem {
     protected void initDefaultCommand() {
         // no default command - the move to position command leaves the elevator PID on and at the
         // setpoint, and the zero command stops the motors when it finishes.
-    }
-
-    public boolean isAtLimit() {
-        return elevatorLimitSensor.get();
     }
 
     public void setPosition(double position) {
@@ -96,8 +90,6 @@ public class Elevator extends Subsystem {
             currentBEntry.forceSetNumber(elevatorB.getOutputCurrent());
 
             offsetEntry.forceSetNumber(getOffset());
-
-            limEntry.forceSetBoolean(isAtLimit());
         }
     }
 
