@@ -14,10 +14,6 @@ public class VelocityTankDrive extends Command {
     }
 
     @Override
-    protected void initialize() {
-    }
-
-    @Override
     protected void execute() {
         double triggerValue = OI.getTankdriveForwardsAxis() - OI.getTankdriveBackwardsAxis();
         double leftSetpoint = (triggerValue - OI.getTankdriveLeftAxis()) * Tuning.drivetrainMaxVelocity;

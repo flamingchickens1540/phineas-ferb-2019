@@ -18,10 +18,6 @@ public class TankDriveForTimeVelocity extends TimedCommand {
     }
 
     @Override
-    protected void initialize() {
-    }
-
-    @Override
     protected void execute() {
         Robot.drivetrain.setLeftVelocityMetersPerSecond(velocity);
         Robot.drivetrain.setRightVelocityMetersPerSecond(velocity);

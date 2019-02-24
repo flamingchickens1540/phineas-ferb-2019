@@ -13,10 +13,6 @@ public class LiftGyroStabilizeLevel2 extends Command {
     }
 
     @Override
-    protected void initialize() {
-    }
-
-    @Override
     protected void execute() {
         if (Hardware.navx.getRawPitchDegrees() > 0) {
             Robot.climber.cylinderDown();
