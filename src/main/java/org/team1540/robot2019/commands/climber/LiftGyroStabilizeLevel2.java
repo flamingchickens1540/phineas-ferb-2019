@@ -21,7 +21,7 @@ public class LiftGyroStabilizeLevel2 extends Command {
             Robot.climber.cylinderUp();
         }
 
-        if (Robot.climber.getPosition() < Tuning.climberArmsTooFar) {
+        if (Robot.climber.getPosition() < Tuning.climberArmsFwdLimit) {
             Robot.climber.setArms(OI.getClimbAxis());
         }
         else {
