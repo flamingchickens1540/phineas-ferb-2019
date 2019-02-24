@@ -1,30 +1,13 @@
 package org.team1540.robot2019.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-
-import static org.team1540.robot2019.Hardware.redLEDs;
-import static org.team1540.robot2019.Hardware.blueLEDs;
+import org.team1540.robot2019.Hardware;
 
 public class LEDs extends Subsystem {
 
-    public void red() {
-        blueLEDs.set(false);
-        redLEDs.set(true);
-    }
-
-    public void blue() {
-        blueLEDs.set(true);
-        redLEDs.set(false);
-    }
-
-    public void purple() {
-        blueLEDs.set(true);
-        redLEDs.set(true);
-    }
-
-    public void off() {
-        blueLEDs.set(false);
-        redLEDs.set(false);
+    public void setColor(LEDColor color) {
+        Hardware.redLEDs.set(color.red);
+        Hardware.blueLEDs.set(color.blue);
     }
 
     @Override
@@ -32,4 +15,15 @@ public class LEDs extends Subsystem {
 
     }
 
+    public enum LEDColor {
+        RED(false, true), BLUE(true, false), PURPLE(true, true), OFF(false, false);
+
+        final boolean blue;
+        final boolean red;
+
+        LEDColor(boolean blue, boolean redOn) {
+            this.blue = blue;
+            this.red = redOn;
+        }
+    }
 }
