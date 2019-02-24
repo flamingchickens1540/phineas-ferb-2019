@@ -12,7 +12,6 @@ import com.ctre.phoenix.motorcontrol.IMotorController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -34,9 +33,6 @@ import org.team1540.rooster.wrappers.ChickenTalon;
 public class Drivetrain extends Subsystem {
 
     public static final Logger logger = Logger.getLogger(Drivetrain.class);
-
-    double leftRampAccum;
-    double rightRampAccum;
 
     boolean inFineDrive = false;
 
@@ -67,43 +63,6 @@ public class Drivetrain extends Subsystem {
                 .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
                 .then(getPipelineOutput(false)), this));
     }
-
-    private static double calcRamp(double throttle, double rampAccum) {
-        double ramp;
-        if (throttle == 0) {
-            if (rampAccum < -Tuning.driveControlRampDown) {
-                ramp = Tuning.driveControlRampDown;
-            } else if (rampAccum <= 0) {
-                ramp = rampAccum; // this will make the accumulator 0
-            } else if (rampAccum < Tuning.driveControlRampDown) {
-                ramp = -rampAccum;
-            } else {
-                ramp = -Tuning.driveControlRampDown;
-            }
-        } else if (throttle < 0) {
-            if (rampAccum < throttle - Tuning.driveControlRampDown) {
-                ramp = Tuning.driveControlRampDown;
-            } else if (rampAccum < throttle + Tuning.driveControlRampUp) {
-                ramp = rampAccum - throttle;
-            } else if (rampAccum <= 0) {
-                ramp = -Tuning.driveControlRampUp;
-            } else {
-                ramp = -Tuning.driveControlRampDown;
-            }
-        } else { // throttle is greater than 0
-            if (rampAccum > throttle + Tuning.driveControlRampDown) {
-                ramp = -Tuning.driveControlRampDown;
-            } else if (rampAccum > throttle - Tuning.driveControlRampUp) {
-                ramp = rampAccum - throttle;
-            } else if (rampAccum >= 0) {
-                ramp = Tuning.driveControlRampUp;
-            } else {
-                ramp = Tuning.driveControlRampDown;
-            }
-        }
-        return ramp;
-    }
-
     public Output<TankDriveData> getPipelineOutput() {
         return getPipelineOutput(true);
     }
@@ -368,10 +327,6 @@ public class Drivetrain extends Subsystem {
             rightCurrentAEntry.setNumber(Hardware.getDriveRightACurrent());
             rightCurrentBEntry.setNumber(Hardware.getDriveRightBCurrent());
             rightCurrentCEntry.setNumber(Hardware.getDriveRightCCurrent());
-        }
-        if (DriverStation.getInstance().isDisabled()) {
-            leftRampAccum = 0;
-            rightRampAccum = 0;
         }
 
         if (OI.getDriveFine() && !inFineDrive) {
