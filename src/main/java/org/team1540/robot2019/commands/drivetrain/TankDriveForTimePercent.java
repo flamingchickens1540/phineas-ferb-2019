@@ -14,10 +14,6 @@ public class TankDriveForTimePercent extends TimedCommand {
     }
 
     @Override
-    protected void initialize() {
-    }
-
-    @Override
     protected void execute() {
         Robot.drivetrain.setLeftPercent(percent);
         Robot.drivetrain.setRightPercent(percent);
