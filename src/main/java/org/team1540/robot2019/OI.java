@@ -114,7 +114,7 @@ public class OI {
         climbLevel2Button
             .whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
         climberCylinderUp.whenPressed(
-            new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
+            new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
         Command alignCommand = new PurePursuitThenPointToVisionTarget();
         autoAlignButton.whenPressed(alignCommand);

@@ -19,11 +19,11 @@ public class Climber extends Subsystem {
     private NetworkTable table = NetworkTableInstance.getDefault().getTable("climber");
     private NetworkTableEntry posEntry = table.getEntry("pos");
 
-    public void cylinderDown() {
+    public void lowerCylinder() {
         climberCylinder.set(Value.kReverse);
     }
 
-    public void cylinderUp() {
+    public void raiseCylinder() {
         climberCylinder.set(Value.kForward);
     }
 

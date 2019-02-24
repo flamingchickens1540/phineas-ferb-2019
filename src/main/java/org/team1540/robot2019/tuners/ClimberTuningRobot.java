@@ -44,7 +44,7 @@ public class ClimberTuningRobot extends TimedRobot {
         button1.whenPressed(new LiftGyroStabilizeLevel3());
 //        button2.whenPressed(new PrepareForClimb());
         button3
-            .whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::cylinderUp, Robot.climber));
+            .whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
         button3.whenPressed(new SimpleCommand("stahp", () -> Robot.climber.setArms(0), Robot.climber));
     }
 

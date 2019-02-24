@@ -169,7 +169,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         setMechanismBrakes(true);
 
-        Robot.climber.cylinderUp();
+        Robot.climber.raiseCylinder();
 
         Hardware.checkStickyFaults();
 
