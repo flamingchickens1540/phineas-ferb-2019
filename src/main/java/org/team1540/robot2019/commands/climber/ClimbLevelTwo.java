@@ -11,6 +11,6 @@ public class ClimbLevelTwo extends CommandGroup {
         addSequential(new MoveElevatorToPosition(Tuning.elevatorClimbPosition));
         addSequential(new MoveArmsToPosition(Tuning.climberStartPosLevel2));
         addSequential(new MoveElevatorToZero());
-        addSequential(new ExtendGyroStabilizeLevel2());
+        addSequential(new LiftGyroStabilizeLevel2());
     }
 }

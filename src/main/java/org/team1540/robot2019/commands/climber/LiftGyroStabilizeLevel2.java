@@ -6,9 +6,9 @@ import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class ExtendGyroStabilizeLevel2 extends Command {
+public class LiftGyroStabilizeLevel2 extends Command {
 
-    public ExtendGyroStabilizeLevel2() {
+    public LiftGyroStabilizeLevel2() {
         requires(Robot.climber);
     }
 
