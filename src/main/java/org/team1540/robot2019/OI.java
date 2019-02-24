@@ -93,14 +93,12 @@ public class OI {
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
         elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-        elevatorCargoShipButton
-            .whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
+        elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
         intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
 
         Command intakeCommand = new FloorIntake();
-        autoIntakeButton
-            .whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, intakeCommand));
+        autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, intakeCommand));
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ejectButton.whenPressed(new EjectThenDown());
 
@@ -110,12 +108,9 @@ public class OI {
         grabHatchButton.whenPressed(new GrabHatch());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
 
-        climbLevel3Button
-            .whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
-        climbLevel2Button
-            .whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
-        climberCylinderUp.whenPressed(
-            new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
+        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
+        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
+        climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
         Command alignCommand = new PurePursuitThenPointToVisionTarget();
         autoAlignButton.whenPressed(alignCommand);

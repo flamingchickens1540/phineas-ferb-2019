@@ -27,6 +27,10 @@ public class HatchMech extends Subsystem {
         return hatchGrabber.get();
     }
 
+    public boolean retracted() {
+        return !hatchSlide.get();
+    }
+
     @Override
     protected void initDefaultCommand() {
     }

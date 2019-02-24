@@ -9,7 +9,7 @@ public class PlaceHatchThenDown extends CommandGroup {
 
     public PlaceHatchThenDown() {
         addSequential(new PlaceHatch());
-        addSequential(new WaitCommand(Tuning.hatchRetractWaitTime));
+        addSequential(new WaitCommand(Tuning.hatchDownWaitTime));
         addSequential(new MoveElevatorToZero());
     }
 
