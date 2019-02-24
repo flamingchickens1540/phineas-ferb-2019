@@ -72,9 +72,12 @@ public class Robot extends TimedRobot {
             0.011
         );
 
-        limelight = new Limelight("limelight-a", new Transform3D(Tuning.CAM_X, Tuning.CAM_Y, Tuning.CAM_Z, Tuning.CAM_ROLL, Tuning.CAM_PITCH, Tuning.CAM_YAW));
+        limelight = new Limelight("limelight-a",
+            new Transform3D(RobotMap.CAM_X, RobotMap.CAM_Y, RobotMap.CAM_Z, RobotMap.CAM_ROLL,
+                RobotMap.CAM_PITCH, RobotMap.CAM_YAW));
         lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
-        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight, Tuning.PLANE_HEIGHT, 0.05,
+        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight,
+            RobotMap.PLANE_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
         tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
