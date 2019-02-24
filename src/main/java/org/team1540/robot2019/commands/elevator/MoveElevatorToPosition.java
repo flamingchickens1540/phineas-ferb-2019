@@ -9,7 +9,7 @@ public class MoveElevatorToPosition extends Command {
 
     private static final Logger logger = Logger.getLogger(MoveElevatorToPosition.class);
 
-    double position;
+    private double position;
 
     public MoveElevatorToPosition(double pos) {
         this.position = pos;
