@@ -24,6 +24,7 @@ import org.team1540.robot2019.commands.hatch.RetractHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
+import org.team1540.rooster.triggers.MultiAxisButton;
 import org.team1540.rooster.triggers.StrictDPadButton;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleConditionalCommand;
@@ -82,7 +83,7 @@ public class OI {
 
     public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
     public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
-    public static JoystickButton autoAlignCancelButton = new JoystickButton(driver, A);
+    public static Button autoAlignCancelButton = new MultiAxisButton(driver, Tuning.driveDeadzone);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
