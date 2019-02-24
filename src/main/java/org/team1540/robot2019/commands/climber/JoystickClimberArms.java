@@ -13,7 +13,7 @@ public class JoystickClimberArms extends Command {
 
     @Override
     protected void execute() {
-        if (Robot.climber.getPosition() < Tuning.climberArmsTooFar) {
+        if (Robot.climber.getPosition() < Tuning.climberArmsFwdLimit) {
             Robot.climber.setArms(OI.getClimbAxis());
         }
         else {
