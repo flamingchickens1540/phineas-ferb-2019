@@ -55,10 +55,6 @@ public class Robot extends TimedRobot {
         logger.info("Initializing...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-//    PreferenceManager.getInstance().add(new Tuning());
-//    Scheduler.getInstance().run();
-
-        // initialize hardware after we run the scheduler once so that the preference manager can update its values
         Hardware.initAll();
 
         drivetrain = new Drivetrain();
