@@ -99,7 +99,7 @@ public class OI {
 
         Command intakeCommand = new FloorIntake();
         autoIntakeButton
-            .whenPressed(new SimpleConditionalCommand(Robot.hatch::noHatch, intakeCommand));
+            .whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, intakeCommand));
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ejectButton.whenPressed(new EjectThenDown());
 

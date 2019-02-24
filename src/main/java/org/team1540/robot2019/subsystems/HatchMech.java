@@ -23,7 +23,7 @@ public class HatchMech extends Subsystem {
         hatchGrabber.set(true);
     }
 
-    public boolean noHatch() {
+    public boolean hasNoHatch() {
         return hatchGrabber.get();
     }
 
