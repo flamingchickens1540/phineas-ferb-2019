@@ -20,11 +20,7 @@ public class IntakeCargo extends Command {
 
     @Override
     protected void end() {
-        if (isTimedOut()) {
-            logger.debug("Intake stopping due to timeout");
-        } else {
-            logger.debug("Intake stopping due to detected ball");
-        }
+        logger.debug("Intake stopping");
         Robot.cargoMechanism.stop();
     }
 
