@@ -14,7 +14,7 @@ public class LiftGyroStabilizeLevel3 extends PIDCommand {
 
     @Override
     protected void initialize() {
-        Robot.climber.cylinderDown();
+        Robot.climber.lowerCylinder();
     }
 
     @Override
