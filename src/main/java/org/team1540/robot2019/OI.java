@@ -17,9 +17,9 @@ import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.ExtendHatchMech;
-import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.GrabHatch;
 import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.RetractHatchMech;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
@@ -85,7 +85,8 @@ public class OI {
     public static JoystickButton autoAlignCancelButton = new JoystickButton(driver, A);
 
     /**
-     * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
+     * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate
+     * stuff here to get more informative error traces and less general weirdness.
      */
     static void init() {
         logger.info("Initializing operator interface...");

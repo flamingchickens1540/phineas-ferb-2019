@@ -15,6 +15,7 @@ public class PrepHatchFloorGrab extends CommandGroup {
         addSequential(new WristDown());
         addSequential(new WaitCommand(Tuning.hatchPrepFloorWaitTime));
         addSequential(new ExtendHatchMech());
-        addSequential(new SimpleLoopCommand("Wait until interrupted", () -> {}));
+        addSequential(new SimpleLoopCommand("Wait until interrupted", () -> {
+        }));
     }
 }

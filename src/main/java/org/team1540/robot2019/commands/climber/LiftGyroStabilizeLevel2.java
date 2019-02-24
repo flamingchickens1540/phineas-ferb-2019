@@ -16,15 +16,13 @@ public class LiftGyroStabilizeLevel2 extends Command {
     protected void execute() {
         if (Hardware.navx.getRawPitchDegrees() > 0) {
             Robot.climber.lowerCylinder();
-        }
-        else {
+        } else {
             Robot.climber.raiseCylinder();
         }
 
         if (Robot.climber.getPosition() < Tuning.climberArmsFwdLimit) {
             Robot.climber.setArms(OI.getClimbAxis());
-        }
-        else {
+        } else {
             Robot.climber.setArms(0);
         }
     }
