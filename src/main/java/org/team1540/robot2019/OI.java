@@ -167,18 +167,22 @@ public class OI {
 
     // DRIVETRAIN
     public static double getTankdriveLeftAxis() {
-        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_Y), Tuning.driveDeadzone), 2);
+        return Utilities
+            .scale(Utilities.processDeadzone(driver.getY(Hand.kLeft), Tuning.driveDeadzone), 2);
     }
 
     public static double getTankdriveRightAxis() {
-        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_Y), Tuning.driveDeadzone), 2);
+        return Utilities
+            .scale(Utilities.processDeadzone(driver.getY(Hand.kRight), Tuning.driveDeadzone), 2);
     }
 
     public static double getTankdriveBackwardsAxis() {
-        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(LEFT_TRIG), Tuning.driveDeadzone), 2);
+        return Utilities.scale(
+            Utilities.processDeadzone(driver.getTriggerAxis(Hand.kLeft), Tuning.driveDeadzone), 2);
     }
 
     public static double getTankdriveForwardsAxis() {
-        return Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(RIGHT_TRIG), Tuning.driveDeadzone), 2);
+        return Utilities.scale(
+            Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), Tuning.driveDeadzone), 2);
     }
 }
