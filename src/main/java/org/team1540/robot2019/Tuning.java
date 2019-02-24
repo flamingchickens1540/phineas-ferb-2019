@@ -83,7 +83,7 @@ public class Tuning {
     public static double wristHoldThrot = 0.1;
     public static double wristLowerTimeout = 1;
 
-    // cargoMechanism
+    // intake
     public static boolean intakeInvertTop = false;
     public static boolean intakeInvertBtm = false;
 

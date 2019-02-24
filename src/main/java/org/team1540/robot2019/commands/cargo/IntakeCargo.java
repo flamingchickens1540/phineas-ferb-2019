@@ -9,23 +9,23 @@ public class IntakeCargo extends Command {
     private static final Logger logger = Logger.getLogger(IntakeCargo.class);
 
     public IntakeCargo() {
-        requires(Robot.cargoMechanism);
+        requires(Robot.intake);
     }
 
     @Override
     protected void initialize() {
         logger.debug("Intake starting");
-        Robot.cargoMechanism.startIntaking();
+        Robot.intake.startIntaking();
     }
 
     @Override
     protected void end() {
         logger.debug("Intake stopping");
-        Robot.cargoMechanism.stop();
+        Robot.intake.stop();
     }
 
     @Override
     protected boolean isFinished() {
-        return Robot.cargoMechanism.hasBall() || isTimedOut();
+        return Robot.intake.hasBall() || isTimedOut();
     }
 }

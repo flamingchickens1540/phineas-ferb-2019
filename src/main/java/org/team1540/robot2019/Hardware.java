@@ -213,7 +213,7 @@ public class Hardware {
     }
 
     public static void initIntake() {
-        logger.info("Initializing cargoMechanism...");
+        logger.info("Initializing intake...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
         intakeTop = createController(RobotMap.INTAKE_TOP);
@@ -234,7 +234,7 @@ public class Hardware {
         intakeSensor = new DigitalInput(RobotMap.INTAKE_SENSOR);
 
         double end = RobotController.getFPGATime() / 1000.0;
-        logger.info("Initialized cargoMechanism in " + (end - start) + " ms");
+        logger.info("Initialized intake in " + (end - start) + " ms");
     }
 
     public static void initHatchMech() {
