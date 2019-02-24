@@ -60,4 +60,12 @@ public class RobotMap {
     public static final int PDP_CLIMBER_ARM_R = 11;
 
     public static final Port NAVX = Port.kMXP;
+
+    public static final double CAM_X = 0.086;
+    public static final double CAM_Y = 0.099;
+    public static final double CAM_Z = 1.12;
+    public static final double CAM_PITCH = Math.toRadians(-37.5);
+    public static final double CAM_ROLL = Math.toRadians(0);
+    public static final double CAM_YAW = Math.toRadians(0);
+    public static final double PLANE_HEIGHT = 0.71;
 }
