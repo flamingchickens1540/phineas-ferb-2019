@@ -196,7 +196,7 @@ public class Hardware {
         logger.info("Initializing wrist...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        wristMotor = createController(RobotMap.INTAKE_WRIST);
+        wristMotor = createController(RobotMap.WRIST_MOTOR);
 
         wristMotor.setInverted(Tuning.wristInvertMotor);
         wristMotor.setBrake(true);
@@ -393,11 +393,11 @@ public class Hardware {
         }
     }
 
-    public static double getIntakeWristCurrent() {
+    public static double getWristMotorCurrent() {
         if (wristMotor instanceof ChickenTalon) {
             return ((ChickenTalon) wristMotor).getOutputCurrent();
         } else {
-            return pdp.getCurrent(RobotMap.PDP_INTAKE_WRIST);
+            return pdp.getCurrent(RobotMap.PDP_WRIST_MOTOR);
         }
     }
 
