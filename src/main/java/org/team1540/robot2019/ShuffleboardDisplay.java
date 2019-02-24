@@ -9,14 +9,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.elevator.ZeroElevator;
 import org.team1540.robot2019.commands.selftests.SelfTest;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleLoopCommand;
 
 public class ShuffleboardDisplay {
 
-    private static final Logger logger = Logger.getLogger(ZeroElevator.class);
+    private static final Logger logger = Logger.getLogger(ShuffleboardDisplay.class);
 
     private static NetworkTableEntry pressureEntry;
 
