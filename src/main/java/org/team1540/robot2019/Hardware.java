@@ -47,8 +47,6 @@ public class Hardware {
     public static CANSparkMax elevatorA;
     public static CANSparkMax elevatorB;
 
-    public static DigitalInput elevatorLimitSensor;
-
     public static DigitalInput wristMidSwitch;
     public static DigitalInput wristBtmSwitch;
 
@@ -189,8 +187,6 @@ public class Hardware {
         elevatorA.getPIDController().setI(Tuning.elevatorI);
         elevatorA.getPIDController().setD(Tuning.elevatorD);
         elevatorA.getPIDController().setOutputRange(-1, 1);
-
-        elevatorLimitSensor = new DigitalInput(RobotMap.ELEVATOR_LIMIT_SENSOR);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized elevator in " + (end - start) + " ms");
