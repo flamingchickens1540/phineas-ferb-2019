@@ -10,9 +10,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.squirrelframework.foundation.fsm.StateMachineLogger;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.wrist.WristUpOrHold;
 
@@ -30,10 +28,6 @@ public class Wrist extends Subsystem {
     private NetworkTableEntry motorEntry = table.getEntry("motorThrot");
 
     public Wrist() {
-        // configure state machine logger
-        Logger.getLogger(StateMachineLogger.class)
-            .setLevel(Level.INFO); // this can be changed as needed
-
         wristMidSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
             @Override
             public void interruptFired(int i, Object o) {
