@@ -80,7 +80,8 @@ public class Robot extends TimedRobot {
             RobotMap.PLANE_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
-        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
+        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800,
+            "10.15.40.202", 0.01);
 
         OI.init();
 
@@ -100,8 +101,10 @@ public class Robot extends TimedRobot {
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
         odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
         if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
-            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
-            deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D()
+                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
+            deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D()
+                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
         }
     }
 

@@ -6,10 +6,10 @@ import org.team1540.robot2019.Tuning;
 
 public class PlaceHatch extends CommandGroup {
 
-  public PlaceHatch() {
-      addSequential(new ReleaseHatch());
-      addSequential(new WaitCommand(Tuning.hatchReleaseWaitTime));
-      addSequential(new RetractHatchMech());
-  }
+    public PlaceHatch() {
+        addSequential(new ReleaseHatch());
+        addSequential(new WaitCommand(Tuning.hatchReleaseWaitTime));
+        addSequential(new RetractHatchMech());
+    }
 
 }

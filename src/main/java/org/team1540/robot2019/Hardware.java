@@ -18,8 +18,9 @@ import org.team1540.rooster.wrappers.ChickenTalon;
 import org.team1540.rooster.wrappers.ChickenVictor;
 
 /**
- * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I centralize the motors themselves. This also means we don't have to redo loads of config when making
- * alternative robots or funky testing code.
+ * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I centralize the
+ * motors themselves. This also means we don't have to redo loads of config when making alternative robots or funky
+ * testing code.
  */
 public class Hardware {
 

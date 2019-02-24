@@ -63,6 +63,7 @@ public class Drivetrain extends Subsystem {
                 .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
                 .then(getPipelineOutput(false)), this));
     }
+
     public Output<TankDriveData> getPipelineOutput() {
         return getPipelineOutput(true);
     }
@@ -238,7 +239,9 @@ public class Drivetrain extends Subsystem {
 
     public Twist2D getTwist() {
         double xvel = (getLeftVelocityMetersPerSecond() + getRightVelocityMetersPerSecond()) / 2;
-        double thetavel = (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadiusMeters) / 2;
+        double thetavel =
+            (getLeftVelocityMetersPerSecond() - getRightVelocityMetersPerSecond()) / (Tuning.drivetrainRadiusMeters)
+                / 2;
         return new Twist2D(xvel, 0, thetavel);
     }
 
