@@ -98,11 +98,9 @@ public class Tuning {
     public static double intakeEjectTime = 1;
 
     // hatch mech
-    public static double hatchGetTime = 0.2;
-    public static double hatchPlaceTime1 = 0.2;
-    public static double hatchPlaceTime2 = 0.2;
-    public static double hatchFloorTime = 0.5;
-    public static double hatchEjectThenDownTime = 0.3;
+    public static double hatchReleaseWaitTime = 0.2;
+    public static double hatchPrepFloorWaitTime = 0.5;
+    public static double hatchRetractWaitTime = 0.3;
 
     // climber
     public static double climberArmSpeed = 10000;
