@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PurePursuitThenPointToVisionTarget;
+import org.team1540.robot2019.commands.auto.SimplePointToVisionTarget;
+import org.team1540.robot2019.commands.auto.TurnOnLimelightGroup;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
@@ -80,9 +82,10 @@ public class OI {
 
     // driver buttons
 
-    public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
+    public static JoystickButton fineDriveButton = new JoystickButton(driver, B);
+    public static JoystickButton autoPointButton = new JoystickButton(driver, LB);
     public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
-    public static JoystickButton autoAlignCancelButton = new JoystickButton(driver, LB);
+    public static JoystickButton autoAlignCancelButton = new JoystickButton(driver, A);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -133,6 +136,7 @@ public class OI {
         Command alignCommand = new PurePursuitThenPointToVisionTarget();
         autoAlignButton.whenPressed(alignCommand);
         autoAlignCancelButton.cancelWhenPressed(alignCommand);
+        autoPointButton.whenPressed(new TurnOnLimelightGroup(new SimplePointToVisionTarget()));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized buttons in " + (end - start) + " ms");

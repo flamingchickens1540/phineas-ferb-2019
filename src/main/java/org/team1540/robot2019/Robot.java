@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.auto.UDPVelocityTwistDrive;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.TransformManager;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -86,13 +87,13 @@ public class Robot extends TimedRobot {
         );
 
         // VISION
-        limelight = new Limelight("limelight-a", new Transform3D(0.086, 0.099, 1.12, Tuning.CAM_ROLL, Tuning.CAM_PITCH, 0));
+        limelight = new Limelight("limelight-a", new Transform3D(Tuning.CAM_X, Tuning.CAM_Y, Tuning.CAM_Z, Tuning.CAM_ROLL, Tuning.CAM_PITCH, Tuning.CAM_YAW));
         lastOdomToVisionTargetTracker = new LastValidTransformTracker(() -> tf.getTransform("odom", "base_link"));
-        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight, 0.71, 0.05,
+        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight, Tuning.PLANE_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
         // PLANNING
-        tebPlanner = new TEBPlanner(() -> new Odometry(tf.getTransform("odom", "base_link"), drivetrain.getTwist()), 5801, 5800, "10.15.40.202", 0.01);
+        tebPlanner = new TEBPlanner(() -> new Odometry(tf.getTransform("odom", "base_link"), drivetrain.getTwist()), 5801, 5800, "10.15.40.201", 0.01);
 
         OI.init();
 
@@ -111,8 +112,12 @@ public class Robot extends TimedRobot {
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
         tf.getTransform("odom", "base_link").toTransform2D().putToNetworkTable("Odometry/Debug");
-        lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
-        deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+        if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
+            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
+            deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+        }
+        SmartDashboard.putNumber("DriveTrain Left ticks: ", drivetrain.getLeftPositionTicks());
+        SmartDashboard.putNumber("DriveTrain Right ticks: ", drivetrain.getRightPositionTicks());
     }
 
     private Timer brakeTimer = new Timer();
@@ -167,6 +172,8 @@ public class Robot extends TimedRobot {
         }
 
         Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
+
+        new UDPVelocityTwistDrive().start();
 
         if (elevator.getPosition() < 1) {
             elevator.setRaw(0);

@@ -1,6 +1,7 @@
 package org.team1540.robot2019.commands.auto;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
@@ -20,16 +21,16 @@ import org.team1540.rooster.functional.Executable;
 
 // TODO: Use proper logging class
 // TODO: Make this a generic pure pursuit command
-public class PurePursuitToVisionTarget extends Command {
+public class PurePursuitToVisionTarget extends TimedCommand {
 
     public static final Logger logger = Logger.getLogger(PurePursuitToVisionTarget.class);
 
-    private static final double ANGULAR_KP = 5;
-    private static final double LINEAR_KP = 4;
-    private static final double MAX_VEL_X = 0.8;
-    private static final double MIN_VEL_X = 0.2;
-    private static final double MAX_VEL_THETA = 2.0;
-    private static final double GOAL_DISTANCE_TOLERANCE = 0.05;
+    private static double ANGULAR_KP = 5;
+    private static double LINEAR_KP = 4;
+    private static double MAX_VEL_X = 0.8;
+    private static double MIN_VEL_X = 0.2;
+    private static double MAX_VEL_THETA = 2.0;
+    private static double GOAL_DISTANCE_TOLERANCE = 0.1;
     private static final Transform3D VISION_TARGET_OFFSET = new Transform3D(-0.65, -0.025, 0);
 
     private final TankDriveOdometryRunnable driveOdometry;
@@ -41,6 +42,7 @@ public class PurePursuitToVisionTarget extends Command {
     private Transform3D goal;
 
     public PurePursuitToVisionTarget(DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, TankDriveOdometryRunnable driveOdometry) {
+        super(3);
         requires(Robot.drivetrain);
         this.deepSpaceVisionTargetLocalization = deepSpaceVisionTargetLocalization;
         this.driveOdometry = driveOdometry;
@@ -58,6 +60,18 @@ public class PurePursuitToVisionTarget extends Command {
 
     @Override
     protected void initialize() {
+        SmartDashboard.setDefaultNumber("PurePursuit/ANGULAR_KP", 5);
+        SmartDashboard.setDefaultNumber("PurePursuit/LINEAR_KP", 4);
+        SmartDashboard.setDefaultNumber("PurePursuit/MAX_VEL_X", 0.8);
+        SmartDashboard.setDefaultNumber("PurePursuit/MIN_VEL_X", 0.2);
+        SmartDashboard.setDefaultNumber("PurePursuit/MAX_VEL_THETA", 2.0);
+        SmartDashboard.setDefaultNumber("PurePursuit/GOAL_DISTANCE_TOLERANCE", 0.05);
+        ANGULAR_KP = SmartDashboard.getNumber("PurePursuit/ANGULAR_KP", 5);
+        LINEAR_KP = SmartDashboard.getNumber("PurePursuit/LINEAR_KP", 4);
+        MAX_VEL_X = SmartDashboard.getNumber("PurePursuit/MAX_VEL_X", 0.8);
+        MIN_VEL_X = SmartDashboard.getNumber("PurePursuit/MIN_VEL_X", 0.2);
+        MAX_VEL_THETA = SmartDashboard.getNumber("PurePursuit/MAX_VEL_THETA", 2.0);
+        GOAL_DISTANCE_TOLERANCE = SmartDashboard.getNumber("PurePursuit/GOAL_DISTANCE_TOLERANCE", 0.05);
         logger.debug("Pure pursuit starting...");
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
             logger.debug("Vision target pose acquired!");
@@ -97,6 +111,7 @@ public class PurePursuitToVisionTarget extends Command {
         double cmdVelX = distanceError * (1 - Math.abs(angleError) / Math.PI * 2) * LINEAR_KP;
         cmdVelX = ControlUtils.velocityPosNegConstrain(cmdVelX, MAX_VEL_X, MIN_VEL_X);
 
+        logger.debug(String.format("Distance cmd: %f Theta cmd: %f", distanceError, angleError));
         Twist2D cmdVel = new Twist2D(cmdVelX, 0, cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();
@@ -104,8 +119,11 @@ public class PurePursuitToVisionTarget extends Command {
 
     @Override
     protected boolean isFinished() {
+        if (goal == null) {
+            return true;
+        }
         double distanceError = getDistanceError();
-        boolean isFinished = goal == null || distanceError < GOAL_DISTANCE_TOLERANCE;
+        boolean isFinished = distanceError < GOAL_DISTANCE_TOLERANCE;
         if (isFinished) {
             logger.debug("Pure pursuit goal reached! Distance error remaining: " + distanceError);
         }
@@ -118,12 +136,20 @@ public class PurePursuitToVisionTarget extends Command {
     }
 
     private double getDistanceError() {
-        Vector3D odomPosition = Robot.tf.getTransform("odom", "base_link").getPosition(); // TODO: This should use javaTF
+        Transform3D transform = Robot.tf.getTransform("odom", "base_link");
+        if (transform == null) {
+            return Double.POSITIVE_INFINITY;
+        }
+        Vector3D odomPosition = transform.getPosition(); // TODO: This should use javaTF
         return goal.toTransform2D().getPositionVector().distance(new Vector2D(odomPosition.getX(), odomPosition.getY()));
     }
 
     private double getAngleError() {
-        Vector3D odomPosition = Robot.tf.getTransform("odom", "base_link").getPosition(); // TODO: This should use javaTF
+        Transform3D transform = Robot.tf.getTransform("odom", "base_link");
+        if (transform == null) {
+            return Double.POSITIVE_INFINITY;
+        }
+        Vector3D odomPosition = transform.getPosition(); // TODO: This should use javaTF
         double targetAngle = Math.atan2(goal.toTransform2D().getY() - odomPosition.getY(), goal.toTransform2D().getX() - odomPosition.getX());
         double currentAngle = Hardware.navx.getYawRadians();
         return TrigUtils.signedAngleError(targetAngle, currentAngle);

@@ -20,7 +20,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
     public static final Logger logger = Logger.getLogger(SimplePointToVisionTarget.class);
 
     // Max/Min angular velocity
-    private static final double MIN_VEL_THETA = 0.1;
+    private static final double MIN_VEL_THETA = 0.2;
     private static final double MAX_VEL_THETA = 1.8;
 
     // Constants for angular VPID controller
@@ -50,6 +50,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected void initialize() {
+        logger.debug("Simple point command starting...");
         double x = Robot.limelight.getTargetAngles().getX();
         if (x == 0) {
             Transform3D prevGoal = Robot.lastOdomToVisionTargetTracker.getOdomToVisionTarget();
@@ -69,6 +70,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
     @Override
     protected void execute() {
         if (goal == null) {
+            logger.debug("goal is null!");
             return;
         }
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
@@ -79,9 +81,13 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected boolean isFinished() {
+        if (goal == null) {
+            logger.debug("Goal was null! Ending...");
+            return true;
+        }
         double anglePosError = Math.abs(getAngleError(goal));
         double angleVelError = Math.abs(Robot.drivetrain.getTwist().getOmega());
-        boolean isFinished = goal == null || (anglePosError < GOAL_TOLERANCE_ANGULAR_POSITION && angleVelError < GOAL_TOLERANCE_ANGULAR_VELOCITY);
+        boolean isFinished = anglePosError < GOAL_TOLERANCE_ANGULAR_POSITION && angleVelError < GOAL_TOLERANCE_ANGULAR_VELOCITY;
         if (isFinished) {
             logger.debug(String.format("Simple point goal reached! Angle error remaining: %f Angular velocity error remaining: %f", anglePosError, angleVelError));
         }
@@ -90,6 +96,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected void end() {
+        logger.debug("SimplePointToTarget Ended!");
         Robot.drivetrain.stop();
     }
 
@@ -99,6 +106,9 @@ public class SimplePointToVisionTarget extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
+        if (goal == null) {
+            return 0;
+        }
         return getAngleError(goal);
     }
 
@@ -107,6 +117,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
         output *= MAX_VEL_THETA;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
 
+        logger.debug(String.format("Command Vel Theta: %f", cmdVelTheta));
         Twist2D cmdVel = new Twist2D(0, 0, cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();

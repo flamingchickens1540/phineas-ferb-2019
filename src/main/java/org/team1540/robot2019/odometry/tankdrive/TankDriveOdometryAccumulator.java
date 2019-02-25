@@ -12,7 +12,7 @@ public class TankDriveOdometryAccumulator {
     private double distancePrevRight = 0;
     private double angleRadsPrev = 0;
 
-//    private boolean firstUpdate = true;
+    private boolean firstUpdate = true;
 
     /**
      * @param distanceLeft Absolute distance in meters of left wheels
@@ -20,13 +20,11 @@ public class TankDriveOdometryAccumulator {
      * @param angleRadians Right-handed rotation about Z axis (up)
      */
     public void update(double distanceLeft, double distanceRight, double angleRadians) {
-//        if (firstUpdate) { // TODO: Prevent having to reset distances
-//            distancePrevLeft = distanceLeft;
-//            distancePrevRight = distanceRight;
-//            angleRadsPrev = angleRadians;
-//            firstUpdate = false;
-//            return;
-//        }
+        if (firstUpdate) { // TODO: Prevent having to reset distances
+            distancePrevLeft = distanceLeft;
+            distancePrevRight = distanceRight;
+            firstUpdate = false;
+        }
 
         double deltaDistanceLeft = distanceLeft - distancePrevLeft;
         double deltaDistanceRight = distanceRight - distancePrevRight;
