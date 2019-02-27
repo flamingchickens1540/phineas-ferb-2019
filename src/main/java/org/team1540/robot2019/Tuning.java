@@ -44,6 +44,11 @@ public class Tuning {
 
     public static int driveCurrentLimit = 40;
 
+    public static double driveTestTime = 2;
+    public static double driveTestWait = 2;
+    public static double driveTestMotorThrot = 1;
+    public static double driveTestStopTolerance = 0.1;
+
     // elevator
     public static boolean invertElevatorA = true;
     public static boolean invertElevatorB = false;

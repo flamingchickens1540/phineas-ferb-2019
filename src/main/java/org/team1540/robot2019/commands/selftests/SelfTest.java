@@ -14,6 +14,7 @@ public class SelfTest extends CommandGroup {
         addSequential(new CargoMechSelfTest());
         addSequential(new WristSelfTest());
         addSequential(new ElevatorSelfTest());
+        addSequential(new DriveSelfTest());
         addSequential(new SimpleCommand("Print status", () -> logger.info("Robot self-test complete")));
     }
 }
