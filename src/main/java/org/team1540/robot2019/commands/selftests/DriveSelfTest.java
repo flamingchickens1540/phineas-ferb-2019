@@ -139,7 +139,7 @@ public class DriveSelfTest extends Command {
             case 5:
                 return "RC";
         }
-        DriverStation.reportError("Current was requested for non-existent drive motor index " + motorIndex, false);
+        DriverStation.reportError("Name was requested for non-existent drive motor index " + motorIndex, false);
         return "??";
     }
 
