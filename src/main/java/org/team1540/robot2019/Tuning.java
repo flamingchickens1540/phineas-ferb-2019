@@ -38,9 +38,9 @@ public class Tuning {
     public static boolean invertDriveRight = false;
     public static boolean invertDriveRightSensor = !isComp;
     public static double drivetrainTicksPerMeter = 1017.3;
-    public static double driveKV = 0.25975;
-    public static double driveVIntercept = 0.054083333;
-    public static double driveMaxVel = 3.645171639;
+    public static double driveKV = 0.2625;
+    public static double driveVIntercept = 0.049583333;
+    public static double driveMaxVel = 3.620634921;
 
     public static int driveCurrentLimit = 40;
 
