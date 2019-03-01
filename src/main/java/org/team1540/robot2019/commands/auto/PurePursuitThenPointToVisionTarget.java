@@ -24,6 +24,11 @@ public class PurePursuitThenPointToVisionTarget extends CommandGroup {
     }
 
     @Override
+    protected void initialize() {
+        Robot.limelight.setLeds(true);
+    }
+
+    @Override
     protected void interrupted() {
         end(); // CommandGroups don't call end by default on interrupted
     }
