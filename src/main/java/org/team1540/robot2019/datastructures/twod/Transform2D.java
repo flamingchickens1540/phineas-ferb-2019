@@ -50,17 +50,13 @@ public class Transform2D {
     public Transform2D add(Transform2D other) {
         Transform3D thisTransform3D = this.toTransform3D();
         Transform3D otherTransform3D = other.toTransform3D();
-        Transform3D transform3D = new Transform3D(thisTransform3D.getOrientation().applyInverseTo(otherTransform3D.getPosition()).add(thisTransform3D.getPosition()),
-            thisTransform3D.getOrientation().applyTo(otherTransform3D.getOrientation()));
-        return transform3D.toTransform2D();
+        return thisTransform3D.add(otherTransform3D).toTransform2D();
     }
 
     public Transform2D subtract(Transform2D other) {
         Transform3D thisTransform3D = this.toTransform3D();
         Transform3D otherTransform3D = other.toTransform3D();
-        Transform3D transform3D = new Transform3D(thisTransform3D.getPosition().subtract(thisTransform3D.getOrientation().applyInverseTo(otherTransform3D.getPosition())),
-            thisTransform3D.getOrientation().applyInverseTo(otherTransform3D.getOrientation()));
-        return transform3D.toTransform2D();
+        return thisTransform3D.subtract(otherTransform3D).toTransform2D();
     }
 
     public void putToNetworkTable(String networkTablesPath) {
