@@ -92,6 +92,11 @@ public class Robot extends TimedRobot {
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
+
+        SmartDashboard.setDefaultBoolean("TurnOffLimelightWhenNotInUse", true);
+        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
+            Robot.limelight.setLeds(false);
+        }
     }
 
     @Override
@@ -106,6 +111,9 @@ public class Robot extends TimedRobot {
             deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D()
                 .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
         }
+
+        SmartDashboard.putNumber("DrivetrainLeftPos", drivetrain.getLeftPositionTicks());
+        SmartDashboard.putNumber("DrivetrainRightPos", drivetrain.getRightPositionTicks());
     }
 
     @Override
