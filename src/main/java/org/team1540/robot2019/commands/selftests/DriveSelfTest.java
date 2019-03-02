@@ -26,6 +26,8 @@ public class DriveSelfTest extends Command {
     private Timer runTimer = new Timer();
     private Timer waitTimer = new Timer();
 
+    private boolean motorRunning;
+
     public DriveSelfTest() {
         requires(Robot.drivetrain);
     }
@@ -41,13 +43,14 @@ public class DriveSelfTest extends Command {
 
         currentMotor = 0;
         finished = false;
+        motorRunning = false;
         runTimer.start();
-        logger.info("Testing motor " + getName(0));
+        Robot.drivetrain.splitFollowers();
     }
 
     @Override
     protected void execute() {
-        if (runTimer.hasPeriodPassed(Tuning.driveTestTime)) {
+        if (runTimer.get() > (Tuning.driveTestTime)) {
             Hardware.driveMotorAll[currentMotor].neutralOutput();
 
             motorMaxCurrents.add(currentMotorStatsCurrent.getMax());
@@ -64,12 +67,19 @@ public class DriveSelfTest extends Command {
             }
             runTimer.stop();
             runTimer.reset();
+            motorRunning = false;
+            Robot.drivetrain.setBrake(true);
         } else {
-            if (Math.abs(getVel(currentMotor)) < Tuning.driveTestStopTolerance || runTimer.get() != 0) {
+            if (Math.abs(getVel(currentMotor)) < Tuning.driveTestStopTolerance && !motorRunning) {
                 runTimer.start();
                 ChickenController motor = Hardware.driveMotorAll[currentMotor];
 
                 motor.set(ControlMode.PercentOutput, Tuning.driveTestMotorThrot);
+                motorRunning = true;
+                Robot.drivetrain.setBrake(false);
+            }
+
+            if (motorRunning) {
                 currentMotorStatsCurrent.addValue(getCurrent(currentMotor));
                 currentMotorStatsVelocity.addValue(getVel(currentMotor));
             }
@@ -88,6 +98,15 @@ public class DriveSelfTest extends Command {
 
         String avgVelInfo = constructMotorStatString(motorAvgVels, " m/s");
         logger.info("Avg velocities were " + avgVelInfo);
+
+        Robot.drivetrain.joinFollowers();
+        Robot.drivetrain.setBrake(true);
+    }
+
+    @Override
+    protected void interrupted() {
+        Robot.drivetrain.joinFollowers();
+        Robot.drivetrain.setBrake(true);
     }
 
     @Override

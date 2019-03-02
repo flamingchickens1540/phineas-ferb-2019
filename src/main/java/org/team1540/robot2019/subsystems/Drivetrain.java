@@ -3,8 +3,12 @@ package org.team1540.robot2019.subsystems;
 import static org.team1540.robot2019.Hardware.DRIVE_POSITION_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.DRIVE_VELOCITY_SLOT_IDX;
 import static org.team1540.robot2019.Hardware.driveLeftMotorA;
+import static org.team1540.robot2019.Hardware.driveLeftMotorB;
+import static org.team1540.robot2019.Hardware.driveLeftMotorC;
 import static org.team1540.robot2019.Hardware.driveMotorMasters;
 import static org.team1540.robot2019.Hardware.driveRightMotorA;
+import static org.team1540.robot2019.Hardware.driveRightMotorB;
+import static org.team1540.robot2019.Hardware.driveRightMotorC;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -97,6 +101,19 @@ public class Drivetrain extends Subsystem {
                 }
             }
         };
+    }
+
+    public void splitFollowers() {
+        for (ChickenController controller : Hardware.driveMotorAll) {
+            controller.set(ControlMode.PercentOutput, 0);
+        }
+    }
+
+    public void joinFollowers() {
+        driveLeftMotorB.follow(driveLeftMotorA);
+        driveLeftMotorC.follow(driveLeftMotorA);
+        driveRightMotorB.follow(driveRightMotorA);
+        driveRightMotorC.follow(driveRightMotorA);
     }
 
     private void configTalonsForPosition() {
