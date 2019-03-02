@@ -7,7 +7,6 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.utils.ControlUtils;
@@ -16,9 +15,9 @@ import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
-public class SimplePointToVisionTargetAndDrive extends PIDCommand {
+public class SimplePointToVisionTargetAndManualDrive extends PIDCommand {
 
-    public static final Logger logger = Logger.getLogger(SimplePointToVisionTargetAndDrive.class);
+    public static final Logger logger = Logger.getLogger(SimplePointToVisionTargetAndManualDrive.class);
 
     // Max/Min angular velocity
     private static final double MIN_VEL_THETA = 0.1;
@@ -35,7 +34,7 @@ public class SimplePointToVisionTargetAndDrive extends PIDCommand {
     private TankDriveTwist2DInput twist2DInput;
     private Double goal = null;
 
-    public SimplePointToVisionTargetAndDrive() {
+    public SimplePointToVisionTargetAndManualDrive() {
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
