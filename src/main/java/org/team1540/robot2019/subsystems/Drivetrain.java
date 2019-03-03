@@ -364,18 +364,6 @@ public class Drivetrain extends Subsystem {
             rightCurrentBEntry.setNumber(Hardware.getDriveRightBCurrent());
             rightCurrentCEntry.setNumber(Hardware.getDriveRightCCurrent());
         }
-
-        if (OI.getDriveFine() && !inFineDrive) {
-            logger.debug("Fine drive engaged");
-            inFineDrive = true;
-            Hardware.driveLeftMotorA.configOpenloopRamp(0);
-            Hardware.driveRightMotorA.configOpenloopRamp(0);
-        } else if (!OI.getDriveFine() && inFineDrive) {
-            logger.debug("Fine drive disengaged");
-            inFineDrive = false;
-            Hardware.driveLeftMotorA.configOpenloopRamp(Tuning.driveOpenLoopRamp);
-            Hardware.driveRightMotorA.configOpenloopRamp(Tuning.driveOpenLoopRamp);
-        }
     }
 }
 

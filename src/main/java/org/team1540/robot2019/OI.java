@@ -14,6 +14,7 @@ import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
+import org.team1540.robot2019.commands.drivetrain.QuickTurn;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
@@ -81,7 +82,7 @@ public class OI {
 
     // driver buttons
 
-    public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
+    public static JoystickButton quickTurnButton = new JoystickButton(driver, LB);
     public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
     public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, A);
@@ -127,6 +128,8 @@ public class OI {
         intakeLoadingStationButton.cancelWhenPressed(alignCommand);
         autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
 
+        quickTurnButton.whenPressed(new QuickTurn(Math.PI));
+
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
     }
@@ -148,10 +151,6 @@ public class OI {
             Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kRight), 0.1)
                 - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
             Tuning.driveHardTurnExponent);
-    }
-
-    public static boolean getDriveFine() {
-        return fineDriveButton.get();
     }
 
     public static double getClimbAxis() {
