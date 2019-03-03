@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.auto.PurePursuitThenPointToVisionTarget;
+import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
@@ -118,7 +118,8 @@ public class OI {
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
-        Command alignCommand = new PurePursuitThenPointToVisionTarget();
+//        Command alignCommand = new SimpleTwoStageLineupSequence();
+        Command alignCommand = new PercentManualLineupSequence();
         autoAlignButton.whenPressed(alignCommand);
         autoAlignCancelAxisButton.cancelWhenPressed(alignCommand);
         elevatorMidRocketButton.cancelWhenPressed(alignCommand);
