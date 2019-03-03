@@ -120,6 +120,9 @@ public class OI {
         Command alignCommand = new PurePursuitThenPointToVisionTarget();
         autoAlignButton.whenPressed(alignCommand);
         autoAlignCancelButton.cancelWhenPressed(alignCommand);
+        elevatorMidRocketButton.cancelWhenPressed(alignCommand);
+        elevatorCargoShipButton.cancelWhenPressed(alignCommand);
+        intakeLoadingStationButton.cancelWhenPressed(alignCommand);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
