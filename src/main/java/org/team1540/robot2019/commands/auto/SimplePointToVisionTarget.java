@@ -38,7 +38,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
     private TankDriveTwist2DInput twist2DInput;
     private Double goal = null;
 
-    public SimplePointToVisionTarget() {
+    public SimplePointToVisionTarget() { // TODO: Separate vision processing and point to angle
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
