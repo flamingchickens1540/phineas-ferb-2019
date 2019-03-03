@@ -16,7 +16,11 @@ import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.*;
+import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
+import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
+import org.team1540.robot2019.commands.hatch.PrepGetHatch;
+import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
+import org.team1540.robot2019.commands.hatch.ReleaseHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -64,8 +68,7 @@ public class OI {
     private static Button cancelIntakeButton = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_Y);
     private static JoystickButton ejectButton = new JoystickButton(copilot, B);
 
-    private static JoystickButton extendHatchButton = new JoystickButton(copilot, X);
-    private static JoystickButton retractHatchButton = new JoystickButton(copilot, BACK);
+    private static JoystickButton prepGetHatchButton = new JoystickButton(copilot, X);
     private static JoystickButton prepGetHatchFloorButton = new JoystickButton(copilot, START);
     private static Button grabHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_TRIG);
     private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
@@ -80,11 +83,10 @@ public class OI {
 
     public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
     public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
-    public static MultiAxisButton autoAlignCancelButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[] {LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
+    public static MultiAxisButton autoAlignCancelButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
 
     /**
-     * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate
-     * stuff here to get more informative error traces and less general weirdness.
+     * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
     static void init() {
         logger.info("Initializing operator interface...");
@@ -93,17 +95,21 @@ public class OI {
         elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
-        intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
+
+        Command loadingIntakeCommand = new LoadingStationIntake();
+        intakeLoadingStationButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, loadingIntakeCommand));
+        cancelIntakeButton.cancelWhenPressed(loadingIntakeCommand);
+        cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
         Command intakeCommand = new FloorIntake();
         autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, intakeCommand));
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ejectButton.whenPressed(new EjectThenDown());
 
-        extendHatchButton.whenPressed(new ExtendHatchMech());
-        retractHatchButton.whenPressed(new RetractHatchMech());
+        prepGetHatchButton.whenPressed(new PrepGetHatch());
+//        retractHatchButton.whenPressed(new RetractHatchMech());
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
-        grabHatchButton.whenPressed(new GrabHatch());
+        grabHatchButton.whenPressed(new GrabHatchThenBack());
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
         releaseHatchButton.whenPressed(new ReleaseHatch());
 
