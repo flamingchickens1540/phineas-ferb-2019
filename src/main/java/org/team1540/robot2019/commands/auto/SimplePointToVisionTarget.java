@@ -71,7 +71,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
         if (goal == null) {
             return;
         }
-        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
+        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0)); // TODO: Are you going to use the interface or not?
         if (x != 0) {
             goal = -(x - ANGLE_OFFSET) + Hardware.navx.getYawRadians();
         }
