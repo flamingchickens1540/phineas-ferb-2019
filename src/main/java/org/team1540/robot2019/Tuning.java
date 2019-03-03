@@ -21,7 +21,7 @@ public class Tuning {
 
     public static double driveThrottleExponent = 3;
     public static double driveSoftTurnExponent = 3;
-    public static double driveHardTurnExponent = 3;
+    public static double driveHardTurnExponent = 1;
 
     public static double driveDeadzone = 0.13;
 
@@ -30,7 +30,7 @@ public class Tuning {
     public static double driveControlRampUp = .2;
     public static double driveControlRampDown = .2;
 
-    public static double driveOpenLoopRamp = 0.25;
+    public static double driveOpenLoopRamp = 0.18725;
     public static double driveClosedLoopRamp = 0;
 
     public static boolean invertDriveLeft = true;
