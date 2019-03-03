@@ -83,7 +83,8 @@ public class OI {
 
     public static JoystickButton fineDriveButton = new JoystickButton(driver, LB);
     public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
-    public static MultiAxisButton autoAlignCancelButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
+    public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
+    public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, A);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -119,10 +120,11 @@ public class OI {
 
         Command alignCommand = new PurePursuitThenPointToVisionTarget();
         autoAlignButton.whenPressed(alignCommand);
-        autoAlignCancelButton.cancelWhenPressed(alignCommand);
+        autoAlignCancelAxisButton.cancelWhenPressed(alignCommand);
         elevatorMidRocketButton.cancelWhenPressed(alignCommand);
         elevatorCargoShipButton.cancelWhenPressed(alignCommand);
         intakeLoadingStationButton.cancelWhenPressed(alignCommand);
+        autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
