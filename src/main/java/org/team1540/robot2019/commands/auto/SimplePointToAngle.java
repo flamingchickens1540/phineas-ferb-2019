@@ -3,6 +3,7 @@ package org.team1540.robot2019.commands.auto;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
+import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
@@ -18,19 +19,20 @@ public class SimplePointToAngle extends PIDCommand {
     public static final Logger logger = Logger.getLogger(SimplePointToAngle.class);
 
     // Max/Min angular velocity
-    private static final double MIN_VEL_THETA = 0.2;
-    private static final double MAX_VEL_THETA = 1.8;
+    private static final double MIN_VEL_THETA = 1.5;
+    private static final double MAX_VEL_THETA = 6;
 
-    private static final double OUTPUT_SCALAR = 1.8;
+    private static final double OUTPUT_SCALAR = 5;
 
     // Constants for angular VPID controller
-    private static final double ANGULAR_KP = -6;
+    private static final double ANGULAR_KP = -1;
     private static final double ANGULAR_KI = 0;
-    private static final double ANGULAR_KD = -10;
+    private static final double ANGULAR_KD = -2;
 
     // Goal tolerances for angle
-    private static final double GOAL_TOLERANCE_ANGULAR_POSITION = Math.toRadians(0.6);
-    private static final double GOAL_TOLERANCE_ANGULAR_VELOCITY = 0.3;
+    private static final double GOAL_TOLERANCE_ANGULAR_POSITION = Math.toRadians(5);
+    private static final double GOAL_TOLERANCE_ANGULAR_VELOCITY = Double.POSITIVE_INFINITY;
+//    private static final double GOAL_TOLERANCE_ANGULAR_VELOCITY = 0.3;
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
@@ -82,10 +84,10 @@ public class SimplePointToAngle extends PIDCommand {
     protected void usePIDOutput(double output) {
         output *= OUTPUT_SCALAR;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-
-        Twist2D cmdVel = new Twist2D(0, 0, cmdVelTheta);
-        twist2DInput.setTwist(cmdVel);
-        pipeline.execute();
+        Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta * 0.1);
+        Robot.drivetrain.setPercentTwist(cmdVel);
+//        twist2DInput.setTwist(cmdVel);
+//        pipeline.execute();
     }
 
     private double getAngleError(double x) {
