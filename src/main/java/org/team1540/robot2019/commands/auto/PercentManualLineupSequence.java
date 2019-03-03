@@ -19,6 +19,7 @@ public class PercentManualLineupSequence extends CommandGroup {
         SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KI", 0);
         SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KD", -2);
         SmartDashboard.setDefaultNumber("PercentLineup/MIN_VEL_THETA", 0);
+        SmartDashboard.setDefaultNumber("PercentLineup/DEADZONE_VEL_THETA", 0.01);
         SmartDashboard.setDefaultNumber("PercentLineup/MAX_VEL_THETA", 1);
     }
 
@@ -28,6 +29,7 @@ public class PercentManualLineupSequence extends CommandGroup {
         PercentManualLineup.ANGULAR_KI = SmartDashboard.getNumber("PercentLineup/ANGULAR_KI", 0);
         PercentManualLineup.ANGULAR_KD = SmartDashboard.getNumber("PercentLineup/ANGULAR_KD", 0);
         PercentManualLineup.MIN_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MIN_VEL_THETA", 0);
+        PercentManualLineup.DEADZONE_VEL_THETA = SmartDashboard.getNumber("PercentLineup/DEADZONE_VEL_THETA", 0);
         PercentManualLineup.MAX_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MAX_VEL_THETA", 0);
 
         command = new PercentManualLineup();
