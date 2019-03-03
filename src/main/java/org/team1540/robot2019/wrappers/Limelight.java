@@ -47,7 +47,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
      *
      * @return a {@link Vector2D} containing the output angles of the limelight targeting in radians
      */
-    public Vector2D getTargetAngles() {
+    public Vector2D getTargetAngles() { // TODO: This should be negated appropriately
         double x = Math.toRadians(limelightTable.getEntry("tx").getDouble(0));
         double y = Math.toRadians(limelightTable.getEntry("ty").getDouble(0));
         return new Vector2D(x, y);
