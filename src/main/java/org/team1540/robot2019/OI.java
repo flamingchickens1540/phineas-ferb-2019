@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
+import org.team1540.robot2019.commands.auto.SimplePointToAngle;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
-import org.team1540.robot2019.commands.drivetrain.QuickTurn;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
@@ -87,6 +87,8 @@ public class OI {
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
     public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, A);
 
+    public static MultiAxisButton anyAxisPressedButton = new MultiAxisButton(driver, Tuning.driveDeadzone);
+
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
@@ -128,7 +130,9 @@ public class OI {
         intakeLoadingStationButton.cancelWhenPressed(alignCommand);
         autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
 
-        quickTurnButton.whenPressed(new QuickTurn(Math.PI));
+        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
+        quickTurnButton.whenPressed(quickTurnCommand);
+        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
