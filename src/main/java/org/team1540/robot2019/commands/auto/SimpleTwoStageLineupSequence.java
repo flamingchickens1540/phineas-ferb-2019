@@ -4,17 +4,15 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.commands.drivetrain.TankDriveForTimeVelocity;
 
-public class PurePursuitThenPointToVisionTarget extends CommandGroup {
+public class SimpleTwoStageLineupSequence extends CommandGroup {
 
-    public PurePursuitThenPointToVisionTarget() {
+    public SimpleTwoStageLineupSequence() {
         addSequential(new WaitCommand(0.05)); // Wait for leds to turn on
-//        addSequential(new PurePursuitToVisionTarget(Robot.deepSpaceVisionTargetLocalization, Robot.odometry, this::cancel));
-
-        addSequential(new SimplePointToVisionTargetAndManualDrive());
-//        addSequential(new SimplePointToVisionTarget());
-
-//        addSequential(new TankDriveForTimeVelocity(0.6, 0.5)); // TODO: Straight driving with navx
+        addSequential(new PurePursuitToVisionTarget(Robot.deepSpaceVisionTargetLocalization, Robot.odometry, this::cancel)); // TODO: Replace this with getGroup().cancel()
+        addSequential(new SimplePointToVisionTarget());
+        addSequential(new TankDriveForTimeVelocity(0.6, 0.5)); // TODO: Straight driving with navx
     }
 
     @Override
@@ -33,5 +31,6 @@ public class PurePursuitThenPointToVisionTarget extends CommandGroup {
     protected void end() {
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
             Robot.limelight.setLeds(false);
-        }    }
+        }
+    }
 }
