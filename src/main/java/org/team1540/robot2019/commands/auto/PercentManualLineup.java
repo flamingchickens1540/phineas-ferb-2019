@@ -21,13 +21,15 @@ public class PercentManualLineup extends PIDCommand {
     public static final Logger logger = Logger.getLogger(PercentManualLineup.class);
 
     // Max/Min angular velocity
-    public static double MIN_VEL_THETA = 0.1;
-    public static double MAX_VEL_THETA = 1.8;
+    public static double MIN_VEL_THETA = 0;
+    public static double MAX_VEL_THETA = 0;
+
+    public static double DEADZONE_VEL_THETA = 0;
 
     // Constants for angular VPID controller
-    public static double ANGULAR_KP = -6;
+    public static double ANGULAR_KP = 0;
     public static double ANGULAR_KI = 0;
-    public static double ANGULAR_KD = -10;
+    public static double ANGULAR_KD = 0;
 
     private static final double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
@@ -100,7 +102,9 @@ public class PercentManualLineup extends PIDCommand {
     protected void usePIDOutput(double output) {
 //        output *= MAX_VEL_THETA;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-
+        if (Math.abs(output) < DEADZONE_VEL_THETA) {
+            cmdVelTheta = 0;
+        }
         Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta);
         Robot.drivetrain.setPercentTwist(cmdVel);
 //        twist2DInput.setTwist(cmdVel);

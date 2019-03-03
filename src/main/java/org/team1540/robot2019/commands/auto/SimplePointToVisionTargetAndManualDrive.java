@@ -93,7 +93,6 @@ public class SimplePointToVisionTargetAndManualDrive extends PIDCommand {
     protected void usePIDOutput(double output) {
         output *= MAX_VEL_THETA;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-
         Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis()*-1.3, 0, cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();
