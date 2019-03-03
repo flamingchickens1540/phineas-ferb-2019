@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Climber;
@@ -92,6 +91,8 @@ public class Robot extends TimedRobot {
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
+
+        SmartDashboard.putBoolean("EnableCompressor", true);
 
         SmartDashboard.setDefaultBoolean("TurnOffLimelightWhenNotInUse", true);
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
@@ -204,15 +205,19 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
-            && (Robot.climber.getCurrentCommand() == null)) {
-            if (Hardware.compressor.getClosedLoopControl()) {
-                logger.debug("Stopping compressor because elevator is up");
-                Hardware.compressor.stop();
+        if (SmartDashboard.getBoolean("EnableCompressor", true)) {
+            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
+                && (Robot.climber.getCurrentCommand() == null)) {
+                if (Hardware.compressor.getClosedLoopControl()) {
+                    logger.debug("Stopping compressor because elevator is up");
+                    Hardware.compressor.stop();
+                }
+            } else if (!Hardware.compressor.getClosedLoopControl()) {
+                logger.debug("Restarting compressor");
+                Hardware.compressor.start();
             }
-        } else if (!Hardware.compressor.getClosedLoopControl()) {
-            logger.debug("Restarting compressor");
-            Hardware.compressor.start();
+        } else {
+            Hardware.compressor.stop();
         }
     }
 
