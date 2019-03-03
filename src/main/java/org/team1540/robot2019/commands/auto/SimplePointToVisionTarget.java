@@ -61,7 +61,7 @@ public class SimplePointToVisionTarget extends PIDCommand {
             goal = prevGoal.toTransform2D().getTheta();
             logger.debug("Unable to find target. Using alternative goal angle: " + goal);
         } else {
-            goal = x - Hardware.navx.getYawRadians();
+            goal = -(x - ANGLE_OFFSET) + Hardware.navx.getYawRadians(); // TODO: This should not be duplicated twice
             logger.debug("Point lineup simple starting. Initial goal angle: " + goal);
         }
     }
