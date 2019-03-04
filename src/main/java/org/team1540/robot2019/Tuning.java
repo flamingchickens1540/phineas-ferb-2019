@@ -56,7 +56,7 @@ public class Tuning {
     public static double elevatorUpPosition = 28;
     public static double elevatorCargoShipPosition = 14;
     public static double elevatorDownPosition = 0;
-    public static double elevatorClimbPosition = 20;
+    public static double elevatorClimbPosition = 18;
     public static double elevatorLoadingStationPosition = 18;
 
     // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
