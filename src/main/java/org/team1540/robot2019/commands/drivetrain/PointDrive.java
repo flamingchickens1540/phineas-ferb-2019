@@ -1,5 +1,6 @@
 package org.team1540.robot2019.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
@@ -25,8 +26,10 @@ public class PointDrive extends PIDCommand {
     private static final double ANGULAR_KI = 0;
     private static final double ANGULAR_KD = -2;
 
+    private static final double FINE_ADJUST_SCALAR = 2; // rads/sec
+
     private static Double initAngleOffset;
-    private static Double lastGoalAngle = null;
+    private static Double goalAngle = null;
 
     public PointDrive() {
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
@@ -48,26 +51,33 @@ public class PointDrive extends PIDCommand {
     }
 
     public static void setInitAngleOffset(Double initAngleOffset) {
-        lastGoalAngle = null;
+        goalAngle = null;
         PointDrive.initAngleOffset = initAngleOffset;
     }
+
+    private double lastTime = 0;
 
     @Override
     protected double returnPIDInput() {
         if (OI.getPointDriveMagnatude() > Tuning.pointDriveDeadzone) {
-            lastGoalAngle = OI.getPointDriveAngle();
+            goalAngle = OI.getPointDriveAngle();
+        } else {
+            double fineAdjust = OI.getPointDriveFineLeft() - OI.getPointDriveFineRight();
+            double currentTime = Timer.getFPGATimestamp();
+            goalAngle += fineAdjust * (currentTime - lastTime) * FINE_ADJUST_SCALAR;
+            lastTime = currentTime;
         }
-        if (lastGoalAngle == null) {
+        if (goalAngle == null) {
             return 0;
         }
-        return getAngleError(lastGoalAngle + initAngleOffset);
+        return getAngleError(goalAngle + initAngleOffset);
     }
 
     @Override
     protected void usePIDOutput(double output) {
         output *= OUTPUT_SCALAR;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-        if (lastGoalAngle == null || Math.abs(output) < 0.01) {
+        if (goalAngle == null || Math.abs(output) < 0.01) {
             cmdVelTheta = 0;
         }
         Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta * 0.1); // TODO: Remove temporary 0.1 constant and re-tune
