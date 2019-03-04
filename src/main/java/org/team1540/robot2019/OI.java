@@ -91,10 +91,10 @@ public class OI {
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
     public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
 
-    public static AxisButton testGrabHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
-    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
-//    public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
-//    public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
+    //    public static AxisButton testGrabHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
+//    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
+    public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
+    public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
 
     public static JoystickButton resetPointOffset = new JoystickButton(driver, Y);
 
@@ -132,17 +132,17 @@ public class OI {
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
-//        Command alignCommand = new SimpleTwoStageLineupSequence();
         Command alignCommand = new PercentManualLineupSequence();
         autoAlignButton.whenPressed(alignCommand);
-//        autoAlignButton.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
         autoAlignButtonAlt.whenPressed(alignCommand);
+
+//        autoAlignButton.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
 //        autoAlignButtonAlt.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
         autoAlignCancelAxisButton.cancelWhenPressed(alignCommand);
-//        elevatorMidRocketButton.cancelWhenPressed(alignCommand);
-//        elevatorCargoShipButton.cancelWhenPressed(alignCommand);
-//        intakeLoadingStationButton.cancelWhenPressed(alignCommand);
-//        autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
+        elevatorMidRocketButton.cancelWhenPressed(alignCommand);
+        elevatorCargoShipButton.cancelWhenPressed(alignCommand);
+        intakeLoadingStationButton.cancelWhenPressed(alignCommand);
+        autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
 
 //        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
 //        quickTurnButton.whenPressed(quickTurnCommand);
