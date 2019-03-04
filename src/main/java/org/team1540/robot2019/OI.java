@@ -214,4 +214,13 @@ public class OI {
         double y = driver.getY(Hand.kRight);
         return Utilities.processDeadzone(new Vector2D(x, y).distance(Vector2D.ZERO), Tuning.driveDeadzone);
     }
+
+
+    public static double getPointDriveFineLeft() {
+        return Utilities.processDeadzone(driver.getTriggerAxis(Hand.kLeft), Tuning.driveDeadzone);
+    }
+
+    public static double getPointDriveFineRight() {
+        return Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), Tuning.driveDeadzone);
+    }
 }

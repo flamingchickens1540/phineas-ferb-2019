@@ -1,5 +1,6 @@
 package org.team1540.robot2019.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
@@ -24,6 +25,8 @@ public class SingleStickPointDrive extends PIDCommand {
     private static final double ANGULAR_KP = -0.7;
     private static final double ANGULAR_KI = 0;
     private static final double ANGULAR_KD = -2;
+
+    private static final double FINE_ADJUST_SCALAR = 2;
 
     private static Double initAngleOffset;
     private static Double goalAngle = null;
@@ -55,6 +58,8 @@ public class SingleStickPointDrive extends PIDCommand {
         SingleStickPointDrive.initAngleOffset = initAngleOffset;
     }
 
+    private double lastTime = 0;
+
     @Override
     protected double returnPIDInput() {
         if (OI.getPointDriveMagnatude() > Tuning.driveDeadzone) {
@@ -67,6 +72,13 @@ public class SingleStickPointDrive extends PIDCommand {
             wasDeadzoned = false;
         } else {
             wasDeadzoned = true;
+            double fineAdjust = OI.getPointDriveFineLeft() - OI.getPointDriveFineRight();
+            double currentTime = Timer.getFPGATimestamp();
+            double deltaTime = currentTime - lastTime;
+            if (deltaTime >= 1) {
+                goalAngle += fineAdjust * deltaTime * FINE_ADJUST_SCALAR;
+                lastTime = currentTime;
+            }
         }
         if (goalAngle == null) {
             return 0;
