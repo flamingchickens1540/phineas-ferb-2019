@@ -203,15 +203,15 @@ public class OI {
             Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), Tuning.driveDeadzone), 2);
     }
 
-    public static double getPointDriveAngle() {
-        double x = -driver.getY(Hand.kRight);
-        double y = -driver.getX(Hand.kRight);
+    public static double getPointDriveAngle(Hand hand) {
+        double x = -driver.getY(hand);
+        double y = -driver.getX(hand);
         return Math.atan2(y, x);
     }
 
-    public static double getPointDriveMagnatude() {
-        double x = driver.getX(Hand.kRight);
-        double y = driver.getY(Hand.kRight);
+    public static double getPointDriveMagnitude(Hand hand) {
+        double x = driver.getX(hand);
+        double y = driver.getY(hand);
         return Utilities.processDeadzone(new Vector2D(x, y).distance(Vector2D.ZERO), Tuning.driveDeadzone);
     }
 

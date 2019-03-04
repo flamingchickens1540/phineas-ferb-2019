@@ -1,5 +1,6 @@
 package org.team1540.robot2019.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.utils.ControlUtils;
+import org.team1540.rooster.Utilities;
 
 public class SingleStickPointDrive extends PIDCommand {
 
@@ -33,6 +35,7 @@ public class SingleStickPointDrive extends PIDCommand {
 
     private boolean backwardsDrive = false;
     private boolean wasDeadzoned = false;
+    private boolean pointStick = false;
 
     public SingleStickPointDrive() {
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
@@ -62,22 +65,28 @@ public class SingleStickPointDrive extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        if (OI.getPointDriveMagnatude() > Tuning.driveDeadzone) {
-            goalAngle = OI.getPointDriveAngle();
-            double currentAngle = Hardware.navx.getYawRadians();
-            double newStickError = TrigUtils.signedAngleError(goalAngle, currentAngle);
-            if (wasDeadzoned && Math.abs(newStickError) > Math.PI / 2) {
-                backwardsDrive = !backwardsDrive;
-            }
-            wasDeadzoned = false;
+        if (OI.getPointDriveMagnitude(Hand.kLeft) > Tuning.driveDeadzone) {
+            goalAngle = OI.getPointDriveAngle(Hand.kLeft);
+            pointStick = true;
         } else {
-            wasDeadzoned = true;
-            double fineAdjust = OI.getPointDriveFineLeft() - OI.getPointDriveFineRight();
-            double currentTime = Timer.getFPGATimestamp();
-            double deltaTime = currentTime - lastTime;
-            if (deltaTime >= 1) {
-                goalAngle += fineAdjust * deltaTime * FINE_ADJUST_SCALAR;
-                lastTime = currentTime;
+            pointStick = false;
+            if (OI.getPointDriveMagnitude(Hand.kRight) > Tuning.driveDeadzone) {
+                goalAngle = OI.getPointDriveAngle(Hand.kRight);
+                double currentAngle = Hardware.navx.getYawRadians();
+                double newStickError = TrigUtils.signedAngleError(goalAngle, currentAngle);
+                if (wasDeadzoned && Math.abs(newStickError) > Math.PI / 2) {
+                    backwardsDrive = !backwardsDrive;
+                }
+                wasDeadzoned = false;
+            } else {
+                wasDeadzoned = true;
+                double fineAdjust = OI.getPointDriveFineLeft() - OI.getPointDriveFineRight();
+                double currentTime = Timer.getFPGATimestamp();
+                double deltaTime = currentTime - lastTime;
+                if (deltaTime >= 1) {
+                    goalAngle += fineAdjust * deltaTime * FINE_ADJUST_SCALAR;
+                    lastTime = currentTime;
+                }
             }
         }
         if (goalAngle == null) {
@@ -93,7 +102,11 @@ public class SingleStickPointDrive extends PIDCommand {
         if (goalAngle == null || Math.abs(output) < 0.01) {
             cmdVelTheta = 0;
         }
-        Twist2D cmdVel = new Twist2D(OI.getPointDriveMagnatude() * -0.7 * (backwardsDrive ? -1 : 1), 0, cmdVelTheta * 0.1); // TODO: Remove temporary 0.1 constant and re-tune
+        double xVel = Utilities.scale(OI.getPointDriveMagnitude(Hand.kRight), 2) * 0.7 * (backwardsDrive ? -1 : 1);
+        if (pointStick) {
+            xVel = 0;
+        }
+        Twist2D cmdVel = new Twist2D(xVel, 0, cmdVelTheta * 0.1); // TODO: Remove temporary 0.1 constant and re-tune
         Robot.drivetrain.setPercentTwist(cmdVel);
     }
 
