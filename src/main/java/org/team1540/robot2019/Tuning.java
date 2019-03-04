@@ -106,7 +106,7 @@ public class Tuning {
     public static double hatchGrabWaitTime = 1;
     public static double hatchExtendWaitTime = 0.2;
     public static double hatchReleaseWaitTime = 0.2;
-    public static double hatchPrepFloorWaitTime = 3.0;
+    public static double hatchPrepFloorWaitTime = 0.5;
     public static double hatchDownWaitTime = 0.3;
 
     // climber
