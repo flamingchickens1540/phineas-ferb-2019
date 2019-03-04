@@ -20,17 +20,13 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
-import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.DriveData;
-import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
-import org.team1540.rooster.drive.pipeline.FeedForwardToVelocityProcessor;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
-import org.team1540.rooster.util.SimpleLoopCommand;
 import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
@@ -60,12 +56,13 @@ public class Drivetrain extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new SimpleLoopCommand("Drive",
-            new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
-                OI::getDriveHardTurn)
-                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
-                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
-                .then(getPipelineOutput(false)), this));
+//        setDefaultCommand(new SimpleLoopCommand("Drive",
+//            new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
+//                OI::getDriveHardTurn)
+//                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
+//                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
+//                .then(getPipelineOutput(false)), this));
+        setDefaultCommand(new PointDrive());
     }
 
     public Output<TankDriveData> getPipelineOutput() {
