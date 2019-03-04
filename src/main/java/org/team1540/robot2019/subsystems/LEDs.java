@@ -2,6 +2,7 @@ package org.team1540.robot2019.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.team1540.robot2019.Hardware;
+import org.team1540.robot2019.commands.leds.GamePieceLEDs;
 
 public class LEDs extends Subsystem {
 
@@ -12,7 +13,7 @@ public class LEDs extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-
+        setDefaultCommand(new GamePieceLEDs());
     }
 
     public enum LEDColor {
