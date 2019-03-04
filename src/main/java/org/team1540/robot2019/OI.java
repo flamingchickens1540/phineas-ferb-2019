@@ -7,14 +7,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
-import org.team1540.robot2019.commands.auto.SimplePointToAngle;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
+import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
@@ -84,13 +85,20 @@ public class OI {
 
     // driver buttons
 
-    public static JoystickButton quickTurnButton = new JoystickButton(driver, LB);
-    public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
+    //    public static JoystickButton quickTurnButton = new JoystickButton(driver, RB);
+    public static JoystickButton autoAlignButtonAlt = new JoystickButton(driver, RB);
+    public static JoystickButton autoAlignButton = new JoystickButton(driver, LB);
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
     public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
 
-    public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
-    public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
+    public static AxisButton testGrabHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
+    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
+//    public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
+//    public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
+
+    public static JoystickButton resetPointOffset = new JoystickButton(driver, Y);
+
+//    private static Button autoAlignButtonAlt = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -127,18 +135,25 @@ public class OI {
 //        Command alignCommand = new SimpleTwoStageLineupSequence();
         Command alignCommand = new PercentManualLineupSequence();
         autoAlignButton.whenPressed(alignCommand);
+//        autoAlignButton.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
+        autoAlignButtonAlt.whenPressed(alignCommand);
+//        autoAlignButtonAlt.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
         autoAlignCancelAxisButton.cancelWhenPressed(alignCommand);
-        elevatorMidRocketButton.cancelWhenPressed(alignCommand);
-        elevatorCargoShipButton.cancelWhenPressed(alignCommand);
-        intakeLoadingStationButton.cancelWhenPressed(alignCommand);
-        autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
+//        elevatorMidRocketButton.cancelWhenPressed(alignCommand);
+//        elevatorCargoShipButton.cancelWhenPressed(alignCommand);
+//        intakeLoadingStationButton.cancelWhenPressed(alignCommand);
+//        autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
 
-        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
-        quickTurnButton.whenPressed(quickTurnCommand);
-        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
+//        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
+//        quickTurnButton.whenPressed(quickTurnCommand);
+//        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
 
         testGrabHatchButton.whenPressed(new TestGrabHatch());
         testPlaceHatchButton.whenPressed(new TestPlaceHatch());
+
+        resetPointOffset.whenPressed(new SimpleCommand("Reset Point Offset", () -> {
+            PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
+        }));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
@@ -186,5 +201,17 @@ public class OI {
     public static double getTankdriveForwardsAxis() {
         return Utilities.scale(
             Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), Tuning.driveDeadzone), 2);
+    }
+
+    public static double getPointDriveAngle() {
+        double x = -driver.getY(Hand.kRight);
+        double y = -driver.getX(Hand.kRight);
+        return Math.atan2(y, x);
+    }
+
+    public static double getPointDriveMagnatude() {
+        double x = driver.getX(Hand.kRight);
+        double y = driver.getY(Hand.kRight);
+        return Utilities.processDeadzone(new Vector2D(x, y).distance(Vector2D.ZERO), Tuning.driveDeadzone);
     }
 }
