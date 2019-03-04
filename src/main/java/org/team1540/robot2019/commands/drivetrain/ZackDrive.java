@@ -11,9 +11,9 @@ import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.utils.ControlUtils;
 
-public class PointDrive extends PIDCommand {
+public class ZackDrive extends PIDCommand {
 
-    public static final Logger logger = Logger.getLogger(PointDrive.class);
+    public static final Logger logger = Logger.getLogger(ZackDrive.class);
 
     // Max/Min angular velocity
     private static final double MIN_VEL_THETA = 0.4;
@@ -31,9 +31,9 @@ public class PointDrive extends PIDCommand {
     private static Double initAngleOffset;
     private static Double goalAngle = null;
 
-    public PointDrive() {
+    public ZackDrive() {
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
-        PointDrive.initAngleOffset = Hardware.navx.getYawRadians();
+        ZackDrive.initAngleOffset = Hardware.navx.getYawRadians();
         requires(Robot.drivetrain);
     }
 
@@ -52,14 +52,14 @@ public class PointDrive extends PIDCommand {
 
     public static void setInitAngleOffset(Double initAngleOffset) {
         goalAngle = null;
-        PointDrive.initAngleOffset = initAngleOffset;
+        ZackDrive.initAngleOffset = initAngleOffset;
     }
 
     private double lastTime = 0;
 
     @Override
     protected double returnPIDInput() {
-        if (OI.getPointDriveMagnatude() > Tuning.pointDriveDeadzone) {
+        if (OI.getPointDriveMagnitude() > Tuning.pointDriveDeadzone) {
             goalAngle = OI.getPointDriveAngle();
         } else {
             double fineAdjust = OI.getPointDriveFineLeft() - OI.getPointDriveFineRight();
