@@ -18,6 +18,7 @@ public class BlinkLEDs extends TimedCommand {
 
     public BlinkLEDs(LEDColor color1, LEDColor color2, double blinkTime) {
         super(Tuning.ledTime);
+        requires(Robot.leds);
         this.color1 = color1;
         this.color2 = color2;
         this.blinkTime = blinkTime;
