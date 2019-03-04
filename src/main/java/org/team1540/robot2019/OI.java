@@ -22,6 +22,8 @@ import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
 import org.team1540.robot2019.commands.hatch.PrepGetHatch;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.ReleaseHatch;
+import org.team1540.robot2019.commands.hatch.TestGrabHatch;
+import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -85,9 +87,10 @@ public class OI {
     public static JoystickButton quickTurnButton = new JoystickButton(driver, LB);
     public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
-    public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, A);
+    public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
 
-    public static MultiAxisButton anyAxisPressedButton = new MultiAxisButton(driver, Tuning.driveDeadzone);
+    public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
+    public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -133,6 +136,9 @@ public class OI {
         SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
         quickTurnButton.whenPressed(quickTurnCommand);
         autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
+
+        testGrabHatchButton.whenPressed(new TestGrabHatch());
+        testPlaceHatchButton.whenPressed(new TestPlaceHatch());
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
