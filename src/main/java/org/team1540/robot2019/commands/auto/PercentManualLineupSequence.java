@@ -18,7 +18,7 @@ public class PercentManualLineupSequence extends CommandGroup {
         SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KP", -0.55); // TODO: Remove temporary tuning (yaml ftw)
         SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KI", 0);
         SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KD", -2);
-        SmartDashboard.setDefaultNumber("PercentLineup/MIN_VEL_THETA", 0);
+        SmartDashboard.setDefaultNumber("PercentLineup/MIN_VEL_THETA", 0.05);
         SmartDashboard.setDefaultNumber("PercentLineup/DEADZONE_VEL_THETA", 0.01);
         SmartDashboard.setDefaultNumber("PercentLineup/MAX_VEL_THETA", 1);
     }
