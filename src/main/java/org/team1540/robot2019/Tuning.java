@@ -143,4 +143,5 @@ public class Tuning {
 
     public static double drivetrainMaxVelocity = 400;
 
+    public static double pointDriveDeadzone = 0.2;
 }
