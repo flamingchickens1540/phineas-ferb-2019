@@ -15,7 +15,7 @@ import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
-import org.team1540.robot2019.commands.drivetrain.PointDrive;
+import org.team1540.robot2019.commands.drivetrain.SingleStickPointDrive;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
@@ -152,7 +152,7 @@ public class OI {
         testPlaceHatchButton.whenPressed(new TestPlaceHatch());
 
         resetPointOffset.whenPressed(new SimpleCommand("Reset Point Offset", () -> {
-            PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
+            SingleStickPointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
         }));
 
         double end = RobotController.getFPGATime() / 1000.0;
