@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.commands.drivetrain.PointDrive;
 
 public class PercentManualLineupSequence extends CommandGroup {
 
@@ -46,6 +47,7 @@ public class PercentManualLineupSequence extends CommandGroup {
 
     @Override
     protected void end() {
+        PointDrive.manualResetGoal();
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
             Robot.limelight.setLeds(false);
         }
