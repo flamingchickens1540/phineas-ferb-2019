@@ -79,6 +79,7 @@ public class OI {
     private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
     private static JoystickButton climbLevel2Button = new JoystickButton(copilot, LB); // + safety
     private static JoystickButton climberCylinderUp = new JoystickButton(copilot, BACK);
+    private static Button cancelClimbButton = new AxisButton(copilot, -Tuning.axisButtonThreshold, LEFT_Y);
 
     // driver buttons
 
@@ -108,7 +109,7 @@ public class OI {
         Command intakeCommand = new FloorIntake();
         autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, intakeCommand));
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
-        ejectButton.whenPressed(new EjectThenDown());
+        ejectButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, new EjectThenDown()));
 
 //        getHatchButton.whenPressed(new PrepGetHatch());
         getHatchButton.whenPressed(new TestGrabHatch());
@@ -119,9 +120,13 @@ public class OI {
         placeHatchButton.whenPressed(new PlaceHatchThenDown());
         stowHatchButton.whenPressed(new StowHatchMech());
 
-        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
-        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
+        Command climbCommand3 = new ClimbLevelThree();
+        Command climbCommand2 = new ClimbLevelTwo();
+        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand3));
+        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand2));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
+        cancelClimbButton.cancelWhenPressed(climbCommand3);
+        cancelClimbButton.cancelWhenPressed(climbCommand2);
 
 //        Command alignCommand = new SimpleTwoStageLineupSequence();
         Command alignCommand = new PercentManualLineupSequence();
