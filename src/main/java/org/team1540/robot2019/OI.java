@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
+import org.team1540.robot2019.commands.auto.SimplePointToAngle;
 import org.team1540.robot2019.commands.cargo.EjectThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
@@ -120,11 +121,14 @@ public class OI {
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ejectButton.whenPressed(new EjectThenDown());
 
-        prepGetHatchButton.whenPressed(new PrepGetHatch());
+//        prepGetHatchButton.whenPressed(new PrepGetHatch());
+        prepGetHatchButton.whenPressed(new TestGrabHatch());
 //        retractHatchButton.whenPressed(new RetractHatchMech());
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
         grabHatchButton.whenPressed(new GrabHatchThenBack());
-        placeHatchButton.whenPressed(new PlaceHatchThenDown());
+//        grabHatchButton.whenPressed(new GrabHatchThenBack());
+        placeHatchButton.whenPressed(new TestPlaceHatch());
+//        placeHatchButton.whenPressed(new PlaceHatchThenDown());
         releaseHatchButton.whenPressed(new ReleaseHatch());
 
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
