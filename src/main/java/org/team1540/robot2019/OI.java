@@ -83,9 +83,9 @@ public class OI {
 
     // driver buttons
 
-    //    public static JoystickButton quickTurnButton = new JoystickButton(driver, RB);
-    public static JoystickButton autoAlignButtonAlt = new JoystickButton(driver, RB);
-    public static JoystickButton autoAlignButton = new JoystickButton(driver, LB);
+    public static JoystickButton quickTurnButton = new JoystickButton(driver, LB);
+    //    public static JoystickButton autoAlignButtonAlt = new JoystickButton(driver, RB);
+    public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
     public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
 
@@ -133,7 +133,7 @@ public class OI {
 
         Command alignCommand = new PercentManualLineupSequence();
         autoAlignButton.whenPressed(alignCommand);
-        autoAlignButtonAlt.whenPressed(alignCommand);
+//        autoAlignButtonAlt.whenPressed(alignCommand);
 
 //        autoAlignButton.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
 //        autoAlignButtonAlt.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
@@ -143,9 +143,9 @@ public class OI {
         intakeLoadingStationButton.cancelWhenPressed(alignCommand);
         autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
 
-//        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
-//        quickTurnButton.whenPressed(quickTurnCommand);
-//        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
+        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
+        quickTurnButton.whenPressed(quickTurnCommand);
+        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
 
         testGrabHatchButton.whenPressed(new TestGrabHatch());
         testPlaceHatchButton.whenPressed(new TestPlaceHatch());
