@@ -46,6 +46,10 @@ public class PointDrive extends PIDCommand {
         return false;
     }
 
+    public static void manualResetGoal() {
+        lastGoalAngle = Hardware.navx.getYawRadians() - initAngleOffset;
+    }
+
     public static void setInitAngleOffset(Double initAngleOffset) {
         lastGoalAngle = null;
         PointDrive.initAngleOffset = initAngleOffset;
