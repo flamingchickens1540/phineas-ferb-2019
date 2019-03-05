@@ -18,10 +18,10 @@ import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
-import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
-import org.team1540.robot2019.commands.hatch.PrepGetHatch;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.ReleaseHatch;
+import org.team1540.robot2019.commands.hatch.TestGrabHatch;
+import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
@@ -110,11 +110,13 @@ public class OI {
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ejectButton.whenPressed(new EjectThenDown());
 
-        prepGetHatchButton.whenPressed(new PrepGetHatch());
+//        prepGetHatchButton.whenPressed(new PrepGetHatch());
+        prepGetHatchButton.whenPressed(new TestGrabHatch());
 //        retractHatchButton.whenPressed(new RetractHatchMech());
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
         grabHatchButton.whenPressed(new GrabHatchThenBack());
-        placeHatchButton.whenPressed(new PlaceHatchThenDown());
+        placeHatchButton.whenPressed(new TestPlaceHatch());
+//        placeHatchButton.whenPressed(new PlaceHatchThenDown());
         releaseHatchButton.whenPressed(new ReleaseHatch());
 
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
