@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.utils.ControlUtils;
@@ -53,13 +54,14 @@ public class PointDrive extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
+        boolean backwards = OI.getTankdriveLeftAxis() > Tuning.driveDeadzone;
         if (OI.getPointDriveMagnatude() > 0.5) {
             lastGoalAngle = OI.getPointDriveAngle();
         }
         if (lastGoalAngle == null) {
             return 0;
         }
-        return getAngleError(lastGoalAngle + initAngleOffset);
+        return getAngleError((backwards ? Math.PI : 0) + lastGoalAngle + initAngleOffset);
     }
 
     @Override
