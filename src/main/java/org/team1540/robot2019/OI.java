@@ -19,8 +19,6 @@ import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
-import org.team1540.robot2019.commands.hatch.PlaceHatchThenDown;
-import org.team1540.robot2019.commands.hatch.PrepGetHatch;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.TestGrabHatch;
@@ -95,6 +93,7 @@ public class OI {
 //    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
     public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
     public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
+    private static Button testElevatorMidRocketButton = new StrictDPadButton(driver, 0, DPadAxis.UP);
 
     public static JoystickButton resetPointOffset = new JoystickButton(driver, Y);
 
@@ -150,6 +149,8 @@ public class OI {
 
         testGrabHatchButton.whenPressed(new TestGrabHatch());
         testPlaceHatchButton.whenPressed(new TestPlaceHatch());
+        testElevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+        testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
 
         resetPointOffset.whenPressed(new SimpleCommand("Reset Point Offset", () -> {
             PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
