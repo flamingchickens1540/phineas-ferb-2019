@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
-import org.team1540.robot2019.commands.cargo.EjectThenDown;
+import org.team1540.robot2019.commands.cargo.Eject;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
@@ -119,7 +119,8 @@ public class OI {
         Command intakeCommand = new FloorIntake();
         autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, intakeCommand));
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
-        ejectButton.whenPressed(new EjectThenDown());
+        ejectButton.whenPressed(new Eject());
+        ejectButton.whenReleased(new MoveElevatorToZero());
 
 //        prepGetHatchButton.whenPressed(new PrepGetHatch());
         prepGetHatchButton.whenPressed(new TestGrabHatch());
