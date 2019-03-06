@@ -2,6 +2,8 @@ package org.team1540.robot2019.wrappers;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import java.util.Arrays;
+import java.util.Objects;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
@@ -76,10 +78,12 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
     }
 
     /**
-     * Gets additional raw contour centers published by the limelight. SendRawContours in the limelight web interface must be turned on.
+     * Gets additional raw contour centers published by the limelight. SendRawContours in the limelight web interface
+     * must be turned on.
      *
      * @param id the index of the raw contour
-     * @return a {@link Vector2D} containing the center of the contour in screen-space coordinates or null if the contour does not pass the filters
+     * @return a {@link Vector2D} containing the center of the contour in screen-space coordinates or null if the
+     * contour does not pass the filters
      */
     public Vector2D getFilteredRawContourOrNull(int id) {
         double upperLimit = 0.86;
@@ -138,5 +142,10 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         }
 
         return new RawDeepSpaceVisionTarget(point0, point1);
+    }
+
+    public boolean isConnected() {
+        return Arrays.stream(NetworkTableInstance.getDefault().getConnections())
+            .anyMatch(conn -> Objects.equals(conn.remote_ip, "10.15.40.101"));
     }
 }

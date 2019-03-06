@@ -33,4 +33,12 @@ public class NavX {
     public double getRawPitchDegrees() {
         return navx.getPitch();
     }
+
+    public boolean isConnected() {
+        return navx.isConnected();
+    }
+
+    public boolean isCalibrating() {
+        return navx.isCalibrating();
+    }
 }
