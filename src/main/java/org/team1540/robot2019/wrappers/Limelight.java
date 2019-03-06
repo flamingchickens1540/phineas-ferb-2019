@@ -117,7 +117,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 
     public void prepForDriverCam() {
         setLeds(false);
-        setPipeline(1);
+//        setPipeline(1);
     }
 
     /**
