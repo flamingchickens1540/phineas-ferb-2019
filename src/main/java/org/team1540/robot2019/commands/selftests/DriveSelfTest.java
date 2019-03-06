@@ -1,7 +1,6 @@
 package org.team1540.robot2019.commands.selftests;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import java.util.ArrayList;
@@ -139,7 +138,7 @@ public class DriveSelfTest extends Command {
             case 5:
                 return Hardware.getDriveRightCCurrent();
         }
-        DriverStation.reportError("Current was requested for non-existent drive motor index " + motorIndex, false);
+        logger.error("Current was requested for non-existent drive motor index " + motorIndex);
         return 0;
     }
 
@@ -158,7 +157,7 @@ public class DriveSelfTest extends Command {
             case 5:
                 return "RC";
         }
-        DriverStation.reportError("Name was requested for non-existent drive motor index " + motorIndex, false);
+        logger.error("Name was requested for non-existent drive motor index " + motorIndex);
         return "??";
     }
 

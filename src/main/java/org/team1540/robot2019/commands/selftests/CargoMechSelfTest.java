@@ -1,6 +1,5 @@
 package org.team1540.robot2019.commands.selftests;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.apache.log4j.Logger;
@@ -24,7 +23,7 @@ public class CargoMechSelfTest extends CommandGroup {
         addSequential(new SimpleCommand("Stop intake", Robot.intake::stop, Robot.intake));
         addSequential(new SimpleCommand("Check Sensor", () -> {
             if (Robot.intake.hasBall()) {
-                DriverStation.reportWarning("Ball sensor is still tripped after ejecting", false);
+                logger.warn("Ball sensor is still tripped after ejecting");
             }
         }, Robot.intake));
         addSequential(
