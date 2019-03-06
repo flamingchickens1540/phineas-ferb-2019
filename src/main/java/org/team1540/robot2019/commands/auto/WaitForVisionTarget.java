@@ -16,7 +16,7 @@ public class WaitForVisionTarget extends Command {
     @Override
     protected void initialize() {
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.setLeds(true);
+            Robot.limelight.prepForVision();
         }
     }
 
@@ -34,7 +34,7 @@ public class WaitForVisionTarget extends Command {
             new RumbleForTime(OI.driver, 0.2).start();
             OI.alignCommand.start();
         } else if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.setLeds(false);
+            Robot.limelight.prepForDriverCam();
         }
     }
 }

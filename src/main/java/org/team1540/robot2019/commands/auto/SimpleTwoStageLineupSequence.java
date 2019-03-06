@@ -18,7 +18,7 @@ public class SimpleTwoStageLineupSequence extends CommandGroup {
     @Override
     protected void initialize() {
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.setLeds(true);
+            Robot.limelight.prepForVision();
         }
     }
 
@@ -30,7 +30,7 @@ public class SimpleTwoStageLineupSequence extends CommandGroup {
     @Override
     protected void end() {
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.setLeds(false);
+            Robot.limelight.prepForDriverCam();
         }
     }
 }
