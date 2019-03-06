@@ -105,6 +105,21 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         NetworkTableInstance.getDefault().flush();
     }
 
+    public void setPipeline(int id) {
+        limelightTable.getEntry("pipeline").setNumber(id);
+        NetworkTableInstance.getDefault().flush();
+    }
+
+    public void prepForVision() {
+        setLeds(true);
+        setPipeline(0);
+    }
+
+    public void prepForDriverCam() {
+        setLeds(false);
+        setPipeline(1);
+    }
+
     /**
      * Attempts to get the published SolvePNP transform from the vision target to the limelight (not the other way around).
      *

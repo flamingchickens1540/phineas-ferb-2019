@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.setDefaultBoolean("TurnOffLimelightWhenNotInUse", true);
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.setLeds(false);
+            Robot.limelight.prepForDriverCam();
         }
     }
 

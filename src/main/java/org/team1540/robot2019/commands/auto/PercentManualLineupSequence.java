@@ -36,7 +36,7 @@ public class PercentManualLineupSequence extends CommandGroup {
         command = new PercentManualLineup();
 
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.setLeds(true);
+            Robot.limelight.prepForVision();
         }
     }
 
@@ -49,7 +49,7 @@ public class PercentManualLineupSequence extends CommandGroup {
     protected void end() {
         PointDrive.manualResetGoal();
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.setLeds(false);
+            Robot.limelight.prepForDriverCam();
         }
     }
 }
