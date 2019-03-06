@@ -47,12 +47,12 @@ public class RobotMap {
 
 
     // pdp ports
-    public static final int PDP_DRIVE_LEFT_A = 15;
-    public static final int PDP_DRIVE_LEFT_B = 14;
-    public static final int PDP_DRIVE_LEFT_C = 13;
-    public static final int PDP_DRIVE_RIGHT_A = 0;
-    public static final int PDP_DRIVE_RIGHT_B = 2;
-    public static final int PDP_DRIVE_RIGHT_C = 1;
+    public static final int PDP_DRIVE_LEFT_A = 0;
+    public static final int PDP_DRIVE_LEFT_B = 1;
+    public static final int PDP_DRIVE_LEFT_C = 2;
+    public static final int PDP_DRIVE_RIGHT_A = 13;
+    public static final int PDP_DRIVE_RIGHT_B = 14;
+    public static final int PDP_DRIVE_RIGHT_C = 15;
     public static final int PDP_WRIST_MOTOR = 7;
     public static final int PDP_INTAKE_TOP = 5;
     public static final int PDP_INTAKE_BTM = 4;

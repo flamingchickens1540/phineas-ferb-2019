@@ -24,5 +24,4 @@ public class TestGrabHatch extends CommandGroup {
         new GrabHatch().start();
         new RetractHatchMech().start();
     }
-
 }
