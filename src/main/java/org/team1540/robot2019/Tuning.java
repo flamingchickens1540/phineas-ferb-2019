@@ -56,7 +56,7 @@ public class Tuning {
     public static double elevatorUpPosition = 28;
     public static double elevatorCargoShipPosition = 14;
     public static double elevatorDownPosition = 0;
-    public static double elevatorClimbPosition = 20;
+    public static double elevatorClimbPosition = 18;
     public static double elevatorLoadingStationPosition = 18;
 
     // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
@@ -106,7 +106,7 @@ public class Tuning {
     public static double hatchGrabWaitTime = 1;
     public static double hatchExtendWaitTime = 0.2;
     public static double hatchReleaseWaitTime = 0.2;
-    public static double hatchPrepFloorWaitTime = 3.0;
+    public static double hatchPrepFloorWaitTime = 0.5;
     public static double hatchDownWaitTime = 0.3;
 
     // climber
@@ -129,7 +129,7 @@ public class Tuning {
     public static double climberStartPosLevel3 = 30000;
     public static double climberBackPos = 0;
 
-    public static double climberGyroFF = 0.5;
+    public static double climberGyroFF = 0.2;
     public static double climberUpPosition = 53000; // arms
 
     public static double climberTolerance = 1000;

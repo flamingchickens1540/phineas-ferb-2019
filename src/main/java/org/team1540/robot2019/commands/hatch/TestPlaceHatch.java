@@ -22,4 +22,9 @@ public class TestPlaceHatch extends CommandGroup {
         addSequential(new MoveElevatorToZero());
     }
 
+    @Override
+    protected void interrupted() {
+        new ReleaseHatch().start();
+        new RetractHatchMech().start();
+    }
 }

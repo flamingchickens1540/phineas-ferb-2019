@@ -79,7 +79,7 @@ public class OI {
     private static Button climbingSafety = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
     private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
     private static JoystickButton climbLevel2Button = new JoystickButton(copilot, LB); // + safety
-    private static JoystickButton climberCylinderUp = new JoystickButton(copilot, LB);
+    private static JoystickButton climberCylinderUp = new JoystickButton(copilot, BACK);
 
     // driver buttons
 
@@ -126,7 +126,6 @@ public class OI {
 //        retractHatchButton.whenPressed(new RetractHatchMech());
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
         grabHatchButton.whenPressed(new GrabHatchThenBack());
-//        grabHatchButton.whenPressed(new GrabHatchThenBack());
         placeHatchButton.whenPressed(new TestPlaceHatch());
 //        placeHatchButton.whenPressed(new PlaceHatchThenDown());
         releaseHatchButton.whenPressed(new ReleaseHatch());

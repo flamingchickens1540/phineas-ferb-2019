@@ -147,6 +147,10 @@ public class Robot extends TimedRobot {
             disableBrakes = false;
 
             Shuffleboard.addEventMarker("Mechanism brakes disabled", EventImportance.kTrivial);
+
+            if (!SmartDashboard.getBoolean("IsHatchPreload", true)) {
+                Robot.hatch.release();
+            }
         }
     }
 
@@ -193,13 +197,6 @@ public class Robot extends TimedRobot {
 
         if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
             elevator.setRaw(0);
-        }
-
-        if (SmartDashboard.getBoolean("IsHatchPreload", false)) {
-            Robot.hatch.extend();
-        }
-        if (!SmartDashboard.getBoolean("IsHatchPreload", true)) {
-            Robot.hatch.release();
         }
     }
 
