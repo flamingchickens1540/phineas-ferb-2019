@@ -54,7 +54,7 @@ public class Tuning {
     public static boolean invertElevatorB = false;
 
     public static double elevatorUpPosition = 28;
-    public static double elevatorCargoShipPosition = 14;
+    public static double elevatorCargoShipPosition = 16;
     public static double elevatorDownPosition = 0;
     public static double elevatorClimbPosition = 18;
     public static double elevatorLoadingStationPosition = 18;
