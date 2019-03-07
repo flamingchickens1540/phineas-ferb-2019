@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.utils.ControlUtils;
@@ -14,7 +15,7 @@ public class PointDrive extends PIDCommand {
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
     // Max/Min angular velocity
-    private static final double MIN_VEL_THETA = 0.4;
+    private static final double MIN_VEL_THETA = 1;
     private static final double MAX_VEL_THETA = 5;
 
     private static final double OUTPUT_SCALAR = 5;
@@ -57,8 +58,30 @@ public class PointDrive extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
+        double pointDriveAngle = OI.getPointDriveAngle();
         if (OI.getPointDriveMagnatude() > 0.5) {
-            lastGoalAngle = OI.getPointDriveAngle();
+            if (OI.getTankdriveBackwardsAxis() > Tuning.driveDeadzone) {
+                if (pointDriveAngle < (1f / 16f * 1) * 2 * Math.PI) {
+                    pointDriveAngle = 0;
+                } else if (pointDriveAngle < (1f / 16f * 3) * 2 * Math.PI) {
+                    pointDriveAngle = Math.PI / 4;
+                } else if (pointDriveAngle < (1f / 16f * 5) * 2 * Math.PI) {
+                    pointDriveAngle = 2 * Math.PI / 4;
+                } else if (pointDriveAngle < (1f / 16f * 7) * 2 * Math.PI) {
+                    pointDriveAngle = 3 * Math.PI / 4;
+                } else if (pointDriveAngle < (1f / 16f * 9) * 2 * Math.PI) {
+                    pointDriveAngle = 4 * Math.PI / 4;
+                } else if (pointDriveAngle < (1f / 16f * 11) * 2 * Math.PI) {
+                    pointDriveAngle = 5 * Math.PI / 4;
+                } else if (pointDriveAngle < (1f / 16f * 13) * 2 * Math.PI) {
+                    pointDriveAngle = 6 * Math.PI / 4;
+                } else if (pointDriveAngle < (1f / 16f * 15) * 2 * Math.PI) {
+                    pointDriveAngle = 7 * Math.PI / 4;
+                } else {
+                    pointDriveAngle = 0;
+                }
+            }
+            lastGoalAngle = pointDriveAngle;
         }
         if (lastGoalAngle == null) {
             return 0;
@@ -70,7 +93,7 @@ public class PointDrive extends PIDCommand {
     protected void usePIDOutput(double output) {
         output *= OUTPUT_SCALAR;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-        if (lastGoalAngle == null || Math.abs(output) < 0.01) {
+        if (lastGoalAngle == null || Math.abs(output) < 0.005) {
             cmdVelTheta = 0;
         }
         Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta * 0.1); // TODO: Remove temporary 0.1 constant and re-tune
