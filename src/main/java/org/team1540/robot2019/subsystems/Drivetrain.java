@@ -16,7 +16,9 @@ import com.ctre.phoenix.motorcontrol.IMotorController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
@@ -27,6 +29,7 @@ import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
 import org.team1540.rooster.functional.Output;
+import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
@@ -53,6 +56,7 @@ public class Drivetrain extends Subsystem {
     private NetworkTableEntry rightCurrentAEntry = table.getEntry("rightCurrA");
     private NetworkTableEntry rightCurrentBEntry = table.getEntry("rightCurrB");
     private NetworkTableEntry rightCurrentCEntry = table.getEntry("rightCurrC");
+    private PointDrive command;
 
     @Override
     protected void initDefaultCommand() {
@@ -62,7 +66,21 @@ public class Drivetrain extends Subsystem {
 //                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
 //                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
 //                .then(getPipelineOutput(false)), this));
-        setDefaultCommand(new PointDrive());
+        SmartDashboard.setDefaultNumber("PointDrive/min", 0);
+        SmartDashboard.setDefaultNumber("PointDrive/max", 10);
+        SmartDashboard.setDefaultNumber("PointDrive/outScalar", 20);
+        SmartDashboard.setDefaultNumber("PointDrive/P", 0.2);
+        SmartDashboard.setDefaultNumber("PointDrive/I", 0);
+        SmartDashboard.setDefaultNumber("PointDrive/D", 0.5);
+        SmartDashboard.setDefaultNumber("PointDrive/deadZone", 0.05);
+        command = new PointDrive();
+        setDefaultCommand(command);
+
+        Command updatePoint = new SimpleCommand("Update PointDrive", () -> {
+            new PointDrive().start();
+        });
+        updatePoint.setRunWhenDisabled(true);
+        SmartDashboard.putData(updatePoint);
     }
 
     public Output<TankDriveData> getPipelineOutput() {
