@@ -5,6 +5,10 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
+import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
+import org.team1540.robot2019.commands.hatch.simple.GrabHatch;
+import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
+import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.rooster.util.SimpleCommand;
 
 public class TestPlaceHatch extends CommandGroup {
