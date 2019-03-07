@@ -90,7 +90,7 @@ public class OI {
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, Tuning.driveDeadzone, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
     public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
 
-    public static AxisButton autoAlignPointButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
+    //    public static AxisButton autoAlignPointButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
 //    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
     public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
     public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
@@ -150,7 +150,7 @@ public class OI {
         intakeLoadingStationButton.cancelWhenPressed(alignCommand);
         autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
 
-        autoAlignPointButton.whenPressed(alignCommand);
+//        autoAlignPointButton.whenPressed(alignCommand);
 
 //        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
 //        quickTurnButton.whenPressed(quickTurnCommand);
