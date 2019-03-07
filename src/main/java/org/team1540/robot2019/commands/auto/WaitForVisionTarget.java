@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.commands.rumble.RumbleForTime;
 
 public class WaitForVisionTarget extends Command {
 
@@ -31,7 +32,7 @@ public class WaitForVisionTarget extends Command {
     @Override
     protected void end() {
         if (OI.alignCommand != null && !this.isTimedOut()) {
-            new RumbleForTime(OI.driver, 0.2).start();
+            new RumbleForTime(OI.driver, 0.5).start();
             OI.alignCommand.start();
         } else if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
             Robot.limelight.prepForDriverCam();
