@@ -24,7 +24,7 @@ public class WaitForVisionTarget extends Command {
     @Override
     protected boolean isFinished() {
         if (this.isTimedOut()) {
-            return false;
+            return true;
         }
         return Robot.limelight.isTargetFound();
     }
