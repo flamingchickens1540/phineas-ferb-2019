@@ -129,6 +129,7 @@ public class Robot extends TimedRobot {
         disableBrakes = true;
 
         Robot.hatch.retract();
+        Robot.hatch.grab(); // otherwise we might flicker grab-release on enable
 
         if (DriverStation.getInstance().isFMSAttached()) {
             logger.debug("FMS is attached, auto-stopping recording");
@@ -151,10 +152,6 @@ public class Robot extends TimedRobot {
             disableBrakes = false;
 
             Shuffleboard.addEventMarker("Mechanism brakes disabled", EventImportance.kTrivial);
-
-            if (!SmartDashboard.getBoolean("IsHatchPreload", true)) {
-                Robot.hatch.release();
-            }
         }
     }
 
@@ -178,6 +175,12 @@ public class Robot extends TimedRobot {
 
         if (elevator.getPosition() < 1) {
             elevator.setRaw(0);
+        }
+
+        if (SmartDashboard.getBoolean("IsHatchPreload", true)) {
+            Robot.hatch.grab();
+        } else {
+            Robot.hatch.release();
         }
     }
 
