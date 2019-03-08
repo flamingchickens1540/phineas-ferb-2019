@@ -78,6 +78,7 @@ public class OI {
     private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
     private static JoystickButton climbLevel2Button = new JoystickButton(copilot, LB); // + safety
     private static JoystickButton climberCylinderUp = new JoystickButton(copilot, BACK);
+    private static Button cancelClimbButton = new AxisButton(copilot, -Tuning.axisButtonThreshold, LEFT_Y);
 
     // driver buttons
 
@@ -129,9 +130,13 @@ public class OI {
         grabHatchButton.whenPressed(new GrabHatchThenBack());
         stowHatchButton.whenPressed(new StowHatchMech());
 
-        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
-        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
+        Command climbCommand3 = new ClimbLevelThree();
+        Command climbCommand2 = new ClimbLevelTwo();
+        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand3));
+        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand2));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
+        cancelClimbButton.cancelWhenPressed(climbCommand3);
+        cancelClimbButton.cancelWhenPressed(climbCommand2);
 
         alignCommand = new PercentManualLineupSequence();
         autoAlignButton.whenPressed(alignCommand);
