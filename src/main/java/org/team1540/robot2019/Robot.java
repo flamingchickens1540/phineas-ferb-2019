@@ -89,6 +89,7 @@ public class Robot extends TimedRobot {
 
         ShuffleboardDisplay.init();
 
+        // TODO: use shuffleboard properly
         SmartDashboard.putBoolean("IsHatchPreload", false);
         SmartDashboard.putBoolean("Debug Mode", false);
 
@@ -98,6 +99,8 @@ public class Robot extends TimedRobot {
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
             Robot.limelight.prepForDriverCam();
         }
+
+        SmartDashboard.putData("PointDrive/CommandAngle", pointDriveFakeGyro);
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
@@ -120,7 +123,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("DrivetrainRightPos", drivetrain.getRightPositionTicks());
 
         pointDriveFakeGyro.setAngle(180 - Math.toDegrees(OI.getPointDriveAngle()));
-        SmartDashboard.putData("PointDrive/CommandAngle", pointDriveFakeGyro);
     }
 
     @Override
