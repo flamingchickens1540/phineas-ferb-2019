@@ -15,7 +15,7 @@ public class GamePieceLEDs extends Command {
         LEDColor color;
         if (Robot.intake.hasBall()) {
             color = LEDColor.RED;
-        } else if (!Robot.hatch.hasNoHatch()) {
+        } else if (!Robot.hatch.isReleased()) {
             color = LEDColor.BLUE;
         } else {
             color = LEDColor.OFF;
