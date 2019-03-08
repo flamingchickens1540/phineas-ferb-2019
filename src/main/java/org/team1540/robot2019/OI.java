@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
@@ -19,11 +20,6 @@ import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
-import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
-import org.team1540.robot2019.commands.hatch.StowHatchMech;
-import org.team1540.robot2019.commands.hatch.TestGrabHatch;
-import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
@@ -193,10 +189,13 @@ public class OI {
             }
         }));
 
-
-        resetPointOffset.whenPressed(new SimpleCommand("Reset Point Offset", () -> {
+        SimpleCommand reset_point_offset = new SimpleCommand("Reset Point Offset", () -> {
+            logger.debug("Setting Angle Offset");
             PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
-        }));
+        });
+        reset_point_offset.setRunWhenDisabled(true);
+        resetPointOffset.whenPressed(reset_point_offset);
+        Shuffleboard.getTab("Phineas").add(reset_point_offset);
 
         strobeRedBlueButton.whenPressed(new BlinkLEDs(LEDColor.RED, LEDColor.BLUE, Tuning.ledStrobeTime));
 
