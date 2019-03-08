@@ -1,5 +1,7 @@
 package org.team1540.robot2019;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -97,6 +99,10 @@ public class Robot extends TimedRobot {
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
             Robot.limelight.prepForDriverCam();
         }
+
+        UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("backup cam", 0);
+        cam.setResolution(128, 73);
+        cam.setFPS(30);
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
