@@ -65,6 +65,7 @@ public class Robot extends TimedRobot {
         intake = new Intake();
         hatch = new HatchMech();
         climber = new Climber();
+        leds = new LEDs();
 //
 //        odometry = new TankDriveOdometryRunnable(
 //            drivetrain::getLeftPositionMeters,
@@ -91,15 +92,15 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("IsHatchPreload", false);
         SmartDashboard.putBoolean("Debug Mode", false);
 
-        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
-        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
-
         SmartDashboard.putBoolean("EnableCompressor", true);
 
         SmartDashboard.setDefaultBoolean("TurnOffLimelightWhenNotInUse", true);
         if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
             Robot.limelight.prepForDriverCam();
         }
+
+        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
     }
 
     @Override
@@ -130,6 +131,7 @@ public class Robot extends TimedRobot {
         disableBrakes = true;
 
         Robot.hatch.retract();
+        Robot.hatch.grab(); // otherwise we might flicker grab-release on enable
 
         if (DriverStation.getInstance().isFMSAttached()) {
             logger.debug("FMS is attached, auto-stopping recording");
@@ -175,6 +177,12 @@ public class Robot extends TimedRobot {
 
         if (elevator.getPosition() < 1) {
             elevator.setRaw(0);
+        }
+
+        if (SmartDashboard.getBoolean("IsHatchPreload", true)) {
+            Robot.hatch.grab();
+        } else {
+            Robot.hatch.release();
         }
     }
 

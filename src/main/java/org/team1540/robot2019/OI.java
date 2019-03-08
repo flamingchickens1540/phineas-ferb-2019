@@ -24,6 +24,13 @@ import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.TestGrabHatch;
 import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
+import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
+import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
+import org.team1540.robot2019.commands.hatch.StowHatchMech;
+import org.team1540.robot2019.commands.hatch.TestGrabHatch;
+import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
+import org.team1540.robot2019.commands.leds.BlinkLEDs;
+import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
@@ -108,6 +115,8 @@ public class OI {
 
 //    private static Button autoAlignButtonAlt = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
 
+    public static StrictDPadButton strobeRedBlueButton = new StrictDPadButton(driver, 0, DPadAxis.DOWN);
+
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
@@ -188,6 +197,8 @@ public class OI {
         resetPointOffset.whenPressed(new SimpleCommand("Reset Point Offset", () -> {
             PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
         }));
+
+        strobeRedBlueButton.whenPressed(new BlinkLEDs(LEDColor.RED, LEDColor.BLUE, Tuning.ledStrobeTime));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
