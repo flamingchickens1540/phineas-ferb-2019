@@ -19,15 +19,22 @@ import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.*;
-import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
+import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
+import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
+import org.team1540.robot2019.commands.hatch.StowHatchMech;
+import org.team1540.robot2019.commands.hatch.TestGrabHatch;
+import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
 import org.team1540.rooster.Utilities;
+import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
+import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
+import org.team1540.rooster.drive.pipeline.FeedForwardToVelocityProcessor;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.triggers.MultiAxisButton;
 import org.team1540.rooster.triggers.StrictDPadButton;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleConditionalCommand;
+import org.team1540.rooster.util.SimpleLoopCommand;
 
 public class OI {
 
@@ -97,6 +104,8 @@ public class OI {
     public static JoystickButton resetPointOffset = new JoystickButton(driver, Y);
     public static PercentManualLineupSequence alignCommand;
 
+    public static JoystickButton arcadeToggle = new JoystickButton(driver, BACK);
+
 //    private static Button autoAlignButtonAlt = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
 
     /**
@@ -111,12 +120,12 @@ public class OI {
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
 
         Command loadingIntakeCommand = new LoadingStationIntake();
-        intakeLoadingStationButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, loadingIntakeCommand));
+        intakeLoadingStationButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::isReleased, loadingIntakeCommand));
         cancelIntakeButton.cancelWhenPressed(loadingIntakeCommand);
         cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
         Command intakeCommand = new FloorIntake();
-        autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::hasNoHatch, intakeCommand));
+        autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::isReleased, intakeCommand));
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ForwardThenEject command = new ForwardThenEject();
         ejectButton.whenPressed(command);
@@ -156,10 +165,25 @@ public class OI {
 //        quickTurnButton.whenPressed(quickTurnCommand);
 //        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
 
-//        testGrabHatchButton.whenPressed(new TestGrabHatch());
-//        testPlaceHatchButton.whenPressed(new TestPlaceHatch());
-//        testElevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-//        testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
+        testGrabHatchButton.whenPressed(new TestGrabHatch());
+        testPlaceHatchButton.whenPressed(new TestPlaceHatch());
+        testElevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+        testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
+
+        Command arcadeCommand = new SimpleLoopCommand("Drive",
+            new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
+                OI::getDriveHardTurn)
+                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
+                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
+                .then(Robot.drivetrain.getPipelineOutput(false)), Robot.drivetrain);
+        arcadeToggle.whenPressed(new SimpleCommand("Toggle Auto Lineup", () -> {
+            if (arcadeCommand.isRunning()) {
+                arcadeCommand.cancel();
+            } else {
+                arcadeCommand.start();
+            }
+        }));
+
 
         resetPointOffset.whenPressed(new SimpleCommand("Reset Point Offset", () -> {
             PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
@@ -219,7 +243,7 @@ public class OI {
         return Math.atan2(y, x);
     }
 
-    public static double getPointDriveMagnatude() {
+    public static double getPointDriveMagnitude() {
         double x = driver.getX(Hand.kRight);
         double y = driver.getY(Hand.kRight);
         return Utilities.processDeadzone(new Vector2D(x, y).distance(Vector2D.ZERO), Tuning.driveDeadzone);
