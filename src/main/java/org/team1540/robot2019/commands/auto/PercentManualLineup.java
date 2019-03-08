@@ -19,18 +19,17 @@ import org.team1540.rooster.functional.Executable;
 public class PercentManualLineup extends PIDCommand {
 
     public static final Logger logger = Logger.getLogger(PercentManualLineup.class);
-    public static double OUTPUT_SCALAR;
 
     // Max/Min angular velocity
-    public static double MIN_VEL_THETA;
-    public static double MAX_VEL_THETA;
+    public static double MIN_VEL_THETA = 0;
+    public static double MAX_VEL_THETA = 0;
 
-    public static double DEADZONE_VEL_THETA;
+    public static double DEADZONE_VEL_THETA = 0;
 
     // Constants for angular VPID controller
-    public static double ANGULAR_KP;
-    public static double ANGULAR_KI;
-    public static double ANGULAR_KD;
+    public static double ANGULAR_KP = 0;
+    public static double ANGULAR_KI = 0;
+    public static double ANGULAR_KD = 0;
 
     private static final double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
@@ -44,9 +43,9 @@ public class PercentManualLineup extends PIDCommand {
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
-            .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
+            .then(new FeedForwardProcessor(0, 0, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
-            .then(Robot.drivetrain.getPipelineOutput(false));
+            .then(Robot.drivetrain.getPipelineOutput());
     }
 
     @Override
@@ -101,14 +100,14 @@ public class PercentManualLineup extends PIDCommand {
 
     @Override
     protected void usePIDOutput(double output) {
-        output *= OUTPUT_SCALAR;
+//        output *= MAX_VEL_THETA;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
         if (Math.abs(output) < DEADZONE_VEL_THETA) {
             cmdVelTheta = 0;
         }
-        SmartDashboard.putNumber("PointDrive/Debug/cmdVelTheta", cmdVelTheta);
-        Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -3, 0, -cmdVelTheta);
-        twist2DInput.setTwist(cmdVel);
-        pipeline.execute();
+        Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta);
+        Robot.drivetrain.setPercentTwist(cmdVel);
+//        twist2DInput.setTwist(cmdVel);
+//        pipeline.execute();
     }
 }
