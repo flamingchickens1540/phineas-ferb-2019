@@ -45,7 +45,7 @@ public class ShuffleboardDisplay {
         Shuffleboard.getTab("Phineas")
             .add(new SelfTest());
 
-        tab.add("Point Drive Heading",  pointDriveFakeGyro);
+        tab.add("Point Drive Heading",  pointDriveFakeGyro).withProperties(Map.of("Starting angle", 0));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized Shuffleboard in " + (end - start) + " ms");
