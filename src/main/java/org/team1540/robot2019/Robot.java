@@ -1,6 +1,5 @@
 package org.team1540.robot2019;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -91,9 +90,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("IsHatchPreload", false);
         SmartDashboard.putBoolean("Debug Mode", false);
 
-        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
-        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
-
         SmartDashboard.putBoolean("EnableCompressor", true);
 
         SmartDashboard.setDefaultBoolean("TurnOffLimelightWhenNotInUse", true);
@@ -101,7 +97,8 @@ public class Robot extends TimedRobot {
             Robot.limelight.prepForDriverCam();
         }
 
-        CameraServer.getInstance().startAutomaticCapture(0);
+        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
     }
 
     @Override
