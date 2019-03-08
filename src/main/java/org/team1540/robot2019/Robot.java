@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
         intake = new Intake();
         hatch = new HatchMech();
         climber = new Climber();
+        leds = new LEDs();
 //
 //        odometry = new TankDriveOdometryRunnable(
 //            drivetrain::getLeftPositionMeters,
