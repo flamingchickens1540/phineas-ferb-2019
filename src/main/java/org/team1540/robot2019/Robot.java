@@ -175,11 +175,11 @@ public class Robot extends TimedRobot {
             elevator.setRaw(0);
         }
 
-        if (SmartDashboard.getBoolean("IsHatchPreload", true)) {
-            Robot.hatch.grab();
-        } else {
-            Robot.hatch.release();
-        }
+//        if (SmartDashboard.getBoolean("IsHatchPreload", true)) {
+//            Robot.hatch.grab();
+//        } else {
+//            Robot.hatch.release();
+//        }
     }
 
     @Override
