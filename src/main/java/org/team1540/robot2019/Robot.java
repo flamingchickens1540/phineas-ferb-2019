@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.drivetrain.PointDriveFakeGyro;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Climber;
@@ -41,7 +40,6 @@ public class Robot extends TimedRobot {
 
     boolean disableBrakes;
     private Timer brakeTimer = new Timer();
-    private PointDriveFakeGyro pointDriveFakeGyro = new PointDriveFakeGyro();
 
     public static TankDriveOdometryRunnable odometry;
     public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
@@ -100,8 +98,6 @@ public class Robot extends TimedRobot {
             Robot.limelight.prepForDriverCam();
         }
 
-        SmartDashboard.putData("PointDrive/CommandAngle", pointDriveFakeGyro);
-
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
     }
@@ -121,8 +117,6 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("DrivetrainLeftPos", drivetrain.getLeftPositionTicks());
         SmartDashboard.putNumber("DrivetrainRightPos", drivetrain.getRightPositionTicks());
-
-        pointDriveFakeGyro.setAngle(180 - Math.toDegrees(OI.getPointDriveAngle()));
     }
 
     @Override
