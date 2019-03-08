@@ -82,7 +82,7 @@ public class PointDrive extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        if (OI.getPointDriveMagnatude() > 0.5) {
+        if (OI.getPointDriveMagnitude() > 0.5) {
             lastGoalAngle = OI.getPointDriveAngle();
         }
         if (lastGoalAngle == null) {
