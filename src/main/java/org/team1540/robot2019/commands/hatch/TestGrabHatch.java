@@ -12,9 +12,9 @@ public class TestGrabHatch extends CommandGroup {
     public TestGrabHatch() {
         addSequential(new ReleaseHatch());
         addSequential(new ExtendHatchMech());
-        addSequential(new WaitCommand(0.4));
+        addSequential(new WaitCommand(0.2));
         addSequential(new GrabHatch());
-        addSequential(new WaitCommand(1));
+        addSequential(new WaitCommand(0.2));
         addSequential(new RetractHatchMech());
     }
 
