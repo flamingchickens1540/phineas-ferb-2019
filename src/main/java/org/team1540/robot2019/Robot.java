@@ -134,7 +134,7 @@ public class Robot extends TimedRobot {
 
         if (DriverStation.getInstance().isFMSAttached()) {
             logger.debug("FMS is attached, auto-stopping recording");
-            Shuffleboard.stopRecording();
+//            Shuffleboard.stopRecording();
         }
 
         Shuffleboard.addEventMarker("Robot Disable", EventImportance.kNormal);
@@ -169,7 +169,7 @@ public class Robot extends TimedRobot {
                     .getMatchType() + "-" + DriverStation.getInstance().getMatchNumber()
                     + "-${date}-${time}");
 
-            Shuffleboard.startRecording();
+//            Shuffleboard.startRecording();
         }
 
         Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
@@ -198,7 +198,7 @@ public class Robot extends TimedRobot {
         Hardware.checkStickyFaults();
 
         if (DriverStation.getInstance().isFMSAttached()) {
-            Shuffleboard.startRecording();
+//            Shuffleboard.startRecording();
         }
 
         Shuffleboard.addEventMarker("Teleop Start", EventImportance.kNormal);
