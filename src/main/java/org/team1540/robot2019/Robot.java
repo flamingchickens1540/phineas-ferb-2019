@@ -95,10 +95,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("EnableCompressor", true);
 
-        SmartDashboard.setDefaultBoolean("TurnOffLimelightWhenNotInUse", true);
-        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.prepForDriverCam();
-        }
+        Robot.limelight.setLeds(false);
 
         UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("backup cam", 0);
         cam.setResolution(128, 73);
