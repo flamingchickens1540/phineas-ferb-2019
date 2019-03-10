@@ -10,6 +10,7 @@ public class StowHatchMech extends InstantCommand {
 
     public StowHatchMech() {
         requires(Robot.hatch);
+        requires(Robot.wrist);
     }
 
     @Override
