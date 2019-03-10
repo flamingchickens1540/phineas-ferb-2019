@@ -145,5 +145,5 @@ public class Tuning {
     public static double drivetrainMaxVelocity = 400;
 
     public static double ledTime = 5;
-    public static double ledStrobeTime = 0;
+    public static double ledStrobeTime = 0.2;
 }

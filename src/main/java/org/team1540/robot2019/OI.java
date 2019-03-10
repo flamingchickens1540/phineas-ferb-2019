@@ -197,7 +197,7 @@ public class OI {
         resetPointOffset.whenPressed(reset_point_offset);
         Shuffleboard.getTab("Phineas").add(reset_point_offset);
 
-        strobeRedBlueButton.whenPressed(new BlinkLEDs(LEDColor.RED, LEDColor.BLUE, Tuning.ledStrobeTime));
+        strobeRedBlueButton.whenPressed(new BlinkLEDs(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
