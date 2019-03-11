@@ -21,17 +21,17 @@ public class PercentManualLineup extends PIDCommand {
     public static final Logger logger = Logger.getLogger(PercentManualLineup.class);
 
     // Max/Min angular velocity
-    public static double MIN_VEL_THETA = 0;
-    public static double MAX_VEL_THETA = 0;
+    public static double MIN_VEL_THETA = 0.05;
+    public static double MAX_VEL_THETA = 1;
 
-    public static double DEADZONE_VEL_THETA = 0;
+    public static double DEADZONE_VEL_THETA = 0.01;
 
     // Constants for angular VPID controller
-    public static double ANGULAR_KP = 0;
+    public static double ANGULAR_KP = -0.55;
     public static double ANGULAR_KI = 0;
-    public static double ANGULAR_KD = 0;
+    public static double ANGULAR_KD = -2;
 
-    private static final double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
+    public static double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;

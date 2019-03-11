@@ -11,6 +11,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.InterruptHandlerFunction;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.wrist.WristUpOrHold;
 
@@ -22,6 +23,8 @@ public class Wrist extends Subsystem {
     private volatile boolean midFlag = false;
 
     private NetworkTable table = NetworkTableInstance.getDefault().getTable("wrist");
+
+    private NetworkTableEntry wristCurrentEntry = table.getEntry("wristCurr");
 
     private NetworkTableEntry isAtMidEntry = table.getEntry("atMid");
     private NetworkTableEntry isAtBtmEntry = table.getEntry("atBtm");
@@ -109,6 +112,7 @@ public class Wrist extends Subsystem {
             isAtMidEntry.forceSetBoolean(isAtMid());
             isAtBtmEntry.forceSetBoolean(isAtBtm());
             motorEntry.forceSetNumber(wristMotor.getMotorOutputPercent());
+            wristCurrentEntry.forceSetNumber(Hardware.getWristMotorCurrent());
         }
     }
 

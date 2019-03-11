@@ -25,6 +25,8 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
     public Limelight(String name, Transform3D baseLinkToCamera) {
         limelightTable = NetworkTableInstance.getDefault().getTable(name);
         this.baseLinkToCamera = baseLinkToCamera;
+
+        setPipeline(0);
     }
 
     @Override
@@ -103,6 +105,31 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
     public void setLeds(boolean isOn) {
         limelightTable.getEntry("ledMode").setNumber(isOn ? 0 : 1);
         NetworkTableInstance.getDefault().flush();
+    }
+
+    /**
+     * Sets limelight to driver cam or vision mode.
+     *
+     * @param driverCam Whether the limelight should be in driver cam mode
+     */
+    public void setDriverCam(boolean driverCam) {
+        limelightTable.getEntry("camMode").setNumber(driverCam ? 1 : 0);
+        NetworkTableInstance.getDefault().flush();
+    }
+
+    public void setPipeline(int id) {
+        limelightTable.getEntry("pipeline").setNumber(id);
+        NetworkTableInstance.getDefault().flush();
+    }
+
+    public void prepForVision() {
+        setLeds(true);
+        setDriverCam(false);
+    }
+
+    public void prepForDriverCam() {
+        setLeds(false);
+//        setDriverCam(true);
     }
 
     /**

@@ -10,7 +10,7 @@ public class LoadingStationIntake extends CommandGroup {
 
     public LoadingStationIntake() {
         addParallel(new StowHatchMech());
-        addSequential(new MoveElevatorToPosition(Tuning.elevatorLoadingStationPosition));
+        addParallel(new MoveElevatorToPosition(Tuning.elevatorLoadingStationPosition));
         addSequential(new IntakeCargo());
         addSequential(new MoveElevatorToZero());
     }

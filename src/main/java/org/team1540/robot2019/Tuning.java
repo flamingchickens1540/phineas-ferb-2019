@@ -23,7 +23,7 @@ public class Tuning {
     public static double driveSoftTurnExponent = 3;
     public static double driveHardTurnExponent = 1;
 
-    public static double driveDeadzone = 0.13;
+    public static double driveDeadzone = 0.2;
 
     // this unit is [-1,1] throttle per 20ms, which is kind of terrible but makes for nicer drive code
     // divide 0.02 by this to get seconds from neutral to full throttle
@@ -54,10 +54,11 @@ public class Tuning {
     public static boolean invertElevatorB = false;
 
     public static double elevatorUpPosition = 28;
-    public static double elevatorCargoShipPosition = 14;
+    public static double elevatorCargoShipPosition = 16;
     public static double elevatorDownPosition = 0;
     public static double elevatorClimbPosition = 18;
     public static double elevatorLoadingStationPosition = 18;
+    public static double elevatorDuringClimbPosition = 10;
 
     // (2.872986590827646 in sprocket diameter * pi) * (5:1 gear ratio)
     public static double elevatorInPerRotation = .929926125;
@@ -143,4 +144,6 @@ public class Tuning {
 
     public static double drivetrainMaxVelocity = 400;
 
+    public static double ledTime = 5;
+    public static double ledStrobeTime = 0.2;
 }

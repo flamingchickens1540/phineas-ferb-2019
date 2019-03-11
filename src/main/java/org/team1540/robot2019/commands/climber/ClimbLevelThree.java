@@ -9,6 +9,7 @@ public class ClimbLevelThree extends CommandGroup {
     public ClimbLevelThree() {
         addSequential(new MoveElevatorToPosition(Tuning.elevatorClimbPosition));
         addSequential(new MoveArmsToPosition(Tuning.climberStartPosLevel3));
+        addSequential(new MoveElevatorToPosition(Tuning.elevatorDuringClimbPosition));
         addSequential(new LiftGyroStabilizeLevel3());
     }
 
