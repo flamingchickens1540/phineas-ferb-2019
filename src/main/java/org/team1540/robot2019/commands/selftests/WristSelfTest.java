@@ -1,7 +1,7 @@
 package org.team1540.robot2019.commands.selftests;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.wrist.WristDown;
 import org.team1540.robot2019.commands.wrist.WristUpOrHold;
@@ -15,8 +15,9 @@ public class WristSelfTest extends CommandGroup {
         addSequential(
             new SimpleCommand("Print status", () -> logger.info("Beginning wrist self-test")));
         addSequential(new WristDown());
+        addSequential(new WaitCommand(1));
         addParallel(new WristUpOrHold());
-        addSequential(new TimedCommand(1));
+        addSequential(new WaitCommand(1));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Wrist self-test complete")));
     }
 

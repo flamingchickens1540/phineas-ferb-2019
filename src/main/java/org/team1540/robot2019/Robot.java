@@ -1,5 +1,7 @@
 package org.team1540.robot2019;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -63,6 +65,7 @@ public class Robot extends TimedRobot {
         intake = new Intake();
         hatch = new HatchMech();
         climber = new Climber();
+        leds = new LEDs();
 //
 //        odometry = new TankDriveOdometryRunnable(
 //            drivetrain::getLeftPositionMeters,
@@ -86,18 +89,20 @@ public class Robot extends TimedRobot {
 
         ShuffleboardDisplay.init();
 
+        // TODO: use shuffleboard properly
         SmartDashboard.putBoolean("IsHatchPreload", false);
         SmartDashboard.putBoolean("Debug Mode", false);
 
-        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
-        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
-
         SmartDashboard.putBoolean("EnableCompressor", true);
 
-        SmartDashboard.setDefaultBoolean("TurnOffLimelightWhenNotInUse", true);
-        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
-            Robot.limelight.setLeds(false);
-        }
+        Robot.limelight.setLeds(false);
+
+        UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("backup cam", 0);
+        cam.setResolution(128, 73);
+        cam.setFPS(30);
+
+        double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+        logger.info("Robot ready. Initialization took " + (end - start) + " ms");
     }
 
     @Override
@@ -125,10 +130,11 @@ public class Robot extends TimedRobot {
         disableBrakes = true;
 
         Robot.hatch.retract();
+        Robot.hatch.grab(); // otherwise we might flicker grab-release on enable
 
         if (DriverStation.getInstance().isFMSAttached()) {
             logger.debug("FMS is attached, auto-stopping recording");
-            Shuffleboard.stopRecording();
+//            Shuffleboard.stopRecording();
         }
 
         Shuffleboard.addEventMarker("Robot Disable", EventImportance.kNormal);
@@ -147,10 +153,6 @@ public class Robot extends TimedRobot {
             disableBrakes = false;
 
             Shuffleboard.addEventMarker("Mechanism brakes disabled", EventImportance.kTrivial);
-
-            if (!SmartDashboard.getBoolean("IsHatchPreload", true)) {
-                Robot.hatch.release();
-            }
         }
     }
 
@@ -167,7 +169,7 @@ public class Robot extends TimedRobot {
                     .getMatchType() + "-" + DriverStation.getInstance().getMatchNumber()
                     + "-${date}-${time}");
 
-            Shuffleboard.startRecording();
+//            Shuffleboard.startRecording();
         }
 
         Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
@@ -175,6 +177,12 @@ public class Robot extends TimedRobot {
         if (elevator.getPosition() < 1) {
             elevator.setRaw(0);
         }
+
+//        if (SmartDashboard.getBoolean("IsHatchPreload", true)) {
+//            Robot.hatch.grab();
+//        } else {
+//            Robot.hatch.release();
+//        }
     }
 
     @Override
@@ -190,7 +198,7 @@ public class Robot extends TimedRobot {
         Hardware.checkStickyFaults();
 
         if (DriverStation.getInstance().isFMSAttached()) {
-            Shuffleboard.startRecording();
+//            Shuffleboard.startRecording();
         }
 
         Shuffleboard.addEventMarker("Teleop Start", EventImportance.kNormal);
