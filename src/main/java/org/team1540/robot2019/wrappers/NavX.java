@@ -25,6 +25,14 @@ public class NavX {
         return -Math.toRadians(navx.getAngle());
     }
 
+    public double getAccelX() {
+        return navx.getWorldLinearAccelY();
+    }
+
+    public double getAccelY() {
+        return -navx.getWorldLinearAccelX();
+    }
+
     /**
      * This is bad. Do NOT use this. Re-tune your PID if you have to.
      *
