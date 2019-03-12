@@ -113,6 +113,8 @@ public class OI {
 
     public static StrictDPadButton strobeRedBlueButton = new StrictDPadButton(driver, 0, DPadAxis.DOWN);
 
+    public static MultiAxisButton autoAlignStartButton = new MultiAxisButton(driver, 0.4, new int[]{RIGHT_X, RIGHT_Y});
+
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
