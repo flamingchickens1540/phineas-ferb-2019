@@ -1,7 +1,6 @@
 package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.drivetrain.PointDrive;
@@ -11,7 +10,7 @@ public class PercentManualLineupSequence extends CommandGroup {
     private PercentManualLineup command;
 
     public PercentManualLineupSequence() {
-        addSequential(new WaitCommand(0.05)); // Wait for leds to turn on
+//        addSequential(new WaitCommand(0.05)); // Wait for leds to turn on
 
         command = new PercentManualLineup();
         addSequential(command);
