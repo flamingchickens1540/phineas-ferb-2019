@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
+import org.team1540.robot2019.commands.auto.PrimeForHitGrabSequence;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
 import org.team1540.robot2019.commands.cargo.ForwardThenEject;
@@ -25,6 +26,8 @@ import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.TestGrabHatch;
 import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
+import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
+import org.team1540.robot2019.commands.hatch.simple.GrabHatch;
 import org.team1540.robot2019.commands.leds.BlinkLEDs;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.rooster.Utilities;
@@ -113,6 +116,12 @@ public class OI {
 
     public static StrictDPadButton strobeRedBlueButton = new StrictDPadButton(driver, 0, DPadAxis.DOWN);
 
+    public static JoystickButton primeForPlaceButton = new JoystickButton(driver, X);
+    public static JoystickButton hatchOutButton = new JoystickButton(driver, LB);
+    public static Button hatchGrabButton = new AxisButton(driver, 0.7, RIGHT_TRIG);
+
+    public static MultiAxisButton autoAlignStartButton = new MultiAxisButton(driver, 0.4, new int[]{RIGHT_X, RIGHT_Y});
+
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
@@ -172,6 +181,8 @@ public class OI {
 //        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
 //        quickTurnButton.whenPressed(quickTurnCommand);
 //        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
+        hatchOutButton.whenPressed(new ExtendHatchMech());
+        hatchGrabButton.whenPressed(new GrabHatch());
 
         testGrabHatchButton.whenPressed(new TestGrabHatch());
         testPlaceHatchButton.whenPressed(new TestPlaceHatch());
@@ -201,6 +212,8 @@ public class OI {
         Shuffleboard.getTab("Phineas").add(reset_point_offset);
 
         strobeRedBlueButton.whenPressed(new BlinkLEDs(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
+
+        primeForPlaceButton.whenPressed(new PrimeForHitGrabSequence());
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");

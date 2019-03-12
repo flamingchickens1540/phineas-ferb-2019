@@ -15,6 +15,7 @@ public class WaitForHit extends Command {
 
     @Override
     protected void initialize() {
+        lastAccelX = 0;
         NetworkTableInstance.getDefault().getTable("HitDetection").getEntry("HIT_JERK_THRESHOLD").setDefaultNumber(HIT_JERK_THRESHOLD);
         HIT_JERK_THRESHOLD = NetworkTableInstance.getDefault().getTable("HitDetection").getEntry("HIT_JERK_THRESHOLD").getDouble(HIT_JERK_THRESHOLD);
     }

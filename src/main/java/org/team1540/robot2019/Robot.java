@@ -66,21 +66,21 @@ public class Robot extends TimedRobot {
         hatch = new HatchMech();
         climber = new Climber();
         leds = new LEDs();
-//
-//        odometry = new TankDriveOdometryRunnable(
-//            drivetrain::getLeftPositionMeters,
-//            drivetrain::getRightPositionMeters,
-//            Hardware.navx::getAngleRadians,
-//            0.011
-//        );
-//
+
+        odometry = new TankDriveOdometryRunnable(
+            drivetrain::getLeftPositionMeters,
+            drivetrain::getRightPositionMeters,
+            Hardware.navx::getAngleRadians,
+            0.011
+        );
+
         limelight = new Limelight("limelight-a",
             new Transform3D(RobotMap.CAM_X, RobotMap.CAM_Y, RobotMap.CAM_Z, RobotMap.CAM_ROLL,
                 RobotMap.CAM_PITCH, RobotMap.CAM_YAW));
-//        lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
-//        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight,
-//            RobotMap.PLANE_HEIGHT, 0.05,
-//            lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
+        lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
+        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight,
+            RobotMap.PLANE_HEIGHT, 0.05,
+            lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 //
 //        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800,
 //            "10.15.40.202", 0.01);
@@ -110,13 +110,13 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
-//        odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
-//        if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
-//            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D()
-//                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
-//            deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D()
-//                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
-//        }
+        odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
+        if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
+            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D()
+                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
+            deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D()
+                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+        }
 
         SmartDashboard.putNumber("DrivetrainLeftPos", drivetrain.getLeftPositionTicks());
         SmartDashboard.putNumber("DrivetrainRightPos", drivetrain.getRightPositionTicks());
