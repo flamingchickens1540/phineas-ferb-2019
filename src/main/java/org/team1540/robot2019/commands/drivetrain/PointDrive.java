@@ -19,17 +19,25 @@ public class PointDrive extends PIDCommand {
 
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
-    private static double DEADZONE;// = 0;
+
+    //            SmartDashboard.putNumber("PointDrive/min", 0);
+//        SmartDashboard.putNumber("PointDrive/max", 10);
+//        SmartDashboard.putNumber("PointDrive/outScalar", 20);
+//        SmartDashboard.putNumber("PointDrive/P", 0.2);
+//        SmartDashboard.putNumber("PointDrive/I", 0);
+//        SmartDashboard.putNumber("PointDrive/D", 0.5);
+//        SmartDashboard.putNumber("PointDrive/deadZone", 0.05);
+    private static double DEADZONE = 0.05;// = 0;
 
     // Max/Min angular velocity
-    private static double MIN_VEL_THETA;// = 0.4;
-    private static double MAX_VEL_THETA;// = 5;
-    private static double OUTPUT_SCALAR;// = 5;
+    private static double MIN_VEL_THETA = 0;// = 0.4;
+    private static double MAX_VEL_THETA = 10;// = 5;
+    private static double OUTPUT_SCALAR = 20;// = 5;
 
     // Constants for angular VPID controller
-//    private static final double ANGULAR_KP = -0.7;
-//    private static final double ANGULAR_KI = 0;
-//    private static final double ANGULAR_KD = -2;
+    private static final double ANGULAR_KP = 0.2;
+    private static final double ANGULAR_KI = 0;
+    private static final double ANGULAR_KD = 0.5;
 
     private static Double initAngleOffset;
     private static Double lastGoalAngle = null;
@@ -39,15 +47,10 @@ public class PointDrive extends PIDCommand {
 
     public PointDrive() {
         super(
-            SmartDashboard.getNumber("PointDrive/P", 0),
-            SmartDashboard.getNumber("PointDrive/I", 0),
-            SmartDashboard.getNumber("PointDrive/D", 0)
+            ANGULAR_KP,
+            ANGULAR_KI,
+            ANGULAR_KD
         );
-        MIN_VEL_THETA = SmartDashboard.getNumber("PointDrive/min", 0);
-        MAX_VEL_THETA = SmartDashboard.getNumber("PointDrive/max", 0);
-        OUTPUT_SCALAR = SmartDashboard.getNumber("PointDrive/outScalar", 0);
-        DEADZONE = SmartDashboard.getNumber("PointDrive/deadZone", 0);
-
         System.out.println("Point drive init");
         PointDrive.initAngleOffset = Hardware.navx.getYawRadians();
         requires(Robot.drivetrain);

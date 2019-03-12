@@ -95,10 +95,10 @@ public class OI {
     public static JoystickButton quickTurnButton = new JoystickButton(driver, LB);
     //    public static JoystickButton autoAlignButtonAlt = new JoystickButton(driver, RB);
     public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
-    public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, 0.7, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
-    public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
+    public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, 0.5, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
+//    public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
 
-    public static AxisButton autoAlignPointButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
+    //    public static AxisButton autoAlignPointButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
 //    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
     public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
     public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
@@ -152,19 +152,22 @@ public class OI {
         cancelClimbButton.cancelWhenPressed(climbCommand3);
         cancelClimbButton.cancelWhenPressed(climbCommand2);
 
-        alignCommand = new PercentManualLineupSequence();
-        autoAlignButton.whenPressed(alignCommand);
+//        alignCommand = new PercentManualLineupSequence();
+//        autoAlignButton.whenPressed(alignCommand);
 //        autoAlignButtonAlt.whenPressed(alignCommand);
 
 //        autoAlignButton.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
 //        autoAlignButtonAlt.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
-        autoAlignCancelAxisButton.cancelWhenPressed(alignCommand);
-        elevatorMidRocketButton.cancelWhenPressed(alignCommand);
-        elevatorCargoShipButton.cancelWhenPressed(alignCommand);
-        intakeLoadingStationButton.cancelWhenPressed(alignCommand);
-        autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
+//        autoAlignCancelAxisButton.cancelWhenPressed(alignCommand);
+//        elevatorMidRocketButton.cancelWhenPressed(alignCommand);
+//        elevatorCargoShipButton.cancelWhenPressed(alignCommand);
+//        intakeLoadingStationButton.cancelWhenPressed(alignCommand);
+//        autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
 
-        autoAlignPointButton.whenPressed(alignCommand);
+//        autoAlignPointButton.whenPressed(alignCommand);
+
+        autoAlignStartButton.whileHeld(new PointDrive());
+//        autoAlignStartButton.whenReleased(new SimpleCommand("", () -> OI.pointDrive.cancel()));
 
 //        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
 //        quickTurnButton.whenPressed(quickTurnCommand);
