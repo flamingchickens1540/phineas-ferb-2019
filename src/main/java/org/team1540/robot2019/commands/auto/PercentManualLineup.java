@@ -53,19 +53,13 @@ public class PercentManualLineup extends PIDCommand {
         this.getPIDController().setP(ANGULAR_KP); // TODO: Is this allowed??
         this.getPIDController().setI(ANGULAR_KI);
         this.getPIDController().setD(ANGULAR_KD);
-        double x = Robot.limelight.getTargetAngles().getX();
-        if (!Robot.limelight.isTargetFound() || x == 0) {
-            goal = null;
-            logger.warn("Unable to find target and no alternative specified! Ending...");
-        } else {
-            goal = x - Hardware.navx.getYawRadians();
-            logger.debug("Point lineup simple starting. Initial goal angle: " + goal);
-        }
+
     }
 
     @Override
     protected void execute() {
-        if (goal == null) {
+        if (!Robot.limelight.isTargetFound()) {
+            goal = null;
             return;
         }
         double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
@@ -76,7 +70,8 @@ public class PercentManualLineup extends PIDCommand {
 
     @Override
     protected boolean isFinished() {
-        return goal == null;
+//        return goal == null;
+        return false;
     }
 
     @Override
