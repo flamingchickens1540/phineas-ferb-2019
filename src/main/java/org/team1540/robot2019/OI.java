@@ -117,7 +117,7 @@ public class OI {
 
     public static StrictDPadButton strobeRedBlueButton = new StrictDPadButton(driver, 0, DPadAxis.DOWN);
 
-    public static MultiAxisButton autoAlignStartButton = new MultiAxisButton(driver, 0.4, new int[]{RIGHT_X, RIGHT_Y});
+    public static MultiAxisButton pointDrivePointAxis = new MultiAxisButton(driver, 0.4, new int[]{RIGHT_X, RIGHT_Y});
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -159,23 +159,8 @@ public class OI {
         cancelClimbButton.cancelWhenPressed(climbCommand3);
         cancelClimbButton.cancelWhenPressed(climbCommand2);
 
-//        alignCommand = new PercentManualLineupSequence();
-//        autoAlignButton.whenPressed(alignCommand);
-//        autoAlignButtonAlt.whenPressed(alignCommand);
-
-//        autoAlignButton.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
-//        autoAlignButtonAlt.whenReleased(new SimpleCommand("Cancel Auto-lineup", alignCommand::cancel));
-//        autoAlignCancelAxisButton.cancelWhenPressed(alignCommand);
-//        elevatorMidRocketButton.cancelWhenPressed(alignCommand);
-//        elevatorCargoShipButton.cancelWhenPressed(alignCommand);
-//        intakeLoadingStationButton.cancelWhenPressed(alignCommand);
-//        autoAlignManualCancelButton.cancelWhenPressed(alignCommand);
-
-//        autoAlignPointButton.whenPressed(alignCommand);
-
-        autoAlignStartButton.whileHeld(new PointDrive());
-        autoAlignStartButton.whenReleased(new PercentManualLineupSequence());
-//        autoAlignStartButton.whenReleased(new SimpleCommand("", () -> OI.pointDrive.cancel()));
+        pointDrivePointAxis.whileHeld(new PointDrive());
+        pointDrivePointAxis.whenReleased(new PercentManualLineupSequence());
 
 //        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
 //        quickTurnButton.whenPressed(quickTurnCommand);
@@ -194,7 +179,7 @@ public class OI {
                 .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
                 .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
                 .then(Robot.drivetrain.getPipelineOutput(false)), Robot.drivetrain);
-        arcadeToggle.whenPressed(new SimpleCommand("Toggle Auto Lineup", () -> {
+        arcadeToggle.toggleWhenPressed(new SimpleCommand("Arcade toggle", () -> {
             if (arcadeCommand.isRunning()) {
                 arcadeCommand.cancel();
             } else {
