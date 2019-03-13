@@ -97,9 +97,12 @@ public class Robot extends TimedRobot {
 
         Robot.limelight.setLeds(false);
 
-        UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("backup cam", 0);
-        cam.setResolution(128, 73);
-        cam.setFPS(30);
+        SmartDashboard.setDefaultBoolean("EnableBackupCam", false);
+        if (SmartDashboard.getBoolean("EnableBackupCam", false)) {
+            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("backup cam", 0);
+            cam.setResolution(128, 73);
+            cam.setFPS(30);
+        }
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
