@@ -2,7 +2,6 @@ package org.team1540.robot2019.commands.leds;
 
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 
 public class GamePieceLEDs extends Command {
 
@@ -12,16 +11,16 @@ public class GamePieceLEDs extends Command {
 
     @Override
     protected void execute() {
-        LEDColor color;
-        if (Robot.intake.hasBall()) {
-            color = LEDColor.RED;
+        if (Robot.limelight.isTargetFound()) {
+            Robot.leds.setRaw(false, false,  true );
+        } else if (Robot.intake.hasBall()) {
+            Robot.leds.setRaw(true, false,  false );
         } else if (!Robot.hatch.isReleased()) {
-            color = LEDColor.BLUE;
+            Robot.leds.setRaw(false, true,  false );
         } else {
-            color = LEDColor.OFF;
+            Robot.leds.setRaw(false, false,  false );
         }
 
-        Robot.leds.setColor(color);
     }
 
     @Override

@@ -11,6 +11,12 @@ public class LEDs extends Subsystem {
         Hardware.blueLEDs.set(color.blue);
     }
 
+    public void setRaw(boolean red, boolean blue, boolean green) {
+        Hardware.redLEDs.set(red);
+        Hardware.blueLEDs.set(blue);
+        Hardware.greenLEDs.set(green);
+    }
+
     @Override
     protected void initDefaultCommand() {
         setDefaultCommand(new GamePieceLEDs());
