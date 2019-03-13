@@ -19,14 +19,6 @@ public class PointDrive extends PIDCommand {
 
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
-
-    //            SmartDashboard.putNumber("PointDrive/min", 0);
-//        SmartDashboard.putNumber("PointDrive/max", 10);
-//        SmartDashboard.putNumber("PointDrive/outScalar", 20);
-//        SmartDashboard.putNumber("PointDrive/P", 0.2);
-//        SmartDashboard.putNumber("PointDrive/I", 0);
-//        SmartDashboard.putNumber("PointDrive/D", 0.5);
-//        SmartDashboard.putNumber("PointDrive/deadZone", 0.05);
     private static double DEADZONE = 0.05;// = 0;
 
     // Max/Min angular velocity
