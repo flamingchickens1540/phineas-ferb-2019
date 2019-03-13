@@ -89,8 +89,10 @@ public class PercentManualLineup extends PIDCommand {
 
         if (Robot.limelight.isTargetFound()) {
             double x = Robot.limelight.getTargetAngles().getX();
-            goal = x - Hardware.navx.getYawRadians();
+            goal = x - Hardware.navx.getYawRadians(); // Get rid of this
             logger.debug("PercentManualLineup starting. Initial goal angle: " + goal);
+        } else {
+            goal = null;
         }
     }
 
@@ -102,14 +104,13 @@ public class PercentManualLineup extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        if (goal == null) {
+        if (Robot.limelight.isTargetFound()) {
+            double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0)); // TODO: Use limelight interface
+            goal = -(x - ANGLE_OFFSET) + Hardware.navx.getYawRadians();
+            return getAngleError(goal);
+        } else {
             return 0;
         }
-        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0)); // TODO: Use limelight interface
-        if (x != 0) {
-            goal = -(x - ANGLE_OFFSET) + Hardware.navx.getYawRadians();
-        }
-        return getAngleError(goal);
     }
 
     @Override
