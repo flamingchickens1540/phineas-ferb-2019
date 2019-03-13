@@ -3,9 +3,9 @@ package org.team1540.robot2019.commands.leds;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2019.Robot;
 
-public class GamePieceLEDs extends Command {
+public class StatusLEDs extends Command {
 
-    public GamePieceLEDs() {
+    public StatusLEDs() {
         requires(Robot.leds);
     }
 
