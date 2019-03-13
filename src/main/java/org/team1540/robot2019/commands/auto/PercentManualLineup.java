@@ -102,7 +102,7 @@ public class PercentManualLineup extends PIDCommand {
     protected void usePIDOutput(double output) {
 //        output *= MAX_VEL_THETA;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-        if (Math.abs(output) < DEADZONE_VEL_THETA) {
+        if (Math.abs(output) < DEADZONE_VEL_THETA || Robot.elevator.getPosition() > 4) {
             cmdVelTheta = 0;
         }
         Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta);
