@@ -159,7 +159,9 @@ public class OI {
         cancelClimbButton.cancelWhenPressed(climbCommand3);
         cancelClimbButton.cancelWhenPressed(climbCommand2);
 
-        pointDrivePointAxis.whileHeld(new PointDrive());
+        PointDrive pointDriveCommand = new PointDrive();
+        pointDrivePointAxis.whileHeld(pointDriveCommand);
+
         pointDrivePointAxis.whenReleased(new PercentManualLineupSequence());
 
 //        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
@@ -172,6 +174,11 @@ public class OI {
         testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
 
         testWaitPlaceHatchButton.whenPressed(new PrimeForSensorTripSequence());
+
+        intakeLoadingStationButton.whenPressed(pointDriveCommand);
+        elevatorCargoShipButton.whenPressed(pointDriveCommand);
+        elevatorMidRocketButton.whenPressed(pointDriveCommand);
+        testElevatorMidRocketButton.whenPressed(pointDriveCommand);
 
         Command arcadeCommand = new SimpleLoopCommand("Drive",
             new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
