@@ -129,7 +129,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
     }
 
     public void prepForDriverCam() {
-        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
+        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", false)) {
             setLeds(false);
         }
 //        setDriverCam(true);
