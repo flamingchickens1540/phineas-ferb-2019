@@ -1,0 +1,16 @@
+package org.team1540.robot2019.commands.hatch;
+
+import edu.wpi.first.wpilibj.command.Command;
+import org.team1540.robot2019.Robot;
+
+public class WaitForExtendTrip extends Command {
+
+    @Override
+    protected boolean isFinished() {
+        if (Robot.hatch.wasExtendSensorTripped()) {
+            Robot.hatch.clearExtendSensor();
+            return true;
+        }
+        return false;
+    }
+}

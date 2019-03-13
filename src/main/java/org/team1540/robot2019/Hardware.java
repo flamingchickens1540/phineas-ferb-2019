@@ -52,6 +52,7 @@ public class Hardware {
     public static DigitalInput wristMidSwitch;
     public static DigitalInput wristBtmSwitch;
 
+    public static DigitalInput hatchExtendSwitch;
 
     // solenoid on is wrist extended/down
     public static ChickenController wristMotor;
@@ -244,6 +245,8 @@ public class Hardware {
 
         hatchSlide = new Solenoid(RobotMap.HATCH_SLIDE);
         hatchGrabber = new Solenoid(RobotMap.HATCH_GRABBER);
+
+        hatchExtendSwitch = new DigitalInput(RobotMap.HATCH_EXTEND_SW);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized hatch mech in " + (end - start) + " ms");
