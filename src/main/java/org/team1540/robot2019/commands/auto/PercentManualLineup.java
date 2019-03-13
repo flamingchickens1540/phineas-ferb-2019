@@ -29,9 +29,9 @@ public class PercentManualLineup extends PIDCommand {
     private static double MAX_VEL_THETA = 10;
 
     // Constants for angular VPID controller
-    private static double ANGULAR_KP = 0.4;
+    private static double ANGULAR_KP = 0.32;
     private static double ANGULAR_KI = 0;
-    private static double ANGULAR_KD = 1;
+    private static double ANGULAR_KD = 0.6;
 //
 //    // Max/Min angular velocity
 //    public static double MAX_VEL_THETA = 1;
