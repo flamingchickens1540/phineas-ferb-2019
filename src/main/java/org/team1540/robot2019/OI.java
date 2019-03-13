@@ -22,6 +22,7 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
+import org.team1540.robot2019.commands.hatch.PrimeForSensorTripSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.TestGrabHatch;
 import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
@@ -102,6 +103,9 @@ public class OI {
 //    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
     public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
     public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
+
+    public static JoystickButton testWaitPlaceHatchButton = new JoystickButton(driver, X);
+
     private static Button testElevatorMidRocketButton = new StrictDPadButton(driver, 0, DPadAxis.UP);
 
     public static JoystickButton resetPointOffset = new JoystickButton(driver, Y);
@@ -179,6 +183,8 @@ public class OI {
         testPlaceHatchButton.whenPressed(new TestPlaceHatch());
         testElevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
+
+        testWaitPlaceHatchButton.whenPressed(new PrimeForSensorTripSequence());
 
         Command arcadeCommand = new SimpleLoopCommand("Drive",
             new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
