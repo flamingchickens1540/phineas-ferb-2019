@@ -19,7 +19,7 @@ public class PointDrive extends PIDCommand {
 
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
-    private static double DEADZONE = 0.05;// = 0;
+    private static double DEADZONE_VEL_THETA = 0.05;// = 0;
 
     // Max/Min angular velocity
     private static double MIN_VEL_THETA = 0;// = 0.4;
@@ -90,7 +90,7 @@ public class PointDrive extends PIDCommand {
     protected void usePIDOutput(double output) {
         output *= OUTPUT_SCALAR;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-        if (lastGoalAngle == null || Math.abs(output) < DEADZONE) {
+        if (lastGoalAngle == null || Math.abs(output) < DEADZONE_VEL_THETA) {
             cmdVelTheta = 0;
         }
         SmartDashboard.putNumber("PointDrive/Debug/cmdVelTheta", cmdVelTheta);
