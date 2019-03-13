@@ -26,6 +26,8 @@ import org.team1540.robot2019.commands.hatch.PrimeForSensorTripSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.TestGrabHatch;
 import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
+import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
+import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.leds.BlinkLEDs;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.rooster.Utilities;
@@ -84,12 +86,13 @@ public class OI {
     private static Button grabHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_TRIG);
     private static JoystickButton placeHatchButton = new JoystickButton(copilot, Y);
     private static Button stowHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
+    private static Button hatchSimpleForwardButton = new AxisButton(copilot, -Tuning.axisButtonThreshold, LEFT_Y);
+    private static Button hatchSimpleBackwardButton = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_Y);
 
     private static Button climbingSafety = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
     private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
     private static JoystickButton climbLevel2Button = new JoystickButton(copilot, LB); // + safety
     private static JoystickButton climberCylinderUp = new JoystickButton(copilot, BACK);
-    private static Button cancelClimbButton = new AxisButton(copilot, -Tuning.axisButtonThreshold, LEFT_Y);
 
     // driver buttons
 
@@ -151,13 +154,16 @@ public class OI {
         grabHatchButton.whenPressed(new GrabHatchThenBack());
         stowHatchButton.whenPressed(new StowHatchMech());
 
+        hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
+        hatchSimpleBackwardButton.whenPressed(new RetractHatchMech());
+
         Command climbCommand3 = new ClimbLevelThree();
         Command climbCommand2 = new ClimbLevelTwo();
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand3));
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand2));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
-        cancelClimbButton.cancelWhenPressed(climbCommand3);
-        cancelClimbButton.cancelWhenPressed(climbCommand2);
+//        cancelClimbButton.cancelWhenPressed(climbCommand3);
+//        cancelClimbButton.cancelWhenPressed(climbCommand2);
 
 //        alignCommand = new PercentManualLineupSequence();
 //        autoAlignButton.whenPressed(alignCommand);
