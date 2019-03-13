@@ -18,7 +18,7 @@ public class HatchMech extends Subsystem {
         Hardware.hatchExtendSwitch.requestInterrupts(new InterruptHandlerFunction<>() {
             @Override
             public void interruptFired(int i, Object o) {
-                logger.debug("Mid Switch Interrupt");
+                logger.debug("Hatch Extend Interrupt");
                 extendFlag = true;
             }
         });
