@@ -2,6 +2,7 @@ package org.team1540.robot2019.wrappers;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
@@ -128,7 +129,9 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
     }
 
     public void prepForDriverCam() {
-//        setLeds(false);
+        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", true)) {
+            setLeds(false);
+        }
 //        setDriverCam(true);
     }
 
