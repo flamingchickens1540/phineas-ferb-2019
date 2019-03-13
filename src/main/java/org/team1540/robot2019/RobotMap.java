@@ -41,7 +41,7 @@ public class RobotMap {
     public static final int WRIST_MID_SW = 2;
     public static final int WRIST_BTM_SW = 3;
 
-    public static final int HATCH_EXTEND_SW = 5;
+    public static final int HATCH_EXTEND_SW = 4;
 
     public static final int INTAKE_SENSOR = 0;
 

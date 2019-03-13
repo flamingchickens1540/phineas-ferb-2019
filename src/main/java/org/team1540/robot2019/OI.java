@@ -143,7 +143,8 @@ public class OI {
         ejectButton.whenReleased(new BackThenDown());
         ejectButton.whenReleased(new SimpleCommand("", command::cancel));
 
-        prepGetHatchButton.whenPressed(new TestGrabHatch());
+        prepGetHatchButton.whenPressed(new PrimeForSensorTripSequence());
+//        prepGetHatchButton.whenPressed(new TestGrabHatch());
         placeHatchButton.whenPressed(new TestPlaceHatch());
 
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());

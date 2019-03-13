@@ -76,7 +76,7 @@ public class PercentManualLineup extends PIDCommand {
 
     @Override
     protected boolean isFinished() {
-        return goal == null;
+        return false;
     }
 
     @Override

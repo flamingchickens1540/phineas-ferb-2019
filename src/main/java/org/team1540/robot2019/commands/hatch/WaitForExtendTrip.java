@@ -6,6 +6,11 @@ import org.team1540.robot2019.Robot;
 public class WaitForExtendTrip extends Command {
 
     @Override
+    protected void initialize() {
+        Robot.hatch.clearExtendSensor();
+    }
+
+    @Override
     protected boolean isFinished() {
         if (Robot.hatch.wasExtendSensorTripped()) {
             Robot.hatch.clearExtendSensor();
