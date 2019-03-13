@@ -21,8 +21,8 @@ public class PercentManualLineup extends PIDCommand {
     public static final Logger logger = Logger.getLogger(PercentManualLineup.class);
 
     // Max/Min angular velocity
-    public static double MIN_VEL_THETA = 0.06;
     public static double MAX_VEL_THETA = 1;
+    public static double MIN_VEL_THETA = 0.06;
 
     public static double DEADZONE_VEL_THETA = 0.005;
 
@@ -49,9 +49,9 @@ public class PercentManualLineup extends PIDCommand {
         SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KP", PercentManualLineup.ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
         SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KI", PercentManualLineup.ANGULAR_KI);
         SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KD", PercentManualLineup.ANGULAR_KD);
+        SmartDashboard.setDefaultNumber("PercentLineup/MAX_VEL_THETA", PercentManualLineup.MAX_VEL_THETA);
         SmartDashboard.setDefaultNumber("PercentLineup/MIN_VEL_THETA", PercentManualLineup.MIN_VEL_THETA);
         SmartDashboard.setDefaultNumber("PercentLineup/DEADZONE_VEL_THETA", PercentManualLineup.DEADZONE_VEL_THETA);
-        SmartDashboard.setDefaultNumber("PercentLineup/MAX_VEL_THETA", PercentManualLineup.MAX_VEL_THETA);
         SmartDashboard.setDefaultNumber("PercentLineup/ANGLE_OFFSET", PercentManualLineup.ANGLE_OFFSET);
     }
 
@@ -60,44 +60,22 @@ public class PercentManualLineup extends PIDCommand {
         ANGULAR_KP = SmartDashboard.getNumber("PercentLineup/ANGULAR_KP", PercentManualLineup.ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
         ANGULAR_KI = SmartDashboard.getNumber("PercentLineup/ANGULAR_KI", PercentManualLineup.ANGULAR_KI);
         ANGULAR_KD = SmartDashboard.getNumber("PercentLineup/ANGULAR_KD", PercentManualLineup.ANGULAR_KD);
+        MAX_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MAX_VEL_THETA", PercentManualLineup.MAX_VEL_THETA);
         MIN_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MIN_VEL_THETA", PercentManualLineup.MIN_VEL_THETA);
         DEADZONE_VEL_THETA = SmartDashboard.getNumber("PercentLineup/DEADZONE_VEL_THETA", PercentManualLineup.DEADZONE_VEL_THETA);
-        MAX_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MAX_VEL_THETA", PercentManualLineup.MAX_VEL_THETA);
         ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineup/ANGLE_OFFSET", PercentManualLineup.ANGLE_OFFSET);
 
         this.getPIDController().setP(ANGULAR_KP);
         this.getPIDController().setI(ANGULAR_KI);
         this.getPIDController().setD(ANGULAR_KD);
-        System.out.printf("Config updated: P: %f I: %f D: %f Max: %f Min: %f", ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, MAX_VEL_THETA, MIN_VEL_THETA);
-        double x = Robot.limelight.getTargetAngles().getX();
-        if (!Robot.limelight.isTargetFound() || x == 0) {
-            goal = null;
-            logger.warn("Unable to find target and no alternative specified! Ending...");
-        } else {
+
+        System.out.printf("PercentManualLineup initialized with constants: P: %f I: %f D: %f Max: %f Min: %f", ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, MAX_VEL_THETA, MIN_VEL_THETA);
+
+        if (Robot.limelight.isTargetFound()) {
+            double x = Robot.limelight.getTargetAngles().getX();
             goal = x - Hardware.navx.getYawRadians();
-            logger.debug("Point lineup simple starting. Initial goal angle: " + goal);
+            logger.debug("PercentManualLineup starting. Initial goal angle: " + goal);
         }
-    }
-
-    @Override
-    protected void execute() {
-        if (goal == null) {
-            return;
-        }
-        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0));
-        if (x != 0) {
-            goal = -(x - ANGLE_OFFSET) + Hardware.navx.getYawRadians();
-        }
-    }
-
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    protected void end() {
-        logger.debug("SimplePointToTarget Ended!");
     }
 
     private double getAngleError(double x) {
@@ -111,19 +89,31 @@ public class PercentManualLineup extends PIDCommand {
         if (goal == null) {
             return 0;
         }
+        double x = Math.toRadians(NetworkTableInstance.getDefault().getTable("limelight-a").getEntry("tx").getDouble(0)); // TODO: Use limelight interface
+        if (x != 0) {
+            goal = -(x - ANGLE_OFFSET) + Hardware.navx.getYawRadians();
+        }
         return getAngleError(goal);
     }
 
     @Override
     protected void usePIDOutput(double output) {
-//        output *= MAX_VEL_THETA;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
         if (Math.abs(output) < DEADZONE_VEL_THETA || Robot.elevator.getPosition() > 4) {
             cmdVelTheta = 0;
         }
         Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta);
         Robot.drivetrain.setPercentTwist(cmdVel);
-//        twist2DInput.setTwist(cmdVel);
-//        pipeline.execute();
+    }
+
+
+    @Override
+    protected boolean isFinished() {
+        return false;
+    }
+
+    @Override
+    protected void end() {
+        logger.debug("PercentManualLineup Ended!");
     }
 }
