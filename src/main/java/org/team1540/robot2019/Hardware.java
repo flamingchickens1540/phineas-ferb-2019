@@ -72,8 +72,9 @@ public class Hardware {
 
     public static DoubleSolenoid climberCylinder;
 
-    public static Solenoid blueLEDs;
     public static Solenoid redLEDs;
+    public static Solenoid greenLEDs;
+    public static Solenoid blueLEDs;
 
     public static AnalogInput pressureSensor;
 
@@ -324,8 +325,9 @@ public class Hardware {
         logger.info("Initializing LEDs...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        blueLEDs = new Solenoid(RobotMap.LED_BLUE);
         redLEDs = new Solenoid(RobotMap.LED_RED);
+        greenLEDs = new Solenoid(RobotMap.LED_GREEN);
+        blueLEDs = new Solenoid(RobotMap.LED_BLUE);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized LEDs in " + (end - start) + " ms");
