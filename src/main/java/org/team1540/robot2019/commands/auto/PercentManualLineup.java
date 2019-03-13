@@ -20,18 +20,32 @@ public class PercentManualLineup extends PIDCommand {
 
     public static final Logger logger = Logger.getLogger(PercentManualLineup.class);
 
-    // Max/Min angular velocity
-    public static double MAX_VEL_THETA = 1;
-    public static double MIN_VEL_THETA = 0.06;
+    private static double OUTPUT_SCALAR = 20;
 
-    public static double DEADZONE_VEL_THETA = 0.005;
+    private static double DEADZONE_VEL_THETA = 0.05;
+
+    // Max/Min angular velocity
+    private static double MIN_VEL_THETA = 0;
+    private static double MAX_VEL_THETA = 10;
 
     // Constants for angular VPID controller
-    public static double ANGULAR_KP = -0.55;
-    public static double ANGULAR_KI = 0;
-    public static double ANGULAR_KD = -2;
+    private static double ANGULAR_KP = 0.2;
+    private static double ANGULAR_KI = 0;
+    private static double ANGULAR_KD = 0.5;
+//
+//    // Max/Min angular velocity
+//    public static double MAX_VEL_THETA = 1;
+//    public static double MIN_VEL_THETA = 0.06;
+//
+//    public static double DEADZONE_VEL_THETA = 0.005;
+//
+//    // Constants for angular VPID controller
+//    public static double ANGULAR_KP = -0.55;
+//    public static double ANGULAR_KI = 0;
+//    public static double ANGULAR_KD = -2;
 
-    public static double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
+    public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
+//    public static double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
@@ -42,28 +56,30 @@ public class PercentManualLineup extends PIDCommand {
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
-            .then(new FeedForwardProcessor(0, 0, 0))
+            .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
-            .then(Robot.drivetrain.getPipelineOutput());
+            .then(Robot.drivetrain.getPipelineOutput(false));
 
-        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KP", PercentManualLineup.ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
-        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KI", PercentManualLineup.ANGULAR_KI);
-        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KD", PercentManualLineup.ANGULAR_KD);
-        SmartDashboard.setDefaultNumber("PercentLineup/MAX_VEL_THETA", PercentManualLineup.MAX_VEL_THETA);
-        SmartDashboard.setDefaultNumber("PercentLineup/MIN_VEL_THETA", PercentManualLineup.MIN_VEL_THETA);
-        SmartDashboard.setDefaultNumber("PercentLineup/DEADZONE_VEL_THETA", PercentManualLineup.DEADZONE_VEL_THETA);
-        SmartDashboard.setDefaultNumber("PercentLineup/ANGLE_OFFSET", PercentManualLineup.ANGLE_OFFSET);
+        SmartDashboard.setDefaultNumber("PercentLineup/OUTPUT_SCALAR", OUTPUT_SCALAR); // TODO: Remove temporary tuning (yaml ftw)
+        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KP", ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
+        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KI", ANGULAR_KI);
+        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KD", ANGULAR_KD);
+        SmartDashboard.setDefaultNumber("PercentLineup/MAX_VEL_THETA", MAX_VEL_THETA);
+        SmartDashboard.setDefaultNumber("PercentLineup/MIN_VEL_THETA", MIN_VEL_THETA);
+        SmartDashboard.setDefaultNumber("PercentLineup/DEADZONE_VEL_THETA", DEADZONE_VEL_THETA);
+        SmartDashboard.setDefaultNumber("PercentLineup/ANGLE_OFFSET", ANGLE_OFFSET);
     }
 
     @Override
     protected void initialize() {
-        ANGULAR_KP = SmartDashboard.getNumber("PercentLineup/ANGULAR_KP", PercentManualLineup.ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
-        ANGULAR_KI = SmartDashboard.getNumber("PercentLineup/ANGULAR_KI", PercentManualLineup.ANGULAR_KI);
-        ANGULAR_KD = SmartDashboard.getNumber("PercentLineup/ANGULAR_KD", PercentManualLineup.ANGULAR_KD);
-        MAX_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MAX_VEL_THETA", PercentManualLineup.MAX_VEL_THETA);
-        MIN_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MIN_VEL_THETA", PercentManualLineup.MIN_VEL_THETA);
-        DEADZONE_VEL_THETA = SmartDashboard.getNumber("PercentLineup/DEADZONE_VEL_THETA", PercentManualLineup.DEADZONE_VEL_THETA);
-        ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineup/ANGLE_OFFSET", PercentManualLineup.ANGLE_OFFSET);
+        ANGULAR_KP = SmartDashboard.getNumber("PercentLineup/OUTPUT_SCALAR", OUTPUT_SCALAR); // TODO: Remove temporary tuning (yaml ftw)
+        ANGULAR_KP = SmartDashboard.getNumber("PercentLineup/ANGULAR_KP", ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
+        ANGULAR_KI = SmartDashboard.getNumber("PercentLineup/ANGULAR_KI", ANGULAR_KI);
+        ANGULAR_KD = SmartDashboard.getNumber("PercentLineup/ANGULAR_KD", ANGULAR_KD);
+        MAX_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MAX_VEL_THETA", MAX_VEL_THETA);
+        MIN_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MIN_VEL_THETA", MIN_VEL_THETA);
+        DEADZONE_VEL_THETA = SmartDashboard.getNumber("PercentLineup/DEADZONE_VEL_THETA", DEADZONE_VEL_THETA);
+        ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineup/ANGLE_OFFSET", ANGLE_OFFSET);
 
         this.getPIDController().setP(ANGULAR_KP);
         this.getPIDController().setI(ANGULAR_KI);
@@ -98,12 +114,20 @@ public class PercentManualLineup extends PIDCommand {
 
     @Override
     protected void usePIDOutput(double output) {
+        output *= OUTPUT_SCALAR;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
         if (Math.abs(output) < DEADZONE_VEL_THETA || Robot.elevator.getPosition() > 4) {
             cmdVelTheta = 0;
         }
-        Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta);
-        Robot.drivetrain.setPercentTwist(cmdVel);
+
+        // no ff
+//        Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -0.7, 0, cmdVelTheta);
+//        Robot.drivetrain.setPercentTwist(cmdVel);
+
+        // ff
+        Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -3, 0, -cmdVelTheta);
+        twist2DInput.setTwist(cmdVel);
+        pipeline.execute();
     }
 
 

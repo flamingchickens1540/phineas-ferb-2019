@@ -19,12 +19,12 @@ public class PointDrive extends PIDCommand {
 
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
-    private static double DEADZONE_VEL_THETA = 0.05;// = 0;
+    private static double DEADZONE_VEL_THETA = 0.05;
 
     // Max/Min angular velocity
-    private static double MIN_VEL_THETA = 0;// = 0.4;
-    private static double MAX_VEL_THETA = 10;// = 5;
-    private static double OUTPUT_SCALAR = 20;// = 5;
+    private static double MIN_VEL_THETA = 0;
+    private static double MAX_VEL_THETA = 10;
+    private static double OUTPUT_SCALAR = 20;
 
     // Constants for angular VPID controller
     private static final double ANGULAR_KP = 0.2;
