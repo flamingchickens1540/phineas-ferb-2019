@@ -21,10 +21,10 @@ public class PercentManualLineup extends PIDCommand {
     public static final Logger logger = Logger.getLogger(PercentManualLineup.class);
 
     // Max/Min angular velocity
-    public static double MIN_VEL_THETA = 0.05;
+    public static double MIN_VEL_THETA = 0.06;
     public static double MAX_VEL_THETA = 1;
 
-    public static double DEADZONE_VEL_THETA = 0.01;
+    public static double DEADZONE_VEL_THETA = 0.005;
 
     // Constants for angular VPID controller
     public static double ANGULAR_KP = -0.55;
@@ -39,20 +39,36 @@ public class PercentManualLineup extends PIDCommand {
 
     public PercentManualLineup() {
         super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
-        System.out.printf("Config updated: P: %f I: %f D: %f Max: %f Min: %f", ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, MAX_VEL_THETA, MIN_VEL_THETA);
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(0, 0, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput());
+
+        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KP", PercentManualLineup.ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
+        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KI", PercentManualLineup.ANGULAR_KI);
+        SmartDashboard.setDefaultNumber("PercentLineup/ANGULAR_KD", PercentManualLineup.ANGULAR_KD);
+        SmartDashboard.setDefaultNumber("PercentLineup/MIN_VEL_THETA", PercentManualLineup.MIN_VEL_THETA);
+        SmartDashboard.setDefaultNumber("PercentLineup/DEADZONE_VEL_THETA", PercentManualLineup.DEADZONE_VEL_THETA);
+        SmartDashboard.setDefaultNumber("PercentLineup/MAX_VEL_THETA", PercentManualLineup.MAX_VEL_THETA);
+        SmartDashboard.setDefaultNumber("PercentLineup/ANGLE_OFFSET", PercentManualLineup.ANGLE_OFFSET);
     }
 
     @Override
     protected void initialize() {
-        this.getPIDController().setP(ANGULAR_KP); // TODO: Is this allowed??
+        ANGULAR_KP = SmartDashboard.getNumber("PercentLineup/ANGULAR_KP", PercentManualLineup.ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
+        ANGULAR_KI = SmartDashboard.getNumber("PercentLineup/ANGULAR_KI", PercentManualLineup.ANGULAR_KI);
+        ANGULAR_KD = SmartDashboard.getNumber("PercentLineup/ANGULAR_KD", PercentManualLineup.ANGULAR_KD);
+        MIN_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MIN_VEL_THETA", PercentManualLineup.MIN_VEL_THETA);
+        DEADZONE_VEL_THETA = SmartDashboard.getNumber("PercentLineup/DEADZONE_VEL_THETA", PercentManualLineup.DEADZONE_VEL_THETA);
+        MAX_VEL_THETA = SmartDashboard.getNumber("PercentLineup/MAX_VEL_THETA", PercentManualLineup.MAX_VEL_THETA);
+        ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineup/ANGLE_OFFSET", PercentManualLineup.ANGLE_OFFSET);
+
+        this.getPIDController().setP(ANGULAR_KP);
         this.getPIDController().setI(ANGULAR_KI);
         this.getPIDController().setD(ANGULAR_KD);
+        System.out.printf("Config updated: P: %f I: %f D: %f Max: %f Min: %f", ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, MAX_VEL_THETA, MIN_VEL_THETA);
         double x = Robot.limelight.getTargetAngles().getX();
         if (!Robot.limelight.isTargetFound() || x == 0) {
             goal = null;
