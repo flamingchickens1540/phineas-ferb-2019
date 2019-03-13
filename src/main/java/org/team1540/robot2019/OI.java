@@ -174,6 +174,7 @@ public class OI {
 //        autoAlignPointButton.whenPressed(alignCommand);
 
         autoAlignStartButton.whileHeld(new PointDrive());
+        autoAlignStartButton.whenReleased(new PercentManualLineupSequence());
 //        autoAlignStartButton.whenReleased(new SimpleCommand("", () -> OI.pointDrive.cancel()));
 
 //        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
