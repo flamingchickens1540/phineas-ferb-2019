@@ -92,7 +92,8 @@ public class PercentManualLineupLocalization extends PIDCommand {
         this.getPIDController().setP(ANGULAR_KP);
         this.getPIDController().setI(ANGULAR_KI);
         this.getPIDController().setD(ANGULAR_KD);
-        logger.debug("Pure pursuit starting...");
+
+        logger.debug("Starting...");
     }
 
     private Transform3D computeGoal() {
@@ -111,10 +112,11 @@ public class PercentManualLineupLocalization extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        if (Robot.limelight.isTargetFound()) {
-            if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
-                goal = computeGoal();
-            }
+        if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
+            goal = computeGoal();
+        }
+
+        if (goal != null && Robot.limelight.isTargetFound()) {
             return getAngleError();
         } else {
             return 0;
@@ -147,6 +149,6 @@ public class PercentManualLineupLocalization extends PIDCommand {
 
     @Override
     protected void end() {
-        logger.debug("PercentManualLineup Ended!");
+        logger.debug("Ended");
     }
 }
