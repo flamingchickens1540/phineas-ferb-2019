@@ -1,6 +1,5 @@
 package org.team1540.robot2019.vision;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Line;
 import org.apache.commons.math3.geometry.euclidean.threed.Plane;
 import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
@@ -61,6 +60,9 @@ public class DualVisionTargetLocalizationUtils {
 
     public static double angleFromVisionTargets(Vector2D left, Vector2D right) {
         Vector2D difference = left.subtract(right);
+        if (difference.getX() < CM_TOLERANCE) {
+            return 0;
+        }
         double atan = Math.atan(difference.getY() / difference.getX()) + Math.PI / 2;
         if (atan > Math.PI / 2) {
             atan = atan - Math.PI;
@@ -79,7 +81,7 @@ public class DualVisionTargetLocalizationUtils {
 
         return new Transform3D(
             midpoint(leftPoint, rightPoint),
-            new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, SmartDashboard.getNumber("angleMultiplier", 1) * angleFromVisionTargets(
+            new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angleFromVisionTargets(
                 xyFromVector3D(leftPoint),
                 xyFromVector3D(rightPoint))));
     }
