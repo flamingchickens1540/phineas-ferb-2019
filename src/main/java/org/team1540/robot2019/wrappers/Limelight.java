@@ -173,4 +173,8 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 //            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point1, getHorizontalFov(), getVerticalFov())
 //        );
     }
+
+    public boolean isLEDsOn() {
+        return limelightTable.getEntry("ledMode").getDouble(1) == 0;
+    }
 }
