@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.auto.PercentManualLineup;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
@@ -98,14 +99,16 @@ public class OI {
 
     public static JoystickButton quickTurnButton = new JoystickButton(driver, LB);
     //    public static JoystickButton autoAlignButtonAlt = new JoystickButton(driver, RB);
-    public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
+//    public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, 0.5, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
 //    public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
 
     //    public static AxisButton autoAlignPointButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
 //    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
-    public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
-    public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
+//    public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
+//    public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
+
+    public static AxisButton highTargetButton = new AxisButton(driver, 0.5, LEFT_TRIG);
 
     public static JoystickButton testWaitPlaceHatchButton = new JoystickButton(driver, X);
 
@@ -116,11 +119,12 @@ public class OI {
 
     public static JoystickButton arcadeToggle = new JoystickButton(driver, BACK);
 
-//    private static Button autoAlignButtonAlt = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
+    private static Button autoAlignButtonAlt = new JoystickButton(driver, RB);
 
     public static StrictDPadButton strobeRedBlueButton = new StrictDPadButton(driver, 0, DPadAxis.DOWN);
 
     public static MultiAxisButton pointDrivePointAxis = new MultiAxisButton(driver, 0.4, new int[]{RIGHT_X, RIGHT_Y});
+    static PointDrive pointDriveCommand;
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -165,17 +169,14 @@ public class OI {
 //        cancelClimbButton.cancelWhenPressed(climbCommand3);
 //        cancelClimbButton.cancelWhenPressed(climbCommand2);
 
-        PointDrive pointDriveCommand = new PointDrive();
-        pointDrivePointAxis.whileHeld(pointDriveCommand);
 
-        pointDrivePointAxis.whenReleased(new PercentManualLineupSequence());
 
 //        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
 //        quickTurnButton.whenPressed(quickTurnCommand);
 //        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
 
-        testGrabHatchButton.whenPressed(new TestGrabHatch());
-        testPlaceHatchButton.whenPressed(new TestPlaceHatch());
+//        testGrabHatchButton.whenPressed(new TestGrabHatch());
+//        testPlaceHatchButton.whenPressed(new TestPlaceHatch());
         testElevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
 
@@ -189,10 +190,6 @@ public class OI {
             testWaitPlaceHatchButton.whenReleased(new TestGrabHatch());
         }
 
-        intakeLoadingStationButton.whenPressed(pointDriveCommand);
-        elevatorCargoShipButton.whenPressed(pointDriveCommand);
-        elevatorMidRocketButton.whenPressed(pointDriveCommand);
-        testElevatorMidRocketButton.whenPressed(pointDriveCommand);
 
         Command arcadeCommand = new SimpleLoopCommand("Drive",
             new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
@@ -200,7 +197,7 @@ public class OI {
                 .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
                 .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
                 .then(Robot.drivetrain.getPipelineOutput(false)), Robot.drivetrain);
-        arcadeToggle.toggleWhenPressed(new SimpleCommand("Arcade toggle", () -> {
+        arcadeToggle.whenPressed(new SimpleCommand("Arcade toggle", () -> {
             if (arcadeCommand.isRunning()) {
                 arcadeCommand.cancel();
             } else {
@@ -208,6 +205,41 @@ public class OI {
             }
         }));
 
+        pointDriveCommand = new PointDrive();
+        pointDrivePointAxis.whileHeld(new SimpleCommand("", () -> {
+            if (!arcadeCommand.isRunning()) {
+                pointDriveCommand.start();
+            }
+        }));
+        pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
+            pointDriveCommand.cancel();
+            if (highTargetButton.get()) {
+                Robot.limelight.prepForVision();
+                new PercentManualLineup().start();
+            }
+        }));
+        highTargetButton.whenPressed(new SimpleCommand("", () -> {
+            if (!pointDriveCommand.isRunning()) {
+                Robot.limelight.prepForVision();
+                new PercentManualLineup().start();
+            }
+        }));
+        intakeLoadingStationButton.whenPressed(pointDriveCommand);
+        elevatorCargoShipButton.whenPressed(pointDriveCommand);
+        elevatorMidRocketButton.whenPressed(pointDriveCommand);
+        testElevatorMidRocketButton.whenPressed(pointDriveCommand);
+
+        Command pmuCommand = new PercentManualLineupSequence();
+        pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
+            if (!arcadeCommand.isRunning()) {
+                pmuCommand.start();
+            }
+        }));
+        autoAlignButtonAlt.whenPressed(new SimpleCommand("", () -> {
+            if (!arcadeCommand.isRunning()) {
+                pmuCommand.start();
+            }
+        }));
         SimpleCommand reset_point_offset = new SimpleCommand("Reset Point Offset", () -> {
             logger.debug("Setting Angle Offset");
             PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
@@ -216,7 +248,7 @@ public class OI {
         resetPointOffset.whenPressed(reset_point_offset);
         Shuffleboard.getTab("Phineas").add(reset_point_offset);
 
-        strobeRedBlueButton.whenPressed(new BlinkLEDs(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
+        strobeRedBlueButton.whileHeld(new BlinkLEDs(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
