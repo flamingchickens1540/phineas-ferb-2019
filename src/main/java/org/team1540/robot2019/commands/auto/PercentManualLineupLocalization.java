@@ -68,10 +68,8 @@ public class PercentManualLineupLocalization extends PIDCommand {
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
 
-        SmartDashboard.putNumber("PercentLineupLocalization/OUTPUT_SCALAR",
-            OUTPUT_SCALAR); // TODO: Remove temporary tuning (yaml ftw)
-        SmartDashboard
-            .putNumber("PercentLineupLocalization/ANGULAR_KP", ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
+        SmartDashboard.putNumber("PercentLineupLocalization/OUTPUT_SCALAR", OUTPUT_SCALAR);
+        SmartDashboard.putNumber("PercentLineupLocalization/ANGULAR_KP", ANGULAR_KP);
         SmartDashboard.putNumber("PercentLineupLocalization/ANGULAR_KI", ANGULAR_KI);
         SmartDashboard.putNumber("PercentLineupLocalization/ANGULAR_KD", ANGULAR_KD);
         SmartDashboard.putNumber("PercentLineupLocalization/MAX_VEL_THETA", MAX_VEL_THETA);
@@ -82,10 +80,8 @@ public class PercentManualLineupLocalization extends PIDCommand {
 
     @Override
     protected void initialize() {
-        ANGULAR_KP = SmartDashboard.getNumber("PercentLineupLocalization/OUTPUT_SCALAR",
-            OUTPUT_SCALAR); // TODO: Remove temporary tuning (yaml ftw)
-        ANGULAR_KP = SmartDashboard
-            .getNumber("PercentLineupLocalization/ANGULAR_KP", ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
+        ANGULAR_KP = SmartDashboard.getNumber("PercentLineupLocalization/OUTPUT_SCALAR", OUTPUT_SCALAR);
+        ANGULAR_KP = SmartDashboard.getNumber("PercentLineupLocalization/ANGULAR_KP", ANGULAR_KP);
         ANGULAR_KI = SmartDashboard.getNumber("PercentLineupLocalization/ANGULAR_KI", ANGULAR_KI);
         ANGULAR_KD = SmartDashboard.getNumber("PercentLineupLocalization/ANGULAR_KD", ANGULAR_KD);
         MAX_VEL_THETA = SmartDashboard.getNumber("PercentLineupLocalization/MAX_VEL_THETA", MAX_VEL_THETA);
