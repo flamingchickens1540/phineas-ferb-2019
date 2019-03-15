@@ -19,6 +19,7 @@ import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.drivetrain.PointDrive;
+import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
@@ -207,7 +208,8 @@ public class OI {
 
         pointDriveCommand = new PointDrive();
         pointDrivePointAxis.whileHeld(new SimpleCommand("", () -> {
-            if (!arcadeCommand.isRunning()) {
+            if (!arcadeCommand.isRunning() && !(Robot.drivetrain
+                .getCurrentCommand() instanceof TankDriveForTimePercent)) {
                 pointDriveCommand.start();
             }
         }));
