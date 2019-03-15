@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
+import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
 import org.team1540.robot2019.vision.VisionUtils;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetCamera;
 import org.team1540.robot2019.vision.deepspace.RawDeepSpaceVisionTarget;
@@ -167,6 +168,9 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             return null;
         }
 
-        return new RawDeepSpaceVisionTarget(point0, point1);
+        return new RawDeepSpaceVisionTarget(
+            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point0, getHorizontalFov(), getVerticalFov()),
+            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point1, getHorizontalFov(), getVerticalFov())
+        );
     }
 }

@@ -72,10 +72,10 @@ public class DualVisionTargetLocalizationUtils {
         return new Vector2D(vec.getX(), vec.getY());
     }
 
-    public static Transform3D poseFromTwoCamPoints(Vector2D leftAngles, Vector2D rightAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation, double hoz_fov, double vert_fov) {
+    public static Transform3D poseFromTwoRawCamPoints(Vector2D leftAngles, Vector2D rightAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation) {
 
-        Vector3D leftPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(leftAngles, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
-        Vector3D rightPoint = getIntersection(lineFromScreenAngles(anglesFromScreenSpace(rightAngles, hoz_fov, vert_fov), cameraPosition, cameraRotation), planeHeight);
+        Vector3D leftPoint = getIntersection(lineFromScreenAngles(leftAngles, cameraPosition, cameraRotation), planeHeight);
+        Vector3D rightPoint = getIntersection(lineFromScreenAngles(rightAngles, cameraPosition, cameraRotation), planeHeight);
 
         return new Transform3D(
             midpoint(leftPoint, rightPoint),

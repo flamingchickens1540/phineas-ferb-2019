@@ -31,14 +31,13 @@ public class DeepSpaceVisionTargetLocalization {
         timeLastAcquired = System.currentTimeMillis();
 
         baseLinkToVisionTarget =
-            DualVisionTargetLocalizationUtils.poseFromTwoCamPoints(
+            DualVisionTargetLocalizationUtils.poseFromTwoRawCamPoints(
                 rawVisionTarget.getPointA(),
                 rawVisionTarget.getPointB(),
                 planeHeight,
                 camera.getBaseLinkToCamera().getPosition(),
-                camera.getBaseLinkToCamera().getOrientation(),
-                camera.getHorizontalFov(),
-                camera.getVerticalFov());
+                camera.getBaseLinkToCamera().getOrientation()
+            );
 
         onUpdate.accept(baseLinkToVisionTarget);
         return true;
