@@ -117,7 +117,11 @@ public class Robot extends TimedRobot {
         if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
             lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D()
                 .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
-            deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D()
+
+        }
+        Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
+        if (lastBaseLinkToVisionTarget != null) {
+            lastBaseLinkToVisionTarget.toTransform2D()
                 .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
         }
 
