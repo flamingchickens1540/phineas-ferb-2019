@@ -147,6 +147,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
+        Robot.limelight.setLeds(false);
         if (brakeTimer.hasPeriodPassed(2) && disableBrakes) {
             brakeTimer.stop();
             setMechanismBrakes(false);
@@ -162,6 +163,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         setMechanismBrakes(true);
+        Robot.limelight.setLeds(true);
 
         Hardware.checkStickyFaults();
 
@@ -194,6 +196,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        OI.pointDriveCommand.start();
+        Robot.limelight.setLeds(true);
+
         setMechanismBrakes(true);
 
         Robot.climber.raiseCylinder();
