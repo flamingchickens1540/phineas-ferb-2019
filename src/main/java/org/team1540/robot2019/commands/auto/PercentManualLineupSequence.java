@@ -3,19 +3,18 @@ package org.team1540.robot2019.commands.auto;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.drivetrain.PointDrive;
-import org.team1540.rooster.util.SimpleConditionalCommand;
 
 public class PercentManualLineupSequence extends CommandGroup {
 
 
     public PercentManualLineupSequence() {
-//        addSequential(new WaitCommand(0.05)); // Wait for leds to turn on
-
+//        addSequential(new SimpleConditionalCommand(() -> !Robot.limelight.isLEDsOn(), new WaitCommand(0.05))); // Wait for leds to turn on
+//        addSequential(new PercentManualLineup());
+        addSequential(new PercentManualLineupLocalization(Robot.odometry, Robot.deepSpaceVisionTargetLocalization));
 //        SmartDashboard.setDefaultBoolean("ManualVisionToggle", true);
-        addSequential(new SimpleConditionalCommand(() -> !Robot.intake.hasBall()
-//            ^ SmartDashboard.getBoolean("ManualVisionToggle", true)
-            , new PercentManualLineupLocalization(Robot.odometry, Robot.deepSpaceVisionTargetLocalization),
-            new PercentManualLineup()));
+//        addSequential(new SimpleConditionalCommand(() -> !Robot.intake.hasBall()
+//            , new PercentManualLineupLocalization(Robot.odometry, Robot.deepSpaceVisionTargetLocalization),
+//            new PercentManualLineup()));
     }
 
     @Override
