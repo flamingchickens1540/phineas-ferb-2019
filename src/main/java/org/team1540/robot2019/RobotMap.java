@@ -69,6 +69,14 @@ public class RobotMap {
     public static final double CAM_Z = 1.12;
     public static final double CAM_PITCH = Math.toRadians(-30.0);
     public static final double CAM_ROLL = Math.toRadians(0);
-    public static final double CAM_YAW = Math.toRadians(0);
+    public static final double CAM_YAW;
     public static final double PLANE_HEIGHT = 0.71;
+
+    static {
+        if (Tuning.isComp) {
+            CAM_YAW = Math.toRadians(0);
+        } else {
+            CAM_YAW = Math.toRadians(3);
+        }
+    }
 }
