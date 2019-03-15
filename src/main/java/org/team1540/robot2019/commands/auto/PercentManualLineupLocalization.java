@@ -86,8 +86,7 @@ public class PercentManualLineupLocalization extends PIDCommand {
         ANGULAR_KD = SmartDashboard.getNumber("PercentLineupLocalization/ANGULAR_KD", ANGULAR_KD);
         MAX_VEL_THETA = SmartDashboard.getNumber("PercentLineupLocalization/MAX_VEL_THETA", MAX_VEL_THETA);
         MIN_VEL_THETA = SmartDashboard.getNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN_VEL_THETA);
-        DEADZONE_VEL_THETA = SmartDashboard
-            .getNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE_VEL_THETA);
+        DEADZONE_VEL_THETA = SmartDashboard.getNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE_VEL_THETA);
         ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
 
         this.getPIDController().setP(ANGULAR_KP);
