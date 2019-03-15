@@ -86,14 +86,14 @@ public class PercentManualLineup extends PIDCommand {
         this.getPIDController().setD(ANGULAR_KD);
 
         System.out.printf("PercentManualLineup initialized with constants: P: %f I: %f D: %f Max: %f Min: %f", ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, MAX_VEL_THETA, MIN_VEL_THETA);
-
-        if (Robot.limelight.isTargetFound()) {
-            double x = Robot.limelight.getTargetAngles().getX();
-            goal = x - Hardware.navx.getYawRadians(); // Get rid of this
-            logger.debug("PercentManualLineup starting. Initial goal angle: " + goal);
-        } else {
-            goal = null;
-        }
+//
+//        if (Robot.limelight.isTargetFound()) {
+//            double x = Robot.limelight.getTargetAngles().getX();
+//            goal = x - Hardware.navx.getYawRadians(); // Get rid of this
+//            logger.debug("PercentManualLineup starting. Initial goal angle: " + goal);
+//        } else {
+//            goal = null;
+//        }
     }
 
     private double getAngleError(double x) {
