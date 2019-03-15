@@ -28,6 +28,7 @@ public class BlinkLEDs extends TimedCommand {
     protected void initialize() {
         usingColor2 = true;
         timer.start();
+        Robot.limelight.setLeds(false);
     }
 
     @Override
