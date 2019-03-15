@@ -45,7 +45,7 @@ public class PercentManualLineup extends PIDCommand {
 //    public static double ANGULAR_KD = -2;
 
     //        public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
-    public static double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
+    public static double ANGLE_OFFSET = Math.toRadians(8); // Degrees offset from center of target
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
