@@ -179,7 +179,15 @@ public class OI {
         testElevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
 
-        testWaitPlaceHatchButton.whenPressed(new PrimeForSensorTripSequence());
+        if (Tuning.isComp) {
+            testWaitPlaceHatchButton.whenPressed(new PrimeForSensorTripSequence());
+        } else {
+            testWaitPlaceHatchButton.whenPressed(new SimpleCommand("", () -> {
+                Robot.hatch.extend();
+                Robot.hatch.release();
+            }));
+            testWaitPlaceHatchButton.whenReleased(new TestGrabHatch());
+        }
 
         intakeLoadingStationButton.whenPressed(pointDriveCommand);
         elevatorCargoShipButton.whenPressed(pointDriveCommand);
