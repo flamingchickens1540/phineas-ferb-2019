@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.auto.PercentManualLineup;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorIntake;
@@ -26,11 +25,11 @@ import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.PrimeForSensorTripSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
-import org.team1540.robot2019.commands.hatch.TestGrabHatch;
 import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.leds.BlinkLEDs;
+import org.team1540.robot2019.commands.wrist.RecoverWrist;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
@@ -95,11 +94,12 @@ public class OI {
     private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
     private static JoystickButton climbLevel2Button = new JoystickButton(copilot, LB); // + safety
     private static JoystickButton climberCylinderUp = new JoystickButton(copilot, BACK);
+    private static JoystickButton wristRecoverButton = new JoystickButton(copilot, 9);
 
     // driver buttons
 
     public static JoystickButton quickTurnButton = new JoystickButton(driver, LB);
-    //    public static JoystickButton autoAlignButtonAlt = new JoystickButton(driver, RB);
+    //    public static JoystickButton autoAlignButtonAlt = new JoystickButton(drq  `iver, RB);
 //    public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
     public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, 0.5, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
 //    public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
@@ -151,9 +151,12 @@ public class OI {
         ejectButton.whenReleased(new BackThenDown());
         ejectButton.whenReleased(new SimpleCommand("", command::cancel));
 
-        prepGetHatchButton.whenPressed(new PrimeForSensorTripSequence());
+//        prepGetHatchButton.whenPressed(new PrimeForSensorTripSequence());
+        prepGetHatchButton.whenPressed(new SimpleConditionalCommand(() -> !intakeCommand.isRunning(), new PrimeForSensorTripSequence()));
 //        prepGetHatchButton.whenPressed(new TestGrabHatch());
-        placeHatchButton.whenPressed(new TestPlaceHatch());
+//        placeHatchButton.whenPressed(new TestPlaceHatch());
+        placeHatchButton.whenPressed(new SimpleConditionalCommand(() -> !intakeCommand.isRunning(), new TestPlaceHatch()));
+        wristRecoverButton.whileHeld(new RecoverWrist());
 
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
         grabHatchButton.whenPressed(new GrabHatchThenBack());
@@ -181,15 +184,15 @@ public class OI {
         testElevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
 
-        if (Tuning.isComp) {
-            testWaitPlaceHatchButton.whenPressed(new PrimeForSensorTripSequence());
-        } else {
-            testWaitPlaceHatchButton.whenPressed(new SimpleCommand("", () -> {
-                Robot.hatch.extend();
-                Robot.hatch.release();
-            }));
-            testWaitPlaceHatchButton.whenReleased(new TestGrabHatch());
-        }
+//        if (Tuning.isComp) {
+//            testWaitPlaceHatchButton.whenPressed(new PrimeForSensorTripSequence());
+//        } else {
+//            testWaitPlaceHatchButton.whenPressed(new SimpleCommand("", () -> {
+//                Robot.hatch.extend();
+//                Robot.hatch.release();
+//            }));
+//            testWaitPlaceHatchButton.whenReleased(new TestGrabHatch());
+//        }
 
 
         Command arcadeCommand = new SimpleLoopCommand("Drive",
