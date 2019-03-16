@@ -29,6 +29,10 @@ public class LiftGyroStabilizeLevel3 extends PIDCommand {
 
     @Override
     protected void usePIDOutput(double v) {
-        Robot.climber.setArms(v + Tuning.climberGyroFF);
+        if (Robot.climber.getPosition() > Tuning.climberStartPosLevel3 || v > 0) {
+            Robot.climber.setArms(v + Tuning.climberGyroFF);
+        } else {
+            Robot.climber.setArms(0);
+        }
     }
 }
