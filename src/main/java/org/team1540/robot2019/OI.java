@@ -216,14 +216,23 @@ public class OI {
         pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
             pointDriveCommand.cancel();
             if (highTargetButton.get()) {
+                Robot.limelight.setPipeline(1);
+                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
                 Robot.limelight.prepForVision();
-                new PercentManualLineup().start();
+//                new PercentManualLineup().start();
+            } else {
+                Robot.limelight.setPipeline(0);
+                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
+
             }
         }));
         highTargetButton.whenPressed(new SimpleCommand("", () -> {
             if (!pointDriveCommand.isRunning()) {
+                Robot.limelight.setPipeline(1);
+                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
                 Robot.limelight.prepForVision();
-                new PercentManualLineup().start();
+
+//                new PercentManualLineup().start();
             }
         }));
         intakeLoadingStationButton.whenPressed(pointDriveCommand);

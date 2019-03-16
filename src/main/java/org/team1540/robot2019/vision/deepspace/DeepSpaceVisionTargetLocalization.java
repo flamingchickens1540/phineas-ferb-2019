@@ -8,7 +8,7 @@ import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
 
 public class DeepSpaceVisionTargetLocalization {
 
-    private final double planeHeight;
+    private double planeHeight;
     private final Consumer<Transform3D> onUpdate;
     private final DeepSpaceVisionTargetCamera camera;
     private Transform3D baseLinkToVisionTarget;
@@ -41,6 +41,10 @@ public class DeepSpaceVisionTargetLocalization {
 
         onUpdate.accept(baseLinkToVisionTarget);
         return true;
+    }
+
+    public void setPlaneHeight(double planeHeight) {
+        this.planeHeight = planeHeight;
     }
 
     public boolean targetWasAcquired() {
