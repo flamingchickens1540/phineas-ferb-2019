@@ -60,8 +60,7 @@ public class PercentManualLineup extends PIDCommand {
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
 
-        SmartDashboard
-            .putNumber("PercentLineup/OUTPUT_SCALAR", OUTPUT_SCALAR); // TODO: Remove temporary tuning (yaml ftw)
+        SmartDashboard.putNumber("PercentLineup/OUTPUT_SCALAR", OUTPUT_SCALAR); // TODO: Remove temporary tuning (yaml ftw)
         SmartDashboard.putNumber("PercentLineup/ANGULAR_KP", ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
         SmartDashboard.putNumber("PercentLineup/ANGULAR_KI", ANGULAR_KI);
         SmartDashboard.putNumber("PercentLineup/ANGULAR_KD", ANGULAR_KD);
