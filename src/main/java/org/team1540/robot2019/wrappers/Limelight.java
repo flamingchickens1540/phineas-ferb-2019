@@ -177,4 +177,8 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
     public boolean isLEDsOn() {
         return limelightTable.getEntry("ledMode").getDouble(1) == 0;
     }
+
+    public void setPipeline(double pipelineID) { // TODO
+        limelightTable.getEntry("pipeline").setDouble(1);
+    }
 }
