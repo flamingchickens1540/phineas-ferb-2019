@@ -9,12 +9,12 @@ public class WristUp extends Command {
     @Override
     protected void initialize() {
         Robot.wrist.clearMidFlag();
-        Robot.wrist.set(Tuning.wristUpTravelThrot);
+        Robot.wrist.set(-Tuning.wristUpTravelThrot);
     }
 
     @Override
     protected void end() {
-        Robot.wrist.set(Tuning.wristHoldThrot);
+        Robot.wrist.set(-Tuning.wristHoldThrot);
     }
 
     @Override

@@ -9,7 +9,7 @@ public class WristUpOrHold extends ConditionalCommand {
 
     public WristUpOrHold() {
         super(new WristUp(),
-            new SimpleLoopCommand("Hold Wrist", () -> Robot.wrist.set(Tuning.wristHoldThrot),
+            new SimpleLoopCommand("Hold Wrist", () -> Robot.wrist.set(-Tuning.wristHoldThrot),
                 Robot.wrist));
     }
 
