@@ -139,12 +139,13 @@ public class OI {
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
 
         Command loadingIntakeCommand = new LoadingStationIntake();
-        intakeLoadingStationButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::isReleased, loadingIntakeCommand));
+        intakeLoadingStationButton.whenPressed(loadingIntakeCommand);
         cancelIntakeButton.cancelWhenPressed(loadingIntakeCommand);
         cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
         Command intakeCommand = new FloorIntake();
-        autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::isReleased, intakeCommand));
+//        autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::isReleased, intakeCommand));
+        autoIntakeButton.whenPressed(intakeCommand);
         cancelIntakeButton.cancelWhenPressed(intakeCommand);
         ForwardThenEject command = new ForwardThenEject();
         ejectButton.whenPressed(command);
@@ -152,10 +153,10 @@ public class OI {
         ejectButton.whenReleased(new SimpleCommand("", command::cancel));
 
 //        prepGetHatchButton.whenPressed(new PrimeForSensorTripSequence());
-        prepGetHatchButton.whenPressed(new SimpleConditionalCommand(() -> !intakeCommand.isRunning(), new PrimeForSensorTripSequence()));
+        prepGetHatchButton.whenPressed(new PrimeForSensorTripSequence());
 //        prepGetHatchButton.whenPressed(new TestGrabHatch());
 //        placeHatchButton.whenPressed(new TestPlaceHatch());
-        placeHatchButton.whenPressed(new SimpleConditionalCommand(() -> !intakeCommand.isRunning(), new TestPlaceHatch()));
+        placeHatchButton.whenPressed(new TestPlaceHatch());
         wristRecoverButton.whileHeld(new RecoverWrist());
 
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
