@@ -17,7 +17,7 @@ public class WristDown extends Command {
         if (!Robot.wrist.isAtBtm()) {
             Robot.wrist.clearBtmFlag();
             Robot.wrist.clearMidFlag();
-            Robot.wrist.set(-Tuning.wristDownTravelPwrThrot);
+            Robot.wrist.set(Tuning.wristDownTravelPwrThrot);
         }
     }
 
