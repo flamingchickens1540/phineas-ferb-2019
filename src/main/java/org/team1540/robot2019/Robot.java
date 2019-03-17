@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.auto.UDPVelocityTwistDrive;
+import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
 import org.team1540.robot2019.subsystems.Climber;
@@ -25,6 +27,7 @@ import org.team1540.robot2019.utils.LastValidTransformTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
 import org.team1540.robot2019.wrappers.TEBPlanner;
+import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
 
@@ -82,8 +85,8 @@ public class Robot extends TimedRobot {
             RobotMap.HATCH_TARGET_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
-//        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800,
-//            "10.15.40.202", 0.01);
+        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800,
+            "10.15.40.76", 0.01);
 
         OI.init();
 
@@ -106,6 +109,11 @@ public class Robot extends TimedRobot {
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
+
+        SimpleCommand testTeb = new SimpleCommand("Test TEB", () -> {
+            new UDPVelocityTwistDrive(false).start();
+        });
+        SmartDashboard.putData(testTeb);
     }
 
     @Override
