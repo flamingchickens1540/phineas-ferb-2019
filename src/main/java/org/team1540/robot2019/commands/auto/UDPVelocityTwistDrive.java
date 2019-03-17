@@ -84,6 +84,7 @@ public class UDPVelocityTwistDrive extends Command {
         SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
         SmartDashboard.putNumber("debug-velocity-left", Robot.drivetrain.getLeftVelocityMetersPerSecond());
         SmartDashboard.putNumber("debug-velocity-right", Robot.drivetrain.getRightVelocityMetersPerSecond());
+        NetworkTableInstance.getDefault().flush();
 //    twist2DInput.setTwist(cmdVel);
 //    pipeline.execute();
     }
