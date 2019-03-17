@@ -30,7 +30,7 @@ public class RobotMap {
     public static final int CLIMBER_CYLINDER_2 = 2;
 
     public static final int HATCH_SLIDE = 1;
-    public static final int HATCH_GRABBER = 0;
+    public static final int HATCH_GRABBER = 4;//0;
 
     public static final int LED_GREEN = 5;
     public static final int LED_BLUE = 6;
