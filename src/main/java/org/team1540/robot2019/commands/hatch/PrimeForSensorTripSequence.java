@@ -16,7 +16,7 @@ public class PrimeForSensorTripSequence extends CommandGroup {
         addSequential(new WaitCommand(0.5));
         addSequential(new WaitForExtendTrip());
         addSequential(new GrabHatch());
-        addSequential(new WaitCommand(0.2));
+        addSequential(new WaitCommand(0.3));
         addSequential(new RetractHatchMech());
     }
 }
