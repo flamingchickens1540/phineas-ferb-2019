@@ -32,7 +32,7 @@ public class PointDrive extends PIDCommand {
     private static final double ANGULAR_KD = 0.5;
 
     private static Double initAngleOffset;
-    private static Double lastGoalAngle = null;
+    private static Double goalAngle = null;
 
     private final TankDriveTwist2DInput twist2DInput;
     private final Executable pipeline;
@@ -55,38 +55,34 @@ public class PointDrive extends PIDCommand {
 
     @Override
     protected void initialize() {
+        setGoalToCurrentAngle();
     }
 
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    public static void manualResetGoal() {
-        lastGoalAngle = Hardware.navx.getYawRadians() - initAngleOffset;
+    private void setGoalToCurrentAngle() {
+        goalAngle = Hardware.navx.getYawRadians() - initAngleOffset;
     }
 
     public static void setInitAngleOffset(Double initAngleOffset) {
-        lastGoalAngle = null;
+        goalAngle = null;
         PointDrive.initAngleOffset = initAngleOffset;
     }
 
     @Override
     protected double returnPIDInput() {
         if (OI.getPointDriveMagnitude() > 0.5) {
-            lastGoalAngle = OI.getPointDriveAngle();
+            goalAngle = OI.getPointDriveAngle();
         }
-        if (lastGoalAngle == null) {
+        if (goalAngle == null) {
             return 0;
         }
-        return getAngleError(lastGoalAngle + initAngleOffset);
+        return getAngleError(goalAngle + initAngleOffset);
     }
 
     @Override
     protected void usePIDOutput(double output) {
         output *= OUTPUT_SCALAR;
         double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-        if (lastGoalAngle == null || Math.abs(output) < DEADZONE_VEL_THETA) {
+        if (goalAngle == null || Math.abs(output) < DEADZONE_VEL_THETA) {
             cmdVelTheta = 0;
         }
         SmartDashboard.putNumber("PointDrive/Debug/cmdVelTheta", cmdVelTheta);
@@ -97,5 +93,10 @@ public class PointDrive extends PIDCommand {
 
     private double getAngleError(double x) {
         return TrigUtils.signedAngleError(x, Hardware.navx.getYawRadians());
+    }
+
+    @Override
+    protected boolean isFinished() {
+        return false;
     }
 }
