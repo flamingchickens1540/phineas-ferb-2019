@@ -25,7 +25,7 @@ public class PercentManualLineup extends PIDCommand {
     private static double MAX = 10;
     private static double DEADZONE = 0.05;
 
-    // Constants for angular VPID controller
+    // Constants for angular PID controller
     private static double P = 0.32;
     private static double I = 0;
     private static double D = 0.6;
@@ -41,6 +41,7 @@ public class PercentManualLineup extends PIDCommand {
     public PercentManualLineup() {
         super(P, I, D);
         requires(Robot.drivetrain);
+
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
@@ -73,7 +74,6 @@ public class PercentManualLineup extends PIDCommand {
         this.getPIDController().setD(D);
 
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
-        logger.debug("Starting...");
     }
 
     @Override
