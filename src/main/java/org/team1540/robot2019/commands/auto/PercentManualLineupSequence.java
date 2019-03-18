@@ -29,7 +29,6 @@ public class PercentManualLineupSequence extends CommandGroup {
 
     @Override
     protected void end() {
-        PointDrive.manualResetGoal();
         Robot.limelight.prepForDriverCam();
     }
 }
