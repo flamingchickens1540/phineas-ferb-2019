@@ -228,16 +228,16 @@ public class Drivetrain extends Subsystem {
     }
 
     public void setTwist(Twist2D cmdVel) {
-        double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadiusMeters);
-        double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadiusMeters);
+        double leftSetpoint = cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadiusMeters;
+        double rightSetpoint = cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadiusMeters;
         setLeftVelocityMetersPerSecond(leftSetpoint);
         setRightVelocityMetersPerSecond(rightSetpoint);
         cmdVel.putToNetworkTable("Debug/DriveTrain/CmdVel");
     }
 
     public void setPercentTwist(Twist2D cmdVel) {
-        double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega());
-        double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega());
+        double leftSetpoint = cmdVel.getX() - cmdVel.getOmega();
+        double rightSetpoint = cmdVel.getX() + cmdVel.getOmega();
         setLeftPercent(leftSetpoint);
         setRightPercent(rightSetpoint);
         cmdVel.putToNetworkTable("Debug/DriveTrain/CmdVelPercent");

@@ -1,8 +1,6 @@
 package org.team1540.robot2019.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.PIDCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
@@ -32,8 +30,8 @@ public class PointDrive extends PIDCommand {
     private static final double I = 0;
     private static final double D = 0.5;
 
-    public static final double POINT_JOYSTICK_DEADZONE = 0.5;
-    public static final double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
+    private static final double POINT_JOYSTICK_DEADZONE = 0.5;
+    private static final double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 
     private static Double initAngleOffset = null;
     private static Double goalAngle = null;
@@ -75,8 +73,8 @@ public class PointDrive extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        if (OI.get2DJoystickMagnitude(OI.POINTDRIVE_CONTROLLER, OI.POINTDRIVE_POINT_HAND) > POINT_JOYSTICK_DEADZONE) {
-            goalAngle = OI.getJoystickAngle(OI.POINTDRIVE_CONTROLLER, OI.POINTDRIVE_POINT_HAND);
+        if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
+            goalAngle = OI.getPointDriveAngle();
         }
         if (goalAngle == null) {
             return 0;
@@ -91,7 +89,6 @@ public class PointDrive extends PIDCommand {
         if (goalAngle == null || Math.abs(output) < DEADZONE) {
             cmdVelTheta = 0;
         }
-        SmartDashboard.putNumber("PointDrive/Debug/cmdVelTheta", cmdVelTheta);
         Twist2D cmdVel = new Twist2D(-OI.getTankdriveLeftAxis() * THROTTLE_CONSTANT, 0, -cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();
