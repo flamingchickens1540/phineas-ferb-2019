@@ -7,20 +7,16 @@ import org.team1540.robot2019.commands.hatch.simple.GrabHatch;
 import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 
-public class TestGrabHatch extends CommandGroup {
+public class SensorGrabHatchSequence extends CommandGroup {
 
-    public TestGrabHatch() {
+
+    public SensorGrabHatchSequence() {
         addSequential(new ReleaseHatch());
         addSequential(new ExtendHatchMech());
-        addSequential(new WaitCommand(0.2));
+        addSequential(new WaitCommand(0.5));
+        addSequential(new WaitForExtendSensorTrip());
         addSequential(new GrabHatch());
-        addSequential(new WaitCommand(0.2));
+        addSequential(new WaitCommand(0.3));
         addSequential(new RetractHatchMech());
-    }
-
-    @Override
-    protected void interrupted() {
-        new GrabHatch().start();
-        new RetractHatchMech().start();
     }
 }

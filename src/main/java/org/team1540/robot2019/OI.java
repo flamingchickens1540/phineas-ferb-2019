@@ -20,11 +20,11 @@ import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.GrabHatchThenBack;
+import org.team1540.robot2019.commands.hatch.GrabThenBack;
+import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
-import org.team1540.robot2019.commands.hatch.PrimeForSensorTripSequence;
+import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
-import org.team1540.robot2019.commands.hatch.TestPlaceHatch;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.leds.BlinkLEDs;
@@ -141,15 +141,15 @@ public class OI {
         ejectButton.whenReleased(new BackThenDown());
         ejectButton.whenReleased(new SimpleCommand("", command::cancel));
 
-//        prepGetHatchButton.whenPressed(new PrimeForSensorTripSequence());
-        prepGetHatchButton.whenPressed(new PrimeForSensorTripSequence());
+//        prepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
+        prepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
 //        prepGetHatchButton.whenPressed(new TestGrabHatch());
-//        placeHatchButton.whenPressed(new TestPlaceHatch());
-        placeHatchButton.whenPressed(new TestPlaceHatch());
+//        placeHatchButton.whenPressed(new PlaceHatchSequence());
+        placeHatchButton.whenPressed(new PlaceHatchSequence());
         wristRecoverButton.whileHeld(new RecoverWrist());
 
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
-        grabHatchButton.whenPressed(new GrabHatchThenBack());
+        grabHatchButton.whenPressed(new GrabThenBack());
         stowHatchButton.whenPressed(new StowHatchMech());
 
         hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
