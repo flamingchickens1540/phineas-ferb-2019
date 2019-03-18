@@ -43,22 +43,18 @@ public class PointDrive extends PIDCommand {
             ANGULAR_KI,
             ANGULAR_KD
         );
-        System.out.println("Point drive init");
-        PointDrive.initAngleOffset = Hardware.navx.getYawRadians();
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
+        setInitAngleOffset(Hardware.navx.getYawRadians());
+        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, MAX_VEL_THETA, MIN_VEL_THETA, DEADZONE_VEL_THETA));
     }
 
     @Override
     protected void initialize() {
-    }
-
-    @Override
-    protected void execute() {
     }
 
     @Override
