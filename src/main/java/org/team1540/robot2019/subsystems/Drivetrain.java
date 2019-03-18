@@ -58,8 +58,8 @@ public class Drivetrain extends Subsystem {
     @Override
     protected void initDefaultCommand() {
 //        setDefaultCommand(new SimpleLoopCommand("Drive",
-//            new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
-//                OI::getDriveHardTurn)
+//            new AdvancedArcadeJoystickInput(true, OI::getArcadeDriveThrottle, OI::getArcadeDriveSoftTurn,
+//                OI::getArcadeDriveHardTurn)
 //                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
 //                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
 //                .then(getPipelineOutput(false)), this));
