@@ -18,26 +18,27 @@ public class PointDrive extends PIDCommand {
 
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
-    // Max/Min angular velocity
-    private static final double MIN = 0;
-    private static final double MAX = 10;
-    private static final double DEADZONE = 0.05;
+    private static double OUTPUT_SCALAR = 20;
 
-    private static final double OUTPUT_SCALAR = 20;
+    // Max/Min angular velocity
+    private static double MIN = 0;
+    private static double MAX = 10;
+    private static double DEADZONE = 0.05;
 
     // Constants for angular PID controller
-    private static final double P = 0.2;
-    private static final double I = 0;
-    private static final double D = 0.5;
+    private static double P = 0.2;
+    private static double I = 0;
+    private static double D = 0.5;
 
-    private static final double POINT_JOYSTICK_DEADZONE = 0.5;
-    private static final double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
+    private static double POINT_JOYSTICK_DEADZONE = 0.5;
+
+    private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
+
+    private Executable pipeline;
+    private TankDriveTwist2DInput twist2DInput;
 
     private static Double initAngleOffset = null;
     private static Double goalAngle = null;
-
-    private final TankDriveTwist2DInput twist2DInput;
-    private final Executable pipeline;
 
     public PointDrive() {
         super(P, I, D);
@@ -52,6 +53,7 @@ public class PointDrive extends PIDCommand {
         if (PointDrive.initAngleOffset == null) { // Only set initial angle offset if there is no offset already set
             setInitAngleOffset(Hardware.navx.getYawRadians());
         }
+
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
@@ -84,8 +86,14 @@ public class PointDrive extends PIDCommand {
         pipeline.execute();
     }
 
+
     @Override
     protected boolean isFinished() {
         return false;
+    }
+
+    @Override
+    protected void end() {
+        logger.debug("Ended");
     }
 }

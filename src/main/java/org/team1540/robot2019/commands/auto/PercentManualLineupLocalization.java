@@ -25,13 +25,12 @@ public class PercentManualLineupLocalization extends PIDCommand {
 
     private static double OUTPUT_SCALAR = 20;
 
-    private static double DEADZONE = 0.05;
-
     // Max/Min angular velocity
     private static double MIN = 0;
     private static double MAX = 10;
+    private static double DEADZONE = 0.05;
 
-    // Constants for angular PID controller
+    // Constants for angular VPID controller
     private static double P = 0.32;
     private static double I = 0;
     private static double D = 0.6;
@@ -39,20 +38,22 @@ public class PercentManualLineupLocalization extends PIDCommand {
     public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
 //    public static double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
-    private static final double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
+    private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
+
     private Transform3D goal = null;
     private final TankDriveOdometryRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
     public PercentManualLineupLocalization(TankDriveOdometryRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
         super(P, I, D);
+        requires(Robot.drivetrain);
+
         this.driveOdometry = driveOdometry;
         this.deepSpaceVisionTargetLocalization = deepSpaceVisionTargetLocalization;
-        System.out.printf("Config updated: P: %f I: %f D: %f Max: %f Min: %f", P, I, D, MAX, MIN);
-        requires(Robot.drivetrain);
+
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
@@ -67,6 +68,8 @@ public class PercentManualLineupLocalization extends PIDCommand {
         SmartDashboard.putNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN);
         SmartDashboard.putNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE);
         SmartDashboard.putNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
+
+        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
     @Override
@@ -84,6 +87,7 @@ public class PercentManualLineupLocalization extends PIDCommand {
         this.getPIDController().setI(I);
         this.getPIDController().setD(D);
 
+        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
         logger.debug("Starting...");
     }
 
