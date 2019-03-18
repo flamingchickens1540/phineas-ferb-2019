@@ -1,20 +1,18 @@
 package org.team1540.robot2019.commands.drivetrain;
 
-import edu.wpi.first.wpilibj.command.PIDCommand;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.datastructures.twod.Twist2D;
+import org.team1540.robot2019.commands.auto.ContinuousPointManualDriveCommand;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
-import org.team1540.robot2019.utils.ControlUtils;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
-public class PointDrive extends PIDCommand {
+public class PointDrive extends ContinuousPointManualDriveCommand {
 
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
@@ -41,7 +39,7 @@ public class PointDrive extends PIDCommand {
     private static double goalAngle = 0;
 
     public PointDrive() {
-        super(P, I, D);
+        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
         requires(Robot.drivetrain);
 
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
@@ -72,23 +70,5 @@ public class PointDrive extends PIDCommand {
             goalAngle = OI.getPointDriveAngle();
         }
         return TrigUtils.signedAngleError(Hardware.navx.getYawRadians(), goalAngle + initAngleOffset);
-    }
-
-    @Override
-    protected void usePIDOutput(double output) {
-        double cmdVelTheta = ControlUtils.allVelocityConstraints(output*OUTPUT_SCALAR, MAX, MIN, DEADZONE);
-        twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * THROTTLE_CONSTANT, 0, -cmdVelTheta)); // TODO: Figure out why cmdVelTheta is negated
-        pipeline.execute();
-    }
-
-
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    protected void end() {
-        logger.debug("Ended");
     }
 }
