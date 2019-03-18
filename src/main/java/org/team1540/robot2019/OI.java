@@ -47,7 +47,7 @@ public class OI {
 
     private static final Logger logger = Logger.getLogger(OI.class);
 
-    // Buttons
+    // Buttons TODO: Migrate to ROOSTER
     public static final int A = 1;
     public static final int B = 2;
     public static final int X = 3;
@@ -59,7 +59,7 @@ public class OI {
     public static final int START = 8;
 
 
-    // Axes
+    // Axes TODO: Migrate to ROOSTER
     public static final int LEFT_X = 0;
     public static final int LEFT_Y = 1;
     public static final int LEFT_TRIG = 2;
@@ -125,7 +125,11 @@ public class OI {
     public static StrictDPadButton strobeRedBlueButton = new StrictDPadButton(driver, 0, DPadAxis.DOWN);
 
     public static MultiAxisButton pointDrivePointAxis = new MultiAxisButton(driver, 0.4, new int[]{RIGHT_X, RIGHT_Y});
+
+    // Pointdrive
     static PointDrive pointDriveCommand;
+    public static final XboxController POINTDRIVE_CONTROLLER = OI.driver;
+    public static final Hand POINTDRIVE_POINT_HAND = Hand.kRight;
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -313,15 +317,15 @@ public class OI {
             Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), Tuning.driveDeadzone), 2);
     }
 
-    public static double getPointDriveAngle() {
-        double x = -driver.getY(Hand.kRight);
-        double y = -driver.getX(Hand.kRight);
+    public static double getJoystickAngle(XboxController controller, Hand hand) { // TODO: Migrate to ROOSTER
+        double x = -controller.getY(hand);
+        double y = -controller.getX(hand);
         return Math.atan2(y, x);
     }
 
-    public static double getPointDriveMagnitude() {
-        double x = driver.getX(Hand.kRight);
-        double y = driver.getY(Hand.kRight);
+    public static double get2DJoystickMagnitude(XboxController controller, Hand hand) { // TODO: Migrate to ROOSTER
+        double x = controller.getX(hand);
+        double y = controller.getY(hand);
         return Utilities.processDeadzone(new Vector2D(x, y).distance(Vector2D.ZERO), Tuning.driveDeadzone);
     }
 }

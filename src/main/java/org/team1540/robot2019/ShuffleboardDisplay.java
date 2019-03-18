@@ -1,6 +1,7 @@
 package org.team1540.robot2019;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.command.Command;
@@ -53,6 +54,6 @@ public class ShuffleboardDisplay {
 
     private static void update() {
         pressureEntry.forceSetNumber(50 * (Hardware.pressureSensor.getVoltage() - 0.5));
-        pointDriveFakeGyro.setAngle(180 - Math.toDegrees(OI.getPointDriveAngle()));
+        pointDriveFakeGyro.setAngle(180 - Math.toDegrees(OI.getJoystickAngle(OI.POINTDRIVE_CONTROLLER, OI.POINTDRIVE_POINT_HAND)));
     }
 }

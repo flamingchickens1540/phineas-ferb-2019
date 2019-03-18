@@ -1,5 +1,6 @@
 package org.team1540.robot2019.commands.drivetrain;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
@@ -74,8 +75,8 @@ public class PointDrive extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
-            goalAngle = OI.getPointDriveAngle();
+        if (OI.get2DJoystickMagnitude(OI.POINTDRIVE_CONTROLLER, OI.POINTDRIVE_POINT_HAND) > POINT_JOYSTICK_DEADZONE) {
+            goalAngle = OI.getJoystickAngle(OI.POINTDRIVE_CONTROLLER, OI.POINTDRIVE_POINT_HAND);
         }
         if (goalAngle == null) {
             return 0;
