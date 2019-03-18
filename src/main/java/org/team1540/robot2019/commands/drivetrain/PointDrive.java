@@ -37,8 +37,8 @@ public class PointDrive extends PIDCommand {
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
 
-    private static Double initAngleOffset = null;
-    private static Double goalAngle = null;
+    private static double initAngleOffset = Hardware.navx.getYawRadians();
+    private static double goalAngle = 0;
 
     public PointDrive() {
         super(P, I, D);
@@ -49,17 +49,12 @@ public class PointDrive extends PIDCommand {
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
-
-        if (PointDrive.initAngleOffset == null) { // Only set initial angle offset if there is no offset already set
-            setInitAngleOffset(Hardware.navx.getYawRadians());
-        }
-
-        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
     @Override
     protected void initialize() {
         setGoalToCurrentAngle();
+        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
     private static void setGoalToCurrentAngle() {

@@ -68,8 +68,6 @@ public class PercentManualLineupLocalization extends PIDCommand {
         SmartDashboard.putNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN);
         SmartDashboard.putNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE);
         SmartDashboard.putNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
-
-        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
     @Override
@@ -88,7 +86,6 @@ public class PercentManualLineupLocalization extends PIDCommand {
         this.getPIDController().setD(D);
 
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
-        logger.debug("Starting...");
     }
 
     private Transform3D computeGoal() {
