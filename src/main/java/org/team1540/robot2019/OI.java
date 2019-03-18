@@ -71,17 +71,20 @@ public class OI {
     public static XboxController driver = new XboxController(0);
     private static XboxController copilot = new XboxController(1);
 
-    // copilot buttons
-
+    // Copilot
+    // - Elevator
     private static Button elevatorMidRocketButton = new StrictDPadButton(copilot, 0, DPadAxis.UP);
     private static Button elevatorCargoShipButton = new StrictDPadButton(copilot, 0, DPadAxis.LEFT);
     private static Button elevatorDownButton = new StrictDPadButton(copilot, 0, DPadAxis.DOWN);
     private static Button intakeLoadingStationButton = new StrictDPadButton(copilot, 0, DPadAxis.RIGHT);
 
+    // - Intake
     private static JoystickButton autoIntakeButton = new JoystickButton(copilot, A);
     private static Button cancelIntakeButton = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_Y);
     private static JoystickButton ejectButton = new JoystickButton(copilot, B);
+    private static JoystickButton wristRecoverButton = new JoystickButton(copilot, 9);
 
+    // - Hatch
     private static JoystickButton prepGetHatchButton = new JoystickButton(copilot, X);
     private static JoystickButton prepGetHatchFloorButton = new JoystickButton(copilot, START);
     private static Button grabHatchButton = new AxisButton(copilot, Tuning.axisButtonThreshold, RIGHT_TRIG);
@@ -90,46 +93,29 @@ public class OI {
     private static Button hatchSimpleForwardButton = new AxisButton(copilot, -Tuning.axisButtonThreshold, LEFT_Y);
     private static Button hatchSimpleBackwardButton = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_Y);
 
+    // - Climb
     private static Button climbingSafety = new AxisButton(copilot, Tuning.axisButtonThreshold, LEFT_TRIG);
     private static JoystickButton climbLevel3Button = new JoystickButton(copilot, RB); // + safety
     private static JoystickButton climbLevel2Button = new JoystickButton(copilot, LB); // + safety
     private static JoystickButton climberCylinderUp = new JoystickButton(copilot, BACK);
-    private static JoystickButton wristRecoverButton = new JoystickButton(copilot, 9);
 
-    // driver buttons
-
-    public static JoystickButton quickTurnButton = new JoystickButton(driver, LB);
-    //    public static JoystickButton autoAlignButtonAlt = new JoystickButton(drq  `iver, RB);
-//    public static JoystickButton autoAlignButton = new JoystickButton(driver, RB);
-    public static MultiAxisButton autoAlignCancelAxisButton = new MultiAxisButton(driver, 0.5, new int[]{LEFT_TRIG, RIGHT_TRIG, RIGHT_X, RIGHT_Y});
-//    public static JoystickButton autoAlignManualCancelButton = new JoystickButton(driver, X);
-
-    //    public static AxisButton autoAlignPointButton = new AxisButton(driver, Tuning.axisButtonThreshold, LEFT_TRIG);
-//    public static AxisButton testPlaceHatchButton = new AxisButton(driver, Tuning.axisButtonThreshold, RIGHT_TRIG);
-//    public static JoystickButton testGrabHatchButton = new JoystickButton(driver, A);
-//    public static JoystickButton testPlaceHatchButton = new JoystickButton(driver, B);
-
-    public static AxisButton highTargetButton = new AxisButton(driver, 0.5, LEFT_TRIG);
-
-    public static JoystickButton testWaitPlaceHatchButton = new JoystickButton(driver, X);
-
-    private static Button testElevatorMidRocketButton = new StrictDPadButton(driver, 0, DPadAxis.UP);
-
-    public static JoystickButton resetPointOffset = new JoystickButton(driver, Y);
+    // Driver
+    // - Auto-align
     public static PercentManualLineupSequence alignCommand;
-
-    public static JoystickButton arcadeToggle = new JoystickButton(driver, BACK);
-
+    public static AxisButton highTargetButton = new AxisButton(driver, 0.5, LEFT_TRIG);
     private static Button autoAlignButtonAlt = new JoystickButton(driver, RB);
 
-    public static StrictDPadButton strobeRedBlueButton = new StrictDPadButton(driver, 0, DPadAxis.DOWN);
-
-    public static MultiAxisButton pointDrivePointAxis = new MultiAxisButton(driver, 0.4, new int[]{RIGHT_X, RIGHT_Y});
-
-    // Pointdrive
+    // - Driving
     static PointDrive pointDriveCommand;
     public static final XboxController POINTDRIVE_CONTROLLER = OI.driver;
     public static final Hand POINTDRIVE_POINT_HAND = Hand.kRight;
+    public static MultiAxisButton pointDrivePointAxis = new MultiAxisButton(driver, 0.4, new int[]{RIGHT_X, RIGHT_Y});
+    public static JoystickButton resetPointOffset = new JoystickButton(driver, Y);
+
+    public static JoystickButton arcadeToggle = new JoystickButton(driver, BACK);
+
+    // - LEDs
+    public static StrictDPadButton strobeRedBlueButton = new StrictDPadButton(driver, 0, DPadAxis.DOWN);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -178,28 +164,6 @@ public class OI {
 //        cancelClimbButton.cancelWhenPressed(climbCommand3);
 //        cancelClimbButton.cancelWhenPressed(climbCommand2);
 
-
-
-//        SimplePointToAngle quickTurnCommand = new SimplePointToAngle(Math.PI - Math.toRadians(2));
-//        quickTurnButton.whenPressed(quickTurnCommand);
-//        autoAlignCancelAxisButton.cancelWhenPressed(quickTurnCommand);
-
-//        testGrabHatchButton.whenPressed(new TestGrabHatch());
-//        testPlaceHatchButton.whenPressed(new TestPlaceHatch());
-        testElevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-        testElevatorMidRocketButton.cancelWhenPressed(alignCommand);
-
-//        if (Tuning.isComp) {
-//            testWaitPlaceHatchButton.whenPressed(new PrimeForSensorTripSequence());
-//        } else {
-//            testWaitPlaceHatchButton.whenPressed(new SimpleCommand("", () -> {
-//                Robot.hatch.extend();
-//                Robot.hatch.release();
-//            }));
-//            testWaitPlaceHatchButton.whenReleased(new TestGrabHatch());
-//        }
-
-
         Command arcadeCommand = new SimpleLoopCommand("Drive",
             new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
                 OI::getDriveHardTurn)
@@ -246,7 +210,6 @@ public class OI {
         intakeLoadingStationButton.whenPressed(pointDriveCommand);
         elevatorCargoShipButton.whenPressed(pointDriveCommand);
         elevatorMidRocketButton.whenPressed(pointDriveCommand);
-        testElevatorMidRocketButton.whenPressed(pointDriveCommand);
 
         Command pmuCommand = new PercentManualLineupSequence();
         pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
