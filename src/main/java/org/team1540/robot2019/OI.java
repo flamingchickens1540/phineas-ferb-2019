@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
@@ -165,8 +164,8 @@ public class OI {
 //        cancelClimbButton.cancelWhenPressed(climbCommand2);
 
         Command arcadeCommand = new SimpleLoopCommand("Drive",
-            new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
-                OI::getDriveHardTurn)
+            new AdvancedArcadeJoystickInput(true, OI::getArcadeDriveThrottle, OI::getArcadeDriveSoftTurn,
+                OI::getArcadeDriveHardTurn)
                 .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
                 .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
                 .then(Robot.drivetrain.getPipelineOutput(false)), Robot.drivetrain);
@@ -235,26 +234,26 @@ public class OI {
         logger.info("Initialized operator interface in " + (end - start) + " ms");
     }
 
-    public static double getDriveThrottle() {
+    public static double getArcadeDriveThrottle() {
         return Utilities.scale(
             -Utilities.processDeadzone(driver.getY(GenericHID.Hand.kLeft), Tuning.driveDeadzone),
             Tuning.driveThrottleExponent);
     }
 
-    public static double getDriveSoftTurn() {
+    public static double getArcadeDriveSoftTurn() {
         return Utilities.scale(
             Utilities.processDeadzone(driver.getX(Hand.kRight), Tuning.driveDeadzone),
             Tuning.driveSoftTurnExponent);
     }
 
-    public static double getDriveHardTurn() {
+    public static double getArcadeDriveHardTurn() {
         return Utilities.scale(
             Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kRight), 0.1)
                 - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
             Tuning.driveHardTurnExponent);
     }
 
-    public static double getClimbAxis() {
+    public static double getManualClimberArmsAxis() {
         return Utilities.processDeadzone(-copilot.getY(Hand.kRight), Tuning.driveDeadzone);
     }
 
