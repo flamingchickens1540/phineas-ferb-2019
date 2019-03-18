@@ -28,7 +28,7 @@ public class TankDriveOdometryAccumulator {
 
         double deltaDistanceLeft = distanceLeft - distancePrevLeft;
         double deltaDistanceRight = distanceRight - distancePrevRight;
-        double deltaRads = TrigUtils.signedAngleError(angleRadians, angleRadsPrev);
+        double deltaRads = TrigUtils.signedAngleError(angleRadsPrev, angleRadians);
 
         distancePrevLeft = distanceLeft;
         distancePrevRight = distanceRight;

@@ -1,8 +1,8 @@
-package org.team1540.robot2019.commands.drivetrain;
+package org.team1540.robot2019.utils;
 
 import edu.wpi.first.wpilibj.GyroBase;
 
-public class PointDriveFakeGyro extends GyroBase {
+public class ShuffleboardFakeGyro extends GyroBase {
 
     private double angle = 0;
 

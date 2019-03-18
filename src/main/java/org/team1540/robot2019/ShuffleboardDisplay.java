@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.drivetrain.PointDriveFakeGyro;
 import org.team1540.robot2019.commands.selftests.SelfTest;
+import org.team1540.robot2019.utils.ShuffleboardFakeGyro;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleLoopCommand;
 
@@ -18,8 +18,8 @@ public class ShuffleboardDisplay {
 
     private static final Logger logger = Logger.getLogger(ShuffleboardDisplay.class);
 
-    private static NetworkTableEntry pressureEntry;
-    private static PointDriveFakeGyro pointDriveFakeGyro = new PointDriveFakeGyro();
+    private static NetworkTableEntry    pressureEntry;
+    private static ShuffleboardFakeGyro pointDriveFakeGyro = new ShuffleboardFakeGyro();
 
 
     public static void init() {
