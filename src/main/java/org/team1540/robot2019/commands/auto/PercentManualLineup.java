@@ -92,7 +92,7 @@ public class PercentManualLineup extends PIDCommand {
     }
 
     private double getAngleError(double x) {
-        double error = TrigUtils.signedAngleError(x, Hardware.navx.getYawRadians());
+        double error = TrigUtils.signedAngleError(Hardware.navx.getYawRadians(), x);
         SmartDashboard.putNumber("PercentLineup/AngleError", error);
         return error;
     }

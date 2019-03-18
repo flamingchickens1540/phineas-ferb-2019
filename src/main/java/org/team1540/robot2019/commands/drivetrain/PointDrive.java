@@ -40,17 +40,15 @@ public class PointDrive extends PIDCommand {
     private final Executable pipeline;
 
     public PointDrive() {
-        super(
-            P,
-            I,
-            D
-        );
+        super(P, I, D);
         requires(Robot.drivetrain);
+
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
+
         if (PointDrive.initAngleOffset == null) { // Only set initial angle offset if there is no offset already set
             setInitAngleOffset(Hardware.navx.getYawRadians());
         }
@@ -62,13 +60,13 @@ public class PointDrive extends PIDCommand {
         setGoalToCurrentAngle();
     }
 
-    private void setGoalToCurrentAngle() {
+    private static void setGoalToCurrentAngle() {
         goalAngle = Hardware.navx.getYawRadians() - initAngleOffset;
     }
 
     public static void setInitAngleOffset(Double initAngleOffset) {
-        goalAngle = null;
         PointDrive.initAngleOffset = initAngleOffset;
+        setGoalToCurrentAngle();
     }
 
     @Override
@@ -76,26 +74,14 @@ public class PointDrive extends PIDCommand {
         if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
             goalAngle = OI.getPointDriveAngle();
         }
-        if (goalAngle == null) {
-            return 0;
-        }
-        return getAngleError(goalAngle + initAngleOffset);
+        return TrigUtils.signedAngleError(Hardware.navx.getYawRadians(), goalAngle + initAngleOffset);
     }
 
     @Override
     protected void usePIDOutput(double output) {
-        output *= OUTPUT_SCALAR;
-        double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX, MIN);
-        if (goalAngle == null || Math.abs(output) < DEADZONE) {
-            cmdVelTheta = 0;
-        }
-        Twist2D cmdVel = new Twist2D(-OI.getTankdriveLeftAxis() * THROTTLE_CONSTANT, 0, -cmdVelTheta);
-        twist2DInput.setTwist(cmdVel);
+        double cmdVelTheta = ControlUtils.allVelocityConstraints(output*OUTPUT_SCALAR, MAX, MIN, DEADZONE);
+        twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * THROTTLE_CONSTANT, 0, -cmdVelTheta)); // TODO: Figure out why cmdVelTheta is negated
         pipeline.execute();
-    }
-
-    private double getAngleError(double x) {
-        return TrigUtils.signedAngleError(x, Hardware.navx.getYawRadians());
     }
 
     @Override

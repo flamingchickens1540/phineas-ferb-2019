@@ -220,6 +220,10 @@ public class OI {
     }
 
     // Point drive
+    public static double getPointDriveThrottle() {
+        return -Utilities.scale(Utilities.processDeadzone(driver.getY(Hand.kLeft), Tuning.driveDeadzone), 2);
+    }
+
     public static double getPointDriveAngle() {
         return driver.get2DJoystickAngle(Hand.kRight);
     }

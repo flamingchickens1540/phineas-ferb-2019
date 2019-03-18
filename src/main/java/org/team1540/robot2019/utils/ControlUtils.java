@@ -10,4 +10,15 @@ public class ControlUtils {
         }
         return velocity;
     }
+
+    public static double simpleDeadzone(double input, double deadzone) {
+        if (Math.abs(input) < Math.abs(deadzone)) {
+            return 0;
+        }
+        return input;
+    }
+
+    public static double allVelocityConstraints(double output, double max, double min, double deadzone) {
+        return simpleDeadzone(velocityPosNegConstrain(output, max, min), deadzone);
+    }
 }
