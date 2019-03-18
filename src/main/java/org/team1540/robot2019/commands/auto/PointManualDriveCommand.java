@@ -11,7 +11,7 @@ import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
-public abstract class ContinuousPointManualDriveCommand extends PIDCommand {
+public abstract class PointManualDriveCommand extends PIDCommand {
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
@@ -22,7 +22,7 @@ public abstract class ContinuousPointManualDriveCommand extends PIDCommand {
     private double deadzone;
     private double throttleConstant;
 
-    public ContinuousPointManualDriveCommand(double p, double i, double d, double outputScalar, double max, double min, double deadzone, double throttleConstant) {
+    public PointManualDriveCommand(double p, double i, double d, double outputScalar, double max, double min, double deadzone, double throttleConstant) {
         super(p, i, d);
         this.outputScalar = outputScalar;
         this.max = max;
@@ -51,9 +51,4 @@ public abstract class ContinuousPointManualDriveCommand extends PIDCommand {
     }
 
     protected abstract double returnAngleError();
-
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
 }

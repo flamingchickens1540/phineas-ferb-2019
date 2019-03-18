@@ -4,15 +4,10 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.auto.ContinuousPointManualDriveCommand;
+import org.team1540.robot2019.commands.auto.PointManualDriveCommand;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
-import org.team1540.robot2019.utils.TankDriveTwist2DInput;
-import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
-import org.team1540.rooster.drive.pipeline.UnitScaler;
-import org.team1540.rooster.functional.Executable;
 
-public class PointDrive extends ContinuousPointManualDriveCommand {
+public class PointDrive extends PointManualDriveCommand {
 
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
@@ -28,12 +23,9 @@ public class PointDrive extends ContinuousPointManualDriveCommand {
     private static double I = 0;
     private static double D = 0.5;
 
-    private static double POINT_JOYSTICK_DEADZONE = 0.5;
+    private static final double POINT_JOYSTICK_DEADZONE = 0.5;
 
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
-
-    private Executable pipeline;
-    private TankDriveTwist2DInput twist2DInput;
 
     private static double initAngleOffset = Hardware.navx.getYawRadians();
     private static double goalAngle = 0;
@@ -41,12 +33,6 @@ public class PointDrive extends ContinuousPointManualDriveCommand {
     public PointDrive() {
         super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
         requires(Robot.drivetrain);
-
-        twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
-        pipeline = twist2DInput
-            .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
-            .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
-            .then(Robot.drivetrain.getPipelineOutput(false));
     }
 
     @Override
@@ -70,5 +56,10 @@ public class PointDrive extends ContinuousPointManualDriveCommand {
             goalAngle = OI.getPointDriveAngle();
         }
         return TrigUtils.signedAngleError(Hardware.navx.getYawRadians(), goalAngle + initAngleOffset);
+    }
+
+    @Override
+    protected boolean isFinished() {
+        return false;
     }
 }
