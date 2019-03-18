@@ -77,20 +77,19 @@ public class OI {
 
     // Driver
     // - Auto-align
-    public static PercentManualLineupSequence alignCommand;
-    private static Button highTargetButton = driver.getAxisButton(0.5, XboxAxis.LEFT_TRIG);
+    private static Button highTargetButton   = driver.getAxisButton(0.5, XboxAxis.LEFT_TRIG);
     private static Button autoAlignButtonAlt = driver.getButton(XboxButton.RB);
 
     // - Driving
     static PointDrive pointDriveCommand;
 
-    public static Button pointDrivePointAxis = driver.getMultiAxisButton(0.4, new XboxAxis[]{XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y});
-    public static Button resetPointOffset    = driver.getButton(XboxButton.Y);
+    private static Button pointDrivePointAxis = driver.getMultiAxisButton(0.4, new XboxAxis[]{XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y});
+    private static Button resetPointOffset    = driver.getButton(XboxButton.Y);
 
-    public static Button arcadeToggle = driver.getButton(XboxButton.BACK);
+    private static Button arcadeToggle = driver.getButton(XboxButton.BACK);
 
     // - LEDs
-    public static Button strobeRedBlueButton = driver.getDPadButton(DPadAxis.DOWN);
+    private static Button strobeRedBlueButton = driver.getDPadButton(DPadAxis.DOWN);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
