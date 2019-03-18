@@ -49,7 +49,7 @@ public class OI {
 
     // Copilot
     // - Elevator
-    private static Button elevatorMidRocketButton    = copilot.getDPadButton(DPadAxis.UP);
+    private static Button elevatorFullUpButton       = copilot.getDPadButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton    = copilot.getDPadButton(DPadAxis.LEFT);
     private static Button elevatorDownButton         = copilot.getDPadButton(DPadAxis.DOWN);
     private static Button intakeLoadingStationButton = copilot.getDPadButton(DPadAxis.RIGHT);
@@ -99,19 +99,19 @@ public class OI {
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
         // Elevator
-        elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+        elevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
-        intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
-
-        // Wrist
-        wristRecoverButton.whileHeld(new RecoverWrist());
+        intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
 
         // Intake cargo
         Command floorIntakeCommand = new FloorIntake();
         floorIntakeButton.whenPressed(floorIntakeCommand);
         cancelIntakeButton.cancelWhenPressed(floorIntakeCommand);
         cancelIntakeButton.whenPressed(new MoveElevatorToZero());
+
+        // Wrist
+        wristRecoverButton.whileHeld(new RecoverWrist());
 
         // Eject cargo
         ForwardThenEject forwardThenEjectCommand = new ForwardThenEject();
@@ -172,7 +172,7 @@ public class OI {
         // Auto-align cancel
         intakeLoadingStationButton.whenPressed(pointDriveCommand);
         elevatorCargoShipButton.whenPressed(pointDriveCommand);
-        elevatorMidRocketButton.whenPressed(pointDriveCommand);
+        elevatorFullUpButton.whenPressed(pointDriveCommand);
 
         // Auto-align start
         Command lineupCommand = new PercentManualLineupSequence();
