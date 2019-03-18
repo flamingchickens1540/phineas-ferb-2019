@@ -19,19 +19,22 @@ public class PointDrive extends PIDCommand {
 
     public static final Logger logger = Logger.getLogger(PointDrive.class);
 
-    private static double DEADZONE_VEL_THETA = 0.05;
-
     // Max/Min angular velocity
-    private static double MIN_VEL_THETA = 0;
-    private static double MAX_VEL_THETA = 10;
-    private static double OUTPUT_SCALAR = 20;
+    private static final double MIN = 0;
+    private static final double MAX = 10;
+    private static final double DEADZONE = 0.05;
 
-    // Constants for angular VPID controller
-    private static final double ANGULAR_KP = 0.2;
-    private static final double ANGULAR_KI = 0;
-    private static final double ANGULAR_KD = 0.5;
+    private static final double OUTPUT_SCALAR = 20;
 
-    private static Double initAngleOffset;
+    // Constants for angular PID controller
+    private static final double P = 0.2;
+    private static final double I = 0;
+    private static final double D = 0.5;
+
+    public static final double POINT_JOYSTICK_DEADZONE = 0.5;
+    public static final double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
+
+    private static Double initAngleOffset = null;
     private static Double goalAngle = null;
 
     private final TankDriveTwist2DInput twist2DInput;
@@ -39,9 +42,9 @@ public class PointDrive extends PIDCommand {
 
     public PointDrive() {
         super(
-            ANGULAR_KP,
-            ANGULAR_KI,
-            ANGULAR_KD
+            P,
+            I,
+            D
         );
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
@@ -49,8 +52,10 @@ public class PointDrive extends PIDCommand {
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
-        setInitAngleOffset(Hardware.navx.getYawRadians());
-        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, MAX_VEL_THETA, MIN_VEL_THETA, DEADZONE_VEL_THETA));
+        if (PointDrive.initAngleOffset == null) { // Only set initial angle offset if there is no offset already set
+            setInitAngleOffset(Hardware.navx.getYawRadians());
+        }
+        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
     @Override
@@ -69,7 +74,7 @@ public class PointDrive extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        if (OI.getPointDriveMagnitude() > 0.5) {
+        if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
             goalAngle = OI.getPointDriveAngle();
         }
         if (goalAngle == null) {
@@ -81,12 +86,12 @@ public class PointDrive extends PIDCommand {
     @Override
     protected void usePIDOutput(double output) {
         output *= OUTPUT_SCALAR;
-        double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX_VEL_THETA, MIN_VEL_THETA);
-        if (goalAngle == null || Math.abs(output) < DEADZONE_VEL_THETA) {
+        double cmdVelTheta = ControlUtils.velocityPosNegConstrain(output, MAX, MIN);
+        if (goalAngle == null || Math.abs(output) < DEADZONE) {
             cmdVelTheta = 0;
         }
         SmartDashboard.putNumber("PointDrive/Debug/cmdVelTheta", cmdVelTheta);
-        Twist2D cmdVel = new Twist2D(OI.getTankdriveLeftAxis() * -3, 0, -cmdVelTheta);
+        Twist2D cmdVel = new Twist2D(-OI.getTankdriveLeftAxis() * THROTTLE_CONSTANT, 0, -cmdVelTheta);
         twist2DInput.setTwist(cmdVel);
         pipeline.execute();
     }
