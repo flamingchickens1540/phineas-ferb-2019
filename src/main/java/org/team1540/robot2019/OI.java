@@ -55,7 +55,7 @@ public class OI {
     private static Button intakeLoadingStationButton = copilot.getDPadButton(DPadAxis.RIGHT);
 
     // - Intake
-    private static Button autoIntakeButton   = copilot.getButton(XboxButton.A);
+    private static Button floorIntakeButton  = copilot.getButton(XboxButton.A);
     private static Button cancelIntakeButton = copilot.getAxisButton(Tuning.axisButtonThreshold, XboxAxis.LEFT_Y);
     private static Button ejectButton        = copilot.getButton(XboxButton.B);
     private static Button wristRecoverButton = copilot.getButton(XboxButton.LEFT_PRESS);
@@ -98,46 +98,47 @@ public class OI {
         logger.info("Initializing operator interface...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
+        // Elevator
         elevatorMidRocketButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
+        intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
 
-        Command loadingIntakeCommand = new LoadingStationIntake();
-        intakeLoadingStationButton.whenPressed(loadingIntakeCommand);
-        cancelIntakeButton.cancelWhenPressed(loadingIntakeCommand);
+        // Wrist
+        wristRecoverButton.whileHeld(new RecoverWrist());
+
+        // Intake cargo
+        Command floorIntakeCommand = new FloorIntake();
+        floorIntakeButton.whenPressed(floorIntakeCommand);
+        cancelIntakeButton.cancelWhenPressed(floorIntakeCommand);
         cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
-        Command intakeCommand = new FloorIntake();
-//        autoIntakeButton.whenPressed(new SimpleConditionalCommand(Robot.hatch::isReleased, intakeCommand));
-        autoIntakeButton.whenPressed(intakeCommand);
-        cancelIntakeButton.cancelWhenPressed(intakeCommand);
+        // Eject cargo
         ForwardThenEject command = new ForwardThenEject();
         ejectButton.whenPressed(command);
         ejectButton.whenReleased(new BackThenDown());
         ejectButton.whenReleased(new SimpleCommand("", command::cancel));
 
-//        prepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
+        // Hatch
         prepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
-//        prepGetHatchButton.whenPressed(new TestGrabHatch());
-//        placeHatchButton.whenPressed(new PlaceHatchSequence());
         placeHatchButton.whenPressed(new PlaceHatchSequence());
-        wristRecoverButton.whileHeld(new RecoverWrist());
 
-        prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
         grabHatchButton.whenPressed(new GrabThenBack());
         stowHatchButton.whenPressed(new StowHatchMech());
 
         hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
         hatchSimpleBackwardButton.whenPressed(new RetractHatchMech());
 
+        prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
+
+        // Climb
         Command climbCommand3 = new ClimbLevelThree();
         Command climbCommand2 = new ClimbLevelTwo();
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand3));
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand2));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
-//        cancelClimbButton.cancelWhenPressed(climbCommand3);
-//        cancelClimbButton.cancelWhenPressed(climbCommand2);
 
+        // Arcade drive
         Command arcadeCommand = new SimpleLoopCommand("Drive",
             new AdvancedArcadeJoystickInput(true, OI::getArcadeDriveThrottle, OI::getArcadeDriveSoftTurn,
                 OI::getArcadeDriveHardTurn)
@@ -152,6 +153,7 @@ public class OI {
             }
         }));
 
+        // Point drive
         pointDriveCommand = new PointDrive();
         pointDrivePointAxis.whileHeld(new SimpleCommand("", () -> {
             if (!arcadeCommand.isRunning() && !(Robot.drivetrain
@@ -159,43 +161,7 @@ public class OI {
                 pointDriveCommand.start();
             }
         }));
-        pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
-            pointDriveCommand.cancel();
-            if (highTargetButton.get()) {
-                Robot.limelight.setPipeline(1);
-                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
-                Robot.limelight.prepForVision();
-//                new PercentManualLineup().start();
-            } else {
-                Robot.limelight.setPipeline(0);
-                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
 
-            }
-        }));
-        highTargetButton.whenPressed(new SimpleCommand("", () -> {
-            if (!pointDriveCommand.isRunning()) {
-                Robot.limelight.setPipeline(1);
-                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
-                Robot.limelight.prepForVision();
-
-//                new PercentManualLineup().start();
-            }
-        }));
-        intakeLoadingStationButton.whenPressed(pointDriveCommand);
-        elevatorCargoShipButton.whenPressed(pointDriveCommand);
-        elevatorMidRocketButton.whenPressed(pointDriveCommand);
-
-        Command pmuCommand = new PercentManualLineupSequence();
-        pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
-            if (!arcadeCommand.isRunning()) {
-                pmuCommand.start();
-            }
-        }));
-        autoAlignButtonAlt.whenPressed(new SimpleCommand("", () -> {
-            if (!arcadeCommand.isRunning()) {
-                pmuCommand.start();
-            }
-        }));
         SimpleCommand resetPointOffset = new SimpleCommand("Reset Point Offset", () -> {
             logger.debug("Setting Angle Offset");
             PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
@@ -203,6 +169,45 @@ public class OI {
         resetPointOffset.setRunWhenDisabled(true);
         OI.resetPointOffset.whenPressed(resetPointOffset);
 
+        // Auto-align cancel
+        intakeLoadingStationButton.whenPressed(pointDriveCommand);
+        elevatorCargoShipButton.whenPressed(pointDriveCommand);
+        elevatorMidRocketButton.whenPressed(pointDriveCommand);
+
+        // Auto-align start
+        Command lineupCommand = new PercentManualLineupSequence();
+        pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
+            pointDriveCommand.cancel();
+            if (highTargetButton.get()) {
+                Robot.limelight.setPipeline(1);
+                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
+                Robot.limelight.prepForVision();
+            } else {
+                Robot.limelight.setPipeline(0);
+                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
+            }
+            if (!arcadeCommand.isRunning()) {
+                lineupCommand.start();
+            }
+        }));
+
+        // High vision target
+        highTargetButton.whenPressed(new SimpleCommand("", () -> {
+            if (!pointDriveCommand.isRunning()) {
+                Robot.limelight.setPipeline(1);
+                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
+                Robot.limelight.prepForVision();
+            }
+        }));
+
+        // Manual activate auto-align
+        autoAlignButtonAlt.whenPressed(new SimpleCommand("", () -> {
+            if (!arcadeCommand.isRunning()) {
+                lineupCommand.start();
+            }
+        }));
+
+        // Flash LEDs
         strobeRedBlueButton.whileHeld(new BlinkLEDs(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
 
         double end = RobotController.getFPGATime() / 1000.0;
