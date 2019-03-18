@@ -114,10 +114,10 @@ public class OI {
         cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
         // Eject cargo
-        ForwardThenEject command = new ForwardThenEject();
-        ejectButton.whenPressed(command);
+        ForwardThenEject forwardThenEjectCommand = new ForwardThenEject();
+        ejectButton.whenPressed(forwardThenEjectCommand);
+        ejectButton.whenReleased(new SimpleCommand("", forwardThenEjectCommand::cancel));
         ejectButton.whenReleased(new BackThenDown());
-        ejectButton.whenReleased(new SimpleCommand("", command::cancel));
 
         // Hatch
         prepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
