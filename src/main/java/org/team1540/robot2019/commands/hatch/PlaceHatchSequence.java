@@ -11,9 +11,9 @@ import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.rooster.util.SimpleCommand;
 
-public class TestPlaceHatch extends CommandGroup {
+public class PlaceHatchSequence extends CommandGroup {
 
-    public TestPlaceHatch() {
+    public PlaceHatchSequence() {
         addSequential(new GrabHatch());
         addSequential(new ExtendHatchMech());
         addSequential(new SimpleCommand("Drive", () -> new TankDriveForTimePercent(0.3, 0.3).start()));
