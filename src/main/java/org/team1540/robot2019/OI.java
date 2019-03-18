@@ -222,13 +222,12 @@ public class OI {
                 pmuCommand.start();
             }
         }));
-        SimpleCommand reset_point_offset = new SimpleCommand("Reset Point Offset", () -> {
+        SimpleCommand resetPointOffset = new SimpleCommand("Reset Point Offset", () -> {
             logger.debug("Setting Angle Offset");
             PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
         });
-        reset_point_offset.setRunWhenDisabled(true);
-        resetPointOffset.whenPressed(reset_point_offset);
-        Shuffleboard.getTab("Phineas").add(reset_point_offset);
+        resetPointOffset.setRunWhenDisabled(true);
+        OI.resetPointOffset.whenPressed(resetPointOffset);
 
         strobeRedBlueButton.whileHeld(new BlinkLEDs(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
 
