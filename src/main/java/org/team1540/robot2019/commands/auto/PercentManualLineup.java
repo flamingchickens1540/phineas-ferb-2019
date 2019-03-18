@@ -20,27 +20,26 @@ public class PercentManualLineup extends PIDCommand {
 
     private static double OUTPUT_SCALAR = 20;
 
-    private static double DEADZONE = 0.05;
-
     // Max/Min angular velocity
     private static double MIN = 0;
     private static double MAX = 10;
+    private static double DEADZONE = 0.05;
 
     // Constants for angular VPID controller
-    private static double ANGULAR_KP = 0.32;
-    private static double ANGULAR_KI = 0;
-    private static double ANGULAR_KD = 0.6;
-
-    private static final double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
+    private static double P = 0.32;
+    private static double I = 0;
+    private static double D = 0.6;
 
     //        public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
     public static double ANGLE_OFFSET = Math.toRadians(8); // Degrees offset from center of target
+
+    private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
 
     public PercentManualLineup() {
-        super(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD);
+        super(P, I, D);
         requires(Robot.drivetrain);
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
@@ -48,10 +47,10 @@ public class PercentManualLineup extends PIDCommand {
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
 
-        SmartDashboard.putNumber("PercentLineup/OUTPUT_SCALAR", OUTPUT_SCALAR); // TODO: Remove temporary tuning (yaml ftw)
-        SmartDashboard.putNumber("PercentLineup/ANGULAR_KP", ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
-        SmartDashboard.putNumber("PercentLineup/ANGULAR_KI", ANGULAR_KI);
-        SmartDashboard.putNumber("PercentLineup/ANGULAR_KD", ANGULAR_KD);
+        SmartDashboard.putNumber("PercentLineup/OUTPUT_SCALAR", OUTPUT_SCALAR);
+        SmartDashboard.putNumber("PercentLineup/ANGULAR_KP", P);
+        SmartDashboard.putNumber("PercentLineup/ANGULAR_KI", I);
+        SmartDashboard.putNumber("PercentLineup/ANGULAR_KD", D);
         SmartDashboard.putNumber("PercentLineup/MAX_VEL_THETA", MAX);
         SmartDashboard.putNumber("PercentLineup/MIN_VEL_THETA", MIN);
         SmartDashboard.putNumber("PercentLineup/DEADZONE_VEL_THETA", DEADZONE);
@@ -60,20 +59,20 @@ public class PercentManualLineup extends PIDCommand {
 
     @Override
     protected void initialize() {
-        ANGULAR_KP = SmartDashboard.getNumber("PercentLineup/OUTPUT_SCALAR", OUTPUT_SCALAR); // TODO: Remove temporary tuning (yaml ftw)
-        ANGULAR_KP = SmartDashboard.getNumber("PercentLineup/ANGULAR_KP", ANGULAR_KP); // TODO: Remove temporary tuning (yaml ftw)
-        ANGULAR_KI = SmartDashboard.getNumber("PercentLineup/ANGULAR_KI", ANGULAR_KI);
-        ANGULAR_KD = SmartDashboard.getNumber("PercentLineup/ANGULAR_KD", ANGULAR_KD);
+        OUTPUT_SCALAR = SmartDashboard.getNumber("PercentLineup/OUTPUT_SCALAR", OUTPUT_SCALAR);
+        P = SmartDashboard.getNumber("PercentLineup/ANGULAR_KP", P);
+        I = SmartDashboard.getNumber("PercentLineup/ANGULAR_KI", I);
+        D = SmartDashboard.getNumber("PercentLineup/ANGULAR_KD", D);
         MAX = SmartDashboard.getNumber("PercentLineup/MAX_VEL_THETA", MAX);
         MIN = SmartDashboard.getNumber("PercentLineup/MIN_VEL_THETA", MIN);
         DEADZONE = SmartDashboard.getNumber("PercentLineup/DEADZONE_VEL_THETA", DEADZONE);
         ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineup/ANGLE_OFFSET", ANGLE_OFFSET);
 
-        this.getPIDController().setP(ANGULAR_KP);
-        this.getPIDController().setI(ANGULAR_KI);
-        this.getPIDController().setD(ANGULAR_KD);
+        this.getPIDController().setP(P);
+        this.getPIDController().setI(I);
+        this.getPIDController().setD(D);
 
-        logger.debug(String.format("Initialized with constants: P: %f I: %f D: %f Max: %f Min: %f", ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, MAX, MIN));
+        logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
         logger.debug("Starting...");
     }
 
@@ -90,7 +89,7 @@ public class PercentManualLineup extends PIDCommand {
     @Override
     protected void usePIDOutput(double output) {
         double cmdVelTheta = ControlUtils.allVelocityConstraints(output*OUTPUT_SCALAR, MAX, MIN, DEADZONE);
-        twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * THROTTLE_CONSTANT, 0, -cmdVelTheta));
+        twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * THROTTLE_CONSTANT, 0, -cmdVelTheta)); // TODO: Figure out why cmdVelTheta is negated
         pipeline.execute();
     }
 
@@ -102,6 +101,6 @@ public class PercentManualLineup extends PIDCommand {
 
     @Override
     protected void end() {
-        logger.debug("Ended!");
+        logger.debug("Ended");
     }
 }
