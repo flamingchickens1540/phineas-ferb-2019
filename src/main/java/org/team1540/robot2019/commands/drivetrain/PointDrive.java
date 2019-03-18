@@ -65,7 +65,7 @@ public class PointDrive extends ContinuousPointManualDriveCommand {
     }
 
     @Override
-    protected double returnPIDInput() {
+    protected double returnAngleError() {
         if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
             goalAngle = OI.getPointDriveAngle();
         }

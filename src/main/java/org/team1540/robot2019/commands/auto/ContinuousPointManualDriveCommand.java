@@ -1,7 +1,6 @@
 package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.PIDCommand;
-import org.apache.log4j.Logger;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
@@ -13,8 +12,6 @@ import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
 public abstract class ContinuousPointManualDriveCommand extends PIDCommand {
-
-    public static final Logger logger = Logger.getLogger(ContinuousPointManualDriveCommand.class);
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
@@ -42,20 +39,21 @@ public abstract class ContinuousPointManualDriveCommand extends PIDCommand {
     }
 
     @Override
-    protected void usePIDOutput(double output) {
+    protected final void usePIDOutput(double output) {
         double cmdVelTheta = ControlUtils.allVelocityConstraints(output*outputScalar, max, min, deadzone);
         twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * throttleConstant, 0, -cmdVelTheta)); // TODO: Figure out why cmdVelTheta is negated
         pipeline.execute();
     }
 
+    @Override
+    protected final double returnPIDInput() {
+        return returnAngleError();
+    }
+
+    protected abstract double returnAngleError();
 
     @Override
     protected boolean isFinished() {
         return false;
-    }
-
-    @Override
-    protected void end() {
-        logger.debug("Ended");
     }
 }
