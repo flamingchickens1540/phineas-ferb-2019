@@ -90,7 +90,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
             goal = computeGoal();
         }
 
-        if (goal != null && Robot.limelight.isTargetFound()) {
+        if (goal != null && Hardware.limelight.isTargetFound()) {
             return getAngleError();
         } else {
             return 0;
