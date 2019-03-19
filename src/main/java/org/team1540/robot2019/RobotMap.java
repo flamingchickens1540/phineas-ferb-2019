@@ -64,13 +64,13 @@ public class RobotMap {
 
     public static final Port NAVX = Port.kMXP;
 
-    public static final double CAM_X                     = 0.086;
-    public static final double CAM_Y                     = 0.099;
-    public static final double CAM_Z                     = 1.12;
+    public static final double CAM_X = 0.086;
+    public static final double CAM_Y = 0.099;
+    public static final double CAM_Z = 1.12;
     public static final double CAM_PITCH;
-    public static final double CAM_ROLL                  = Math.toRadians(0);
+    public static final double CAM_ROLL = Math.toRadians(0);
     public static final double CAM_YAW;
-    public static final double HATCH_TARGET_HEIGHT       = 0.74;
+    public static final double HATCH_TARGET_HEIGHT = 0.74;
     public static final double ROCKET_BALL_TARGET_HEIGHT = 0.99;
 
     static {

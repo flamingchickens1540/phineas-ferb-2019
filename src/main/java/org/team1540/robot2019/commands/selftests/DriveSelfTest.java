@@ -13,6 +13,7 @@ import org.team1540.robot2019.Tuning;
 import org.team1540.rooster.wrappers.ChickenController;
 
 public class DriveSelfTest extends Command {
+
     private static final Logger logger = Logger.getLogger(DriveSelfTest.class);
 
     private boolean finished = false;

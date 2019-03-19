@@ -40,7 +40,7 @@ public abstract class PointManualDriveCommand extends PIDCommand {
 
     @Override
     protected final void usePIDOutput(double output) {
-        double cmdVelTheta = ControlUtils.allVelocityConstraints(output*outputScalar, max, min, deadzone);
+        double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
         twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * throttleConstant, 0, cmdVelTheta));
         pipeline.execute();
     }

@@ -104,8 +104,10 @@ public class ChickenXboxController extends XboxController {
     public Vector2D get2DJoystickVector(Hand hand) {
         return new Vector2D(getRectifiedX(hand), getRectifiedY(hand));
     }
+
     /**
      * Gets angle from a 2D joystick
+     *
      * @param hand Left vs right joystick of the xbox this
      * @return Angle in radians counter-clockwise from 12 o'clock
      */
@@ -131,8 +133,9 @@ public class ChickenXboxController extends XboxController {
 
     public MultiAxisButton getMultiAxisButton(double threshold, XboxAxis[] axes) {
         int[] axesIds = new int[axes.length];
-        for (int i = 0; i < axes.length; i++)
+        for (int i = 0; i < axes.length; i++) {
             axesIds[i] = axes[i].value;
+        }
         return new MultiAxisButton(this, threshold, axesIds);
     }
 }
