@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
             drivetrain::getLeftPositionMeters,
             drivetrain::getRightPositionMeters,
             Hardware.navx::getAngleRadians,
-            0.011
+            0.01
         );
 
         Hardware.limelight = new Limelight("limelight-a",
