@@ -132,10 +132,8 @@ public class OI {
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
         // Climb
-        Command climbCommand3 = new ClimbLevelThree();
-        Command climbCommand2 = new ClimbLevelTwo();
-        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand3));
-        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, climbCommand2));
+        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
+        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
         // Arcade drive
