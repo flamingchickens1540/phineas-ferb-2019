@@ -141,13 +141,8 @@ public class OI {
                 .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
                 .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
                 .then(Robot.drivetrain.getPipelineOutput(false)), Robot.drivetrain);
-        arcadeToggle.whenPressed(new SimpleCommand("Arcade toggle", () -> {
-            if (arcadeCommand.isRunning()) {
-                arcadeCommand.cancel();
-            } else {
-                arcadeCommand.start();
-            }
-        }));
+
+        arcadeToggle.toggleWhenPressed(arcadeCommand);
 
         // Point drive
         pointDriveCommand = new PointDrive();
