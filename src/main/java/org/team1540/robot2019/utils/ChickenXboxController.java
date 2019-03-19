@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
-import org.team1540.robot2019.Tuning;
-import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.AxisButton;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.triggers.MultiAxisButton;
@@ -84,20 +82,39 @@ public class ChickenXboxController extends XboxController {
     }
 
     /**
+     * Get the X axis value of the controller in the official 1540 coordinate system
+     *
+     * @param hand Side of controller whose value should be returned.
+     * @return The X axis value of the controller in the official 1540 coordinate system
+     */
+    public double getRectifiedX(Hand hand) {
+        return -super.getY(hand);
+    }
+
+    /**
+     * Get the Y axis value of the controller in the official 1540 coordinate system
+     *
+     * @param hand Side of controller whose value should be returned.
+     * @return The Y axis value of the controller in the official 1540 coordinate system
+     */
+    public double getRectifiedY(Hand hand) {
+        return -super.getX(hand);
+    }
+
+    public Vector2D get2DJoystickVector(Hand hand) {
+        return new Vector2D(getRectifiedX(hand), getRectifiedY(hand));
+    }
+    /**
      * Gets angle from a 2D joystick
      * @param hand Left vs right joystick of the xbox this
      * @return Angle in radians counter-clockwise from 12 o'clock
      */
     public double get2DJoystickAngle(Hand hand) { // TODO: Migrate to ROOSTER
-        double x = -getY(hand);
-        double y = -getX(hand);
-        return Math.atan2(y, x);
+        return Math.atan2(getRectifiedY(hand), getRectifiedX(hand));
     }
 
     public double get2DJoystickMagnitude(Hand hand) { // TODO: Migrate to ROOSTER
-        double x = getX(hand);
-        double y = getY(hand);
-        return Utilities.processDeadzone(new Vector2D(x, y).distance(Vector2D.ZERO), Tuning.driveDeadzone);
+        return Vector2D.ZERO.distance(get2DJoystickVector(hand));
     }
 
     public StrictDPadButton getDPadButton(DPadAxis button) {
