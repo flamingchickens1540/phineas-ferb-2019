@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
 import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
@@ -54,7 +53,6 @@ public class Drivetrain extends Subsystem {
     private NetworkTableEntry rightCurrentAEntry = table.getEntry("rightCurrA");
     private NetworkTableEntry rightCurrentBEntry = table.getEntry("rightCurrB");
     private NetworkTableEntry rightCurrentCEntry = table.getEntry("rightCurrC");
-    private PercentManualLineupSequence command;
 
     @Override
     protected void initDefaultCommand() {
