@@ -44,52 +44,52 @@ public class OI {
     private static final Logger logger = Logger.getLogger(OI.class);
 
     // Joysticks
-    public static ChickenXboxController driver = new ChickenXboxController(0);
+    public static  ChickenXboxController driver  = new ChickenXboxController(0);
     private static ChickenXboxController copilot = new ChickenXboxController(1);
 
     // Copilot
     // - Elevator
-    private static Button elevatorFullUpButton = copilot.getDPadButton(DPadAxis.UP);
-    private static Button elevatorCargoShipButton = copilot.getDPadButton(DPadAxis.LEFT);
-    private static Button elevatorDownButton = copilot.getDPadButton(DPadAxis.DOWN);
-    private static Button intakeLoadingStationButton = copilot.getDPadButton(DPadAxis.RIGHT);
+    private static Button elevatorFullUpButton       = copilot.getButton(DPadAxis.UP);
+    private static Button elevatorCargoShipButton    = copilot.getButton(DPadAxis.LEFT);
+    private static Button elevatorDownButton         = copilot.getButton(DPadAxis.DOWN);
+    private static Button intakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
 
     // - Intake
-    private static Button floorIntakeButton = copilot.getButton(XboxButton.A);
-    private static Button cancelIntakeButton = copilot.getAxisButton(Tuning.axisButtonThreshold, XboxAxis.LEFT_Y);
-    private static Button ejectButton = copilot.getButton(XboxButton.B);
+    private static Button floorIntakeButton  = copilot.getButton(XboxButton.A);
+    private static Button cancelIntakeButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
+    private static Button ejectButton        = copilot.getButton(XboxButton.B);
     private static Button wristRecoverButton = copilot.getButton(XboxButton.LEFT_PRESS);
 
     // - Hatch
-    private static Button prepGetHatchButton = copilot.getButton(XboxButton.X);
-    private static Button prepGetHatchFloorButton = copilot.getButton(XboxButton.START);
-    private static Button grabHatchButton = copilot.getAxisButton(Tuning.axisButtonThreshold, XboxAxis.RIGHT_TRIG);
-    private static Button placeHatchButton = copilot.getButton(XboxButton.Y);
-    private static Button stowHatchButton = copilot.getAxisButton(Tuning.axisButtonThreshold, XboxAxis.LEFT_TRIG);
-    private static Button hatchSimpleForwardButton = copilot.getAxisButton(-Tuning.axisButtonThreshold, XboxAxis.LEFT_Y);
-    private static Button hatchSimpleBackwardButton = copilot.getAxisButton(Tuning.axisButtonThreshold, XboxAxis.LEFT_Y);
+    private static Button prepGetHatchButton        = copilot.getButton(XboxButton.X);
+    private static Button prepGetHatchFloorButton   = copilot.getButton(XboxButton.START);
+    private static Button grabHatchButton           = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
+    private static Button placeHatchButton          = copilot.getButton(XboxButton.Y);
+    private static Button stowHatchButton           = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
+    private static Button hatchSimpleForwardButton  = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold);
+    private static Button hatchSimpleBackwardButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
 
     // - Climb
-    private static Button climbingSafety = copilot.getAxisButton(Tuning.axisButtonThreshold, XboxAxis.LEFT_TRIG);
+    private static Button climbingSafety    = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
     private static Button climbLevel3Button = copilot.getButton(XboxButton.RB); // + safety
     private static Button climbLevel2Button = copilot.getButton(XboxButton.LB); // + safety
     private static Button climberCylinderUp = copilot.getButton(XboxButton.BACK);
 
     // Driver
     // - Auto-align
-    private static Button highTargetButton = driver.getAxisButton(0.5, XboxAxis.LEFT_TRIG);
+    private static Button highTargetButton   = driver.getButton(XboxAxis.LEFT_TRIG, 0.5);
     private static Button autoAlignButtonAlt = driver.getButton(XboxButton.RB);
 
     // - Driving
     static PointDrive pointDriveCommand;
 
-    private static Button pointDrivePointAxis = driver.getMultiAxisButton(0.4, new XboxAxis[]{XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y});
-    private static Button resetPointOffset = driver.getButton(XboxButton.Y);
+    private static Button pointDrivePointAxis = driver.getButton(0.4, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
+    private static Button resetPointOffset    = driver.getButton(XboxButton.Y);
 
     private static Button arcadeToggle = driver.getButton(XboxButton.BACK);
 
     // - LEDs
-    private static Button strobeRedBlueButton = driver.getDPadButton(DPadAxis.DOWN);
+    private static Button strobeRedBlueButton = driver.getButton(DPadAxis.DOWN);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
