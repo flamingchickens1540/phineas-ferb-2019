@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
-import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
+import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
     boolean disableBrakes;
     private Timer brakeTimer = new Timer();
 
-    public static TankDriveOdometryRunnable odometry;
+    public static TankDriveOdometryAccumulatorRunnable odometry;
     public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
     public static TEBPlanner tebPlanner;
     public static LastValidTransformTracker lastOdomToVisionTargetTracker;
@@ -66,7 +66,7 @@ public class Robot extends TimedRobot {
         climber = new Climber();
         leds = new LEDs();
 
-        odometry = new TankDriveOdometryRunnable(
+        odometry = new TankDriveOdometryAccumulatorRunnable(
             drivetrain::getLeftPositionMeters,
             drivetrain::getRightPositionMeters,
             Hardware.navx::getAngleRadians,
