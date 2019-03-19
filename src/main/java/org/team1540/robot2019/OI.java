@@ -44,7 +44,7 @@ public class OI {
     private static final Logger logger = Logger.getLogger(OI.class);
 
     // Joysticks
-    public static  ChickenXboxController driver  = new ChickenXboxController(0);
+    private static ChickenXboxController driver  = new ChickenXboxController(0);
     private static ChickenXboxController copilot = new ChickenXboxController(1);
 
     // Copilot
