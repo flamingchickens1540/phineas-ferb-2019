@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 
-public class Eject extends Command {
+public class EjectCargo extends Command {
 
-    private static final Logger logger = Logger.getLogger(Eject.class);
+    private static final Logger logger = Logger.getLogger(EjectCargo.class);
 
-    public Eject() {
+    public EjectCargo() {
         requires(Robot.intake);
     }
 

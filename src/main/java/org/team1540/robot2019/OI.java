@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
-import org.team1540.robot2019.commands.cargo.FloorIntake;
-import org.team1540.robot2019.commands.cargo.ForwardThenEject;
-import org.team1540.robot2019.commands.cargo.LoadingStationIntake;
+import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
+import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
+import org.team1540.robot2019.commands.cargo.LoadingStationCargoIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
 import org.team1540.robot2019.commands.drivetrain.PointDrive;
@@ -102,10 +102,10 @@ public class OI {
         elevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
         elevatorDownButton.whenPressed(new MoveElevatorToZero());
-        intakeLoadingStationButton.whenPressed(new LoadingStationIntake());
+        intakeLoadingStationButton.whenPressed(new LoadingStationCargoIntake());
 
         // Intake cargo
-        Command floorIntakeCommand = new FloorIntake();
+        Command floorIntakeCommand = new FloorCargoIntake();
         floorIntakeButton.whenPressed(floorIntakeCommand);
         cancelIntakeButton.cancelWhenPressed(floorIntakeCommand);
         cancelIntakeButton.whenPressed(new MoveElevatorToZero());
@@ -114,9 +114,9 @@ public class OI {
         wristRecoverButton.whileHeld(new RecoverWrist());
 
         // Eject cargo
-        ForwardThenEject forwardThenEjectCommand = new ForwardThenEject();
-        ejectButton.whenPressed(forwardThenEjectCommand);
-        ejectButton.whenReleased(new SimpleCommand("", forwardThenEjectCommand::cancel));
+        ForwardThenEjectCargo forwardThenEjectCargoCommand = new ForwardThenEjectCargo();
+        ejectButton.whenPressed(forwardThenEjectCargoCommand);
+        ejectButton.whenReleased(new SimpleCommand("", forwardThenEjectCargoCommand::cancel));
         ejectButton.whenReleased(new BackThenDown());
 
         // Hatch
