@@ -6,9 +6,9 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 
-public class LoadingStationIntake extends CommandGroup {
+public class LoadingStationCargoIntake extends CommandGroup {
 
-    public LoadingStationIntake() {
+    public LoadingStationCargoIntake() {
         addParallel(new StowHatchMech());
         addParallel(new MoveElevatorToPosition(Tuning.elevatorLoadingStationPosition));
         addSequential(new IntakeCargo());
