@@ -55,7 +55,7 @@ public class PointDrive extends PointManualDriveCommand {
         if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
             goalAngle = OI.getPointDriveAngle();
         }
-        return TrigUtils.signedAngleError(Hardware.navx.getYawRadians(), goalAngle + initAngleOffset);
+        return TrigUtils.signedAngleError(goalAngle + initAngleOffset, Hardware.navx.getYawRadians());
     }
 
     @Override
