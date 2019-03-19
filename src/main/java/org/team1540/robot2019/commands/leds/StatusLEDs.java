@@ -12,13 +12,13 @@ public class StatusLEDs extends Command {
     @Override
     protected void execute() {
         if (Robot.limelight.isTargetFound()) {
-            Robot.leds.setRaw(false, false,  true );
+            Robot.leds.setRaw(false, false, true);
         } else if (Robot.intake.hasBall()) {
-            Robot.leds.setRaw(true, false,  false );
+            Robot.leds.setRaw(true, false, false);
         } else if (!Robot.hatch.isReleased()) {
-            Robot.leds.setRaw(false, true,  false );
+            Robot.leds.setRaw(false, true, false);
         } else {
-            Robot.leds.setRaw(false, false,  false );
+            Robot.leds.setRaw(false, false, false);
         }
 
     }

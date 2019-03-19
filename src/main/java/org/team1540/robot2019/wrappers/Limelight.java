@@ -20,6 +20,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 
     /**
      * Constructs a new limelight interface with the default hostname.
+     *
      * @param name hostname of the limelight
      * @param baseLinkToCamera baseLinkToCamera of the limelight
      */

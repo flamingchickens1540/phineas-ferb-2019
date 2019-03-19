@@ -127,7 +127,6 @@ public class Robot extends TimedRobot {
         estimateYaw.setRunWhenDisabled(true);
         SmartDashboard.putData(estimateYaw);
 
-
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
     }

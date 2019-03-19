@@ -18,7 +18,7 @@ public class ShuffleboardDisplay {
 
     private static final Logger logger = Logger.getLogger(ShuffleboardDisplay.class);
 
-    private static NetworkTableEntry    pressureEntry;
+    private static NetworkTableEntry pressureEntry;
     private static ShuffleboardFakeGyro pointDriveFakeGyro = new ShuffleboardFakeGyro();
 
 
@@ -45,7 +45,7 @@ public class ShuffleboardDisplay {
         Shuffleboard.getTab("Phineas")
             .add(new SelfTest());
 
-        tab.add("Point Drive Heading",  pointDriveFakeGyro).withProperties(Map.of("Starting angle", 0));
+        tab.add("Point Drive Heading", pointDriveFakeGyro).withProperties(Map.of("Starting angle", 0));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized Shuffleboard in " + (end - start) + " ms");

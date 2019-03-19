@@ -2,7 +2,6 @@ package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.commands.drivetrain.PointDrive;
 
 public class PercentManualLineupSequence extends CommandGroup {
 
