@@ -1,6 +1,7 @@
 package org.team1540.robot2019.commands.leds;
 
 import edu.wpi.first.wpilibj.command.Command;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 
 public class StatusLEDs extends Command {
@@ -11,7 +12,7 @@ public class StatusLEDs extends Command {
 
     @Override
     protected void execute() {
-        if (Robot.limelight.isTargetFound()) {
+        if (Hardware.limelight.isTargetFound()) {
             Robot.leds.setRaw(false, false, true);
         } else if (Robot.intake.hasBall()) {
             Robot.leds.setRaw(true, false, false);

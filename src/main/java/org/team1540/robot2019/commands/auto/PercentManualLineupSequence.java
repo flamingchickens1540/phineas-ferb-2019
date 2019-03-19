@@ -1,6 +1,7 @@
 package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 
 public class PercentManualLineupSequence extends CommandGroup {
@@ -18,7 +19,7 @@ public class PercentManualLineupSequence extends CommandGroup {
 
     @Override
     protected void initialize() {
-        Robot.limelight.prepForVision();
+        Hardware.limelight.prepForVision();
     }
 
     @Override
@@ -28,6 +29,6 @@ public class PercentManualLineupSequence extends CommandGroup {
 
     @Override
     protected void end() {
-        Robot.limelight.prepForDriverCam();
+        Hardware.limelight.prepForDriverCam();
     }
 }
