@@ -3,14 +3,11 @@ package org.team1540.robot2019;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -168,13 +165,6 @@ public class Robot extends TimedRobot {
         Robot.hatch.retract();
         Robot.hatch.grab(); // otherwise we might flicker grab-release on enable
 
-        if (DriverStation.getInstance().isFMSAttached()) {
-            logger.debug("FMS is attached, auto-stopping recording");
-//            Shuffleboard.stopRecording();
-        }
-
-        Shuffleboard.addEventMarker("Robot Disable", EventImportance.kNormal);
-
         Hardware.checkStickyFaults();
     }
 
@@ -187,8 +177,6 @@ public class Robot extends TimedRobot {
             logger.debug("Mechanism brakes disabled");
 
             disableBrakes = false;
-
-            Shuffleboard.addEventMarker("Mechanism brakes disabled", EventImportance.kTrivial);
         }
     }
 
@@ -199,27 +187,9 @@ public class Robot extends TimedRobot {
 
         Hardware.checkStickyFaults();
 
-        if (DriverStation.getInstance().isFMSAttached()) {
-            logger.debug("FMS is attached, auto-starting recording");
-            Shuffleboard.setRecordingFileNameFormat(
-                DriverStation.getInstance().getEventName() + "-" + DriverStation.getInstance()
-                    .getMatchType() + "-" + DriverStation.getInstance().getMatchNumber()
-                    + "-${date}-${time}");
-
-//            Shuffleboard.startRecording();
-        }
-
-        Shuffleboard.addEventMarker("Autonomous Start", EventImportance.kNormal);
-
         if (elevator.getPosition() < 1) {
             elevator.setRaw(0);
         }
-
-//        if (SmartDashboard.getBoolean("IsHatchPreload", true)) {
-//            Robot.hatch.grab();
-//        } else {
-//            Robot.hatch.release();
-//        }
     }
 
     @Override
@@ -236,12 +206,6 @@ public class Robot extends TimedRobot {
         Robot.climber.raiseCylinder();
 
         Hardware.checkStickyFaults();
-
-        if (DriverStation.getInstance().isFMSAttached()) {
-//            Shuffleboard.startRecording();
-        }
-
-        Shuffleboard.addEventMarker("Teleop Start", EventImportance.kNormal);
 
         if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
             elevator.setRaw(0);
