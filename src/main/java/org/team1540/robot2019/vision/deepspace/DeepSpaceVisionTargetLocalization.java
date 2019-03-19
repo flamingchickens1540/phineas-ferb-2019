@@ -7,11 +7,14 @@ import java.util.function.DoubleUnaryOperator;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationOrder;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.RotationUtils;
 import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
 
 public class DeepSpaceVisionTargetLocalization {
+
+    private static final Logger logger = Logger.getLogger(DeepSpaceVisionTargetLocalization.class);
 
     private double planeHeight;
     private final Consumer<Transform3D> onUpdate;
@@ -53,7 +56,7 @@ public class DeepSpaceVisionTargetLocalization {
         RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull();
 
         if (rawVisionTarget == null) {
-            System.out.println("No vision target found!");
+            logger.error("No vision target found!");
             return null;
         }
 
@@ -76,7 +79,7 @@ public class DeepSpaceVisionTargetLocalization {
         Double result = doubleBinarySearch(startPitch, Math.toRadians(10), actualDistance, tolerance, maxAttempts, function);
 
         if (result == null) {
-            System.out.println("Unable to find good pitch angle");
+            logger.error("Unable to find good pitch angle");
         }
         return result;
     }
@@ -87,7 +90,7 @@ public class DeepSpaceVisionTargetLocalization {
         RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull();
 
         if (rawVisionTarget == null) {
-            System.out.println("No vision target found!");
+            logger.error("No vision target found!");
             return null;
         }
 
@@ -110,7 +113,7 @@ public class DeepSpaceVisionTargetLocalization {
         Double result = doubleBinarySearch(startYaw, Math.toRadians(10), actualDistance, tolerance, maxAttempts, function);
 
         if (result == null) {
-            System.out.println("Unable to find good yaw angle");
+            logger.error("Unable to find good yaw angle");
         }
         return result;
     }
@@ -122,12 +125,12 @@ public class DeepSpaceVisionTargetLocalization {
         boolean direction = upperOutput > lowerOutput;
         if (direction) {
             if (actualOutput < lowerOutput || actualOutput > upperOutput) {
-                System.out.println("Search failed! Actual outside of guess bounds!");
+                logger.error("Search failed! Actual outside of guess bounds!");
                 return null;
             }
         } else {
             if (actualOutput > lowerOutput || actualOutput < upperOutput) {
-                System.out.println("Search failed! Actual outside of guess bounds!");
+                logger.error("Search failed! Actual outside of guess bounds!");
                 return null;
             }
         }
@@ -149,7 +152,7 @@ public class DeepSpaceVisionTargetLocalization {
                 }
             }
         }
-        System.out.println("Search failed! Unable to find guess within tolerance");
+        logger.error("Search failed! Unable to find guess within tolerance");
         return null;
     }
 
