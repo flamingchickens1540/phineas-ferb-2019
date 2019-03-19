@@ -81,6 +81,10 @@ public class ChickenXboxController extends XboxController {
         }
     }
 
+    public double getRawAxis(XboxAxis axis) {
+        return super.getRawAxis(axis.value);
+    }
+
     /**
      * Get the X axis value of the controller in the official 1540 coordinate system
      *
@@ -119,7 +123,7 @@ public class ChickenXboxController extends XboxController {
         return Vector2D.ZERO.distance(get2DJoystickVector(hand));
     }
 
-    public StrictDPadButton getDPadButton(DPadAxis button) {
+    public StrictDPadButton getButton(DPadAxis button) {
         return new StrictDPadButton(this, 0, button);
     }
 
@@ -127,11 +131,11 @@ public class ChickenXboxController extends XboxController {
         return new JoystickButton(this, button.value);
     }
 
-    public AxisButton getAxisButton(double threshold, XboxAxis axis) {
+    public AxisButton getButton(XboxAxis axis, double threshold) {
         return new AxisButton(this, threshold, axis.value);
     }
 
-    public MultiAxisButton getMultiAxisButton(double threshold, XboxAxis[] axes) {
+    public MultiAxisButton getButton(double threshold, XboxAxis... axes) {
         int[] axesIds = new int[axes.length];
         for (int i = 0; i < axes.length; i++) {
             axesIds[i] = axes[i].value;
