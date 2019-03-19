@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.utils.StickyFaultsUtils;
+import org.team1540.robot2019.wrappers.Limelight;
 import org.team1540.robot2019.wrappers.NavX;
 import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
@@ -78,6 +79,8 @@ public class Hardware {
     public static AnalogInput pressureSensor;
 
     public static NavX navx;
+
+    public static Limelight limelight;
 
     // initialized statically as there's literally no scenario where the PDP wouldn't be connected
     public static PowerDistributionPanel pdp = new PowerDistributionPanel();

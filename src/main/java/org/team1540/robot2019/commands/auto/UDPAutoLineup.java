@@ -10,7 +10,7 @@
 //import org.team1540.robot2019.datastructures.threed.Transform3D;
 //import org.team1540.robot2019.datastructures.twod.Twist2D;
 //import org.team1540.robot2019.datastructures.utils.TrigUtils;
-//import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
+//import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
 //import org.team1540.robot2019.subsystems.Drivetrain;
 //import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 //import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
@@ -25,7 +25,7 @@
 //    private final Drivetrain dt;
 //    private final TEBPlanner planner;
 //    private final DeepSpaceVisionTargetLocalization limeLoc;
-//    private final TankDriveOdometryRunnable driveOdometry;
+//    private final TankDriveOdometryAccumulatorRunnable driveOdometry;
 //    private final Transform3D lastOdomToLimelight;
 //    private final NavX navx;
 //
@@ -33,7 +33,7 @@
 //    private Executable pipeline;
 //    private TankDriveTwist2DInput twist2DInput;
 //
-//    public UDPAutoLineup(Drivetrain dt, TEBPlanner planner, DeepSpaceVisionTargetLocalization limeLoc, TankDriveOdometryRunnable driveOdometry,
+//    public UDPAutoLineup(Drivetrain dt, TEBPlanner planner, DeepSpaceVisionTargetLocalization limeLoc, TankDriveOdometryAccumulatorRunnable driveOdometry,
 //        Transform3D lastOdomToLimelight, NavX navx) {
 //        this.dt = dt;
 //        this.planner = planner;

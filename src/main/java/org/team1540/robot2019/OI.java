@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
+import org.team1540.robot2019.commands.auto.PercentManualLineupLocalization;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
@@ -166,15 +166,15 @@ public class OI {
         elevatorFullUpButton.whenPressed(pointDriveCommand);
 
         // Auto-align start
-        Command lineupCommand = new PercentManualLineupSequence();
+        Command lineupCommand = new PercentManualLineupLocalization(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
         pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
             pointDriveCommand.cancel();
             if (highTargetButton.get()) {
-                Robot.limelight.setPipeline(1);
+                Hardware.limelight.setPipeline(1);
                 Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
-                Robot.limelight.prepForVision();
+                Hardware.limelight.prepForVision();
             } else {
-                Robot.limelight.setPipeline(0);
+                Hardware.limelight.setPipeline(0);
                 Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
             }
             if (!arcadeCommand.isRunning()) {
@@ -185,9 +185,9 @@ public class OI {
         // High vision target
         highTargetButton.whenPressed(new SimpleCommand("", () -> {
             if (!pointDriveCommand.isRunning()) {
-                Robot.limelight.setPipeline(1);
+                Hardware.limelight.setPipeline(1);
                 Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
-                Robot.limelight.prepForVision();
+                Hardware.limelight.prepForVision();
             }
         }));
 

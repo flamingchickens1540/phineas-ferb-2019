@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
-import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
+import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
@@ -43,9 +43,8 @@ public class Robot extends TimedRobot {
     boolean disableBrakes;
     private Timer brakeTimer = new Timer();
 
-    public static TankDriveOdometryRunnable odometry;
+    public static TankDriveOdometryAccumulatorRunnable odometry;
     public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
-    public static Limelight limelight;
     public static TEBPlanner tebPlanner;
     public static LastValidTransformTracker lastOdomToVisionTargetTracker;
 
@@ -67,18 +66,18 @@ public class Robot extends TimedRobot {
         climber = new Climber();
         leds = new LEDs();
 
-        odometry = new TankDriveOdometryRunnable(
+        odometry = new TankDriveOdometryAccumulatorRunnable(
             drivetrain::getLeftPositionMeters,
             drivetrain::getRightPositionMeters,
             Hardware.navx::getAngleRadians,
             0.011
         );
 
-        limelight = new Limelight("limelight-a",
+        Hardware.limelight = new Limelight("limelight-a",
             new Transform3D(RobotMap.CAM_X, RobotMap.CAM_Y, RobotMap.CAM_Z, RobotMap.CAM_ROLL,
                 RobotMap.CAM_PITCH, RobotMap.CAM_YAW));
         lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
-        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(limelight,
+        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(Hardware.limelight,
             RobotMap.HATCH_TARGET_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
@@ -95,7 +94,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putBoolean("EnableCompressor", true);
 
-        Robot.limelight.prepForDriverCam();
+        Hardware.limelight.prepForDriverCam();
 
         SmartDashboard.setDefaultBoolean("EnableBackupCam", false);
         if (SmartDashboard.getBoolean("EnableBackupCam", false)) {
@@ -155,7 +154,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        Robot.limelight.setLeds(false);
+        Hardware.limelight.setLeds(false);
         logger.debug("Disabling mechanism brakes in 2 seconds...");
         brakeTimer.reset();
         brakeTimer.start();
@@ -182,7 +181,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         setMechanismBrakes(true);
-        Robot.limelight.setLeds(true);
+        Hardware.limelight.setLeds(true);
 
         Hardware.checkStickyFaults();
 
@@ -198,7 +197,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         OI.pointDriveCommand.start();
-        Robot.limelight.setLeds(true);
+        Hardware.limelight.setLeds(true);
 
         setMechanismBrakes(true);
 

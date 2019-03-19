@@ -7,7 +7,7 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
-import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
+import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 
 public class PercentManualLineupLocalization extends PointManualDriveCommand {
@@ -32,10 +32,10 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 
     private Transform3D goal = null;
-    private final TankDriveOdometryRunnable driveOdometry;
+    private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
-    public PercentManualLineupLocalization(TankDriveOdometryRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
+    public PercentManualLineupLocalization(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
         super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
         requires(Robot.drivetrain);
 
@@ -90,7 +90,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
             goal = computeGoal();
         }
 
-        if (goal != null && Robot.limelight.isTargetFound()) {
+        if (goal != null && Hardware.limelight.isTargetFound()) {
             return getAngleError();
         } else {
             return 0;
