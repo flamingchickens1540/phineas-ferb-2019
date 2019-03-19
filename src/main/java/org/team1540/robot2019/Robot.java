@@ -108,9 +108,9 @@ public class Robot extends TimedRobot {
         Command estimatePitch = new SimpleCommand("Estimate Camera Pitch", () -> {
             Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectPitch(SmartDashboard.getNumber("CalibrationDistance", 0), 1000, 0.001);
             if (calibrationPitch == null) {
-                System.out.println("calibrationPitch is null!");
+                logger.error("calibrationPitch is null!");
             } else {
-                System.out.println("Pitch estimation successful: " + calibrationPitch);
+                logger.info("Pitch estimation successful: " + calibrationPitch);
             }
         });
         estimatePitch.setRunWhenDisabled(true);
@@ -119,9 +119,9 @@ public class Robot extends TimedRobot {
         Command estimateYaw = new SimpleCommand("Estimate Camera Yaw", () -> {
             Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectYaw(0, 1000, 0.001);
             if (calibrationPitch == null) {
-                System.out.println("calibrationYaw is null!");
+                logger.error("calibrationYaw is null!");
             } else {
-                System.out.println("Yaw estimation successful: " + calibrationPitch);
+                logger.info("Yaw estimation successful: " + calibrationPitch);
             }
         });
         estimateYaw.setRunWhenDisabled(true);
