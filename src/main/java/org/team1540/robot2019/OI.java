@@ -114,9 +114,7 @@ public class OI {
         wristRecoverButton.whileHeld(new RecoverWrist());
 
         // Eject cargo
-        ForwardThenEjectCargo forwardThenEjectCargoCommand = new ForwardThenEjectCargo();
-        ejectButton.whenPressed(forwardThenEjectCargoCommand);
-        ejectButton.whenReleased(new SimpleCommand("", forwardThenEjectCargoCommand::cancel));
+        ejectButton.whileHeld(new ForwardThenEjectCargo());
         ejectButton.whenReleased(new BackThenDown());
 
         // Hatch
