@@ -41,13 +41,13 @@ public abstract class PointManualDriveCommand extends PIDCommand {
     @Override
     protected final void usePIDOutput(double output) {
         double cmdVelTheta = ControlUtils.allVelocityConstraints(output*outputScalar, max, min, deadzone);
-        twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * throttleConstant, 0, -cmdVelTheta)); // TODO: Figure out why cmdVelTheta is negated
+        twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * throttleConstant, 0, cmdVelTheta));
         pipeline.execute();
     }
 
     @Override
     protected final double returnPIDInput() {
-        return returnAngleError();
+        return -returnAngleError(); // returnPIDInput expects a position, so the error must be negated
     }
 
     protected abstract double returnAngleError();
