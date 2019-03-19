@@ -60,7 +60,7 @@ public class HatchMech extends Subsystem {
         return hatchGrabber.get();
     }
 
-    public boolean retracted() {
+    public boolean isRetracted() {
         return !hatchSlide.get();
     }
 
