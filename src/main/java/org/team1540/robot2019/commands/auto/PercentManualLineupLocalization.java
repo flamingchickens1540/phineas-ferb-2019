@@ -81,7 +81,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
-        return TrigUtils.signedAngleError(Hardware.navx.getYawRadians(), targetAngle);
+        return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
     }
 
     @Override
