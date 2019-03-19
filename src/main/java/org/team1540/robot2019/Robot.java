@@ -2,10 +2,12 @@ package org.team1540.robot2019;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -25,6 +27,7 @@ import org.team1540.robot2019.utils.LastValidTransformTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
 import org.team1540.robot2019.wrappers.TEBPlanner;
+import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
 
@@ -104,6 +107,30 @@ public class Robot extends TimedRobot {
             cam.setFPS(30);
         }
 
+        SmartDashboard.putNumber("CalibrationDistance", 1);
+        Command estimatePitch = new SimpleCommand("Estimate Camera Pitch", () -> {
+            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectPitch(SmartDashboard.getNumber("CalibrationDistance", 0), 1000, 0.001);
+            if (calibrationPitch == null) {
+                System.out.println("calibrationPitch is null!");
+            } else {
+                System.out.println("Pitch estimation successful: " + calibrationPitch);
+            }
+        });
+        estimatePitch.setRunWhenDisabled(true);
+        SmartDashboard.putData(estimatePitch);
+
+        Command estimateYaw = new SimpleCommand("Estimate Camera Yaw", () -> {
+            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectYaw(0, 1000, 0.001);
+            if (calibrationPitch == null) {
+                System.out.println("calibrationYaw is null!");
+            } else {
+                System.out.println("Yaw estimation successful: " + calibrationPitch);
+            }
+        });
+        estimateYaw.setRunWhenDisabled(true);
+        SmartDashboard.putData(estimateYaw);
+
+
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
     }
@@ -127,10 +154,12 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("DrivetrainLeftPos", drivetrain.getLeftPositionTicks());
         SmartDashboard.putNumber("DrivetrainRightPos", drivetrain.getRightPositionTicks());
+        NetworkTableInstance.getDefault().flush();
     }
 
     @Override
     public void disabledInit() {
+        Robot.limelight.setLeds(false);
         logger.debug("Disabling mechanism brakes in 2 seconds...");
         brakeTimer.reset();
         brakeTimer.start();
@@ -151,7 +180,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        Robot.limelight.setLeds(false);
         if (brakeTimer.hasPeriodPassed(2) && disableBrakes) {
             brakeTimer.stop();
             setMechanismBrakes(false);
