@@ -6,9 +6,9 @@ import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.hatch.simple.GrabHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 
-public class GrabThenBack extends CommandGroup {
+public class GrabThenRetract extends CommandGroup {
 
-    public GrabThenBack() {
+    public GrabThenRetract() {
         addSequential(new GrabHatch());
         addSequential(new WaitCommand(Tuning.hatchGrabWaitTime));
         addSequential(new RetractHatchMech());

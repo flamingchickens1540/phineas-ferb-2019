@@ -17,7 +17,7 @@ import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.GrabThenBack;
+import org.team1540.robot2019.commands.hatch.GrabThenRetract;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
@@ -123,7 +123,7 @@ public class OI {
         prepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
         placeHatchButton.whenPressed(new PlaceHatchSequence());
 
-        grabHatchButton.whenPressed(new GrabThenBack());
+        grabHatchButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
 
         hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
