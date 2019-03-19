@@ -23,6 +23,7 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.auto.PercentManualLineupSequence;
+import org.team1540.robot2019.commands.drivetrain.PointDrive;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
@@ -57,20 +58,7 @@ public class Drivetrain extends Subsystem {
 
     @Override
     protected void initDefaultCommand() {
-//        setDefaultCommand(new SimpleLoopCommand("Drive",
-//            new AdvancedArcadeJoystickInput(true, OI::getArcadeDriveThrottle, OI::getArcadeDriveSoftTurn,
-//                OI::getArcadeDriveHardTurn)
-//                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
-//                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
-//                .then(getPipelineOutput(false)), this));
-
-        setDefaultCommand(new PercentManualLineupSequence());
-
-//        Command updatePoint = new SimpleCommand("Update PointDrive", () -> {
-//            new PointDrive().start();
-//        });
-//        updatePoint.setRunWhenDisabled(true);
-//        SmartDashboard.putData(updatePoint);
+        setDefaultCommand(new PointDrive());
     }
 
     public Output<TankDriveData> getPipelineOutput() {
