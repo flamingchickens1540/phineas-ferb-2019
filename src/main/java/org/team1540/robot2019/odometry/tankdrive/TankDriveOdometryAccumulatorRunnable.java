@@ -7,7 +7,7 @@ import org.team1540.robot2019.datastructures.threed.Transform3D;
 /**
  * Runnable wrapper class for the TankDriveOdometryAccumulator.
  */
-public class TankDriveOdometryRunnable implements Runnable {
+public class TankDriveOdometryAccumulatorRunnable implements Runnable {
 
     private TankDriveOdometryAccumulator odometryAccumulator = new TankDriveOdometryAccumulator();
 
@@ -22,7 +22,7 @@ public class TankDriveOdometryRunnable implements Runnable {
      * @param rightPosSupplier Supplier for right tank drive position in meters
      * @param angleSupplier Supplier for continuous angle measurement in radians
      */
-    public TankDriveOdometryRunnable(
+    public TankDriveOdometryAccumulatorRunnable(
         DoubleSupplier leftPosSupplier,
         DoubleSupplier rightPosSupplier,
         DoubleSupplier angleSupplier,
@@ -40,7 +40,7 @@ public class TankDriveOdometryRunnable implements Runnable {
      * @param rightPosSupplier Supplier for right tank drive position in meters
      * @param angleSupplier Supplier for continuous angle measurement in radians
      */
-    public TankDriveOdometryRunnable(
+    public TankDriveOdometryAccumulatorRunnable(
         DoubleSupplier leftPosSupplier,
         DoubleSupplier rightPosSupplier,
         DoubleSupplier angleSupplier) {

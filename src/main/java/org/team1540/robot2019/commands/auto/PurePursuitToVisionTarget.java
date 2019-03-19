@@ -10,7 +10,7 @@
 //import org.team1540.robot2019.datastructures.threed.Transform3D;
 //import org.team1540.robot2019.datastructures.twod.Twist2D;
 //import org.team1540.robot2019.datastructures.utils.TrigUtils;
-//import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryRunnable;
+//import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
 //import org.team1540.robot2019.utils.ControlUtils;
 //import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 //import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
@@ -32,7 +32,7 @@
 //    private static final double GOAL_DISTANCE_TOLERANCE = 0.05;
 //    private static final Transform3D VISION_TARGET_OFFSET = new Transform3D(-0.65, -0.025, 0);
 //
-//    private final TankDriveOdometryRunnable driveOdometry;
+//    private final TankDriveOdometryAccumulatorRunnable driveOdometry;
 //    private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 //    private Runnable onFail = null;
 //
@@ -40,7 +40,7 @@
 //    private TankDriveTwist2DInput twist2DInput;
 //    private Transform3D goal;
 //
-//    public PurePursuitToVisionTarget(DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, TankDriveOdometryRunnable driveOdometry) {
+//    public PurePursuitToVisionTarget(DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, TankDriveOdometryAccumulatorRunnable driveOdometry) {
 //        requires(Robot.drivetrain);
 //        this.deepSpaceVisionTargetLocalization = deepSpaceVisionTargetLocalization;
 //        this.driveOdometry = driveOdometry;
@@ -51,7 +51,7 @@
 //            .then(Robot.drivetrain.getPipelineOutput());
 //    }
 //
-//    public PurePursuitToVisionTarget(DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, TankDriveOdometryRunnable driveOdometry, Runnable onFail) {
+//    public PurePursuitToVisionTarget(DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, TankDriveOdometryAccumulatorRunnable driveOdometry, Runnable onFail) {
 //        this(deepSpaceVisionTargetLocalization, driveOdometry);
 //        this.onFail = onFail;
 //    }
