@@ -1,8 +1,5 @@
 package org.team1540.robot2019.utils;
 
-import edu.wpi.first.wpilibj.GenericHID.HIDType;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import java.util.HashMap;
@@ -15,7 +12,16 @@ import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.triggers.MultiAxisButton;
 import org.team1540.rooster.triggers.StrictDPadButton;
 
-public class ChickenXboxController {
+public class ChickenXboxController extends XboxController {
+
+    /**
+     * Construct an instance of a joystick. The joystick index is the USB port on the drivers station.
+     *
+     * @param port The port on the Driver Station that the joystick is plugged into.
+     */
+    public ChickenXboxController(int port) {
+        super(port);
+    }
 
     public enum XboxAxis {
         LEFT_X(0),
@@ -77,231 +83,39 @@ public class ChickenXboxController {
         }
     }
 
-    private XboxController controller;
-
-    public ChickenXboxController(int port) {
-        this.controller = new XboxController(port);
-    }
-
-    public double getX(Hand hand) {
-        return controller.getX(hand);
-    }
-
-    public double getY(Hand hand) {
-        return controller.getY(hand);
-    }
-
     /**
      * Gets angle from a 2D joystick
-     * @param hand Left vs right joystick of the xbox controller
+     * @param hand Left vs right joystick of the xbox this
      * @return Angle in radians counter-clockwise from 12 o'clock
      */
     public double get2DJoystickAngle(Hand hand) { // TODO: Migrate to ROOSTER
-        double x = -controller.getY(hand);
-        double y = -controller.getX(hand);
+        double x = -getY(hand);
+        double y = -getX(hand);
         return Math.atan2(y, x);
     }
 
     public double get2DJoystickMagnitude(Hand hand) { // TODO: Migrate to ROOSTER
-        double x = controller.getX(hand);
-        double y = controller.getY(hand);
+        double x = getX(hand);
+        double y = getY(hand);
         return Utilities.processDeadzone(new Vector2D(x, y).distance(Vector2D.ZERO), Tuning.driveDeadzone);
     }
 
     public StrictDPadButton getDPadButton(DPadAxis button) {
-        return new StrictDPadButton(controller, 0, button);
+        return new StrictDPadButton(this, 0, button);
     }
 
     public JoystickButton getButton(XboxButton button) {
-        return new JoystickButton(controller, button.value);
+        return new JoystickButton(this, button.value);
     }
 
     public AxisButton getAxisButton(double threshold, XboxAxis axis) {
-        return new AxisButton(controller, threshold, axis.value);
-    }
-
-    public XboxController getController() {
-        return controller;
+        return new AxisButton(this, threshold, axis.value);
     }
 
     public MultiAxisButton getMultiAxisButton(double threshold, XboxAxis[] axes) {
         int[] axesIds = new int[axes.length];
         for (int i = 0; i < axes.length; i++)
             axesIds[i] = axes[i].value;
-        return new MultiAxisButton(controller, threshold, axesIds);
-    }
-
-    // Delegated methods
-
-    public double getTriggerAxis(Hand hand) {
-        return controller.getTriggerAxis(hand);
-    }
-
-    public boolean getBumper(Hand hand) {
-        return controller.getBumper(hand);
-    }
-
-    public boolean getBumperPressed(Hand hand) {
-        return controller.getBumperPressed(hand);
-    }
-
-    public boolean getBumperReleased(Hand hand) {
-        return controller.getBumperReleased(hand);
-    }
-
-    public boolean getStickButton(Hand hand) {
-        return controller.getStickButton(hand);
-    }
-
-    public boolean getStickButtonPressed(Hand hand) {
-        return controller.getStickButtonPressed(hand);
-    }
-
-    public boolean getStickButtonReleased(Hand hand) {
-        return controller.getStickButtonReleased(hand);
-    }
-
-    public boolean getAButton() {
-        return controller.getAButton();
-    }
-
-    public boolean getAButtonPressed() {
-        return controller.getAButtonPressed();
-    }
-
-    public boolean getAButtonReleased() {
-        return controller.getAButtonReleased();
-    }
-
-    public boolean getBButton() {
-        return controller.getBButton();
-    }
-
-    public boolean getBButtonPressed() {
-        return controller.getBButtonPressed();
-    }
-
-    public boolean getBButtonReleased() {
-        return controller.getBButtonReleased();
-    }
-
-    public boolean getXButton() {
-        return controller.getXButton();
-    }
-
-    public boolean getXButtonPressed() {
-        return controller.getXButtonPressed();
-    }
-
-    public boolean getXButtonReleased() {
-        return controller.getXButtonReleased();
-    }
-
-    public boolean getYButton() {
-        return controller.getYButton();
-    }
-
-    public boolean getYButtonPressed() {
-        return controller.getYButtonPressed();
-    }
-
-    public boolean getYButtonReleased() {
-        return controller.getYButtonReleased();
-    }
-
-    public boolean getBackButton() {
-        return controller.getBackButton();
-    }
-
-    public boolean getBackButtonPressed() {
-        return controller.getBackButtonPressed();
-    }
-
-    public boolean getBackButtonReleased() {
-        return controller.getBackButtonReleased();
-    }
-
-    public boolean getStartButton() {
-        return controller.getStartButton();
-    }
-
-    public boolean getStartButtonPressed() {
-        return controller.getStartButtonPressed();
-    }
-
-    public boolean getStartButtonReleased() {
-        return controller.getStartButtonReleased();
-    }
-
-    public double getX() { // Don't use this
-        return controller.getX();
-    }
-
-    public double getY() { // Don't use this
-        return controller.getY();
-    }
-
-    public boolean getRawButton(int button) {
-        return controller.getRawButton(button);
-    }
-
-    public boolean getRawButtonPressed(int button) {
-        return controller.getRawButtonPressed(button);
-    }
-
-    public boolean getRawButtonReleased(int button) {
-        return controller.getRawButtonReleased(button);
-    }
-
-    public double getRawAxis(int axis) {
-        return controller.getRawAxis(axis);
-    }
-
-    public int getPOV(int pov) {
-        return controller.getPOV(pov);
-    }
-
-    public int getPOV() {
-        return controller.getPOV();
-    }
-
-    public int getAxisCount() {
-        return controller.getAxisCount();
-    }
-
-    public int getPOVCount() {
-        return controller.getPOVCount();
-    }
-
-    public int getButtonCount() {
-        return controller.getButtonCount();
-    }
-
-    public HIDType getType() {
-        return controller.getType();
-    }
-
-    public String getName() {
-        return controller.getName();
-    }
-
-    public int getAxisType(int axis) {
-        return controller.getAxisType(axis);
-    }
-
-    public int getPort() {
-        return controller.getPort();
-    }
-
-    public void setOutput(int outputNumber, boolean value) {
-        controller.setOutput(outputNumber, value);
-    }
-
-    public void setOutputs(int value) {
-        controller.setOutputs(value);
-    }
-
-    public void setRumble(RumbleType type, double value) {
-        controller.setRumble(type, value);
+        return new MultiAxisButton(this, threshold, axesIds);
     }
 }
