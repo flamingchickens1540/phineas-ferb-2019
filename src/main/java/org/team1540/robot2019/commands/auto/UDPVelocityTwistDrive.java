@@ -1,9 +1,9 @@
 package org.team1540.robot2019.commands.auto;
 
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.io.IOException;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
@@ -45,15 +45,15 @@ public class UDPVelocityTwistDrive extends Command {
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(new CTREOutput(Hardware.driveLeftMotorA, Hardware.driveRightMotorA, true));
 
-        NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
-        tebConfigTable.getEntry("TEBReset").setBoolean(true);
-        if (tebConfigTable.getEntry("ResetTuningVals").getBoolean(true)) {
-            tebConfigTable.getEntry("MaxVelX").setNumber(1.5);
-            tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.4);
-            tebConfigTable.getEntry("AccLimX").setNumber(1.5);
-            tebConfigTable.getEntry("MaxVelTheta").setNumber(5.0);
-            tebConfigTable.getEntry("AccLimTheta").setNumber(15.0);
-        }
+//        NetworkTable tebConfigTable = NetworkTableInstance.getDefault().getTable("TEBPlanner/Config");
+//        tebConfigTable.getEntry("TEBReset").setBoolean(true);
+//        if (tebConfigTable.getEntry("ResetTuningVals").getBoolean(true)) {
+//            tebConfigTable.getEntry("MaxVelX").setNumber(1.5);
+//            tebConfigTable.getEntry("MaxVelXBackwards").setNumber(1.4);
+//            tebConfigTable.getEntry("AccLimX").setNumber(1.5);
+//            tebConfigTable.getEntry("MaxVelTheta").setNumber(5.0);
+//            tebConfigTable.getEntry("AccLimTheta").setNumber(15.0);
+//        }
         updateGoal();
     }
 
@@ -69,8 +69,16 @@ public class UDPVelocityTwistDrive extends Command {
 
 //    Robot.odometry.reset();
         Robot.tebPlanner.setGoal(goal);
-        Robot.tebPlanner.setViaPoint(goal.getPositionVector());
-//    Robot.udpSender.setViaPoint(new Vector2D(1, -1));
+//        List<Vector2D> viaPoints = new ArrayList<>();
+//        viaPoints.add(new Vector2D(0.5, 0.3));
+//        Robot.tebPlanner.setViaPoints(viaPoints);
+        try {
+            Robot.tebPlanner.sendGoalAndConfig();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        Robot.tebPlanner.setViaPoints(goal.getPositionVector());
+//    Robot.udpSender.setViaPoints(new Vector2D(1, -1));
     }
 
     @Override

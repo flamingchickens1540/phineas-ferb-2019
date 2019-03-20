@@ -88,7 +88,7 @@
 //        System.out.println("Goal updated");
 //
 //        Transform3D via_point = goal.add(new Transform3D(-0.7, 0, 0));
-//        planner.setViaPoint(via_point.toTransform2D().getPositionVector());
+//        planner.setViaPoints(via_point.toTransform2D().getPositionVector());
 //    }
 //
 //    @Override
