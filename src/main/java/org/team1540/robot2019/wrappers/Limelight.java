@@ -190,18 +190,26 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 
         List<Vector2D> corners = getCorners();
         corners.sort(Comparator.comparingDouble(Vector2D::getX));
-        double approxMiddleX = corners.get(0).getX()+corners.get(corners.size()-1).getX();
-        Optional<Vector2D> min = corners.stream().filter(item -> item.getX() < approxMiddleX).min(Comparator.comparingDouble(Vector2D::getY));
-        Optional<Vector2D> max = corners.stream().filter(item -> item.getX() > approxMiddleX).min(Comparator.comparingDouble(Vector2D::getY));
+        Optional<Vector2D> leftmostCorner = corners.stream().min(Comparator.comparingDouble(Vector2D::getX));
+        Optional<Vector2D> rightmostCorner = corners.stream().max(Comparator.comparingDouble(Vector2D::getX));
 
-        if (!min.isPresent() || !max.isPresent()) {
+        if (!leftmostCorner.isPresent() || !rightmostCorner.isPresent()) {
+            return null;
+        }
+
+        double approxMiddleX = (leftmostCorner.get().getX()+rightmostCorner.get().getX())/2;
+
+        Optional<Vector2D> leftBottomCorner = corners.stream().filter(item -> item.getX() < approxMiddleX).min(Comparator.comparingDouble(Vector2D::getY));
+        Optional<Vector2D> rightBottomCorner = corners.stream().filter(item -> item.getX() > approxMiddleX).min(Comparator.comparingDouble(Vector2D::getY));
+
+        if (!leftBottomCorner.isPresent() || !rightBottomCorner.isPresent()) {
             return null;
         }
 
         // TODO: Angles or normalized screen space?
         return new RawDeepSpaceVisionTarget(
-            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(min.get(), getHorizontalFov(), getVerticalFov()),
-            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(max.get(), getHorizontalFov(), getVerticalFov())
+            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(leftBottomCorner.get(), getHorizontalFov(), getVerticalFov()),
+            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(rightBottomCorner.get(), getHorizontalFov(), getVerticalFov())
         );
 
 //        // single point approach
