@@ -14,6 +14,7 @@ import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization
 public class PercentManualLineupLocalization extends PointManualDriveCommand {
 
     public static final Logger logger = Logger.getLogger(PercentManualLineupLocalization.class);
+    private static final Transform3D VISION_TARGET_OFFSET = Transform3D.IDENTITY;
 
     private static double OUTPUT_SCALAR = 20;
 
@@ -32,7 +33,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
 
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 
-    private Transform3D goal = null;
+    private Transform3D goal;
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
@@ -71,6 +72,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         this.getPIDController().setD(D);
 
         similarVectorTracker.reset();
+        goal = null;
 
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
@@ -86,7 +88,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
             }
         }
 
-        if (goal != null && Hardware.limelight.isTargetFound()) {
+        if (goal != null) {
             return getAngleError();
         } else {
             return 0;
@@ -95,14 +97,16 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
 
     private Transform3D computeGoal() {
         return driveOdometry.getOdomToBaseLink()
-            .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget());
-//            .add(VISION_TARGET_OFFSET);
+            .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget())
+            .add(VISION_TARGET_OFFSET);
     }
 
 
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
-        Vector3D goalPosition = goal.getPosition();
+        double distanceToVisionTarget = driveOdometry.getOdomToBaseLink().getPosition().distance(goal.getPosition());
+        Transform3D adjustedGoal = goal.add(new Transform3D(-(distanceToVisionTarget*0.5), 0, 0));
+        Vector3D goalPosition = adjustedGoal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
         return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
     }
