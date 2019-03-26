@@ -51,6 +51,11 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         return baseLinkToCamera;
     }
 
+    @Override
+    public void setBaseLinkToCamera(Transform3D baseLinkToCamera) {
+        this.baseLinkToCamera = baseLinkToCamera;
+    }
+
     /**
      * Gets the output of the limelight targeting from the network table.
      *

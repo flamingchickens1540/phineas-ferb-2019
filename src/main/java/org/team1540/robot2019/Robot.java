@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
@@ -104,27 +105,41 @@ public class Robot extends TimedRobot {
         }
 
         SmartDashboard.putNumber("CalibrationDistance", 1);
-        Command estimatePitch = new SimpleCommand("Estimate Camera Pitch", () -> {
-            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectPitch(SmartDashboard.getNumber("CalibrationDistance", 0), 1000, 0.001);
+        Command estimatePitch = new SimpleCommand("Estimate Camera Pitch Command", () -> {
+            String distanceGuessKey = "CameraPoseCalibration/DistanceGuessIn";
+            double distanceEstimate = NetworkTableInstance.getDefault().getEntry(distanceGuessKey).getDouble(0);
+            if (distanceEstimate == 0) {
+                logger.error("No distance estimate provided at networktables key: " + distanceGuessKey);
+            }
+            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectPitch(distanceEstimate, 1000, 0.001, true);
             if (calibrationPitch == null) {
                 logger.error("calibrationPitch is null!");
             } else {
                 logger.info("Pitch estimation successful: " + calibrationPitch);
+                NetworkTableInstance.getDefault().getEntry("CameraPoseCalibration/PitchEstimate").setValue(calibrationPitch);
             }
         });
         estimatePitch.setRunWhenDisabled(true);
         SmartDashboard.putData(estimatePitch);
 
-        Command estimateYaw = new SimpleCommand("Estimate Camera Yaw", () -> {
-            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectYaw(0, 1000, 0.001);
-            if (calibrationPitch == null) {
+        Command estimateYaw = new SimpleCommand("Estimate Camera Yaw Command", () -> {
+            Double calibrationYaw = deepSpaceVisionTargetLocalization.estimateCorrectYaw(0, 1000, 0.001, true);
+            if (calibrationYaw == null) {
                 logger.error("calibrationYaw is null!");
             } else {
-                logger.info("Yaw estimation successful: " + calibrationPitch);
+                logger.info("Yaw estimation successful: " + calibrationYaw);
+                NetworkTableInstance.getDefault().getEntry("CameraPoseCalibration/YawEstimate").setValue(calibrationYaw);
             }
         });
         estimateYaw.setRunWhenDisabled(true);
         SmartDashboard.putData(estimateYaw);
+
+        Command calibrateCamera = new CommandGroup("Calibrate Camera Command") {{
+            addSequential(estimatePitch);
+            addSequential(estimateYaw);
+        }};
+        calibrateCamera.setRunWhenDisabled(true);
+        SmartDashboard.putData(calibrateCamera);
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");

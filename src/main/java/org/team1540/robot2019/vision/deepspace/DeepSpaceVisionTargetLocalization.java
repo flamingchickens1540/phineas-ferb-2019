@@ -51,7 +51,7 @@ public class DeepSpaceVisionTargetLocalization {
         return true;
     }
 
-    public Double estimateCorrectPitch(double actualDistance, int maxAttempts, double tolerance) {
+    public Double estimateCorrectPitch(double actualDistance, int maxAttempts, double tolerance, boolean updateIfSuccessful) {
 
         RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull();
 
@@ -60,7 +60,7 @@ public class DeepSpaceVisionTargetLocalization {
             return null;
         }
 
-        double[] angles = camera.getBaseLinkToCamera().getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM);
+        double[] angles = camera.getBaseLinkToCamera().getOrientation().getAngles(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM); // TODO: Use RotationUtils::getRPYVec
 
         double startPitch = angles[1];
 
@@ -80,12 +80,14 @@ public class DeepSpaceVisionTargetLocalization {
 
         if (result == null) {
             logger.error("Unable to find good pitch angle");
+        } else if (updateIfSuccessful) {
+            camera.setBaseLinkToCamera(new Transform3D(camera.getBaseLinkToCamera().getPosition(), RotationUtils.fromRPY(angles[0], result, angles[2])));
         }
         return result;
     }
 
 
-    public Double estimateCorrectYaw(double actualDistance, int maxAttempts, double tolerance) {
+    public Double estimateCorrectYaw(double actualDistance, int maxAttempts, double tolerance, boolean updateIfSuccessful) {
 
         RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull();
 
@@ -114,6 +116,8 @@ public class DeepSpaceVisionTargetLocalization {
 
         if (result == null) {
             logger.error("Unable to find good yaw angle");
+        } else if (updateIfSuccessful) {
+            camera.setBaseLinkToCamera(new Transform3D(camera.getBaseLinkToCamera().getPosition(), RotationUtils.fromRPY(angles[0], angles[1], result)));
         }
         return result;
     }
