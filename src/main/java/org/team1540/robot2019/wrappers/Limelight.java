@@ -12,9 +12,6 @@ import org.team1540.robot2019.vision.deepspace.RawDeepSpaceVisionTarget;
 
 public class Limelight implements DeepSpaceVisionTargetCamera {
 
-    private static final double HORIZONTAL_FOV = Math.toRadians(59.6);
-    private static final double VERTICAL_FOV = Math.toRadians(45.7);
-
     private final NetworkTable limelightTable;
     private Transform3D baseLinkToCamera;
 
@@ -29,16 +26,6 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         this.baseLinkToCamera = baseLinkToCamera;
 
         setPipeline(0);
-    }
-
-    @Override
-    public double getHorizontalFov() {
-        return HORIZONTAL_FOV;
-    }
-
-    @Override
-    public double getVerticalFov() {
-        return VERTICAL_FOV;
     }
 
     @Override
