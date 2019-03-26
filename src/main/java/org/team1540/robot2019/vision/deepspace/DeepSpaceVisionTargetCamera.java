@@ -11,6 +11,8 @@ public interface DeepSpaceVisionTargetCamera {
 
     Transform3D getBaseLinkToCamera();
 
+    void setBaseLinkToCamera(Transform3D baseLinkToCamera);
+
     @Nullable
     RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull();
 }
