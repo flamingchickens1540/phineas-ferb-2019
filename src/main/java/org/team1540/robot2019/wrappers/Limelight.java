@@ -3,9 +3,14 @@ package org.team1540.robot2019.wrappers;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
+import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
 import org.team1540.robot2019.vision.VisionUtils;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetCamera;
 import org.team1540.robot2019.vision.deepspace.RawDeepSpaceVisionTarget;
@@ -109,6 +114,10 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         NetworkTableInstance.getDefault().flush();
     }
 
+    public boolean getLeds() {
+        return limelightTable.getEntry("ledMode").getDouble(1) == 0;
+    }
+
     /**
      * Sets limelight to driver cam or vision mode.
      *
@@ -123,6 +132,8 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         limelightTable.getEntry("pipeline").setNumber(id);
         NetworkTableInstance.getDefault().flush();
     }
+
+    // todo: getPipeline and incorrect pipline warnings
 
     public void prepForVision() {
         setLeds(true);
@@ -156,12 +167,42 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             Math.toRadians(rawTransformation[4]));
     }
 
+    public List<Vector2D> getCorners() {
+        Double[] xCorners = limelightTable.getEntry("tcornx").getDoubleArray(new Double[]{});
+        Double[] yCorners = limelightTable.getEntry("tcorny").getDoubleArray(new Double[]{});
+        List<Vector2D> cornerList = new ArrayList<>();
+        for (int i = 0; i < xCorners.length; i++) {
+            cornerList.add(new Vector2D(xCorners[i], yCorners[i]));
+        }
+        return cornerList;
+    }
+
     @Override
     public RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull() {
         if (!isTargetFound()) {
             return null;
         }
-        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
+
+        List<Vector2D> corners = getCorners();
+        corners.sort(Comparator.comparingDouble(Vector2D::getX));
+        double approxMiddleX = corners.get(0).getX()+corners.get(corners.size()-1).getX();
+        Optional<Vector2D> min = corners.stream().filter(item -> item.getX() < approxMiddleX).min(Comparator.comparingDouble(Vector2D::getY));
+        Optional<Vector2D> max = corners.stream().filter(item -> item.getX() > approxMiddleX).min(Comparator.comparingDouble(Vector2D::getY));
+
+        if (!min.isPresent() || !max.isPresent()) {
+            return null;
+        }
+
+        // TODO: Angles or normalized screen space?
+        return new RawDeepSpaceVisionTarget(
+            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(min.get(), getHorizontalFov(), getVerticalFov()),
+            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(max.get(), getHorizontalFov(), getVerticalFov())
+        );
+
+//        // single point approach
+//        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
+//
+//        // raw contours approach
 //        Vector2D point0 = getFilteredRawContourOrNull(0);
 //        Vector2D point1 = getFilteredRawContourOrNull(1);
 //
@@ -173,10 +214,6 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 //            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point0, getHorizontalFov(), getVerticalFov()),
 //            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point1, getHorizontalFov(), getVerticalFov())
 //        );
-    }
-
-    public boolean isLEDsOn() {
-        return limelightTable.getEntry("ledMode").getDouble(1) == 0;
     }
 
     public void setPipeline(double pipelineID) { // TODO
