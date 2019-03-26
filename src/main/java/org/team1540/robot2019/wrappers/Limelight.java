@@ -138,7 +138,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         NetworkTableInstance.getDefault().flush();
     }
 
-    // todo: getPipeline and incorrect pipline warnings
+    // todo: getPipeline and incorrect pipeline warnings
 
     public void prepForVision() {
         setLeds(true);
