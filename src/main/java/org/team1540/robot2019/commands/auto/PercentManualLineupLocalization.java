@@ -8,6 +8,7 @@ import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
+import org.team1540.robot2019.vision.SimilarVector3DTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 
 public class PercentManualLineupLocalization extends PointManualDriveCommand {
@@ -34,6 +35,8 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
     private Transform3D goal = null;
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
+
+    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.3);
 
     public PercentManualLineupLocalization(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
         super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
@@ -67,7 +70,27 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         this.getPIDController().setI(I);
         this.getPIDController().setD(D);
 
+        similarVectorTracker.reset();
+
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
+    }
+
+    @Override
+    protected double returnAngleError() {
+        if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
+            Transform3D goal = computeGoal();
+            if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
+                this.goal = goal;
+            } else {
+                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
+            }
+        }
+
+        if (goal != null && Hardware.limelight.isTargetFound()) {
+            return getAngleError();
+        } else {
+            return 0;
+        }
     }
 
     private Transform3D computeGoal() {
@@ -82,19 +105,6 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
         return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
-    }
-
-    @Override
-    protected double returnAngleError() {
-        if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
-            goal = computeGoal();
-        }
-
-        if (goal != null && Hardware.limelight.isTargetFound()) {
-            return getAngleError();
-        } else {
-            return 0;
-        }
     }
 
     @Override
