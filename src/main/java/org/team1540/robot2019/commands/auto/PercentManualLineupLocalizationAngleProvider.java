@@ -17,9 +17,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     public static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
     private static double HATCH_GRAB_X_OFFSET = -0.05;
-    private static double HATCH_GRAB_Y_OFFSET = 0;
+    private static double HATCH_GRAB_Y_OFFSET = -0.015;
     private static double HATCH_PLACE_X_OFFSET = -0.05;
-    private static double HATCH_PLACE_Y_OFFSET = -0.01;
+    private static double HATCH_PLACE_Y_OFFSET = -0.025;
     private static double A = 5.2;
     private static double B = 0;
     private static double C = 1.2;
@@ -104,12 +104,12 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             logger.debug("Rocket ball mode!");
             Hardware.limelight.setPipeline(1);
             Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
-            Hardware.limelight.prepForVision();
         } else {
             logger.debug("Hatch mode!");
             Hardware.limelight.setPipeline(0);
             Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
         }
+        Hardware.limelight.prepForVision();
 
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
