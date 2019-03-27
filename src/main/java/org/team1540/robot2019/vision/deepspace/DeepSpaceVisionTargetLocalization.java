@@ -76,7 +76,7 @@ public class DeepSpaceVisionTargetLocalization {
             return baseLinkToVisionTarget.toTransform2D().getPositionVector().distance(Vector2D.ZERO);
         };
 
-        Double result = doubleBinarySearch(startPitch, Math.toRadians(10), actualDistance, tolerance, maxAttempts, function);
+        Double result = doubleBinarySearch(startPitch, Math.toRadians(20), actualDistance, tolerance, maxAttempts, function);
 
         if (result == null) {
             logger.error("Unable to find good pitch angle");
