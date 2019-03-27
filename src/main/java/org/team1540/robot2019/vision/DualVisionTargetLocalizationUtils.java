@@ -60,7 +60,7 @@ public class DualVisionTargetLocalizationUtils {
 
     public static double angleFromVisionTargets(Vector2D left, Vector2D right) {
         Vector2D difference = left.subtract(right);
-        if (difference.getX() < CM_TOLERANCE) {
+        if (difference.getX() == 0) {
             return 0;
         }
         double atan = Math.atan(difference.getY() / difference.getX()) + Math.PI / 2;
