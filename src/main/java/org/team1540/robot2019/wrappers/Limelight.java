@@ -241,7 +241,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             getFilteredRawContourOrNull(1),
             getFilteredRawContourOrNull(2)
         };
-        List<RawContour> sortedContours = Arrays.stream(rawContours).filter(Objects::nonNull)
+        List<RawContour> sortedContours = Arrays.stream(rawContours).filter(Objects::nonNull) // TODO: this is incorrect!
             .map(point -> new RawContour(point.getId(), DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point.getCenter(), getHorizontalFov(), getVerticalFov())))
             .sorted(Comparator.comparingDouble(point -> point.getCenter().distance(this.getTargetAngles()))).collect(Collectors.toList());
 
