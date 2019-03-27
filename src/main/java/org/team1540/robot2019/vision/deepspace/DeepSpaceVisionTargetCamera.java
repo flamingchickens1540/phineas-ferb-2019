@@ -7,6 +7,8 @@ public interface DeepSpaceVisionTargetCamera {
 
     Transform3D getBaseLinkToCamera();
 
+    boolean isTargetFound();
+
     @Nullable
     RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull();
 }

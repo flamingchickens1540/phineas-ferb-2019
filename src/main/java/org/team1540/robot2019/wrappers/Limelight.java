@@ -49,6 +49,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
      *
      * @return the state of the target
      */
+    @Override
     public boolean isTargetFound() {
         return (double) limelightTable.getEntry("tv").getNumber(0) > 0;
     }
