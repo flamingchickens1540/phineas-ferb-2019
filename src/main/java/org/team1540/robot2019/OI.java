@@ -93,7 +93,7 @@ public class OI {
 
     // - Temporary
     private static Button testPrepGetHatchButton = driver.getButton(XboxButton.X);
-    private static Button testPlaceHatchButton = driver.getButton(XboxButton.Y);
+    private static Button testPlaceHatchButton = driver.getButton(XboxButton.A);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
