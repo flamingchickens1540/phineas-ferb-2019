@@ -104,12 +104,13 @@ public class Robot extends TimedRobot {
             cam.setFPS(30);
         }
 
-        SmartDashboard.putNumber("CalibrationDistance", 1);
+        String distanceGuessKey = "CameraPoseCalibration/DistanceGuessIn";
+        SmartDashboard.putNumber(distanceGuessKey, 0);
         Command estimatePitch = new SimpleCommand("Estimate Camera Pitch Command", () -> {
-            String distanceGuessKey = "CameraPoseCalibration/DistanceGuessIn";
-            double distanceEstimate = NetworkTableInstance.getDefault().getEntry(distanceGuessKey).getDouble(0);
+            double distanceEstimate = SmartDashboard.getNumber(distanceGuessKey, 0);
             if (distanceEstimate == 0) {
                 logger.error("No distance estimate provided at networktables key: " + distanceGuessKey);
+                return;
             }
             Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectPitch(distanceEstimate, 1000, 0.001, true);
             if (calibrationPitch == null) {
