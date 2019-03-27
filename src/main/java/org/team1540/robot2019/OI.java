@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.auto.TurnUntilNewTarget;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
@@ -76,7 +77,6 @@ public class OI {
     // Driver
     // - Auto-align
     private static Button highTargetButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.5);
-    private static Button autoAlignButtonAlt = driver.getButton(XboxButton.RB);
 
     // - Driving
     private static Button pointDrivePointAxis = driver.getButton(0.4, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
@@ -86,6 +86,10 @@ public class OI {
 
     // - LEDs
     private static Button strobeRedBlueButton = driver.getButton(DPadAxis.DOWN);
+
+    //
+    private static Button nextLeftTarget = driver.getButton(XboxButton.LB);
+    private static Button nextRightTarget = driver.getButton(XboxButton.RB);
 
     // - Temporary
     private static Button testPrepGetHatchButton = driver.getButton(XboxButton.A);
@@ -135,13 +139,13 @@ public class OI {
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
         // Temporary
-        testPrepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
-        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
-
-        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-        testElevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
-
-        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
+//        testPrepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
+//        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
+//
+//        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+//        testElevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
+//
+//        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
@@ -176,6 +180,10 @@ public class OI {
         elevatorCargoShipButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
         elevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
         floorIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
+
+        //
+        nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
+        nextRightTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, false));
 
         // High vision target
         highTargetButton.whenPressed(new SimpleCommand("", () -> queueBallRocketTargetFlag = true));
