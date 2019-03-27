@@ -39,8 +39,8 @@ public class RobotMap {
     // sensors and switches
     public static final int ELEVATOR_LIMIT_SENSOR = 1;
 
-    public static final int WRIST_MID_SW = 2;
-    public static final int WRIST_BTM_SW = 3;
+    public static final int WRIST_MID_SW;
+    public static final int WRIST_BTM_SW;
 
     public static final int HATCH_EXTEND_SW = 4;
 
@@ -81,11 +81,14 @@ public class RobotMap {
             CAM_YAW = Math.toRadians(3); // TODO: THIS WAS BECAUSE THE LIMELIGHT HAD AN OFFSET!!! FIX THIS
             CAM_PITCH = Math.toRadians(-30.0);
             HATCH_GRABBER = 4;//0;
+            WRIST_MID_SW = 2;
+            WRIST_BTM_SW = 3;
         } else {
             CAM_YAW = Math.toRadians(0.616);
             CAM_PITCH = Math.toRadians(-33.08);
             HATCH_GRABBER = 0;
-
+            WRIST_MID_SW = 3;
+            WRIST_BTM_SW = 2;
         }
     }
 }
