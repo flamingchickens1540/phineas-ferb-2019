@@ -101,10 +101,12 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         goal = null;
 
         if (OI.clearBallRocketTargetFlag()) {
+            logger.debug("Rocket ball mode!");
             Hardware.limelight.setPipeline(1);
             Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
             Hardware.limelight.prepForVision();
         } else {
+            logger.debug("Hatch mode!");
             Hardware.limelight.setPipeline(0);
             Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
         }
