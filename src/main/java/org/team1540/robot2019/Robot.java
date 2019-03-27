@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
@@ -104,10 +105,10 @@ public class Robot extends TimedRobot {
             cam.setFPS(30);
         }
 
-        String distanceGuessKey = "CameraPoseCalibration/DistanceGuessIn";
+        String distanceGuessKey = "CameraPoseCalibration/DistanceGuessInInches";
         SmartDashboard.putNumber(distanceGuessKey, 0);
         Command estimatePitch = new SimpleCommand("Estimate Camera Pitch Command", () -> {
-            double distanceEstimate = SmartDashboard.getNumber(distanceGuessKey, 0);
+            double distanceEstimate = UnitsUtils.inchesToMeters(SmartDashboard.getNumber(distanceGuessKey, 0));
             if (distanceEstimate == 0) {
                 logger.error("No distance estimate provided at networktables key: " + distanceGuessKey);
                 return;
@@ -117,7 +118,7 @@ public class Robot extends TimedRobot {
                 logger.error("calibrationPitch is null!");
             } else {
                 logger.info("Pitch estimation successful: " + calibrationPitch);
-                NetworkTableInstance.getDefault().getEntry("CameraPoseCalibration/PitchEstimate").setValue(calibrationPitch);
+                SmartDashboard.putNumber("CameraPoseCalibration/PitchEstimate", Math.toDegrees(calibrationPitch));
             }
         });
         estimatePitch.setRunWhenDisabled(true);
@@ -129,7 +130,7 @@ public class Robot extends TimedRobot {
                 logger.error("calibrationYaw is null!");
             } else {
                 logger.info("Yaw estimation successful: " + calibrationYaw);
-                NetworkTableInstance.getDefault().getEntry("CameraPoseCalibration/YawEstimate").setValue(calibrationYaw);
+                SmartDashboard.putNumber("CameraPoseCalibration/YawEstimate", Math.toDegrees(calibrationYaw));
             }
         });
         estimateYaw.setRunWhenDisabled(true);
