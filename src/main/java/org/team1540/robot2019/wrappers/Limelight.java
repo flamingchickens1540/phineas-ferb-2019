@@ -4,10 +4,13 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
@@ -17,8 +20,11 @@ import org.team1540.robot2019.vision.deepspace.RawDeepSpaceVisionTarget;
 
 public class Limelight implements DeepSpaceVisionTargetCamera {
 
+    private static final Logger logger = Logger.getLogger(Limelight.class);
+
     private static final double HORIZONTAL_FOV = Math.toRadians(59.6);
     private static final double VERTICAL_FOV = Math.toRadians(45.7);
+    private static final Vector2D CAM_RESOLUTION = new Vector2D(320, 240);
 
     private final NetworkTable limelightTable;
     private Transform3D baseLinkToCamera;
@@ -188,45 +194,69 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             return null;
         }
 
-        List<Vector2D> corners = getCorners();
-        corners.sort(Comparator.comparingDouble(Vector2D::getX));
-        Optional<Vector2D> leftmostCorner = corners.stream().min(Comparator.comparingDouble(Vector2D::getX));
-        Optional<Vector2D> rightmostCorner = corners.stream().max(Comparator.comparingDouble(Vector2D::getX));
-
-        if (!leftmostCorner.isPresent() || !rightmostCorner.isPresent()) {
-            return null;
-        }
-
-        double approxMiddleX = (leftmostCorner.get().getX()+rightmostCorner.get().getX())/2;
-
-        Optional<Vector2D> leftBottomCorner = corners.stream().filter(item -> item.getX() < approxMiddleX).min(Comparator.comparingDouble(Vector2D::getY));
-        Optional<Vector2D> rightBottomCorner = corners.stream().filter(item -> item.getX() > approxMiddleX).min(Comparator.comparingDouble(Vector2D::getY));
-
-        if (!leftBottomCorner.isPresent() || !rightBottomCorner.isPresent()) {
-            return null;
-        }
-
-        // TODO: Angles or normalized screen space?
-        return new RawDeepSpaceVisionTarget(
-            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(leftBottomCorner.get(), getHorizontalFov(), getVerticalFov()),
-            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(rightBottomCorner.get(), getHorizontalFov(), getVerticalFov())
-        );
-
-//        // single point approach
-//        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
+//        List<Vector2D> corners = getCorners();
+//        corners.sort(Comparator.comparingDouble(Vector2D::getX));
+//        Optional<Vector2D> leftmostCorner = corners.stream().min(Comparator.comparingDouble(Vector2D::getX));
+//        Optional<Vector2D> rightmostCorner = corners.stream().max(Comparator.comparingDouble(Vector2D::getX));
 //
-//        // raw contours approach
-//        Vector2D point0 = getFilteredRawContourOrNull(0);
-//        Vector2D point1 = getFilteredRawContourOrNull(1);
-//
-//        if (point0 == null || point1 == null) {
+//        if (!leftmostCorner.isPresent() || !rightmostCorner.isPresent()) {
 //            return null;
 //        }
 //
+//        double approxMiddleX = (leftmostCorner.get().getX()+rightmostCorner.get().getX())/2;
+//
+//        Optional<Vector2D> leftBottomCorner = corners.stream().filter(item -> item.getX() < approxMiddleX).max(Comparator.comparingDouble(Vector2D::getY));
+//        Optional<Vector2D> rightBottomCorner = corners.stream().filter(item -> item.getX() > approxMiddleX).max(Comparator.comparingDouble(Vector2D::getY));
+//
+//        if (!leftBottomCorner.isPresent() || !rightBottomCorner.isPresent()) {
+//            return null;
+//        }
+//
+//        logger.debug(String.format("left: %f %f right: %f %f middle: %f", leftBottomCorner.get().getX(), leftBottomCorner.get().getY(), rightBottomCorner.get().getX(), rightBottomCorner.get().getY(), approxMiddleX));
+//
+//        // TODO: Angles or normalized screen space?
+//        Vector2D leftPoint = new Vector2D(leftBottomCorner.get().getX()/ CAM_RESOLUTION.getX()*2-1, -leftBottomCorner.get().getY()/ CAM_RESOLUTION.getY()*2-1);
+//        Vector2D rightPoint = new Vector2D(rightBottomCorner.get().getX()/ CAM_RESOLUTION.getX()*2-1, -rightBottomCorner.get().getY()/ CAM_RESOLUTION.getY()*2-1);
+//
+//        logger.debug(String.format("scaled left: %f %f right: %f %f", leftPoint.getX(), leftPoint.getY(), rightPoint.getX(), rightPoint.getY()));
 //        return new RawDeepSpaceVisionTarget(
-//            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point0, getHorizontalFov(), getVerticalFov()),
-//            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point1, getHorizontalFov(), getVerticalFov())
+//            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(leftPoint, getHorizontalFov(), getVerticalFov()),
+//            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(rightPoint, getHorizontalFov(), getVerticalFov())
 //        );
+
+//        // skew approach
+//        double skew = Math.toRadians(limelightTable.getEntry("ts").getDouble(0));
+//        double width = Math.toRadians(limelightTable.getEntry("tlong").getDouble(0));
+//
+//        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
+//
+
+//        // single point approach
+//        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
+
+        // raw contours approach
+        Vector2D[] rawContours = new Vector2D[]{
+            getFilteredRawContourOrNull(0),
+            getFilteredRawContourOrNull(1),
+            getFilteredRawContourOrNull(2)
+        };
+        List<Vector2D> sortedContours = Arrays.stream(rawContours).filter(Objects::nonNull)
+            .map(point -> DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point, getHorizontalFov(), getVerticalFov()))
+            .sorted(Comparator.comparingDouble(point -> point.distance(this.getTargetAngles()))).collect(Collectors.toList());
+
+        if (sortedContours.size() < 2) {
+            return null;
+        }
+//        logger.debug(String.format("left: %f %f right: %f %f",
+//            Math.toDegrees(sortedContours.get(0).getX()),
+//            Math.toDegrees(sortedContours.get(0).getY()),
+//            Math.toDegrees(sortedContours.get(1).getX()),
+//            Math.toDegrees(sortedContours.get(1).getY())));
+
+        return new RawDeepSpaceVisionTarget(
+            sortedContours.get(0),
+            sortedContours.get(1)
+        );
     }
 
     public void setPipeline(double pipelineID) { // TODO
