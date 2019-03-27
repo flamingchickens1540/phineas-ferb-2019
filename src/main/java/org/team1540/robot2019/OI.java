@@ -88,8 +88,13 @@ public class OI {
     private static Button strobeRedBlueButton = driver.getButton(DPadAxis.DOWN);
 
     // - Temporary
-    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.X);
-    private static Button testPlaceHatchButton = driver.getButton(XboxButton.A);
+    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.A);
+    private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
+
+    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP); // TODO: ChickenButton
+    private static Button testElevatorCargoShipButton = driver.getButton(DPadAxis.LEFT);
+    private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
+    private static Button testIntakeLoadingStationButton = driver.getButton(DPadAxis.RIGHT);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -133,6 +138,11 @@ public class OI {
         testPrepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
         testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
 
+        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+        testElevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
+
+        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
+
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
@@ -162,9 +172,10 @@ public class OI {
         OI.resetPointOffset.whenPressed(resetPointOffset);
 
         // Auto-align cancel
-        intakeLoadingStationButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getPointLineupDrive()::tempDisableLineup));
-        elevatorCargoShipButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getPointLineupDrive()::tempDisableLineup));
-        elevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getPointLineupDrive()::tempDisableLineup));
+        intakeLoadingStationButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
+        elevatorCargoShipButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
+        elevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
+        floorIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
 
         // High vision target
         highTargetButton.whenPressed(new SimpleCommand("", () -> queueBallRocketTargetFlag = true));
