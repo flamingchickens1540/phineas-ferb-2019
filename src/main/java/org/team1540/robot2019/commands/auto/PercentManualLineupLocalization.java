@@ -14,9 +14,9 @@ import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization
 public class PercentManualLineupLocalization extends PointManualDriveCommand {
 
     public static final Logger logger = Logger.getLogger(PercentManualLineupLocalization.class);
-    private static double X_OFFSET = -0.025;
+    private static double X_OFFSET = -0.05;
     private static double A = 5.2;
-    private static double B = 0.8;
+    private static double B = 0;
     private static double C = 1.2;
 
     private static double POINT_DEADZONE = 0.6;
@@ -29,11 +29,11 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
     private static double DEADZONE = 0.05;
 
     // Constants for angular VPID controller
-    private static double P = 0.32;
+    private static double P = 0.39;
     private static double I = 0;
     private static double D = 0.6;
 
-    public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
+//    public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
 //    public static double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
@@ -58,7 +58,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         SmartDashboard.putNumber("PercentLineupLocalization/MAX_VEL_THETA", MAX);
         SmartDashboard.putNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN);
         SmartDashboard.putNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE);
-        SmartDashboard.putNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
+//        SmartDashboard.putNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/X_OFFSET", X_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/A", A);
         SmartDashboard.putNumber("PercentLineupLocalization/B", B);
@@ -75,7 +75,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         MAX = SmartDashboard.getNumber("PercentLineupLocalization/MAX_VEL_THETA", MAX);
         MIN = SmartDashboard.getNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN);
         DEADZONE = SmartDashboard.getNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE);
-        ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
+//        ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
         X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/X_OFFSET", X_OFFSET);
         A = SmartDashboard.getNumber("PercentLineupLocalization/A", A);
         B = SmartDashboard.getNumber("PercentLineupLocalization/B", B);
@@ -111,9 +111,12 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
     }
 
     private Transform3D computeGoal() {
-        return driveOdometry.getOdomToBaseLink()
-            .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget())
-            .add(new Transform3D(-X_OFFSET, 0, 0));
+        Transform3D partialGoal = driveOdometry.getOdomToBaseLink()
+            .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget());
+        if (!Robot.hatch.isRetracted()) {
+            partialGoal = partialGoal.add(new Transform3D(X_OFFSET, 0, 0));
+        }
+        return partialGoal;
     }
 
 
