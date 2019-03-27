@@ -249,7 +249,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             return null;
         }
 
-        logger.debug("Using contours with id: " + sortedContours.get(0).getId() + " and " + sortedContours.get(0).getId());
+//        logger.debug("Using contours with id: " + sortedContours.get(0).getId() + " and " + sortedContours.get(1).getId());
 //        logger.debug(String.format("left: %f %f right: %f %f",
 //            Math.toDegrees(sortedContours.get(0).getX()),
 //            Math.toDegrees(sortedContours.get(0).getY()),
