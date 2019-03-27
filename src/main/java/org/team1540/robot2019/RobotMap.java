@@ -30,7 +30,7 @@ public class RobotMap {
     public static final int CLIMBER_CYLINDER_2 = 2;
 
     public static final int HATCH_SLIDE = 1;
-    public static final int HATCH_GRABBER = 4;//0;
+    public static final int HATCH_GRABBER;
 
     public static final int LED_GREEN = 5;
     public static final int LED_BLUE = 6;
@@ -80,9 +80,12 @@ public class RobotMap {
         if (Tuning.isComp) {
             CAM_YAW = Math.toRadians(3); // TODO: THIS WAS BECAUSE THE LIMELIGHT HAD AN OFFSET!!! FIX THIS
             CAM_PITCH = Math.toRadians(-30.0);
+            HATCH_GRABBER = 4;//0;
         } else {
-            CAM_YAW = Math.toRadians(2.96);
-            CAM_PITCH = Math.toRadians(-29.255225);
+            CAM_YAW = Math.toRadians(0.616);
+            CAM_PITCH = Math.toRadians(-33.08);
+            HATCH_GRABBER = 0;
+
         }
     }
 }
