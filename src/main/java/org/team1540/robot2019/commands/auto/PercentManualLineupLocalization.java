@@ -96,11 +96,11 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
     protected double returnAngleError() {
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
             Transform3D goal = computeGoal();
-            if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
+//            if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
                 this.goal = goal;
-            } else {
-                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
-            }
+//            } else {
+//                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
+//            }
         }
 
         if (goal != null) {
