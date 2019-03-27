@@ -474,7 +474,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/ANGULAR_KP",
-              "_title": "/SmartDashboard/PercentLineupLocalization/ANGULAR_KP"
+              "_title": "SmartDashboard/PercentLineupLocalization/ANGULAR_KP"
             }
           },
           "4,1": {
@@ -573,7 +573,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/HATCH_PLACE_X_OFFSET",
-              "_title": "/SmartDashboard/PercentLineupLocalization/HATCH_PLACE_X_OFFSET"
+              "_title": "SmartDashboard/PercentLineupLocalization/HATCH_PLACE_X_OFFSET"
             }
           },
           "9,1": {
@@ -584,7 +584,7 @@
             "content": {
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/HATCH_PLACE_Y_OFFSET",
-              "_title": "/SmartDashboard/PercentLineupLocalization/HATCH_PLACE_Y_OFFSET"
+              "_title": "SmartDashboard/PercentLineupLocalization/HATCH_PLACE_Y_OFFSET"
             }
           },
           "8,1": {
@@ -609,6 +609,43 @@
               "_title": "SmartDashboard/DeepSpaceVisionTargetLocalization/Debug/HasFound",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "NextLeftRightTargetTuning",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "3,0": {
+            "size": [
+              4,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Debug/SimilarVector3DTracker/Distance",
+              "_title": "SmartDashboard/Debug/SimilarVector3DTracker/Distance",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/Debug/SimilarVector3DTracker/Distance": true
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/ANGULAR_VEL"
             }
           }
         }
