@@ -21,6 +21,7 @@ import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.robot2019.utils.LastValidTransformTracker;
+import org.team1540.robot2019.vision.JonathanCam;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
 import org.team1540.robot2019.wrappers.TEBPlanner;
@@ -76,8 +77,11 @@ public class Robot extends TimedRobot {
         Hardware.limelight = new Limelight("limelight-a",
             new Transform3D(RobotMap.CAM_X, RobotMap.CAM_Y, RobotMap.CAM_Z, RobotMap.CAM_ROLL,
                 RobotMap.CAM_PITCH, RobotMap.CAM_YAW));
+        Hardware.jonathanCam = new JonathanCam("raspi-2",
+            new Transform3D(RobotMap.CAM_X, RobotMap.CAM_Y, RobotMap.CAM_Z, RobotMap.CAM_ROLL,
+                RobotMap.CAM_PITCH, RobotMap.CAM_YAW));
         lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
-        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(Hardware.limelight,
+        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(Hardware.jonathanCam,
             RobotMap.HATCH_TARGET_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
