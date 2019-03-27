@@ -14,9 +14,13 @@ public class SimilarVector3DTracker {
     }
 
     public boolean isSimilarTransform(Vector3D newTransform) {
+        if (lastVector == null) {
+            this.lastVector = newTransform;
+            return true;
+        }
         double distance = lastVector.distance(newTransform);
         NetworkTableInstance.getDefault().getEntry("Debug/SimilarVector3DTracker/Distance").setNumber(distance); // todo: debug
-        if (lastVector == null || distance < maxDistance) {
+        if (distance < maxDistance) {
             this.lastVector = newTransform;
             return true;
         }
