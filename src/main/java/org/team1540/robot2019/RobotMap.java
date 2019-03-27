@@ -71,10 +71,10 @@ public class RobotMap {
     public static final double CAM_ROLL = Math.toRadians(0);
     public static final double CAM_YAW;
 
-//    public static final double HATCH_TARGET_HEIGHT = 0.74; // center
-//    public static final double ROCKET_BALL_TARGET_HEIGHT = 0.99; // center
-    public static final double HATCH_TARGET_HEIGHT = 0.652018; // bottom
-    public static final double ROCKET_BALL_TARGET_HEIGHT = 0.851408; // bottom
+    public static final double HATCH_TARGET_HEIGHT = 0.74; // center
+    public static final double ROCKET_BALL_TARGET_HEIGHT = 0.99; // center
+//    public static final double HATCH_TARGET_HEIGHT = 0.652018; // bottom
+//    public static final double ROCKET_BALL_TARGET_HEIGHT = 0.851408; // bottom
 
     static {
         if (Tuning.isComp) {
