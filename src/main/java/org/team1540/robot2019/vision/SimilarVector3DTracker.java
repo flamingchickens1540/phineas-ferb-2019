@@ -1,7 +1,7 @@
 package org.team1540.robot2019.vision;
 
 
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 
 public class SimilarVector3DTracker {
@@ -19,7 +19,7 @@ public class SimilarVector3DTracker {
             return true;
         }
         double distance = lastVector.distance(newTransform);
-        NetworkTableInstance.getDefault().getEntry("Debug/SimilarVector3DTracker/Distance").setNumber(distance); // todo: debug
+        SmartDashboard.putNumber("Debug/SimilarVector3DTracker/Distance", distance); // todo: debug
         if (distance < maxDistance) {
             this.lastVector = newTransform;
             return true;
