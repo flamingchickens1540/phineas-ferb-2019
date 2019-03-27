@@ -4,16 +4,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
+import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.RobotMap;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
 import org.team1540.robot2019.vision.SimilarVector3DTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 
-public class PercentManualLineupLocalization extends PointManualDriveCommand {
+public class PercentManualLineupLocalizationAngleProvider implements PointAngleProvider {
 
-    public static final Logger logger = Logger.getLogger(PercentManualLineupLocalization.class);
+    public static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
     private static double HATCH_GRAB_X_OFFSET = -0.05;
     private static double HATCH_GRAB_Y_OFFSET = 0;
     private static double HATCH_PLACE_X_OFFSET = -0.05;
@@ -36,10 +38,10 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
     private static double I = 0;
     private static double D = 0.6;
 
+    private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 //    public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
 //    public static double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
-    private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 
     private Transform3D goal;
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
@@ -47,9 +49,9 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
 
     private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.3);
 
-    public PercentManualLineupLocalization(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
-        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
-        requires(Robot.drivetrain);
+    public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
+//        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
+//        requires(Robot.drivetrain);
 
         this.driveOdometry = driveOdometry;
         this.deepSpaceVisionTargetLocalization = deepSpaceVisionTargetLocalization;
@@ -62,7 +64,10 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         SmartDashboard.putNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN);
         SmartDashboard.putNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE);
 //        SmartDashboard.putNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
-        SmartDashboard.putNumber("PercentLineupLocalization/X_OFFSET", X_OFFSET);
+        SmartDashboard.putNumber("PercentLineupLocalization/HATCH_GRAB_X_OFFSET", HATCH_GRAB_X_OFFSET);
+        SmartDashboard.putNumber("PercentLineupLocalization/HATCH_GRAB_Y_OFFSET", HATCH_GRAB_Y_OFFSET);
+        SmartDashboard.putNumber("PercentLineupLocalization/HATCH_PLACE_X_OFFSET", HATCH_PLACE_X_OFFSET);
+        SmartDashboard.putNumber("PercentLineupLocalization/HATCH_PLACE_Y_OFFSET", HATCH_PLACE_Y_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/A", A);
         SmartDashboard.putNumber("PercentLineupLocalization/B", B);
         SmartDashboard.putNumber("PercentLineupLocalization/C", C);
@@ -70,7 +75,7 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         P = SmartDashboard.getNumber("PercentLineupLocalization/OUTPUT_SCALAR", OUTPUT_SCALAR);
         P = SmartDashboard.getNumber("PercentLineupLocalization/ANGULAR_KP", P);
         I = SmartDashboard.getNumber("PercentLineupLocalization/ANGULAR_KI", I);
@@ -88,18 +93,32 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         C = SmartDashboard.getNumber("PercentLineupLocalization/C", C);
         POINT_DEADZONE = SmartDashboard.getNumber("PercentLineupLocalization/POINT_DEADZONE", POINT_DEADZONE);
 
-        this.getPIDController().setP(P);
-        this.getPIDController().setI(I);
-        this.getPIDController().setD(D);
+//        this.getPIDController().setP(P);
+//        this.getPIDController().setI(I);
+//        this.getPIDController().setD(D);
 
         similarVectorTracker.reset();
         goal = null;
+
+        if (OI.clearBallRocketTargetFlag()) {
+            Hardware.limelight.setPipeline(1);
+            Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
+            Hardware.limelight.prepForVision();
+        } else {
+            Hardware.limelight.setPipeline(0);
+            Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
+        }
 
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
     @Override
-    protected double returnAngleError() {
+    public PointControlConfig getPointControlConfig() {
+        return new PointControlConfig(OUTPUT_SCALAR, MIN, MAX, DEADZONE, P, I, D, THROTTLE_CONSTANT);
+    }
+
+    @Override
+    public double returnAngleError() {
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
             Transform3D goal = computeGoal();
 //            if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
@@ -139,15 +158,5 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         Vector3D goalPosition = adjustedGoal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
         return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
-    }
-
-    @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    protected void end() {
-        logger.debug("Ended");
     }
 }
