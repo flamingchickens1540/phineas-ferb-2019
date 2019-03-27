@@ -14,7 +14,10 @@ import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization
 public class PercentManualLineupLocalization extends PointManualDriveCommand {
 
     public static final Logger logger = Logger.getLogger(PercentManualLineupLocalization.class);
-    private static double X_OFFSET = -0.05;
+    private static double HATCH_GRAB_X_OFFSET = -0.05;
+    private static double HATCH_GRAB_Y_OFFSET = 0;
+    private static double HATCH_PLACE_X_OFFSET = -0.05;
+    private static double HATCH_PLACE_Y_OFFSET = -0.01;
     private static double A = 5.2;
     private static double B = 0;
     private static double C = 1.2;
@@ -76,7 +79,10 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
         MIN = SmartDashboard.getNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN);
         DEADZONE = SmartDashboard.getNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE);
 //        ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
-        X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/X_OFFSET", X_OFFSET);
+        HATCH_GRAB_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_GRAB_X_OFFSET", HATCH_GRAB_X_OFFSET);
+        HATCH_GRAB_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_GRAB_Y_OFFSET", HATCH_GRAB_Y_OFFSET);
+        HATCH_PLACE_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_PLACE_X_OFFSET", HATCH_PLACE_X_OFFSET);
+        HATCH_PLACE_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_PLACE_Y_OFFSET", HATCH_PLACE_Y_OFFSET);
         A = SmartDashboard.getNumber("PercentLineupLocalization/A", A);
         B = SmartDashboard.getNumber("PercentLineupLocalization/B", B);
         C = SmartDashboard.getNumber("PercentLineupLocalization/C", C);
@@ -113,8 +119,10 @@ public class PercentManualLineupLocalization extends PointManualDriveCommand {
     private Transform3D computeGoal() {
         Transform3D partialGoal = driveOdometry.getOdomToBaseLink()
             .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget());
-        if (!Robot.hatch.isRetracted()) {
-            partialGoal = partialGoal.add(new Transform3D(X_OFFSET, 0, 0));
+        if (Robot.hatch.isRetracted()) {
+            partialGoal = partialGoal.add(new Transform3D(HATCH_PLACE_X_OFFSET, HATCH_PLACE_Y_OFFSET, 0));
+        } else {
+            partialGoal = partialGoal.add(new Transform3D(HATCH_GRAB_X_OFFSET, HATCH_GRAB_Y_OFFSET, 0));
         }
         return partialGoal;
     }
