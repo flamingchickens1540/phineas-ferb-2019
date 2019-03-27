@@ -91,6 +91,10 @@ public class OI {
     // - LEDs
     private static Button strobeRedBlueButton = driver.getButton(DPadAxis.DOWN);
 
+    // - Temporary
+    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.X);
+    private static Button testPlaceHatchButton = driver.getButton(XboxButton.Y);
+
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
@@ -128,6 +132,10 @@ public class OI {
         hatchSimpleBackwardButton.whenPressed(new RetractHatchMech());
 
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
+
+        // Temporary
+        testPrepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
+        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
