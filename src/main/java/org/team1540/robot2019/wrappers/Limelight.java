@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
+import org.team1540.robot2019.vision.RawContour;
 import org.team1540.robot2019.vision.VisionUtils;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetCamera;
 import org.team1540.robot2019.vision.deepspace.RawDeepSpaceVisionTarget;
@@ -88,11 +89,11 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
      * @param id the index of the raw contour
      * @return a {@link Vector2D} containing the center of the contour in screen-space coordinates
      */
-    public Vector2D getRawContour(int id) {
-        return new Vector2D(
+    public RawContour getRawContour(int id) {
+        return new RawContour(id, new Vector2D(
             -limelightTable.getEntry("tx" + id).getDouble(0), // TODO: X should not be negated here
             limelightTable.getEntry("ty" + id).getDouble(0)
-        );
+        ));
     }
 
     /**
@@ -101,18 +102,18 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
      * @param id the index of the raw contour
      * @return a {@link Vector2D} containing the center of the contour in screen-space coordinates or null if the contour does not pass the filters
      */
-    public Vector2D getFilteredRawContourOrNull(int id) {
+    public RawContour getFilteredRawContourOrNull(int id) {
         double upperLimit = 0.86;
 //      double lowerLimit = 0.29; // With U
         double lowerLimit = -0.65;
         double rightLimit = 0.90;
         double leftLimit = -0.90;
-        Vector2D vector2D = getRawContour(id);
-        if (vector2D.equals(Vector2D.ZERO)
-            || !VisionUtils.isWithinBounds(vector2D, upperLimit, lowerLimit, rightLimit, leftLimit)) {
+        RawContour contour = getRawContour(id);
+        if (contour.getCenter().equals(Vector2D.ZERO)
+            || !VisionUtils.isWithinBounds(contour.getCenter(), upperLimit, lowerLimit, rightLimit, leftLimit)) {
             return null;
         }
-        return vector2D;
+        return contour;
     }
 
     /**
@@ -235,18 +236,20 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 //        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
 
         // raw contours approach
-        Vector2D[] rawContours = new Vector2D[]{
+        RawContour[] rawContours = new RawContour[]{
             getFilteredRawContourOrNull(0),
             getFilteredRawContourOrNull(1),
             getFilteredRawContourOrNull(2)
         };
-        List<Vector2D> sortedContours = Arrays.stream(rawContours).filter(Objects::nonNull)
-            .map(point -> DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point, getHorizontalFov(), getVerticalFov()))
-            .sorted(Comparator.comparingDouble(point -> point.distance(this.getTargetAngles()))).collect(Collectors.toList());
+        List<RawContour> sortedContours = Arrays.stream(rawContours).filter(Objects::nonNull)
+            .map(point -> new RawContour(point.getId(), DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point.getCenter(), getHorizontalFov(), getVerticalFov())))
+            .sorted(Comparator.comparingDouble(point -> point.getCenter().distance(this.getTargetAngles()))).collect(Collectors.toList());
 
         if (sortedContours.size() < 2) {
             return null;
         }
+
+        logger.debug("Using contours with id: " + sortedContours.get(0).getId() + " and " + sortedContours.get(0).getId());
 //        logger.debug(String.format("left: %f %f right: %f %f",
 //            Math.toDegrees(sortedContours.get(0).getX()),
 //            Math.toDegrees(sortedContours.get(0).getY()),
@@ -254,8 +257,8 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 //            Math.toDegrees(sortedContours.get(1).getY())));
 
         return new RawDeepSpaceVisionTarget(
-            sortedContours.get(0),
-            sortedContours.get(1)
+            sortedContours.get(0).getCenter(),
+            sortedContours.get(1).getCenter()
         );
     }
 
