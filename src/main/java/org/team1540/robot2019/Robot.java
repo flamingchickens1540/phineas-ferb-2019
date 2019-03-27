@@ -213,7 +213,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        OI.pointDriveCommand.start();
         Hardware.limelight.setLeds(true);
 
         setMechanismBrakes(true);

@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.drivetrain.PointDrive;
+import org.team1540.robot2019.commands.drivetrain.PointLineupDrive;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
@@ -54,9 +54,18 @@ public class Drivetrain extends Subsystem {
     private NetworkTableEntry rightCurrentBEntry = table.getEntry("rightCurrB");
     private NetworkTableEntry rightCurrentCEntry = table.getEntry("rightCurrC");
 
+    private PointLineupDrive pointLineupDrive;
+
+    public PointLineupDrive getPointLineupDrive() {
+        if (pointLineupDrive == null) {
+            pointLineupDrive = new PointLineupDrive();
+        }
+        return pointLineupDrive;
+    }
+
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new PointDrive());
+        setDefaultCommand(getPointLineupDrive());
     }
 
     public Output<TankDriveData> getPipelineOutput() {

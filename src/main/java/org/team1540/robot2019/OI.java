@@ -6,15 +6,13 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.auto.PercentManualLineupLocalization;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
 import org.team1540.robot2019.commands.cargo.LoadingStationCargoIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
-import org.team1540.robot2019.commands.drivetrain.PointDrive;
-import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
+import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabThenRetract;
@@ -49,7 +47,7 @@ public class OI {
 
     // Copilot
     // - Elevator
-    private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
+    private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP); // TODO: ChickenButton
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
     private static Button intakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
@@ -81,8 +79,6 @@ public class OI {
     private static Button autoAlignButtonAlt = driver.getButton(XboxButton.RB);
 
     // - Driving
-    static PointDrive pointDriveCommand;
-
     private static Button pointDrivePointAxis = driver.getButton(0.4, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
     private static Button resetPointOffset = driver.getButton(XboxButton.Y);
 
@@ -158,58 +154,20 @@ public class OI {
         }));
 
         // Point drive
-        pointDriveCommand = new PointDrive();
-        pointDrivePointAxis.whileHeld(new SimpleCommand("", () -> {
-            if (!arcadeCommand.isRunning() && !(Robot.drivetrain
-                .getCurrentCommand() instanceof TankDriveForTimePercent)) {
-                pointDriveCommand.start();
-            }
-        }));
-
         SimpleCommand resetPointOffset = new SimpleCommand("Reset Point Offset", () -> {
             logger.debug("Setting Angle Offset");
-            PointDrive.setInitAngleOffset(Hardware.navx.getYawRadians());
+            PointDriveAngleProvider.setInitAngleOffset(Hardware.navx.getYawRadians());
         });
         resetPointOffset.setRunWhenDisabled(true);
         OI.resetPointOffset.whenPressed(resetPointOffset);
 
         // Auto-align cancel
-        intakeLoadingStationButton.whenPressed(pointDriveCommand);
-        elevatorCargoShipButton.whenPressed(pointDriveCommand);
-        elevatorFullUpButton.whenPressed(pointDriveCommand);
-
-        // Auto-align start
-        Command lineupCommand = new PercentManualLineupLocalization(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
-        pointDrivePointAxis.whenReleased(new SimpleCommand("", () -> {
-            pointDriveCommand.cancel();
-            if (highTargetButton.get()) {
-                Hardware.limelight.setPipeline(1);
-                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
-                Hardware.limelight.prepForVision();
-            } else {
-                Hardware.limelight.setPipeline(0);
-                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
-            }
-            if (!arcadeCommand.isRunning()) {
-                lineupCommand.start();
-            }
-        }));
+        intakeLoadingStationButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getPointLineupDrive()::tempDisableLineup));
+        elevatorCargoShipButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getPointLineupDrive()::tempDisableLineup));
+        elevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getPointLineupDrive()::tempDisableLineup));
 
         // High vision target
-        highTargetButton.whenPressed(new SimpleCommand("", () -> {
-            if (!pointDriveCommand.isRunning()) {
-                Hardware.limelight.setPipeline(1);
-                Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
-                Hardware.limelight.prepForVision();
-            }
-        }));
-
-        // Manual activate auto-align
-        autoAlignButtonAlt.whenPressed(new SimpleCommand("", () -> {
-            if (!arcadeCommand.isRunning()) {
-                lineupCommand.start();
-            }
-        }));
+        highTargetButton.whenPressed(new SimpleCommand("", () -> queueBallRocketTargetFlag = true));
 
         // Flash LEDs
         strobeRedBlueButton.whileHeld(new BlinkLEDs(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
@@ -271,5 +229,16 @@ public class OI {
 
     public static double getTankdriveForwardsAxis() {
         return Utilities.scale(Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), Tuning.driveDeadzone), 2);
+    }
+
+    private static boolean queueBallRocketTargetFlag = false;
+
+    public static boolean clearBallRocketTargetFlag() { // return queueBallRocketTargetFlag != (queueBallRocketTargetFlag = false); ::thonk::
+        if (queueBallRocketTargetFlag) {
+            queueBallRocketTargetFlag = false;
+            return true;
+        } else {
+            return false;
+        }
     }
 }
