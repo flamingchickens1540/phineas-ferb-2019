@@ -7,7 +7,7 @@ import org.team1540.robot2019.commands.auto.PointAngleProvider;
 import org.team1540.robot2019.commands.auto.PointControlConfig;
 import org.team1540.robot2019.commands.auto.PointManualDriveCommand;
 
-public class PointLineupDrive extends PointManualDriveCommand {
+public class DriveCommand extends PointManualDriveCommand {
 
     private PointAngleProvider lineupLocalization = new PercentManualLineupLocalizationAngleProvider(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
     private PointAngleProvider pointDriveAngleProvider = new PointDriveAngleProvider();
@@ -16,7 +16,7 @@ public class PointLineupDrive extends PointManualDriveCommand {
 
     private boolean tempDisableLineup = false;
 
-    public PointLineupDrive() {
+    public DriveCommand() {
         super();
     }
 
@@ -32,19 +32,27 @@ public class PointLineupDrive extends PointManualDriveCommand {
             tempDisableLineup = false;
             if (currentAngleProvider != pointDriveAngleProvider) {
                 currentAngleProvider = pointDriveAngleProvider;
-                currentAngleProvider.initialize();
-                super.applyConfig(currentAngleProvider.getPointControlConfig());
+                initializeAndUpdateConfig();
             }
         } else if (!tempDisableLineup && currentAngleProvider != lineupLocalization) {
             currentAngleProvider = lineupLocalization;
-            currentAngleProvider.initialize();
-            super.applyConfig(currentAngleProvider.getPointControlConfig());
+            initializeAndUpdateConfig();
         }
         return currentAngleProvider.returnAngleError();
     }
 
+    private void initializeAndUpdateConfig() {
+        currentAngleProvider.initialize();
+        super.applyConfig(currentAngleProvider.getPointControlConfig());
+    }
+
     public void tempDisableLineup() {
         tempDisableLineup = true;
+        if (currentAngleProvider != pointDriveAngleProvider) {
+            currentAngleProvider = pointDriveAngleProvider;
+            initializeAndUpdateConfig();
+        }
+        logger.debug("Lineup temporarily disabled!");
     }
 
     @Override
