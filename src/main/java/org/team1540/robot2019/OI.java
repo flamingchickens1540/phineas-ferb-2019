@@ -17,6 +17,7 @@ import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabThenRetract;
+import org.team1540.robot2019.commands.hatch.PlaceHatchInLoadingStation;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
@@ -94,6 +95,7 @@ public class OI {
     // - Temporary
     private static Button testPrepGetHatchButton = driver.getButton(XboxButton.A);
     private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
+    private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
     private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP); // TODO: ChickenButton
     private static Button testElevatorCargoShipButton = driver.getButton(DPadAxis.LEFT);
@@ -139,13 +141,15 @@ public class OI {
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
         // Temporary
-//        testPrepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
-//        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
-//
-//        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-//        testElevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
-//
-//        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
+        testPrepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
+        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
+
+        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+        testElevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
+
+        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
+
+        testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
