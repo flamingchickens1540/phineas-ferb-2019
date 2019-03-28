@@ -81,9 +81,6 @@ public class Robot extends TimedRobot {
             RobotMap.HATCH_TARGET_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
-//        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800,
-//            "10.15.40.202", 0.01);
-
         OI.init();
 
         ShuffleboardDisplay.init();
