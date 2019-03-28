@@ -11,7 +11,7 @@ public class RecoverWrist extends Command {
 
     @Override
     protected void initialize() {
-        Robot.wrist.set(1);
+        Robot.wrist.set(-1);
 
     }
 
