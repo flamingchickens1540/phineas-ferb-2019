@@ -25,4 +25,9 @@ public class SensorGrabHatchSequence extends CommandGroup {
         addSequential(new WaitCommand(0.3));
         addSequential(new MoveElevatorToZero());
     }
+
+    @Override
+    protected void interrupted() {
+        new MoveElevatorToZero().start();
+    }
 }
