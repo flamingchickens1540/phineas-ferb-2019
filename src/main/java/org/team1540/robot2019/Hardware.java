@@ -28,7 +28,7 @@ public class Hardware {
     private static final Logger logger = Logger.getLogger(Hardware.class);
 
     private static boolean hasLoggedCompBot = false;
-    K
+
     public static final int DRIVE_POSITION_SLOT_IDX = 0;
     public static final int DRIVE_VELOCITY_SLOT_IDX = 1;
 
