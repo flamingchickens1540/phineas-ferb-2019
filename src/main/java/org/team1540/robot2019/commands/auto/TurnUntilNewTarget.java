@@ -95,4 +95,9 @@ public class TurnUntilNewTarget extends Command {
         return false;
     }
 
+    @Override
+    protected void end() {
+        Robot.drivetrain.getDriveCommand().resetLineup();
+    }
+
 }

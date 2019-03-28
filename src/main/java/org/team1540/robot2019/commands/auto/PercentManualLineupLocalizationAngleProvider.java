@@ -74,6 +74,12 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         SmartDashboard.putNumber("PercentLineupLocalization/POINT_DEADZONE", POINT_DEADZONE);
     }
 
+
+    @Override
+    public void reset() {
+        similarVectorTracker.reset();
+    }
+
     @Override
     public void initialize() {
         P = SmartDashboard.getNumber("PercentLineupLocalization/OUTPUT_SCALAR", OUTPUT_SCALAR);
@@ -97,7 +103,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 //        this.getPIDController().setI(I);
 //        this.getPIDController().setD(D);
 
-        similarVectorTracker.reset();
         goal = null;
 
         if (OI.clearBallRocketTargetFlag()) {

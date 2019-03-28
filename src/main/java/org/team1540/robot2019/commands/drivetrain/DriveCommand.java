@@ -20,6 +20,10 @@ public class DriveCommand extends PointManualDriveCommand {
         super();
     }
 
+    public void resetLineup() {
+        lineupLocalization.reset();
+    }
+
     @Override
     protected PointControlConfig initializeAndGetConfig() {
         currentAngleProvider.initialize();
@@ -32,6 +36,7 @@ public class DriveCommand extends PointManualDriveCommand {
             tempDisableLineup = false;
             if (currentAngleProvider != pointDriveAngleProvider) {
                 currentAngleProvider = pointDriveAngleProvider;
+                lineupLocalization.reset();
                 initializeAndUpdateConfig();
             }
         } else if (!tempDisableLineup && currentAngleProvider != lineupLocalization) {
