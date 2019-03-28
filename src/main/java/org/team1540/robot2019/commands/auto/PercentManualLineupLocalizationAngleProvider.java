@@ -47,7 +47,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
-    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.3);
+    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.1);
 
     public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
 //        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
@@ -123,11 +123,11 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     public double returnAngleError() {
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
             Transform3D goal = computeGoal();
-//            if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
+            if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
                 this.goal = goal;
-//            } else {
-//                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
-//            }
+            } else {
+                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
+            }
         }
 
         if (goal != null) {
