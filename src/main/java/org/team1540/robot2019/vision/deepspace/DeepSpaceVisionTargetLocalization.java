@@ -47,6 +47,11 @@ public class DeepSpaceVisionTargetLocalization {
                 camera.getBaseLinkToCamera().getOrientation()
             );
 
+        if (baseLinkToVisionTarget.getPosition().getX() < 0) { // Target should not be behind the robot! (if "going to do a 180" -> "don't")
+            logger.warn("Vision target found behind robot! This means the robot is detecting interference as targets. Ignoring pose estimate.");
+            return false;
+        }
+
         onUpdate.accept(baseLinkToVisionTarget);
         return true;
     }
