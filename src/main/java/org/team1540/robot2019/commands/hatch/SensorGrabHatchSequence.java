@@ -22,7 +22,7 @@ public class SensorGrabHatchSequence extends CommandGroup {
         addSequential(new GrabHatch());
         addSequential(new WaitCommand(0.3));
         addSequential(new RetractHatchMech());
-        addSequential(new WaitCommand(0.3));
+        addSequential(new WaitCommand(2));
         addSequential(new MoveElevatorToZero());
     }
 
