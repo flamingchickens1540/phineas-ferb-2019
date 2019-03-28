@@ -19,15 +19,16 @@ import org.team1540.rooster.wrappers.ChickenTalon;
 import org.team1540.rooster.wrappers.ChickenVictor;
 
 /**
- * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I centralize the motors themselves. This also means we don't have to redo loads of config when making alternative robots or funky testing
- * code.
+ * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I
+ * centralize the motors themselves. This also means we don't have to redo loads of config when
+ * making alternative robots or funky testing code.
  */
 public class Hardware {
 
     private static final Logger logger = Logger.getLogger(Hardware.class);
 
     private static boolean hasLoggedCompBot = false;
-
+    K
     public static final int DRIVE_POSITION_SLOT_IDX = 0;
     public static final int DRIVE_VELOCITY_SLOT_IDX = 1;
 
@@ -121,7 +122,8 @@ public class Hardware {
         driveMotorAll = new ChickenController[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC,
             driveRightMotorA, driveRightMotorB, driveRightMotorC};
         driveMotorMasters = new ChickenTalon[]{driveLeftMotorA, driveRightMotorA};
-        driveLeftMotors = new ChickenController[]{driveLeftMotorA, driveLeftMotorB, driveLeftMotorC};
+        driveLeftMotors = new ChickenController[]{driveLeftMotorA, driveLeftMotorB,
+            driveLeftMotorC};
         driveRightMotors = new ChickenController[]{driveRightMotorA, driveRightMotorB,
             driveRightMotorC};
 
@@ -287,7 +289,8 @@ public class Hardware {
         climberArmLeft.setSensorPhase(true);
         climberArmLeft.setSelectedSensorPosition(0);
 
-        climberCylinder = new DoubleSolenoid(RobotMap.CLIMBER_CYLINDER_1, RobotMap.CLIMBER_CYLINDER_2);
+        climberCylinder = new DoubleSolenoid(RobotMap.CLIMBER_CYLINDER_1,
+            RobotMap.CLIMBER_CYLINDER_2);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized climber in " + (end - start) + " ms");
