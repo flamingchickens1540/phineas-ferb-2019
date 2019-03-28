@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
@@ -221,9 +222,10 @@ public class Robot extends TimedRobot {
 
         Hardware.checkStickyFaults();
 
-        if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
-            elevator.setRaw(0);
-        }
+//        if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
+//            elevator.setRaw(0);
+//        }
+        new MoveElevatorToZero().start();
     }
 
     @Override
