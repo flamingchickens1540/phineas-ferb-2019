@@ -17,9 +17,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     public static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
     private static double HATCH_GRAB_X_OFFSET = -0.05;
-    private static double HATCH_GRAB_Y_OFFSET = -0.015;
-    private static double HATCH_PLACE_X_OFFSET = -0.05;
-    private static double HATCH_PLACE_Y_OFFSET = -0.025;
+    private static double HATCH_GRAB_Y_OFFSET = -0.035;
+    private static double HATCH_PLACE_X_OFFSET = -0.1;
+    private static double HATCH_PLACE_Y_OFFSET = -0.035;
     private static double A = 5.2;
     private static double B = 0;
     private static double C = 1.2;
