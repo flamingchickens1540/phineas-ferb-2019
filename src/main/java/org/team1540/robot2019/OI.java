@@ -143,7 +143,6 @@ public class OI {
         testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
 
         testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-        testElevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
 
         testElevatorDownButton.whenPressed(new MoveElevatorToZero());
 
@@ -176,12 +175,6 @@ public class OI {
         });
         resetPointOffset.setRunWhenDisabled(true);
         OI.resetPointOffset.whenPressed(resetPointOffset);
-
-        // Auto-align cancel
-        intakeLoadingStationButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
-        elevatorCargoShipButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
-        elevatorFullUpButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
-        floorIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand()::tempDisableLineup));
 
         // Next left/right target
         nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
