@@ -3,6 +3,7 @@ package org.team1540.robot2019.commands.auto;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
@@ -17,6 +18,7 @@ import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization
 public class PercentManualLineupLocalizationAngleProvider implements PointAngleProvider {
 
     public static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
+    private static final double MAX_ACCURATE_POSE_DISTANCE = 2.0;
     private static double HATCH_GRAB_X_OFFSET = -0.05;
     private static double HATCH_GRAB_Y_OFFSET = -0.01;
     private static double HATCH_PLACE_X_OFFSET = -0.1;
@@ -140,6 +142,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             Transform3D goal = computeGoal();
             if (timer != null && !timer.hasPeriodPassed(1)) {
                 similarVectorTracker.reset();
+            }
+            if (deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().getPositionVector().distance(Vector2D.ZERO) > MAX_ACCURATE_POSE_DISTANCE) {
+                similarVectorTracker.setVector3D(goal.getPosition());
+                this.goal = goal;
             }
             if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
                 this.goal = goal;
