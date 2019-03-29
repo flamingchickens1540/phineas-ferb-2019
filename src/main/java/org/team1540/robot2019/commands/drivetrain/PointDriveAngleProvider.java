@@ -36,11 +36,6 @@ public class PointDriveAngleProvider implements PointAngleProvider {
     }
 
     @Override
-    public void reset() {
-
-    }
-
-    @Override
     public void initialize() {
         setGoalToCurrentAngle();
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
