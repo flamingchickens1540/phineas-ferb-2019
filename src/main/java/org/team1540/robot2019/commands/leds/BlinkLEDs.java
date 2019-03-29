@@ -2,7 +2,6 @@ package org.team1540.robot2019.commands.leds;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.TimedCommand;
-import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
@@ -29,7 +28,6 @@ public class BlinkLEDs extends TimedCommand {
     protected void initialize() {
         usingColor2 = true;
         timer.start();
-        Hardware.limelight.setLeds(false);
     }
 
     @Override
