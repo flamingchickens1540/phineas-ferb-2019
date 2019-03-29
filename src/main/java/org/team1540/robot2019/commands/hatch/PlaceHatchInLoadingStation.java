@@ -22,14 +22,15 @@ public class PlaceHatchInLoadingStation extends CommandGroup {
         addSequential(new ExtendHatchMech());
         addSequential(new SimpleCommand("Drive", () -> new TankDriveForTimePercent(0.4, 0.2).start()));
         addSequential(new TimedCommand(0.4));
-        addSequential(new MoveElevatorToPosition(2));
+        addSequential(new SimpleCommand("Drive", () -> new TankDriveForTimePercent(0.6, 0.05).start()));
+        addSequential(new MoveElevatorToZero());
         addSequential(new ReleaseHatch());
-        addSequential(new WaitCommand(0.1));
+        addSequential(new WaitCommand(0.3));
         addSequential(new RetractHatchMech());
         addSequential(new WaitCommand(0.1));
-        addSequential(new MoveElevatorToZero());
-        addSequential(new SimpleCommand("Drive", () -> new TankDriveForTimePercent(0.2, 0.3).start()));
-        addSequential(new TimedCommand(0.2));
+        addSequential(new ExtendHatchMech());
+        addSequential(new WaitCommand(0.3));
+        addSequential(new RetractHatchMech());
     }
 
     @Override
