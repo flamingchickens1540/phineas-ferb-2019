@@ -7,10 +7,10 @@ import org.team1540.robot2019.commands.auto.PointAngleProvider;
 import org.team1540.robot2019.commands.auto.PointControlConfig;
 import org.team1540.robot2019.commands.auto.PointManualDriveCommand;
 
-public class DriveCommand extends PointManualDriveCommand {
+public class DriveCommand extends PointManualDriveCommand { // TODO: Make this generic
 
-    private PointAngleProvider lineupLocalization = new PercentManualLineupLocalizationAngleProvider(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
-    private PointAngleProvider pointDriveAngleProvider = new PointDriveAngleProvider();
+    private PercentManualLineupLocalizationAngleProvider lineupLocalization = new PercentManualLineupLocalizationAngleProvider(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
+    private PointDriveAngleProvider pointDriveAngleProvider = new PointDriveAngleProvider();
 
     private PointAngleProvider currentAngleProvider = pointDriveAngleProvider;
 
@@ -20,8 +20,12 @@ public class DriveCommand extends PointManualDriveCommand {
         super();
     }
 
-    public void resetLineup() {
-        lineupLocalization.reset();
+    public void pointNextReset() {
+        lineupLocalization.pointNextReset();
+    }
+
+    public void justLetGoReset() {
+        lineupLocalization.justLetGoReset();
     }
 
     @Override
@@ -36,7 +40,7 @@ public class DriveCommand extends PointManualDriveCommand {
             tempDisableLineup = false;
             if (currentAngleProvider != pointDriveAngleProvider) {
                 currentAngleProvider = pointDriveAngleProvider;
-                lineupLocalization.reset();
+                justLetGoReset();
                 initializeAndUpdateConfig();
             }
         } else if (!tempDisableLineup && currentAngleProvider != lineupLocalization) {

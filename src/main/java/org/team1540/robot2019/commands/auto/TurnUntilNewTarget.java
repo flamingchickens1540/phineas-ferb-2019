@@ -97,7 +97,7 @@ public class TurnUntilNewTarget extends Command {
 
     @Override
     protected void end() {
-        Robot.drivetrain.getDriveCommand().resetLineup();
+        Robot.drivetrain.getDriveCommand().pointNextReset();
     }
 
 }

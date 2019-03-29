@@ -1,5 +1,6 @@
 package org.team1540.robot2019.commands.auto;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.log4j.Logger;
@@ -48,6 +49,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
     private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.2);
+    private Timer timer;
 
     public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
 //        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
@@ -75,8 +77,16 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     }
 
 
-    @Override
-    public void reset() {
+    public void justLetGoReset() {
+        if (timer == null) {
+            timer = new Timer();
+        }
+        timer.reset();
+        similarVectorTracker.reset();
+    }
+
+    public void pointNextReset() {
+        timer = null;
         similarVectorTracker.reset();
     }
 
@@ -128,6 +138,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     public double returnAngleError() {
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
             Transform3D goal = computeGoal();
+            if (timer != null && !timer.hasPeriodPassed(1)) {
+                similarVectorTracker.reset();
+            }
             if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
                 this.goal = goal;
             } else {
