@@ -245,7 +245,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             .map(point -> new RawContour(point.getId(), DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point.getCenter(), getHorizontalFov(), getVerticalFov())))
             .sorted(Comparator.comparingDouble(point -> point.getCenter().distance(this.getTargetAngles()))).collect(Collectors.toList());
 
-        if (sortedContours.size() < 2) {
+        if (sortedContours.size() < 2) { // TODO: ScreenspaceContour class and AnglesContour and VectorContour
             return null;
         }
 
@@ -258,7 +258,8 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 
         return new RawDeepSpaceVisionTarget(
             sortedContours.get(0).getCenter(),
-            sortedContours.get(1).getCenter()
+            sortedContours.get(1).getCenter(),
+            getTargetAngles()
         );
     }
 

@@ -39,9 +39,10 @@ public class DeepSpaceVisionTargetLocalization {
         timeLastAcquired = System.currentTimeMillis();
 
         baseLinkToVisionTarget =
-            DualVisionTargetLocalizationUtils.poseFromTwoRawCamPoints(
+            DualVisionTargetLocalizationUtils.poseFromTwoRawCamPointsAndCenter(
                 rawVisionTarget.getPointA(),
                 rawVisionTarget.getPointB(),
+                rawVisionTarget.getCenterPoint(),
                 planeHeight,
                 camera.getBaseLinkToCamera().getPosition(),
                 camera.getBaseLinkToCamera().getOrientation()
