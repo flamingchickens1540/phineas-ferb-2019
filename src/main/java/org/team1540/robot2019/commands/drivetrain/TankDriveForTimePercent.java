@@ -5,18 +5,26 @@ import org.team1540.robot2019.Robot;
 
 public class TankDriveForTimePercent extends TimedCommand {
 
-    private final double percent;
+    private final double leftPercent;
+    private final double rightPercent;
 
     public TankDriveForTimePercent(double timeoutSecs, double percent) {
         super(timeoutSecs);
-        this.percent = percent;
+        this.leftPercent = this.rightPercent = percent;
+        requires(Robot.drivetrain);
+    }
+
+    public TankDriveForTimePercent(double timeoutSecs, double leftPercent, double rightPercent) {
+        super(timeoutSecs);
+        this.leftPercent = leftPercent;
+        this.rightPercent = rightPercent;
         requires(Robot.drivetrain);
     }
 
     @Override
     protected void execute() {
-        Robot.drivetrain.setLeftPercent(percent);
-        Robot.drivetrain.setRightPercent(percent);
+        Robot.drivetrain.setLeftPercent(leftPercent);
+        Robot.drivetrain.setRightPercent(rightPercent);
     }
 
     @Override

@@ -22,6 +22,7 @@ import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
+import org.team1540.robot2019.commands.hatch.WiggleAndGrab;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
@@ -78,6 +79,9 @@ public class OI {
     // Driver
     // - Auto-align
     private static Button highTargetButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.5);
+
+    // - Wiggle wiggle wiggle
+    private static Button wiggleButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.5);
 
     // - Driving
     private static Button pointDrivePointAxis = driver.getButton(0.4, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
@@ -175,6 +179,8 @@ public class OI {
         });
         resetPointOffset.setRunWhenDisabled(true);
         OI.resetPointOffset.whenPressed(resetPointOffset);
+
+        wiggleButton.whenPressed(new WiggleAndGrab());
 
         // Next left/right target
         nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
