@@ -1,5 +1,6 @@
 package org.team1540.robot2019.commands.drivetrain;
 
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.auto.PercentManualLineupLocalizationAngleProvider;
@@ -8,6 +9,8 @@ import org.team1540.robot2019.commands.auto.PointControlConfig;
 import org.team1540.robot2019.commands.auto.PointManualDriveCommand;
 
 public class DriveCommand extends PointManualDriveCommand { // TODO: Make this generic
+
+    public static final Logger logger = Logger.getLogger(DriveCommand.class);
 
     private PercentManualLineupLocalizationAngleProvider lineupLocalization = new PercentManualLineupLocalizationAngleProvider(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
     private PointDriveAngleProvider pointDriveAngleProvider = new PointDriveAngleProvider();
@@ -38,16 +41,30 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
     protected double returnAngleError() {
         if (OI.getPointDriveMagnitude() > 0.4) {
             tempDisableLineup = false;
-            if (currentAngleProvider != pointDriveAngleProvider) {
-                currentAngleProvider = pointDriveAngleProvider;
-                justLetGoReset();
-                initializeAndUpdateConfig();
+            startPointDrive();
+        } else {
+            if (!tempDisableLineup) {
+                startLineup();
+            } else {
+                return 0;
             }
-        } else if (!tempDisableLineup && currentAngleProvider != lineupLocalization) {
+        }
+        return currentAngleProvider.returnAngleError();
+    }
+
+    private void startPointDrive() {
+        if (currentAngleProvider != pointDriveAngleProvider) {
+            currentAngleProvider = pointDriveAngleProvider;
+            justLetGoReset();
+            initializeAndUpdateConfig();
+        }
+    }
+
+    private void startLineup() {
+        if (currentAngleProvider != lineupLocalization) {
             currentAngleProvider = lineupLocalization;
             initializeAndUpdateConfig();
         }
-        return currentAngleProvider.returnAngleError();
     }
 
     private void initializeAndUpdateConfig() {
@@ -57,11 +74,12 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
 
     public void tempDisableLineup() {
         tempDisableLineup = true;
-        if (currentAngleProvider != pointDriveAngleProvider) {
-            currentAngleProvider = pointDriveAngleProvider;
-            initializeAndUpdateConfig();
-        }
         logger.debug("Lineup temporarily disabled!");
+    }
+
+    public void clearTempDisableLineup() {
+        tempDisableLineup = false;
+        logger.debug("Lineup re-enabled!");
     }
 
     @Override
