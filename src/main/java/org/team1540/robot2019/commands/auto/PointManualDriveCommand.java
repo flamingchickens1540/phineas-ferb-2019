@@ -1,6 +1,7 @@
 package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
@@ -67,6 +68,7 @@ public abstract class PointManualDriveCommand extends PIDCommand {
     protected final void usePIDOutput(double output) {
         if (isConfigSet) {
             double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
+            SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
             twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * throttleConstant, 0, cmdVelTheta));
         } else {
             logger.warn("Config not set! Setting vel to zero.");
