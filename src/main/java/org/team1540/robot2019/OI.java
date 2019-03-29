@@ -181,7 +181,7 @@ public class OI {
         nextRightTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, false));
 
         // High vision target
-        highTargetButton.whenPressed(new SimpleCommand("", () -> queueBallRocketTargetFlag = true));
+        highTargetButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
 
         // Flash LEDs
         strobeRedBlueButton.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
@@ -243,16 +243,5 @@ public class OI {
 
     public static double getTankdriveForwardsAxis() {
         return Utilities.scale(Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), Tuning.driveDeadzone), 2);
-    }
-
-    private static boolean queueBallRocketTargetFlag = false;
-
-    public static boolean clearBallRocketTargetFlag() { // return queueBallRocketTargetFlag != (queueBallRocketTargetFlag = false); ::thonk::
-        if (queueBallRocketTargetFlag) {
-            queueBallRocketTargetFlag = false;
-            return true;
-        } else {
-            return false;
-        }
     }
 }

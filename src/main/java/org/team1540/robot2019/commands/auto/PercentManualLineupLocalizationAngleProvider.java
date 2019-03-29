@@ -6,7 +6,6 @@ import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.RobotMap;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -76,6 +75,8 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         SmartDashboard.putNumber("PercentLineupLocalization/B", B);
         SmartDashboard.putNumber("PercentLineupLocalization/C", C);
         SmartDashboard.putNumber("PercentLineupLocalization/POINT_DEADZONE", POINT_DEADZONE);
+
+        enableHatchModeForNextCycle();
     }
 
 
@@ -117,18 +118,22 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
         goal = null;
 
-        if (OI.clearBallRocketTargetFlag()) {
-            logger.debug("Rocket ball mode!");
-            Hardware.limelight.setPipeline(1);
-            Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
-        } else {
-            logger.debug("Hatch mode!");
-            Hardware.limelight.setPipeline(0);
-            Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
-        }
         Hardware.limelight.prepForVision();
 
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
+    }
+
+    private void enableHatchModeForNextCycle() {
+        logger.debug("Hatch mode!");
+        Hardware.limelight.setPipeline(0);
+        Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
+    }
+
+    public void enableRocketBallModeForNextCycle() {
+        logger.debug("Rocket ball mode!");
+        Hardware.limelight.setPipeline(1);
+        Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
+        similarVectorTracker.reset();
     }
 
     @Override
@@ -184,5 +189,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         Vector3D goalPosition = adjustedGoal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
         return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
+    }
+
+    public void end() {
+        enableHatchModeForNextCycle();
     }
 }

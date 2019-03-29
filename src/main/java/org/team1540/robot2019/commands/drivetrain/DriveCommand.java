@@ -57,6 +57,7 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
             currentAngleProvider = pointDriveAngleProvider;
             justLetGoReset();
             initializeAndUpdateConfig();
+            lineupLocalization.end();
         }
     }
 
@@ -85,5 +86,13 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
     @Override
     protected boolean isFinished() {
         return false;
+    }
+
+    public PercentManualLineupLocalizationAngleProvider getLineupLocalization() {
+        return lineupLocalization;
+    }
+
+    public PointDriveAngleProvider getPointDriveAngleProvider() {
+        return pointDriveAngleProvider;
     }
 }
