@@ -49,7 +49,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
-    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.1);
+    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.2);
     private Timer timer;
 
     public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
