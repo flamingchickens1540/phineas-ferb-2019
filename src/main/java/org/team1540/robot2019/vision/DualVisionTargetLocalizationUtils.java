@@ -85,4 +85,17 @@ public class DualVisionTargetLocalizationUtils {
                 xyFromVector3D(leftPoint),
                 xyFromVector3D(rightPoint))));
     }
+
+    public static Transform3D poseFromTwoRawCamPointsAndCenter(Vector2D leftAngles, Vector2D rightAngles, Vector2D centerAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation) {
+
+        Vector3D leftPoint = getIntersection(lineFromScreenAngles(leftAngles, cameraPosition, cameraRotation), planeHeight);
+        Vector3D rightPoint = getIntersection(lineFromScreenAngles(rightAngles, cameraPosition, cameraRotation), planeHeight);
+        Vector3D centerPoint = getIntersection(lineFromScreenAngles(centerAngles, cameraPosition, cameraRotation), planeHeight);
+
+        return new Transform3D(
+            centerPoint,
+            new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angleFromVisionTargets(
+                xyFromVector3D(leftPoint),
+                xyFromVector3D(rightPoint))));
+    }
 }
