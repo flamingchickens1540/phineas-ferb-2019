@@ -17,7 +17,7 @@ import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization
 
 public class PercentManualLineupLocalizationAngleProvider implements PointAngleProvider {
 
-    public static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
+    private static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
     private static final double MAX_ACCURATE_POSE_DISTANCE = 2.0;
     private static double HATCH_GRAB_X_OFFSET = -0.05;
     private static double HATCH_GRAB_Y_OFFSET = -0.01;

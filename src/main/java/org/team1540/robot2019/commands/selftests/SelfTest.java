@@ -6,7 +6,7 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class SelfTest extends CommandGroup {
 
-    public static final Logger logger = Logger.getLogger(SelfTest.class);
+    private static final Logger logger = Logger.getLogger(SelfTest.class);
 
     public SelfTest() {
         addSequential(new SimpleCommand("Print status", () -> logger.info("Starting robot self-test")));

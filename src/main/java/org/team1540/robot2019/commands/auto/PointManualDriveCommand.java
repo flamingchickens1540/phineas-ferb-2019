@@ -14,7 +14,7 @@ import org.team1540.rooster.functional.Executable;
 
 public abstract class PointManualDriveCommand extends PIDCommand {
 
-    public static final Logger logger = Logger.getLogger(PointManualDriveCommand.class);
+    private static final Logger logger = Logger.getLogger(PointManualDriveCommand.class);
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;

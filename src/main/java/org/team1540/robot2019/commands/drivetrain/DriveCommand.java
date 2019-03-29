@@ -10,7 +10,7 @@ import org.team1540.robot2019.commands.auto.PointManualDriveCommand;
 
 public class DriveCommand extends PointManualDriveCommand { // TODO: Make this generic
 
-    public static final Logger logger = Logger.getLogger(DriveCommand.class);
+    private static final Logger logger = Logger.getLogger(DriveCommand.class);
 
     private PercentManualLineupLocalizationAngleProvider lineupLocalization = new PercentManualLineupLocalizationAngleProvider(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
     private PointDriveAngleProvider pointDriveAngleProvider = new PointDriveAngleProvider();

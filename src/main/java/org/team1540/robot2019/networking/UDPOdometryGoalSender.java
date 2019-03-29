@@ -18,7 +18,7 @@ import org.team1540.robot2019.datastructures.utils.RotationUtils;
 // TODO: Use logging class
 public class UDPOdometryGoalSender {
 
-    public static final Logger logger = Logger.getLogger(UDPOdometryGoalSender.class);
+    private static final Logger logger = Logger.getLogger(UDPOdometryGoalSender.class);
 
     private DatagramSocket clientSocket;
     private InetAddress address;

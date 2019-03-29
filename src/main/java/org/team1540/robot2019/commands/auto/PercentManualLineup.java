@@ -16,7 +16,7 @@
 //
 //public class PercentManualLineup extends PIDCommand {
 //
-//    public static final Logger logger = Logger.getLogger(PercentManualLineup.class);
+//    private static final Logger logger = Logger.getLogger(PercentManualLineup.class);
 //
 //    private static double OUTPUT_SCALAR = 20;
 //

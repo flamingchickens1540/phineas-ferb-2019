@@ -9,7 +9,7 @@ import org.team1540.robot2019.datastructures.utils.TrigUtils;
 
 public class PointDriveAngleProvider implements PointAngleProvider {
 
-    public static final Logger logger = Logger.getLogger(PointDriveAngleProvider.class);
+    private static final Logger logger = Logger.getLogger(PointDriveAngleProvider.class);
 
     private static double OUTPUT_SCALAR = 20;
 

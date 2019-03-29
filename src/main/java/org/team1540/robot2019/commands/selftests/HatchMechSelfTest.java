@@ -12,7 +12,7 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class HatchMechSelfTest extends CommandGroup {
 
-    public static final Logger logger = Logger.getLogger(HatchMechSelfTest.class);
+    private static final Logger logger = Logger.getLogger(HatchMechSelfTest.class);
 
     public HatchMechSelfTest() {
         addSequential(

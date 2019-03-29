@@ -32,7 +32,7 @@ import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class Drivetrain extends Subsystem {
 
-    public static final Logger logger = Logger.getLogger(Drivetrain.class);
+    private static final Logger logger = Logger.getLogger(Drivetrain.class);
 
     boolean inFineDrive = false;
 

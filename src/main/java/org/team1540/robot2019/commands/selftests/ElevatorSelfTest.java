@@ -7,7 +7,7 @@ import org.team1540.robot2019.Tuning;
 
 public class ElevatorSelfTest extends TimedCommand {
 
-    public static final Logger logger = Logger.getLogger(ElevatorSelfTest.class);
+    private static final Logger logger = Logger.getLogger(ElevatorSelfTest.class);
 
     public ElevatorSelfTest() {
         super(Tuning.elevatorTestTime);
