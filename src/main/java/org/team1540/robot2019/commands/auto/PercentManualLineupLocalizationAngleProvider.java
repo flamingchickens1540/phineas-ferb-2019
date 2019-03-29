@@ -182,26 +182,38 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         double distanceToVisionTarget = driveOdometry.getOdomToBaseLink().toTransform2D().getPositionVector().distance(goal.toTransform2D().getPositionVector());
         SmartDashboard.putNumber("DistanceToTarget", distanceToVisionTarget);
-        double x = -(M * smoothStep(1.0 / (A - Z) * (distanceToVisionTarget - Z)));
-        SmartDashboard.putNumber("DistanceOffset", x);
-        Transform3D adjustedGoal = goal.add(new Transform3D(x, 0, 0));
-        if (distanceToVisionTarget < POINT_DEADZONE) {
-            adjustedGoal = goal;
-        }
-        Vector3D goalPosition = adjustedGoal.getPosition();
+//        double x = -(M * smoothStep(1.0 / (A - Z) * (distanceToVisionTarget - Z)));
+//        double x1 = -0.15 * smoothStepFiveDir(distanceToVisionTarget - 0.5);
+//        SmartDashboard.putNumber("DistanceOffset", x1);
+//        Transform3D adjustedGoal = goal.add(new Transform3D(x1, 0, 0));
+//        if (distanceToVisionTarget < POINT_DEADZONE) {
+//            adjustedGoal = goal;
+//        }
+//        Vector3D goalPosition = adjustedGoal.getPosition();
+        Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
         return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
     }
 
-    private static double smoothStep(double x) {
-        if (x > 1) {
-            return 1;
-        } else if (x < 0) {
-            return 0;
-        }
-        return 3 * x * x - 2 * x * x * x;
-    }
-
+    //
+//    private static double smoothStep(double x) {
+//        if (x > 1) {
+//            return 1;
+//        } else if (x < 0) {
+//            return 0;
+//        }
+//        return 3 * x * x - 2 * x * x * x;
+//    }
+//
+//    private static double smoothStepFiveDir(double x) {
+//        if (x > 1) {
+//            return 1;
+//        } else if (x < 0) {
+//            return 0;
+//        }
+//        return 30 * x * x * x * x - 60 * x * x * x + 30 * x * x;
+//    }
+//
     public void end() {
         enableHatchModeForNextCycle();
     }
