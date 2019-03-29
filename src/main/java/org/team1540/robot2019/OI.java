@@ -32,13 +32,9 @@ import org.team1540.robot2019.utils.ChickenXboxController;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxAxis;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxButton;
 import org.team1540.rooster.Utilities;
-import org.team1540.rooster.drive.pipeline.AdvancedArcadeJoystickInput;
-import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
-import org.team1540.rooster.drive.pipeline.FeedForwardToVelocityProcessor;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleConditionalCommand;
-import org.team1540.rooster.util.SimpleLoopCommand;
 
 public class OI {
 
@@ -86,8 +82,6 @@ public class OI {
     // - Driving
     private static Button pointDrivePointAxis = driver.getButton(0.4, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
     private static Button resetPointOffset = driver.getButton(XboxButton.Y);
-
-    private static Button arcadeToggle = driver.getButton(XboxButton.BACK);
 
     // - LEDs
     private static Button strobeRedBlueButton = driver.getButton(DPadAxis.DOWN);
@@ -156,21 +150,6 @@ public class OI {
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
-
-        // Arcade drive
-        Command arcadeCommand = new SimpleLoopCommand("Drive",
-            new AdvancedArcadeJoystickInput(true, OI::getArcadeDriveThrottle, OI::getArcadeDriveSoftTurn,
-                OI::getArcadeDriveHardTurn)
-                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
-                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
-                .then(Robot.drivetrain.getPipelineOutput(false)), Robot.drivetrain);
-        arcadeToggle.whenPressed(new SimpleCommand("Arcade toggle", () -> {
-            if (arcadeCommand.isRunning()) {
-                arcadeCommand.cancel();
-            } else {
-                arcadeCommand.start();
-            }
-        }));
 
         // Point drive
         SimpleCommand resetPointOffset = new SimpleCommand("Reset Point Offset", () -> {
