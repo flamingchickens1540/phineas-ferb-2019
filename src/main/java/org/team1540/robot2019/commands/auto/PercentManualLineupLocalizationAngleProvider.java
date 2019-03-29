@@ -36,9 +36,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private static double DEADZONE = 0.05;
 
     // Constants for angular VPID controller
-    private static double P = 0.39;
+    private static double P = 0.45;
     private static double I = 0;
-    private static double D = 0.6;
+    private static double D = 1;
 
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 //    public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
