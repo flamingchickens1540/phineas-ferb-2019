@@ -24,7 +24,7 @@ import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
-import org.team1540.robot2019.commands.leds.BlinkLEDs;
+import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.robot2019.utils.ChickenXboxController;
@@ -98,9 +98,7 @@ public class OI {
     private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
     private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP); // TODO: ChickenButton
-    private static Button testElevatorCargoShipButton = driver.getButton(DPadAxis.LEFT);
-    private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
-    private static Button testIntakeLoadingStationButton = driver.getButton(DPadAxis.RIGHT);
+    private static Button testElevatorDownButton = driver.getButton(DPadAxis.LEFT);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -193,7 +191,7 @@ public class OI {
         highTargetButton.whenPressed(new SimpleCommand("", () -> queueBallRocketTargetFlag = true));
 
         // Flash LEDs
-        strobeRedBlueButton.whileHeld(new BlinkLEDs(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
+        strobeRedBlueButton.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
