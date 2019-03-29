@@ -8,7 +8,7 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class CargoMechSelfTest extends CommandGroup {
 
-    public static final Logger logger = Logger.getLogger(CargoMechSelfTest.class);
+    private static final Logger logger = Logger.getLogger(CargoMechSelfTest.class);
 
     public CargoMechSelfTest() {
         addSequential(

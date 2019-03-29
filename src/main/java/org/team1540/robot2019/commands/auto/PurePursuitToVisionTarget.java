@@ -22,7 +22,7 @@
 //// TODO: Make this a generic pure pursuit command
 //public class PurePursuitToVisionTarget extends Command {
 //
-//    public static final Logger logger = Logger.getLogger(PurePursuitToVisionTarget.class);
+//    private static final Logger logger = Logger.getLogger(PurePursuitToVisionTarget.class);
 //
 //    private static final double ANGULAR_KP = 5;
 //    private static final double LINEAR_KP = 4;

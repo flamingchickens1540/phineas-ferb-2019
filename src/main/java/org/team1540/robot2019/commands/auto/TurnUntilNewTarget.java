@@ -21,7 +21,7 @@ import org.team1540.rooster.functional.Executable;
 
 public class TurnUntilNewTarget extends Command {
 
-    public static final Logger logger = Logger.getLogger(TurnUntilNewTarget.class);
+    private static final Logger logger = Logger.getLogger(TurnUntilNewTarget.class);
     private static double ANGULAR_VEL = 2.5;
     private final TankDriveTwist2DInput twist2DInput;
     private final Executable pipeline;

@@ -17,7 +17,7 @@
 //
 //public class SimplePointToVisionTarget extends PIDCommand {
 //
-//    public static final Logger logger = Logger.getLogger(SimplePointToVisionTarget.class);
+//    private static final Logger logger = Logger.getLogger(SimplePointToVisionTarget.class);
 //
 //    // Max/Min angular velocity
 //    private static final double MIN_VEL_THETA = 0.2;

@@ -16,7 +16,7 @@
 //
 //public class SimplePointToAngle extends PIDCommand {
 //
-//    public static final Logger logger = Logger.getLogger(SimplePointToAngle.class);
+//    private static final Logger logger = Logger.getLogger(SimplePointToAngle.class);
 //
 //    // Max/Min angular velocity
 //    private static final double MIN_VEL_THETA = 1.5;
