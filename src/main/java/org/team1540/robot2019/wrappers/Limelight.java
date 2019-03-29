@@ -103,7 +103,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
      * @return a {@link Vector2D} containing the center of the contour in screen-space coordinates or null if the contour does not pass the filters
      */
     public RawContour getFilteredRawContourOrNull(int id) {
-        double upperLimit = 0.86;
+        double upperLimit = 1;
 //      double lowerLimit = 0.29; // With U
         double lowerLimit = -0.65;
         double rightLimit = 0.90;
