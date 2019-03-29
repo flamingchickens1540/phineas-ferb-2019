@@ -138,7 +138,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     @Override
     public double returnAngleError() {
-        if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
+        if (deepSpaceVisionTargetLocalization.attemptUpdatePose() && Robot.elevator.getPosition() < 3) { // TODO: This should be a tuning constant
             Transform3D goal = computeGoal();
             if (timer != null && !timer.hasPeriodPassed(1)) {
                 similarVectorTracker.reset();

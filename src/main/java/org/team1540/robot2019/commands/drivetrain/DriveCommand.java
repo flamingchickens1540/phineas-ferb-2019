@@ -43,7 +43,7 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
             tempDisableLineup = false;
             startPointDrive();
         } else {
-            if (tempDisableLineup || Robot.elevator.getPosition() > 3) { // TODO: This should be a tuning constant
+            if (tempDisableLineup) {
                 return 0;
             } else {
                 startLineup();
