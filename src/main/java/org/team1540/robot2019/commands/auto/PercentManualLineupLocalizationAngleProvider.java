@@ -22,9 +22,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private static double HATCH_GRAB_Y_OFFSET = -0.01;
     private static double HATCH_PLACE_X_OFFSET = -0.1;
     private static double HATCH_PLACE_Y_OFFSET = -0.035;
-    private static double A = 5.2;
-    private static double B = 0;
-    private static double C = 1.2;
+    private static double M = 1.2;
+    private static double Z = 0.6;
+    private static double A = 2;
 
     private static double POINT_DEADZONE = 0.6;
 
@@ -49,7 +49,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
-    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.2);
+    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.1);
     private Timer timer;
 
     public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
@@ -72,8 +72,8 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         SmartDashboard.putNumber("PercentLineupLocalization/HATCH_PLACE_X_OFFSET", HATCH_PLACE_X_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/HATCH_PLACE_Y_OFFSET", HATCH_PLACE_Y_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/A", A);
-        SmartDashboard.putNumber("PercentLineupLocalization/B", B);
-        SmartDashboard.putNumber("PercentLineupLocalization/C", C);
+        SmartDashboard.putNumber("PercentLineupLocalization/M", M);
+        SmartDashboard.putNumber("PercentLineupLocalization/Z", Z);
         SmartDashboard.putNumber("PercentLineupLocalization/POINT_DEADZONE", POINT_DEADZONE);
 
         enableHatchModeForNextCycle();
@@ -108,8 +108,8 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         HATCH_PLACE_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_PLACE_X_OFFSET", HATCH_PLACE_X_OFFSET);
         HATCH_PLACE_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_PLACE_Y_OFFSET", HATCH_PLACE_Y_OFFSET);
         A = SmartDashboard.getNumber("PercentLineupLocalization/A", A);
-        B = SmartDashboard.getNumber("PercentLineupLocalization/B", B);
-        C = SmartDashboard.getNumber("PercentLineupLocalization/C", C);
+        M = SmartDashboard.getNumber("PercentLineupLocalization/M", M);
+        Z = SmartDashboard.getNumber("PercentLineupLocalization/Z", Z);
         POINT_DEADZONE = SmartDashboard.getNumber("PercentLineupLocalization/POINT_DEADZONE", POINT_DEADZONE);
 
 //        this.getPIDController().setP(P);
@@ -145,9 +145,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     public double returnAngleError() {
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose() && Robot.elevator.getPosition() < 3) { // TODO: This should be a tuning constant
             Transform3D goal = computeGoal();
-            if (timer != null && !timer.hasPeriodPassed(1)) {
-                similarVectorTracker.reset();
-            }
+//            if (timer != null && !timer.hasPeriodPassed(0)) {
+//                similarVectorTracker.reset();
+//            }
             if (deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().getPositionVector().distance(Vector2D.ZERO) > MAX_ACCURATE_POSE_DISTANCE) {
                 similarVectorTracker.setVector3D(goal.getPosition());
                 this.goal = goal;
@@ -182,13 +182,24 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
         double distanceToVisionTarget = driveOdometry.getOdomToBaseLink().toTransform2D().getPositionVector().distance(goal.toTransform2D().getPositionVector());
         SmartDashboard.putNumber("DistanceToTarget", distanceToVisionTarget);
-        Transform3D adjustedGoal = goal.add(new Transform3D(-(distanceToVisionTarget * B * (1 / (1 + Math.exp(-A * (distanceToVisionTarget - C))))), 0, 0));
+        double x = -(M * smoothStep(1.0 / (A - Z) * (distanceToVisionTarget - Z)));
+        SmartDashboard.putNumber("DistanceOffset", x);
+        Transform3D adjustedGoal = goal.add(new Transform3D(x, 0, 0));
         if (distanceToVisionTarget < POINT_DEADZONE) {
             adjustedGoal = goal;
         }
         Vector3D goalPosition = adjustedGoal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
         return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
+    }
+
+    private static double smoothStep(double x) {
+        if (x > 1) {
+            return 1;
+        } else if (x < 0) {
+            return 0;
+        }
+        return 3 * x * x - 2 * x * x * x;
     }
 
     public void end() {
