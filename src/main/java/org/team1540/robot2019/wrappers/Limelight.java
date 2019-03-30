@@ -208,6 +208,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         if (sortedContours.size() < 2) { // TODO: ScreenspaceContour class and AnglesContour and VectorContour
             return null;
         }
+        // TODO: Add pipeline checks
 
 //        logger.debug("Using contours with id: " + sortedContours.get(0).getId() + " and " + sortedContours.get(1).getId());
 //        logger.debug(String.format("left: %f %f right: %f %f",
