@@ -5,6 +5,11 @@ import org.team1540.robot2019.datastructures.threed.Transform3D;
 
 public interface DeepSpaceVisionTargetCamera {
 
+    public enum TargetType {
+        HATCH_TARGET,
+        ROCKET_BALL_TARGET;
+    }
+
     double getHorizontalFov();
 
     double getVerticalFov();
@@ -14,5 +19,5 @@ public interface DeepSpaceVisionTargetCamera {
     void setBaseLinkToCamera(Transform3D baseLinkToCamera);
 
     @Nullable
-    RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull();
+    RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull(TargetType type);
 }

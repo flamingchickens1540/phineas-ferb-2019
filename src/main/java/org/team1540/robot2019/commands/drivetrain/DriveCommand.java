@@ -12,7 +12,7 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
 
     private static final Logger logger = Logger.getLogger(DriveCommand.class);
 
-    private PercentManualLineupLocalizationAngleProvider lineupLocalization = new PercentManualLineupLocalizationAngleProvider(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
+    private PercentManualLineupLocalizationAngleProvider lineupLocalization = new PercentManualLineupLocalizationAngleProvider(Robot.odometry);
     private PointDriveAngleProvider pointDriveAngleProvider = new PointDriveAngleProvider();
 
     private PointAngleProvider currentAngleProvider = pointDriveAngleProvider;

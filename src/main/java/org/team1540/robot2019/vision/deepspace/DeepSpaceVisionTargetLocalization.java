@@ -1,7 +1,6 @@
 package org.team1540.robot2019.vision.deepspace;
 
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.function.Consumer;
 import java.util.function.DoubleUnaryOperator;
 import org.apache.commons.math3.geometry.euclidean.threed.RotationConvention;
@@ -11,28 +10,31 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.RotationUtils;
 import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
+import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetCamera.TargetType;
 
 public class DeepSpaceVisionTargetLocalization {
 
     private static final Logger logger = Logger.getLogger(DeepSpaceVisionTargetLocalization.class);
 
     private double planeHeight;
+    private final TargetType type;
     private final Consumer<Transform3D> onUpdate;
     private final DeepSpaceVisionTargetCamera camera;
     private Transform3D baseLinkToVisionTarget;
     private long timeLastAcquired = 0;
 
-    public DeepSpaceVisionTargetLocalization(DeepSpaceVisionTargetCamera camera, double planeHeight, double updatePeriod, Consumer<Transform3D> onUpdate) {
+    public DeepSpaceVisionTargetLocalization(DeepSpaceVisionTargetCamera camera, double planeHeight, TargetType type, double updatePeriod, Consumer<Transform3D> onUpdate) {
         this.camera = camera;
+        this.type = type;
         this.onUpdate = onUpdate;
-        this.planeHeight = planeHeight;
+        this.planeHeight = planeHeight; // TODO: PlaceHeight should be part of TargetType
         new Notifier(this::attemptUpdatePose).startPeriodic(updatePeriod);
     }
 
     public boolean attemptUpdatePose() {
-        RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull();
+        RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull(TargetType.HATCH_TARGET);
 
-        SmartDashboard.putBoolean("DeepSpaceVisionTargetLocalization/Debug/HasFound", rawVisionTarget != null);
+//        SmartDashboard.putBoolean("DeepSpaceVisionTargetLocalization/Debug/HasFound", rawVisionTarget != null);
         if (rawVisionTarget == null) {
             return false;
         }
@@ -58,8 +60,12 @@ public class DeepSpaceVisionTargetLocalization {
     }
 
     public Double estimateCorrectPitch(double actualDistance, int maxAttempts, double tolerance, boolean updateIfSuccessful) {
+        if (this.type != TargetType.HATCH_TARGET) {
+            logger.error("Calibration only supports hatch targets!");
+            return null;
+        }
 
-        RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull();
+        RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull(type);
 
         if (rawVisionTarget == null) {
             logger.error("No vision target found!");
@@ -95,7 +101,11 @@ public class DeepSpaceVisionTargetLocalization {
 
     public Double estimateCorrectYaw(double actualDistance, int maxAttempts, double tolerance, boolean updateIfSuccessful) {
 
-        RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull();
+        if (this.type != TargetType.HATCH_TARGET) {
+            logger.error("Calibration only supports hatch targets!");
+            return null;
+        }
+        RawDeepSpaceVisionTarget rawVisionTarget = camera.getRawDeepSpaceVisionTargetOrNull(type);
 
         if (rawVisionTarget == null) {
             logger.error("No vision target found!");
@@ -165,10 +175,10 @@ public class DeepSpaceVisionTargetLocalization {
         logger.error("Search failed! Unable to find guess within tolerance");
         return null;
     }
-
-    public void setPlaneHeight(double planeHeight) {
-        this.planeHeight = planeHeight;
-    }
+//
+//    public void setPlaneHeight(double planeHeight) {
+//        this.planeHeight = planeHeight;
+//    }
 
     public boolean targetWasAcquired() {
         return baseLinkToVisionTarget != null;
@@ -180,5 +190,9 @@ public class DeepSpaceVisionTargetLocalization {
 
     public long millisSinceLastAcquired() {
         return System.currentTimeMillis() - timeLastAcquired;
+    }
+
+    public TargetType getTargetType() {
+        return type;
     }
 }

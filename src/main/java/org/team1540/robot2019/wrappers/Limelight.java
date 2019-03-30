@@ -2,17 +2,20 @@ package org.team1540.robot2019.wrappers;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.annotation.Nullable;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
-import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 import org.team1540.robot2019.vision.DualVisionTargetLocalizationUtils;
 import org.team1540.robot2019.vision.RawContour;
 import org.team1540.robot2019.vision.VisionUtils;
@@ -40,7 +43,38 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         limelightTable = NetworkTableInstance.getDefault().getTable(name);
         this.baseLinkToCamera = baseLinkToCamera;
 
-        setPipeline(0);
+        new Notifier(this::updatePipeline).startPeriodic(0.02);
+    }
+
+    private long pipelineLastUpdateTime = 0;
+
+    private long updatePipeline() {
+        long actualPipeline = getActualPipeline();
+        if (actualPipeline != pipeline) { // If pipeline has just changed, block things that get limelight values
+            pipelineLastUpdateTime = System.currentTimeMillis();
+            pipeline = actualPipeline;
+            return -1;
+        } else {
+            if (System.currentTimeMillis() - pipelineLastUpdateTime > 50) {
+                return actualPipeline;
+            }
+        }
+        return -1;
+    }
+
+    private long pipeline = -1;
+
+    public void setPipeline(long id) {
+        limelightTable.getEntry("pipeline").setNumber(id);
+        NetworkTableInstance.getDefault().flush();
+    }
+
+    public long getPipeline() {
+        return updatePipeline();
+    }
+
+    private long getActualPipeline() {
+        return Math.round((double) limelightTable.getEntry("getpipe").getNumber(-1));
     }
 
     @Override
@@ -140,16 +174,15 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         NetworkTableInstance.getDefault().flush();
     }
 
-    public void setPipeline(int id) {
-        limelightTable.getEntry("pipeline").setNumber(id);
-        NetworkTableInstance.getDefault().flush();
-    }
-
-    // todo: getPipeline and incorrect pipeline warnings
-
     public void prepForVision() {
         setLeds(true);
         setDriverCam(false);
+    }
+
+    public void prepForHatchGrabbedDetect() {
+        setLeds(true);
+        setDriverCam(false);
+        Hardware.limelight.setPipeline(2);
     }
 
     public void prepForDriverCam() {
@@ -164,21 +197,20 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
      *
      * @return the transform from the vision target to the limelight
      */
-    public Transform3D getVisionTargetToLimelightTransformOrNull() {
-        Double[] rawTransformation = limelightTable.getEntry("camtran").getDoubleArray(new Double[]{});
-        if (rawTransformation[2] == 0) {
-            return null;
-        }
-        // TODO: Something about this is probably wrong
-        return new Transform3D(
-            UnitsUtils.inchesToMeters(rawTransformation[2]),
-            UnitsUtils.inchesToMeters(-rawTransformation[0]),
-            UnitsUtils.inchesToMeters(-rawTransformation[1]),
-            -Math.toRadians(rawTransformation[5]),
-            Math.toRadians(rawTransformation[3]),
-            Math.toRadians(rawTransformation[4]));
-    }
-
+//    public Transform3D getVisionTargetToLimelightTransformOrNull() {
+//        Double[] rawTransformation = limelightTable.getEntry("camtran").getDoubleArray(new Double[]{});
+//        if (rawTransformation[2] == 0) {
+//            return null;
+//        }
+//        // TODO: Something about this is probably wrong
+//        return new Transform3D(
+//            UnitsUtils.inchesToMeters(rawTransformation[2]),
+//            UnitsUtils.inchesToMeters(-rawTransformation[0]),
+//            UnitsUtils.inchesToMeters(-rawTransformation[1]),
+//            -Math.toRadians(rawTransformation[5]),
+//            Math.toRadians(rawTransformation[3]),
+//            Math.toRadians(rawTransformation[4]));
+//    }
     public List<Vector2D> getCorners() {
         Double[] xCorners = limelightTable.getEntry("tcornx").getDoubleArray(new Double[]{});
         Double[] yCorners = limelightTable.getEntry("tcorny").getDoubleArray(new Double[]{});
@@ -189,51 +221,28 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         return cornerList;
     }
 
+    @Nullable
+    public Optional<Boolean> isHatchGrabbed() {
+        if (getPipeline() != 2 || !getLeds()) {
+            return Optional.empty();
+        }
+
+        Vector2D targetAngles = getTargetAngles();
+        return Optional.of(targetAngles.getY() < Math.toRadians(-17) && Math.abs(targetAngles.getX() - Math.toRadians(8)) < Math.toRadians(5));
+    }
+
     @Override
-    public RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull() {
+    public RawDeepSpaceVisionTarget getRawDeepSpaceVisionTargetOrNull(TargetType type) {
         if (!isTargetFound()) {
             return null;
         }
 
-//        List<Vector2D> corners = getCorners();
-//        corners.sort(Comparator.comparingDouble(Vector2D::getX));
-//        Optional<Vector2D> leftmostCorner = corners.stream().min(Comparator.comparingDouble(Vector2D::getX));
-//        Optional<Vector2D> rightmostCorner = corners.stream().max(Comparator.comparingDouble(Vector2D::getX));
-//
-//        if (!leftmostCorner.isPresent() || !rightmostCorner.isPresent()) {
-//            return null;
-//        }
-//
-//        double approxMiddleX = (leftmostCorner.get().getX()+rightmostCorner.get().getX())/2;
-//
-//        Optional<Vector2D> leftBottomCorner = corners.stream().filter(item -> item.getX() < approxMiddleX).max(Comparator.comparingDouble(Vector2D::getY));
-//        Optional<Vector2D> rightBottomCorner = corners.stream().filter(item -> item.getX() > approxMiddleX).max(Comparator.comparingDouble(Vector2D::getY));
-//
-//        if (!leftBottomCorner.isPresent() || !rightBottomCorner.isPresent()) {
-//            return null;
-//        }
-//
-//        logger.debug(String.format("left: %f %f right: %f %f middle: %f", leftBottomCorner.get().getX(), leftBottomCorner.get().getY(), rightBottomCorner.get().getX(), rightBottomCorner.get().getY(), approxMiddleX));
-//
-//        // TODO: Angles or normalized screen space?
-//        Vector2D leftPoint = new Vector2D(leftBottomCorner.get().getX()/ CAM_RESOLUTION.getX()*2-1, -leftBottomCorner.get().getY()/ CAM_RESOLUTION.getY()*2-1);
-//        Vector2D rightPoint = new Vector2D(rightBottomCorner.get().getX()/ CAM_RESOLUTION.getX()*2-1, -rightBottomCorner.get().getY()/ CAM_RESOLUTION.getY()*2-1);
-//
-//        logger.debug(String.format("scaled left: %f %f right: %f %f", leftPoint.getX(), leftPoint.getY(), rightPoint.getX(), rightPoint.getY()));
-//        return new RawDeepSpaceVisionTarget(
-//            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(leftPoint, getHorizontalFov(), getVerticalFov()),
-//            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(rightPoint, getHorizontalFov(), getVerticalFov())
-//        );
+        long pipeline = getPipeline();
+        if ((type == TargetType.HATCH_TARGET && pipeline != 0) || (type == TargetType.ROCKET_BALL_TARGET && pipeline != 1)) {
+//            logger.warn("Incorrect pipeline enabled! Ignoring vision targets.");
+            return null;
+        }
 
-//        // skew approach
-//        double skew = Math.toRadians(limelightTable.getEntry("ts").getDouble(0));
-//        double width = Math.toRadians(limelightTable.getEntry("tlong").getDouble(0));
-//
-//        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
-//
-
-//        // single point approach
-//        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
 
         // raw contours approach
         RawContour[] rawContours = new RawContour[]{

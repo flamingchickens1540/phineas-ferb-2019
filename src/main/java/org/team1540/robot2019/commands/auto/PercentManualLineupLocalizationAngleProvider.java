@@ -7,11 +7,11 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.RobotMap;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
 import org.team1540.robot2019.vision.SimilarVector3DTracker;
+import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetCamera.TargetType;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 
 public class PercentManualLineupLocalizationAngleProvider implements PointAngleProvider {
@@ -47,17 +47,18 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     private Transform3D goal;
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
-    private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
+    private DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
     private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.2);
     private Timer timer;
+    private boolean isRunning = false;
+    private boolean nextRocketBallMode = false;
 
-    public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
+    public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry) {
 //        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
 //        requires(Robot.drivetrain);
 
         this.driveOdometry = driveOdometry;
-        this.deepSpaceVisionTargetLocalization = deepSpaceVisionTargetLocalization;
 
         SmartDashboard.putNumber("PercentLineupLocalization/OUTPUT_SCALAR", OUTPUT_SCALAR);
         SmartDashboard.putNumber("PercentLineupLocalization/ANGULAR_KP", P);
@@ -75,8 +76,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         SmartDashboard.putNumber("PercentLineupLocalization/M", M);
         SmartDashboard.putNumber("PercentLineupLocalization/Z", Z);
         SmartDashboard.putNumber("PercentLineupLocalization/POINT_DEADZONE", POINT_DEADZONE);
-
-        enableHatchModeForNextCycle();
     }
 
 
@@ -95,6 +94,8 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     @Override
     public void initialize() {
+        this.isRunning = true;
+
         P = SmartDashboard.getNumber("PercentLineupLocalization/OUTPUT_SCALAR", OUTPUT_SCALAR);
         P = SmartDashboard.getNumber("PercentLineupLocalization/ANGULAR_KP", P);
         I = SmartDashboard.getNumber("PercentLineupLocalization/ANGULAR_KI", I);
@@ -119,20 +120,34 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         goal = null;
 
         Hardware.limelight.prepForVision();
+        if (this.nextRocketBallMode) {
+            this.nextRocketBallMode = false;
+            enableRocketBallMode();
+        } else {
+            enableHatchMode();
+        }
 
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
-    private void enableHatchModeForNextCycle() {
+    private void enableHatchMode() {
         logger.debug("Hatch mode!");
         Hardware.limelight.setPipeline(0);
-        Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
+        deepSpaceVisionTargetLocalization = Robot.hatchTargetLocalization;
     }
 
     public void enableRocketBallModeForNextCycle() {
+        if (this.isRunning) {
+            enableRocketBallMode();
+        } else {
+            this.nextRocketBallMode = true;
+        }
+    }
+
+    private void enableRocketBallMode() {
         logger.debug("Rocket ball mode!");
         Hardware.limelight.setPipeline(1);
-        Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
+        deepSpaceVisionTargetLocalization = Robot.rocketBallTargetLocalization;
         similarVectorTracker.reset();
     }
 
@@ -143,23 +158,30 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     @Override
     public double returnAngleError() {
-        if (deepSpaceVisionTargetLocalization.attemptUpdatePose() && Robot.elevator.getPosition() < 3) { // TODO: This should be a tuning constant
-            Transform3D goal = computeGoal();
+        if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
+            if (Robot.elevator.getPosition() < 3) { // TODO: This should be a tuning constant
+                Transform3D goal = computeGoal();
 //            if (timer != null && !timer.hasPeriodPassed(0)) {
 //                similarVectorTracker.reset();
 //            }
-            if (deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().getPositionVector().distance(Vector2D.ZERO) > MAX_ACCURATE_POSE_DISTANCE) {
-                similarVectorTracker.setVector3D(goal.getPosition());
-                this.goal = goal;
-            }
-            if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
-                this.goal = goal;
+                if (deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().getPositionVector().distance(Vector2D.ZERO) > MAX_ACCURATE_POSE_DISTANCE) {
+                    similarVectorTracker.setVector3D(goal.getPosition());
+                    this.goal = goal;
+                }
+                if (deepSpaceVisionTargetLocalization.getTargetType() == TargetType.ROCKET_BALL_TARGET || similarVectorTracker.isSimilarTransform(goal.getPosition())) {
+                    this.goal = goal;
+                } else {
+                    logger.debug("Ignoring pose estimate- type == hatch and pose varies by more than the tolerance!");
+                }
             } else {
-                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
+                logger.debug("Ignoring pose estimate- elevator blocking vision!");
             }
         }
 
         if (goal != null) {
+//            if (driveOdometry.getOdomToBaseLink().toTransform2D().getPositionVector().distance(goal.toTransform2D().getPositionVector()) < 0.37) {
+//                new GrabHatchSequence().start();
+//            }
             return getAngleError();
         } else {
             return 0;
@@ -215,6 +237,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 //    }
 //
     public void end() {
-        enableHatchModeForNextCycle();
+        this.isRunning = false;
+        Hardware.limelight.prepForHatchGrabbedDetect();
     }
 }

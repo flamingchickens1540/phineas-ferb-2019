@@ -24,6 +24,8 @@ import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.robot2019.utils.LastValidTransformTracker;
+import org.team1540.robot2019.vision.HasHatchTracker;
+import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetCamera.TargetType;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
 import org.team1540.robot2019.wrappers.TEBPlanner;
@@ -47,9 +49,11 @@ public class Robot extends TimedRobot {
     private Timer brakeTimer = new Timer();
 
     public static TankDriveOdometryAccumulatorRunnable odometry;
-    public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
+    public static DeepSpaceVisionTargetLocalization hatchTargetLocalization;
+    public static DeepSpaceVisionTargetLocalization rocketBallTargetLocalization;
     public static TEBPlanner tebPlanner;
     public static LastValidTransformTracker lastOdomToVisionTargetTracker;
+    public static HasHatchTracker hasHatchTracker;
 
     @Override
     public void robotInit() {
@@ -80,12 +84,18 @@ public class Robot extends TimedRobot {
             new Transform3D(RobotMap.CAM_X, RobotMap.CAM_Y, RobotMap.CAM_Z, RobotMap.CAM_ROLL,
                 RobotMap.CAM_PITCH, RobotMap.CAM_YAW));
         lastOdomToVisionTargetTracker = new LastValidTransformTracker(odometry::getOdomToBaseLink);
-        deepSpaceVisionTargetLocalization = new DeepSpaceVisionTargetLocalization(Hardware.limelight,
-            RobotMap.HATCH_TARGET_HEIGHT, 0.05,
+        hatchTargetLocalization = new DeepSpaceVisionTargetLocalization(Hardware.limelight,
+            RobotMap.HATCH_TARGET_HEIGHT, TargetType.HATCH_TARGET, 0.05,
+            lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
+        rocketBallTargetLocalization = new DeepSpaceVisionTargetLocalization(Hardware.limelight,
+            RobotMap.ROCKET_BALL_TARGET_HEIGHT, TargetType.ROCKET_BALL_TARGET, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
 //        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800,
 //            "10.15.40.202", 0.01);
+
+//        hasHatchTracker = new HasHatchTracker();
+//        new Notifier(hasHatchTracker::periodic).startPeriodic(0.1);
 
         OI.init();
 
@@ -114,7 +124,7 @@ public class Robot extends TimedRobot {
                 logger.error("No distance estimate provided at networktables key: " + distanceGuessKey);
                 return;
             }
-            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectPitch(distanceEstimate, 1000, 0.001, true);
+            Double calibrationPitch = hatchTargetLocalization.estimateCorrectPitch(distanceEstimate, 1000, 0.001, true);
             if (calibrationPitch == null) {
                 logger.error("calibrationPitch is null!");
             } else {
@@ -126,7 +136,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(estimatePitch);
 
         Command estimateYaw = new SimpleCommand("Estimate Camera Yaw Command", () -> {
-            Double calibrationYaw = deepSpaceVisionTargetLocalization.estimateCorrectYaw(0, 1000, 0.001, true);
+            Double calibrationYaw = hatchTargetLocalization.estimateCorrectYaw(0, 1000, 0.001, true);
             if (calibrationYaw == null) {
                 logger.error("calibrationYaw is null!");
             } else {
@@ -159,7 +169,7 @@ public class Robot extends TimedRobot {
                 .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
 
         }
-        Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
+        Transform3D lastBaseLinkToVisionTarget = hatchTargetLocalization.getLastBaseLinkToVisionTarget();
         if (lastBaseLinkToVisionTarget != null) {
             lastBaseLinkToVisionTarget.toTransform2D()
                 .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");

@@ -179,8 +179,8 @@ public class OI {
         }));
 
         // Next left/right target
-        nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
-        nextRightTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, false));
+        nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.hatchTargetLocalization, true));
+        nextRightTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.hatchTargetLocalization, false));
 
         // High vision target
         highTargetButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
