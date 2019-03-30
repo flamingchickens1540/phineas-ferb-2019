@@ -13,7 +13,6 @@ import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.twod.Transform2D;
 
-// TODO: Use logging class
 public class UDPGoalConfigSender {
 
     public static final Logger logger = Logger.getLogger(UDPGoalConfigSender.class);
@@ -23,16 +22,13 @@ public class UDPGoalConfigSender {
     private String addressString;
     private int port;
 
-    private final double period;
-
     private Transform2D goal;
     private TEBConfig cfg = new TEBConfig();
     private List<Vector2D> viaPoints;
 
-    public UDPGoalConfigSender(String address, int port, double period) {
+    public UDPGoalConfigSender(String address, int port) { // TODO: This should be sent over TCP!!!
         addressString = address;
         this.port = port;
-        this.period = period;
         attemptConnection();
     }
 
@@ -53,12 +49,24 @@ public class UDPGoalConfigSender {
         this.goal = goal;
     }
 
+    public Transform2D getGoal() {
+        return goal;
+    }
+
     public void setCfg(TEBConfig cfg) {
         this.cfg = cfg;
     }
 
+    public TEBConfig getCfg() {
+        return cfg;
+    }
+
     public void setViaPoints(List<Vector2D> viaPoints) {
         this.viaPoints = viaPoints;
+    }
+
+    public List<Vector2D> getViaPoints() {
+        return viaPoints;
     }
 
     public void sendIt() throws IOException {

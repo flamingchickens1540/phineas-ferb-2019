@@ -2,6 +2,7 @@ package org.team1540.robot2019.networking;
 
 public class TEBConfig {
 
+    // Defaults
     private double maxVelX = 1.5;
     private double maxVelXBackwards = 1.5;
     private double accLimX = 1.5;
@@ -10,9 +11,7 @@ public class TEBConfig {
     private double minTurningRadius = 0;
     private double weightKinematicsForwardDrive = 0.7;
 
-    public TEBConfig() {
-
-    }
+    public TEBConfig() {}
 
     public TEBConfig(double maxVelX, double maxVelXBackwards, double accLimX, double maxVelTheta, double accLimTheta, double minTurningRadius, double weightKinematicsForwardDrive) {
         this.maxVelX = maxVelX;

@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.auto.UDPVelocityTwistDrive;
+import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
 
         SimpleCommand testTeb = new SimpleCommand("Test TEB", () -> {
-            new UDPVelocityTwistDrive(false).start();
+            new UDPVelocityTwistDrive().start();
         });
         SmartDashboard.putData(testTeb);
     }
