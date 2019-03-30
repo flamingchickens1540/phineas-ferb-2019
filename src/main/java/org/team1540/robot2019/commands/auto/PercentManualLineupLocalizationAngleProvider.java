@@ -20,8 +20,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private static final double MAX_ACCURATE_POSE_DISTANCE = 2.0;
     private static double HATCH_GRAB_X_OFFSET = -0.05;
     private static double HATCH_GRAB_Y_OFFSET = -0.01;
-    private static double HATCH_PLACE_X_OFFSET = -0.1;
-    private static double HATCH_PLACE_Y_OFFSET = -0.035;
+    private static double HATCH_PLACE_X_OFFSET = -0.05;
+    private static double HATCH_PLACE_Y_OFFSET = -0.01;
+    //    private static double HATCH_PLACE_X_OFFSET = -0.1;
+//    private static double HATCH_PLACE_Y_OFFSET = -0.035;
     private static double M = 1.2;
     private static double Z = 0.6;
     private static double A = 2;
@@ -169,10 +171,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private Transform3D computeGoal() {
         Transform3D partialGoal = driveOdometry.getOdomToBaseLink()
             .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget());
-        if (Robot.hatch.isRetracted()) {
-            partialGoal = partialGoal.add(new Transform3D(HATCH_PLACE_X_OFFSET, HATCH_PLACE_Y_OFFSET, 0));
-        } else {
+        if (Robot.hatch.isExtended() && Robot.hatch.isReleased()) {
             partialGoal = partialGoal.add(new Transform3D(HATCH_GRAB_X_OFFSET, HATCH_GRAB_Y_OFFSET, 0));
+        } else {
+            partialGoal = partialGoal.add(new Transform3D(HATCH_PLACE_X_OFFSET, HATCH_PLACE_Y_OFFSET, 0));
         }
         return partialGoal;
     }
