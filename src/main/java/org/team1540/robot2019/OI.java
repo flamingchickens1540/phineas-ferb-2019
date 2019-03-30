@@ -130,7 +130,8 @@ public class OI {
         // Hatch
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
         prepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-        placeHatchButton.whenPressed(new SensorPlaceHatchSequence());
+        SensorPlaceHatchSequence sensorPlaceHatchSequence = new SensorPlaceHatchSequence();
+        placeHatchButton.whenPressed(sensorPlaceHatchSequence);
 
         grabHatchButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
@@ -142,7 +143,7 @@ public class OI {
 
         // Temporary
 //        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-//        testPlaceHatchButton.whenPressed(new SensorPlaceHatchSequence());
+//        testPlaceHatchButton.whenPressed(sensorPlaceHatchSequence);
 //
 //        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
 //
