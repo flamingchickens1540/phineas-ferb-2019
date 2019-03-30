@@ -195,46 +195,6 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             return null;
         }
 
-//        List<Vector2D> corners = getCorners();
-//        corners.sort(Comparator.comparingDouble(Vector2D::getX));
-//        Optional<Vector2D> leftmostCorner = corners.stream().min(Comparator.comparingDouble(Vector2D::getX));
-//        Optional<Vector2D> rightmostCorner = corners.stream().max(Comparator.comparingDouble(Vector2D::getX));
-//
-//        if (!leftmostCorner.isPresent() || !rightmostCorner.isPresent()) {
-//            return null;
-//        }
-//
-//        double approxMiddleX = (leftmostCorner.get().getX()+rightmostCorner.get().getX())/2;
-//
-//        Optional<Vector2D> leftBottomCorner = corners.stream().filter(item -> item.getX() < approxMiddleX).max(Comparator.comparingDouble(Vector2D::getY));
-//        Optional<Vector2D> rightBottomCorner = corners.stream().filter(item -> item.getX() > approxMiddleX).max(Comparator.comparingDouble(Vector2D::getY));
-//
-//        if (!leftBottomCorner.isPresent() || !rightBottomCorner.isPresent()) {
-//            return null;
-//        }
-//
-//        logger.debug(String.format("left: %f %f right: %f %f middle: %f", leftBottomCorner.get().getX(), leftBottomCorner.get().getY(), rightBottomCorner.get().getX(), rightBottomCorner.get().getY(), approxMiddleX));
-//
-//        // TODO: Angles or normalized screen space?
-//        Vector2D leftPoint = new Vector2D(leftBottomCorner.get().getX()/ CAM_RESOLUTION.getX()*2-1, -leftBottomCorner.get().getY()/ CAM_RESOLUTION.getY()*2-1);
-//        Vector2D rightPoint = new Vector2D(rightBottomCorner.get().getX()/ CAM_RESOLUTION.getX()*2-1, -rightBottomCorner.get().getY()/ CAM_RESOLUTION.getY()*2-1);
-//
-//        logger.debug(String.format("scaled left: %f %f right: %f %f", leftPoint.getX(), leftPoint.getY(), rightPoint.getX(), rightPoint.getY()));
-//        return new RawDeepSpaceVisionTarget(
-//            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(leftPoint, getHorizontalFov(), getVerticalFov()),
-//            DualVisionTargetLocalizationUtils.anglesFromScreenSpace(rightPoint, getHorizontalFov(), getVerticalFov())
-//        );
-
-//        // skew approach
-//        double skew = Math.toRadians(limelightTable.getEntry("ts").getDouble(0));
-//        double width = Math.toRadians(limelightTable.getEntry("tlong").getDouble(0));
-//
-//        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
-//
-
-//        // single point approach
-//        return new RawDeepSpaceVisionTarget(this.getTargetAngles(), this.getTargetAngles());
-
         // raw contours approach
         RawContour[] rawContours = new RawContour[]{
             getFilteredRawContourOrNull(0),
