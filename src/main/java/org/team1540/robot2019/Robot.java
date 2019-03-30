@@ -84,24 +84,20 @@ public class Robot extends TimedRobot {
             RobotMap.HATCH_TARGET_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
-//        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5801, 5800,
-//            "10.15.40.202", 0.01);
-
         OI.init();
 
         ShuffleboardDisplay.init();
 
         // TODO: use shuffleboard properly
-        SmartDashboard.putBoolean("IsHatchPreload", false);
         SmartDashboard.putBoolean("Debug Mode", false);
 
         SmartDashboard.putBoolean("EnableCompressor", true);
 
         Hardware.limelight.prepForDriverCam();
 
-        SmartDashboard.setDefaultBoolean("EnableBackupCam", false);
-        if (SmartDashboard.getBoolean("EnableBackupCam", false)) {
-            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("backup cam", 0);
+        SmartDashboard.setDefaultBoolean("EnableUSBCamera", false);
+        if (SmartDashboard.getBoolean("EnableUSBCamera", false)) {
+            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("USBCamera", 0);
             cam.setResolution(128, 73);
             cam.setFPS(30);
         }

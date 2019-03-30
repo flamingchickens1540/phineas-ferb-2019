@@ -12,7 +12,6 @@ import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 
 public class SensorGrabHatchSequence extends CommandGroup {
 
-
     public SensorGrabHatchSequence() {
         addParallel(new MoveElevatorToPosition(Tuning.elevatorHatchIntakePosition));
         addSequential(new ReleaseHatch());
