@@ -17,7 +17,6 @@ import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabThenRetract;
-import org.team1540.robot2019.commands.hatch.PlaceHatchInLoadingStation;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
@@ -142,19 +141,19 @@ public class OI {
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
         // Temporary
-        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
-
-        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-
-        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
-
-        testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
-
-        testFloorIntakeButton.toggleWhenPressed(floorIntakeCommand);
-
-        testBallEjectButton.whileHeld(forwardThenEjectCargo);
-        testBallEjectButton.whenReleased(backThenDown);
+//        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
+//        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
+//
+//        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
+//
+//        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
+//
+//        testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
+//
+//        testFloorIntakeButton.toggleWhenPressed(floorIntakeCommand);
+//
+//        testBallEjectButton.whileHeld(forwardThenEjectCargo);
+//        testBallEjectButton.whenReleased(backThenDown);
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
