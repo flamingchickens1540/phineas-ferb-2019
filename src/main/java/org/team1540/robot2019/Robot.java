@@ -6,7 +6,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
@@ -24,7 +23,6 @@ import org.team1540.robot2019.utils.LastValidTransformTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
 import org.team1540.robot2019.wrappers.TEBPlanner;
-import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
 
@@ -99,29 +97,6 @@ public class Robot extends TimedRobot {
             cam.setResolution(128, 73);
             cam.setFPS(30);
         }
-
-        SmartDashboard.putNumber("CalibrationDistance", 1);
-        Command estimatePitch = new SimpleCommand("Estimate Camera Pitch", () -> {
-            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectPitch(SmartDashboard.getNumber("CalibrationDistance", 0), 1000, 0.001);
-            if (calibrationPitch == null) {
-                logger.error("calibrationPitch is null!");
-            } else {
-                logger.info("Pitch estimation successful: " + calibrationPitch);
-            }
-        });
-        estimatePitch.setRunWhenDisabled(true);
-        SmartDashboard.putData(estimatePitch);
-
-        Command estimateYaw = new SimpleCommand("Estimate Camera Yaw", () -> {
-            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectYaw(0, 1000, 0.001);
-            if (calibrationPitch == null) {
-                logger.error("calibrationYaw is null!");
-            } else {
-                logger.info("Yaw estimation successful: " + calibrationPitch);
-            }
-        });
-        estimateYaw.setRunWhenDisabled(true);
-        SmartDashboard.putData(estimateYaw);
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
