@@ -9,18 +9,28 @@ import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.GrabHatch;
 import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
+import org.team1540.rooster.util.SimpleCommand;
 
 public class SensorGrabHatchSequence extends CommandGroup {
 
 
     public SensorGrabHatchSequence() {
+        this(null);
+    }
+
+    public SensorGrabHatchSequence(Runnable onSensorTrip) {
         addParallel(new MoveElevatorToPosition(Tuning.elevatorHatchIntakePosition));
         addSequential(new ReleaseHatch());
         addSequential(new ExtendHatchMech());
         addSequential(new WaitCommand(0.5));
         addSequential(new WaitForExtendSensorTrip());
+        addSequential(new SimpleCommand("", () -> {
+            if (onSensorTrip != null) {
+                onSensorTrip.run();
+            }
+        }));
         addSequential(new GrabHatch());
-        addSequential(new WaitCommand(0.3));
+        addSequential(new WaitCommand(0.5));
         addSequential(new RetractHatchMech());
         addSequential(new WaitCommand(0.1));
         addSequential(new MoveElevatorToZero());

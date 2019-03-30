@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.auto.AutoPlaceSequence;
 import org.team1540.robot2019.commands.auto.TurnUntilNewTarget;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
@@ -100,6 +101,8 @@ public class OI {
     private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
     private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
 
+    private static Button autoTestButton = driver.getButton(XboxButton.BACK);
+
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
@@ -155,6 +158,8 @@ public class OI {
 
         testBallEjectButton.whileHeld(forwardThenEjectCargo);
         testBallEjectButton.whenReleased(backThenDown);
+
+        autoTestButton.whenPressed(new AutoPlaceSequence());
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
