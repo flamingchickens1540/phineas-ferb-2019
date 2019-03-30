@@ -17,9 +17,9 @@ import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabThenRetract;
-import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
+import org.team1540.robot2019.commands.hatch.SensorPlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.WiggleAndGrab;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
@@ -130,7 +130,7 @@ public class OI {
         // Hatch
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
         prepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-        placeHatchButton.whenPressed(new PlaceHatchSequence());
+        placeHatchButton.whenPressed(new SensorPlaceHatchSequence());
 
         grabHatchButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
@@ -142,7 +142,7 @@ public class OI {
 
         // Temporary
 //        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-//        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
+//        testPlaceHatchButton.whenPressed(new SensorPlaceHatchSequence());
 //
 //        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
 //
