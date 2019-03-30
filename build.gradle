@@ -2,7 +2,7 @@ import edu.wpi.first.gradlerio.GradleRIOPlugin
 
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2019.1.1"
+    id "edu.wpi.first.GradleRIO" version "2019.3.2"
 }
 
 def ROBOT_MAIN_CLASS = "org.team1540.robot2019.Main"
@@ -45,7 +45,19 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 
-    compile "org.team1540:rooster:2019-updates-SNAPSHOT"
+    compile "org.team1540:rooster:master-SNAPSHOT"
+
+    // logging
+    compile 'org.slf4j:slf4j-log4j12:1.6.1'
+    compile 'log4j:log4j:1.2.16'
+
+    // math
+    compile "org.apache.commons:commons-math3:3.6.1"
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 jar {
