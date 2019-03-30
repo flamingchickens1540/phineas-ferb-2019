@@ -75,9 +75,10 @@ public class OI {
     // Driver
     // - Auto-align
     private static Button highTargetButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.5);
+    private static Button testBallEjectButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.5);
 
     // - Wiggle wiggle wiggle
-    private static Button wiggleButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.5);
+    private static Button wiggleButton = driver.getButton(XboxButton.START);
 
     // - Driving
     private static Button pointDrivePointAxis = driver.getButton(0.4, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
@@ -96,7 +97,8 @@ public class OI {
     private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
     private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP); // TODO: ChickenButton
-    private static Button testElevatorDownButton = driver.getButton(DPadAxis.LEFT);
+    private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
+    private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -121,11 +123,14 @@ public class OI {
         wristRecoverButton.whileHeld(new RecoverWrist());
 
         // Eject cargo
-        ejectButton.whileHeld(new ForwardThenEjectCargo());
-        ejectButton.whenReleased(new BackThenDown());
+        ForwardThenEjectCargo forwardThenEjectCargo = new ForwardThenEjectCargo();
+        ejectButton.whileHeld(forwardThenEjectCargo);
+        BackThenDown backThenDown = new BackThenDown();
+        ejectButton.whenReleased(backThenDown);
 
         // Hatch
-        prepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
+        SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
+        prepGetHatchButton.whenPressed(sensorGrabHatchSequence);
         placeHatchButton.whenPressed(new PlaceHatchSequence());
 
         grabHatchButton.whenPressed(new GrabThenRetract());
@@ -137,7 +142,7 @@ public class OI {
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
         // Temporary
-        testPrepGetHatchButton.whenPressed(new SensorGrabHatchSequence());
+        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
         testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
 
         testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
@@ -145,6 +150,11 @@ public class OI {
         testElevatorDownButton.whenPressed(new MoveElevatorToZero());
 
         testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
+
+        testFloorIntakeButton.toggleWhenPressed(floorIntakeCommand);
+
+        testBallEjectButton.whileHeld(forwardThenEjectCargo);
+        testBallEjectButton.whenReleased(backThenDown);
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
@@ -159,7 +169,14 @@ public class OI {
         resetPointOffset.setRunWhenDisabled(true);
         OI.resetPointOffset.whenPressed(resetPointOffset);
 
-        wiggleButton.whenPressed(new WiggleAndGrab());
+        WiggleAndGrab wiggleAndGrab = new WiggleAndGrab();
+        wiggleButton.whenPressed(new SimpleCommand("", () -> {
+            boolean running = sensorGrabHatchSequence.isRunning();
+            logger.debug("SensorGrabHatchSequence running: " + running);
+            if (running) {
+                wiggleAndGrab.start();
+            }
+        }));
 
         // Next left/right target
         nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
@@ -228,5 +245,9 @@ public class OI {
 
     public static double getTankdriveForwardsAxis() {
         return Utilities.scale(Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), Tuning.driveDeadzone), 2);
+    }
+
+    public static double getPointUntilNextTargetAxis() { // unused
+        return Utilities.processDeadzone(driver.getTriggerAxis(Hand.kLeft), 0.1) - Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), 0.1);
     }
 }
