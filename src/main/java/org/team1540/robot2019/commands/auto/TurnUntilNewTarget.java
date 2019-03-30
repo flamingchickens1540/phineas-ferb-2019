@@ -7,11 +7,11 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.RobotMap;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
+import org.team1540.robot2019.utils.ControlUtils;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.robot2019.vision.SimilarVector3DTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
@@ -22,6 +22,7 @@ import org.team1540.rooster.functional.Executable;
 public class TurnUntilNewTarget extends Command {
 
     private static final Logger logger = Logger.getLogger(TurnUntilNewTarget.class);
+    private static final double MAX_ANGULAR_VEL = 5;
     private static double ANGULAR_VEL = 2.5;
     private final TankDriveTwist2DInput twist2DInput;
     private final Executable pipeline;
@@ -29,7 +30,7 @@ public class TurnUntilNewTarget extends Command {
     private Transform3D goal;
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
-    private final boolean left;
+    private Boolean left = null;
 
     private boolean reset = true;
 
@@ -38,9 +39,13 @@ public class TurnUntilNewTarget extends Command {
     private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.1);
 
     public TurnUntilNewTarget(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, boolean left) {
+        this(driveOdometry, deepSpaceVisionTargetLocalization);
+        this.left = left;
+    }
+
+    public TurnUntilNewTarget(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
         this.driveOdometry = driveOdometry;
         this.deepSpaceVisionTargetLocalization = deepSpaceVisionTargetLocalization;
-        this.left = left;
 
         requires(Robot.drivetrain);
 
@@ -59,14 +64,19 @@ public class TurnUntilNewTarget extends Command {
 
         logger.debug("Hatch mode!");
         Hardware.limelight.setPipeline(0);
-        Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
         untilAnyTarget = !deepSpaceVisionTargetLocalization.attemptUpdatePose();
         reset = true;
     }
 
     @Override
     protected void execute() {
-        twist2DInput.setTwist(new Twist2D(0, 0, (left ? 1 : -1) * ANGULAR_VEL));
+        double omega = 0;
+        if (left != null) {
+            omega = (left ? 1 : -1) * ANGULAR_VEL;
+        } else {
+            omega = ControlUtils.velocityPosNegConstrain(OI.getPointUntilNextTargetAxis() * MAX_ANGULAR_VEL, MAX_ANGULAR_VEL, ANGULAR_VEL);
+        }
+        twist2DInput.setTwist(new Twist2D(0, 0, omega));
         pipeline.execute();
     }
 
