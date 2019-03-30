@@ -55,7 +55,7 @@ public class Tuning {
 
     public static double elevatorUpPosition = 28;
     public static double elevatorCargoShipPosition = 16;
-    public static double elevatorHatchIntakePosition = 1.4;
+    public static double elevatorHatchIntakePosition;
     public static double elevatorClimbPosition = 18;
     public static double elevatorLoadingStationPosition = 18;
     public static double elevatorDuringClimbPosition = 10;
@@ -152,9 +152,11 @@ public class Tuning {
         if (Tuning.isComp) {
             wristDownTravelPwrThrot = 0.7;
             wristDownTravelBrakeThrot = -0.25;
+            elevatorHatchIntakePosition = 0.4;
         } else {
             wristDownTravelPwrThrot = 0.7;
             wristDownTravelBrakeThrot = 0.25;
+            elevatorHatchIntakePosition = 1.4;
         }
     }
 }
