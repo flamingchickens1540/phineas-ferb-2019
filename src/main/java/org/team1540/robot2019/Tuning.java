@@ -82,8 +82,8 @@ public class Tuning {
     // wrist
     public static boolean wristInvertMotor = true;
 
-    public static double wristDownTravelPwrThrot = 0.7;
-    public static double wristDownTravelBrakeThrot = -0.25;
+    public static double wristDownTravelPwrThrot;
+    public static double wristDownTravelBrakeThrot;
     // what's uptravel
     public static double wristUpTravelThrot = .6;
     public static double wristHoldThrot = 0.05;
@@ -146,4 +146,15 @@ public class Tuning {
 
     public static double ledTime = 5;
     public static double ledStrobeTime = 0.2;
+
+    static {
+        //noinspection ConstantConditions
+        if (Tuning.isComp) {
+            wristDownTravelPwrThrot = 0.7;
+            wristDownTravelBrakeThrot = -0.25;
+        } else {
+            wristDownTravelPwrThrot = 0.7;
+            wristDownTravelBrakeThrot = 0.25;
+        }
+    }
 }
