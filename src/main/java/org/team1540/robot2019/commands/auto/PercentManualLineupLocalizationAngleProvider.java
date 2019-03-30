@@ -49,7 +49,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
-    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.2);
+    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.3);
     private Timer timer;
 
     public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
@@ -155,7 +155,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
                 this.goal = goal;
             } else {
-                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
+//                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
             }
         }
 
@@ -180,8 +180,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
-        double distanceToVisionTarget = driveOdometry.getOdomToBaseLink().toTransform2D().getPositionVector().distance(goal.toTransform2D().getPositionVector());
-        SmartDashboard.putNumber("DistanceToTarget", distanceToVisionTarget);
 //        double x = -(M * smoothStep(1.0 / (A - Z) * (distanceToVisionTarget - Z)));
 //        double x1 = -0.15 * smoothStepFiveDir(distanceToVisionTarget - 0.5);
 //        SmartDashboard.putNumber("DistanceOffset", x1);
@@ -193,6 +191,15 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
         return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
+    }
+
+    public double getDistanceToVisionTarget() {
+        if (goal == null) {
+            return Double.POSITIVE_INFINITY;
+        }
+        double distanceToVisionTarget = driveOdometry.getOdomToBaseLink().toTransform2D().getPositionVector().distance(goal.toTransform2D().getPositionVector());
+        SmartDashboard.putNumber("DistanceToTarget", distanceToVisionTarget);
+        return distanceToVisionTarget;
     }
 
     //
