@@ -25,7 +25,6 @@ public class RobotMap {
     public static final int CLIMBER_ARM_R = 4;
 
     // pneumatics
-
     public static final int CLIMBER_CYLINDER_1 = 3;
     public static final int CLIMBER_CYLINDER_2 = 2;
 
