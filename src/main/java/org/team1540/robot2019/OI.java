@@ -100,7 +100,9 @@ public class OI {
     private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
 
     /**
-     * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
+     * Since we want to initialize stuff once the robot actually boots up (not as static
+     * initializers), we instantiate stuff here to get more informative error traces and less
+     * general weirdness.
      */
     static void init() {
         logger.info("Initializing operator interface...");
