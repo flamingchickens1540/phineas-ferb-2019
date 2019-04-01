@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.utils.RotationUtils;
 
-// TODO: Use logging class
 public class UDPOdometrySender {
 
     private static final Logger logger = Logger.getLogger(UDPOdometrySender.class);

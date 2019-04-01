@@ -21,7 +21,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private static double HATCH_GRAB_X_OFFSET = -0.05;
     private static double HATCH_GRAB_Y_OFFSET = -0.01;
     private static double HATCH_PLACE_X_OFFSET = -0.1;
-    private static double HATCH_PLACE_Y_OFFSET = -0.035;
+    private static double HATCH_PLACE_Y_OFFSET = -0.025;
     private static double M = 1.2;
     private static double Z = 0.6;
     private static double A = 2;
@@ -49,7 +49,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private final TankDriveOdometryAccumulatorRunnable driveOdometry;
     private final DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
 
-    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.3);
+    private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.4);
     private Timer timer;
 
     public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
@@ -125,7 +125,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     private void enableHatchModeForNextCycle() {
         logger.debug("Hatch mode!");
-        Hardware.limelight.setPipeline(0);
+        long pipeline = Hardware.limelight.getPipeline();
+        if (pipeline != 2 && pipeline != 3) {
+            Hardware.limelight.setPipeline(0);
+        }
         Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
     }
 
@@ -142,7 +145,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     }
 
     @Override
-    public double returnAngleError() {
+    public double returnAngleError() { // TODO: If speed is too large, reset similar vector tracking
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose() && Robot.elevator.getPosition() < 3) { // TODO: This should be a tuning constant
             Transform3D goal = computeGoal();
 //            if (timer != null && !timer.hasPeriodPassed(0)) {
@@ -190,7 +193,13 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 //        Vector3D goalPosition = adjustedGoal.getPosition();
         Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
-        return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
+        double signedAngleError = TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
+        if (Math.abs(signedAngleError) > Math.PI / 2) {
+            logger.debug("Error is greater than PI/2, resetting similar pose tracker");
+            this.pointNextReset();
+            return 0;
+        }
+        return signedAngleError;
     }
 
     public double getDistanceToVisionTarget() {

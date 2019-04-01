@@ -25,7 +25,6 @@ public class RobotMap {
     public static final int CLIMBER_ARM_R = 4;
 
     // pneumatics
-
     public static final int CLIMBER_CYLINDER_1 = 3;
     public static final int CLIMBER_CYLINDER_2 = 2;
 
@@ -78,7 +77,7 @@ public class RobotMap {
 
     static {
         if (Tuning.isComp) {
-            CAM_YAW = Math.toRadians(3); // TODO: THIS WAS BECAUSE THE LIMELIGHT HAD AN OFFSET!!! FIX THIS
+            CAM_YAW = Math.toRadians(3);
             CAM_PITCH = Math.toRadians(-30.0);
             HATCH_GRABBER = 4;//0;
             WRIST_MID_SW = 2;

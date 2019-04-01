@@ -93,17 +93,16 @@ public class Robot extends TimedRobot {
 
         ShuffleboardDisplay.init();
 
-        // TODO: use shuffleboard properly
-        SmartDashboard.putBoolean("IsHatchPreload", false);
+        // TODO: Remove IsHatchPreload
         SmartDashboard.putBoolean("Debug Mode", false);
 
         SmartDashboard.putBoolean("EnableCompressor", true);
 
         Hardware.limelight.prepForDriverCam();
 
-        SmartDashboard.setDefaultBoolean("EnableBackupCam", false);
-        if (SmartDashboard.getBoolean("EnableBackupCam", false)) {
-            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("backup cam", 0);
+        SmartDashboard.setDefaultBoolean("EnableUSBCamera", false);
+        if (SmartDashboard.getBoolean("EnableUSBCamera", false)) {
+            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("USBCamera", 0);
             cam.setResolution(128, 73);
             cam.setFPS(30);
         }

@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 
-// TODO: Use logging class
 public class UDPTwistReceiver implements Runnable {
 
     private int port;
