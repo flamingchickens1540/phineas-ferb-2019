@@ -78,7 +78,7 @@ public class RobotMap {
 
     static {
         if (Tuning.isComp) {
-            CAM_YAW = Math.toRadians(3); // TODO: THIS WAS BECAUSE THE LIMELIGHT HAD AN OFFSET!!! FIX THIS
+            CAM_YAW = Math.toRadians(3);
             CAM_PITCH = Math.toRadians(-30.0);
             HATCH_GRABBER = 4;//0;
             WRIST_MID_SW = 2;
