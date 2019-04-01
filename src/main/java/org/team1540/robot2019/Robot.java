@@ -160,8 +160,8 @@ public class Robot extends TimedRobot {
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
         odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
-        if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
-            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D()
+        if (lastOdomToVisionTargetTracker.getTransform3D() != null) {
+            lastOdomToVisionTargetTracker.getTransform3D().toTransform2D()
                 .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
 
         }
