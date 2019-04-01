@@ -30,6 +30,7 @@ import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.robot2019.utils.ChickenXboxController;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxAxis;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxButton;
+import org.team1540.robot2019.wrappers.SwitchFilterButton;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.util.SimpleCommand;
@@ -73,8 +74,12 @@ public class OI {
 
     // Driver
     // - Auto-align
-    private static Button highTargetButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.5);
-    private static Button testBallEjectButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.5);
+    private static Button highTargetButton = driver.getButton(XboxButton.A);
+
+    private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
+    private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
+
+//    private static Button testBallEjectButton = driver.getButton(XboxAxis.asdfd, 0.5);
 
     // - Wiggle wiggle wiggle
     private static Button wiggleButton = driver.getButton(XboxButton.START);
@@ -91,7 +96,7 @@ public class OI {
     private static Button nextRightTarget = driver.getButton(XboxButton.RB);
 
     // - Temporary
-    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.A);
+//    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.asdfadf);
     private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
     private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
@@ -180,6 +185,11 @@ public class OI {
         // Next left/right target
         nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
         nextRightTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, false));
+
+        leftFilterButton.whenPressed(new SwitchFilterButton(2));
+        leftFilterButton.whenReleased(new SwitchFilterButton(0));
+        rightFilterButton.whenPressed(new SwitchFilterButton(3));
+        rightFilterButton.whenReleased(new SwitchFilterButton(0));
 
         // High vision target
         highTargetButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
