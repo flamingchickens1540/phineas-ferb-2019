@@ -56,12 +56,20 @@ public class HatchMech extends Subsystem {
         hatchGrabber.set(true);
     }
 
-    public boolean isReleased() {
-        return hatchGrabber.get();
+    public boolean isExtended() {
+        return hatchSlide.get();
     }
 
     public boolean isRetracted() {
         return !hatchSlide.get();
+    }
+
+    public boolean isGrabbed() {
+        return !hatchGrabber.get();
+    }
+
+    public boolean isReleased() {
+        return hatchGrabber.get();
     }
 
     @Override
