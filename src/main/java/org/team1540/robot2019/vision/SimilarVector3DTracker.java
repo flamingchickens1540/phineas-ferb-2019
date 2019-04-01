@@ -19,7 +19,7 @@ public class SimilarVector3DTracker {
             return true;
         }
         double distance = lastVector.distance(newTransform);
-        SmartDashboard.putNumber("Debug/SimilarVector3DTracker/Distance", distance); // todo: debug
+        SmartDashboard.putNumber("Debug/SimilarVector3DTracker/Distance", distance);
         if (distance < maxDistance) {
             this.lastVector = newTransform;
             return true;
