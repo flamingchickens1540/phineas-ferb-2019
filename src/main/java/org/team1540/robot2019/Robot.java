@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
 
         ShuffleboardDisplay.init();
 
-        // TODO: use shuffleboard properly
+        // TODO: Remove IsHatchPreload
         SmartDashboard.putBoolean("Debug Mode", false);
 
         SmartDashboard.putBoolean("EnableCompressor", true);

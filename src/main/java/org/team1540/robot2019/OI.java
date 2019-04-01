@@ -17,9 +17,9 @@ import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabThenRetract;
+import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
-import org.team1540.robot2019.commands.hatch.SensorPlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.WiggleAndGrab;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
@@ -30,12 +30,15 @@ import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.robot2019.utils.ChickenXboxController;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxAxis;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxButton;
+import org.team1540.robot2019.wrappers.SwitchFilterButton;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleConditionalCommand;
 
 public class OI {
+
+    // TODO: ChickenButton with better logic (whileReleased, etc)
 
     private static final Logger logger = Logger.getLogger(OI.class);
 
@@ -45,7 +48,7 @@ public class OI {
 
     // Copilot
     // - Elevator
-    private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP); // TODO: ChickenButton
+    private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
     private static Button intakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
@@ -73,8 +76,12 @@ public class OI {
 
     // Driver
     // - Auto-align
-    private static Button highTargetButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.5);
-    private static Button testBallEjectButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.5);
+    private static Button highTargetButton = driver.getButton(XboxButton.A);
+
+    private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
+    private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
+
+//    private static Button testBallEjectButton = driver.getButton(XboxAxis.asdfd, 0.5);
 
     // - Wiggle wiggle wiggle
     private static Button wiggleButton = driver.getButton(XboxButton.START);
@@ -91,18 +98,16 @@ public class OI {
     private static Button nextRightTarget = driver.getButton(XboxButton.RB);
 
     // - Temporary
-    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.A);
+//    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.asdfadf);
     private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
     private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
-    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP); // TODO: ChickenButton
+    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP);
     private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
     private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
 
     /**
-     * Since we want to initialize stuff once the robot actually boots up (not as static
-     * initializers), we instantiate stuff here to get more informative error traces and less
-     * general weirdness.
+     * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
     static void init() {
         logger.info("Initializing operator interface...");
@@ -132,8 +137,7 @@ public class OI {
         // Hatch
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
         prepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-        SensorPlaceHatchSequence sensorPlaceHatchSequence = new SensorPlaceHatchSequence();
-        placeHatchButton.whenPressed(sensorPlaceHatchSequence);
+        placeHatchButton.whenPressed(new PlaceHatchSequence());
 
         grabHatchButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
@@ -145,7 +149,7 @@ public class OI {
 
         // Temporary
 //        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-//        testPlaceHatchButton.whenPressed(sensorPlaceHatchSequence);
+//        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
 //
 //        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
 //
@@ -183,6 +187,11 @@ public class OI {
         // Next left/right target
         nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
         nextRightTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, false));
+
+        leftFilterButton.whenPressed(new SwitchFilterButton(2));
+        leftFilterButton.whenReleased(new SwitchFilterButton(0));
+        rightFilterButton.whenPressed(new SwitchFilterButton(3));
+        rightFilterButton.whenReleased(new SwitchFilterButton(0));
 
         // High vision target
         highTargetButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
