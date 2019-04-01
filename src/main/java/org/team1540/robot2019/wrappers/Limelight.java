@@ -39,8 +39,6 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
     public Limelight(String name, Transform3D baseLinkToCamera) {
         limelightTable = NetworkTableInstance.getDefault().getTable(name);
         this.baseLinkToCamera = baseLinkToCamera;
-
-        setPipeline(0);
     }
 
     @Override
@@ -145,6 +143,10 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         NetworkTableInstance.getDefault().flush();
     }
 
+    public long getPipeline() {
+        return Math.round((double) limelightTable.getEntry("getpipe").getNumber(-1));
+    }
+
     // todo: getPipeline and incorrect pipeline warnings
 
     public void prepForVision() {
@@ -222,9 +224,5 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             sortedContours.get(1).getCenter(),
             getTargetAngles()
         );
-    }
-
-    public void setPipeline(double pipelineID) { // TODO
-        limelightTable.getEntry("pipeline").setDouble(1);
     }
 }
