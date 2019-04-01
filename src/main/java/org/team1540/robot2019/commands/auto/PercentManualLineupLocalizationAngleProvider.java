@@ -125,7 +125,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     private void enableHatchModeForNextCycle() {
         logger.debug("Hatch mode!");
-        Hardware.limelight.setPipeline(0);
+        long pipeline = Hardware.limelight.getPipeline();
+        if (pipeline != 2 && pipeline != 3) {
+            Hardware.limelight.setPipeline(0);
+        }
         Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
     }
 
@@ -142,7 +145,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     }
 
     @Override
-    public double returnAngleError() {
+    public double returnAngleError() { // TODO: If speed is too large, reset similar vector tracking
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose() && Robot.elevator.getPosition() < 3) { // TODO: This should be a tuning constant
             Transform3D goal = computeGoal();
 //            if (timer != null && !timer.hasPeriodPassed(0)) {
@@ -192,7 +195,13 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 //        Vector3D goalPosition = adjustedGoal.getPosition();
         Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
-        return TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
+        double signedAngleError = TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
+        if (Math.abs(signedAngleError) > Math.PI / 2) {
+            logger.debug("Error is greater than PI/2, resetting similar pose tracker");
+            this.pointNextReset();
+            return 0;
+        }
+        return signedAngleError;
     }
 
     //
