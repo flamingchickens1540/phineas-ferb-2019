@@ -38,6 +38,8 @@ import org.team1540.rooster.util.SimpleConditionalCommand;
 
 public class OI {
 
+    // TODO: ChickenButton with better logic (whileReleased, etc)
+
     private static final Logger logger = Logger.getLogger(OI.class);
 
     // Joysticks
@@ -46,7 +48,7 @@ public class OI {
 
     // Copilot
     // - Elevator
-    private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP); // TODO: ChickenButton
+    private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
     private static Button intakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
@@ -100,7 +102,7 @@ public class OI {
     private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
     private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
-    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP); // TODO: ChickenButton
+    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP);
     private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
     private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
 

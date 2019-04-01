@@ -28,7 +28,7 @@ public class Intake extends Subsystem {
     }
 
     public void startIntaking() {
-        intakeTop.set(ControlMode.PercentOutput, Tuning.intakeIntakeSpeedTop); // TODO: rip whoever uses ferb next lol
+        intakeTop.set(ControlMode.PercentOutput, Tuning.intakeIntakeSpeedTop);
         intakeBtm.set(ControlMode.PercentOutput, -Tuning.intakeIntakeSpeedBtm);
     }
 

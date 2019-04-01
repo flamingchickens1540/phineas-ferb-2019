@@ -147,7 +147,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         return Math.round((double) limelightTable.getEntry("getpipe").getNumber(-1));
     }
 
-    // todo: getPipeline and incorrect pipeline warnings
+    // TODO: Incorrect pipeline warnings
 
     public void prepForVision() {
         setLeds(true);
@@ -171,7 +171,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         if (rawTransformation[2] == 0) {
             return null;
         }
-        // TODO: Something about this is probably wrong
+        // TODO: These negations might be incorrect
         return new Transform3D(
             UnitsUtils.inchesToMeters(rawTransformation[2]),
             UnitsUtils.inchesToMeters(-rawTransformation[0]),
@@ -203,7 +203,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             getFilteredRawContourOrNull(1),
             getFilteredRawContourOrNull(2)
         };
-        List<RawContour> sortedContours = Arrays.stream(rawContours).filter(Objects::nonNull) // TODO: this is incorrect!
+        List<RawContour> sortedContours = Arrays.stream(rawContours).filter(Objects::nonNull)
             .map(point -> new RawContour(point.getId(), DualVisionTargetLocalizationUtils.anglesFromScreenSpace(point.getCenter(), getHorizontalFov(), getVerticalFov())))
             .sorted(Comparator.comparingDouble(point -> point.getCenter().distance(this.getTargetAngles()))).collect(Collectors.toList());
 
