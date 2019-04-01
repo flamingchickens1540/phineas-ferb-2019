@@ -21,7 +21,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private static double HATCH_GRAB_X_OFFSET = -0.05;
     private static double HATCH_GRAB_Y_OFFSET = -0.01;
     private static double HATCH_PLACE_X_OFFSET = -0.1;
-    private static double HATCH_PLACE_Y_OFFSET = -0.035;
+    private static double HATCH_PLACE_Y_OFFSET = -0.025;
     private static double M = 1.2;
     private static double Z = 0.6;
     private static double A = 2;
