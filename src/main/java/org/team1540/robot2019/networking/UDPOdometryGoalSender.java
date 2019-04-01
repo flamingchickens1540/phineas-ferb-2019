@@ -15,7 +15,6 @@ import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.twod.Transform2D;
 import org.team1540.robot2019.datastructures.utils.RotationUtils;
 
-// TODO: Use logging class
 public class UDPOdometryGoalSender {
 
     private static final Logger logger = Logger.getLogger(UDPOdometryGoalSender.class);
