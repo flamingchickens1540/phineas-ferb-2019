@@ -94,24 +94,32 @@ public class AutoLineupAndDrive extends PIDCommand { // TODO: Make this generic
 
     @Override
     protected final void usePIDOutput(double output) {
-        if (isConfigSet) {
-            double cmdVelTheta = ControlUtils.allVelocityConstraints(output * cmdVelScalar, max, min, deadzone);
-            double desiredCmdVelX = ControlUtils.allVelocityConstraints(CMD_VEL_X_SCALAR * (lineupLocalization.getDistanceToVisionTarget() - OFFSET_X), MAX_VEL_X, MIN_VEL_X, 0);
-            if (desiredCmdVelX > cmdVelX) {
-                cmdVelX += CMD_VEL_X_MAX_ACCEL_UP;
-            }
-            if (cmdVelX > desiredCmdVelX) {
-                cmdVelX = desiredCmdVelX;
-            }
-            if (cmdVelX < MIN_VEL_X) {
-                cmdVelX = MIN_VEL_X;
-            }
-            SmartDashboard.putNumber("AutoLineupAndDrive/CmdVelTheta", cmdVelTheta);
-            twist2DInput.setTwist(new Twist2D(cmdVelX, 0, cmdVelTheta));
+        double desiredCmdVelX;
+        double cmdVelTheta;
+        if (isConfigSet && lineupLocalization.hasGoalBeenFound()) {
+            cmdVelTheta = ControlUtils.allVelocityConstraints(output * cmdVelScalar, max, min, deadzone);
+            desiredCmdVelX = ControlUtils.allVelocityConstraints(CMD_VEL_X_SCALAR * (lineupLocalization.getDistanceToVisionTarget() - OFFSET_X), MAX_VEL_X, MIN_VEL_X, 0);
+
+        } else if (!lineupLocalization.hasGoalBeenFound()) {
+            logger.warn("Goal not found! Setting vel to full.");
+            cmdVelTheta = 0;
+            desiredCmdVelX = MAX_VEL_X;
         } else {
             logger.warn("Config not set! Setting vel to zero.");
-            twist2DInput.setTwist(Twist2D.ZERO);
+            cmdVelTheta = 0;
+            desiredCmdVelX = 0;
         }
+        if (desiredCmdVelX > cmdVelX) {
+            cmdVelX += CMD_VEL_X_MAX_ACCEL_UP;
+        }
+        if (cmdVelX > desiredCmdVelX) {
+            cmdVelX = desiredCmdVelX;
+        }
+        if (cmdVelX < MIN_VEL_X) {
+            cmdVelX = MIN_VEL_X;
+        }
+        SmartDashboard.putNumber("AutoLineupAndDrive/CmdVelTheta", cmdVelTheta);
+        twist2DInput.setTwist(new Twist2D(cmdVelX, 0, cmdVelTheta));
         pipeline.execute();
     }
 

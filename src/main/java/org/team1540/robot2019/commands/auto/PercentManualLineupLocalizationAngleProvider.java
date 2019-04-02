@@ -169,6 +169,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         }
     }
 
+    public boolean hasGoalBeenFound() {
+        return goal != null;
+    }
+
     private Transform3D computeGoal() {
         Transform3D partialGoal = driveOdometry.getOdomToBaseLink()
             .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget());
