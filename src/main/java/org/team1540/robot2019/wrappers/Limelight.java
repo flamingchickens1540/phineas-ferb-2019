@@ -197,6 +197,10 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             return null;
         }
 
+        if (limelightTable.getEntry("ta").getDouble(0) < 0.47) { // TODO: Make this tunable
+            return null;
+        }
+
         // raw contours approach
         RawContour[] rawContours = new RawContour[]{
             getFilteredRawContourOrNull(0),
