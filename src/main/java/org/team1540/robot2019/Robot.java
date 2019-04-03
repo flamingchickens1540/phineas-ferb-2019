@@ -12,9 +12,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.auto.UDPVelocityTwistDrive;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.datastructures.Odometry;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
@@ -86,14 +84,10 @@ public class Robot extends TimedRobot {
             RobotMap.HATCH_TARGET_HEIGHT, 0.05,
             lastOdomToVisionTargetTracker); // Doesn't have to be very frequent if things that use it also call update
 
-        tebPlanner = new TEBPlanner(() -> new Odometry(odometry.getOdomToBaseLink(), drivetrain.getTwist()), 5803, 5802, 5801,
-            "10.15.40.202", 0.01);
-
         OI.init();
 
         ShuffleboardDisplay.init();
 
-        // TODO: Remove IsHatchPreload
         SmartDashboard.putBoolean("Debug Mode", false);
 
         SmartDashboard.putBoolean("EnableCompressor", true);
@@ -147,11 +141,6 @@ public class Robot extends TimedRobot {
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
-
-        SimpleCommand testTeb = new SimpleCommand("Test TEB", () -> {
-            new UDPVelocityTwistDrive().start();
-        });
-        SmartDashboard.putData(testTeb);
     }
 
     @Override
@@ -159,20 +148,21 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
-        odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
-        if (lastOdomToVisionTargetTracker.getTransform3D() != null) {
-            lastOdomToVisionTargetTracker.getTransform3D().toTransform2D()
-                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
 
-        }
-        Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
-        if (lastBaseLinkToVisionTarget != null) {
-            lastBaseLinkToVisionTarget.toTransform2D()
-                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+        if (debugMode) {
+            odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
+            if (lastOdomToVisionTargetTracker.getTransform3D() != null) {
+                lastOdomToVisionTargetTracker.getTransform3D().toTransform2D()
+                    .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
+
+            }
+            Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
+            if (lastBaseLinkToVisionTarget != null) {
+                lastBaseLinkToVisionTarget.toTransform2D()
+                    .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+            }
         }
 
-        SmartDashboard.putNumber("DrivetrainLeftPos", drivetrain.getLeftPositionTicks());
-        SmartDashboard.putNumber("DrivetrainRightPos", drivetrain.getRightPositionTicks());
         NetworkTableInstance.getDefault().flush();
     }
 
