@@ -2,22 +2,31 @@ package org.team1540.robot2019.commands.drivetrain;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.team1540.robot2019.Robot;
+import org.team1540.robot2019.datastructures.twod.Twist2D;
 
 public class TankDriveForTimePercent extends TimedCommand {
 
     private final double leftPercent;
     private final double rightPercent;
+    private final boolean coast;
 
     public TankDriveForTimePercent(double timeoutSecs, double percent) {
-        super(timeoutSecs);
-        this.leftPercent = this.rightPercent = percent;
-        requires(Robot.drivetrain);
+        this(timeoutSecs, percent, false);
+    }
+
+    public TankDriveForTimePercent(double timeoutSecs, double percent, boolean coast) {
+        this(timeoutSecs, percent, percent, coast);
     }
 
     public TankDriveForTimePercent(double timeoutSecs, double leftPercent, double rightPercent) {
+        this(timeoutSecs, leftPercent, rightPercent, false);
+    }
+
+    public TankDriveForTimePercent(double timeoutSecs, double leftPercent, double rightPercent, boolean coast) {
         super(timeoutSecs);
         this.leftPercent = leftPercent;
         this.rightPercent = rightPercent;
+        this.coast = coast;
         requires(Robot.drivetrain);
     }
 
@@ -29,6 +38,10 @@ public class TankDriveForTimePercent extends TimedCommand {
 
     @Override
     protected void end() {
-        Robot.drivetrain.stop();
+        if (!coast) {
+            Robot.drivetrain.stop();
+        } else {
+            Robot.drivetrain.setPercentTwist(Twist2D.ZERO);
+        }
     }
 }
