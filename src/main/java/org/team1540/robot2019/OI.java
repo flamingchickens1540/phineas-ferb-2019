@@ -77,7 +77,7 @@ public class OI {
 
     // Driver
     // - Auto-align
-    private static Button highTargetButton = driver.getButton(XboxButton.START);
+    private static Button highTargetButton = driver.getButton(XboxButton.A);
 
     private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
     private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
@@ -85,7 +85,7 @@ public class OI {
 //    private static Button testBallEjectButton = driver.getButton(XboxAxis.asdfd, 0.5);
 
     // - Wiggle wiggle wiggle
-//    private static Button wiggleButton = driver.getButton(XboxButton.BACK);
+    private static Button wiggleButton = driver.getButton(XboxButton.START);
 
     // - Driving
     private static Button pointDrivePointAxis = driver.getButton(0.2, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
