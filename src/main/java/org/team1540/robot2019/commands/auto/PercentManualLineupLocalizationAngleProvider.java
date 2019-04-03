@@ -198,6 +198,12 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
         double signedAngleError = TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
+        double xVel = Robot.drivetrain.getTwist().getX();
+        if (Math.abs(xVel) > 1.4) {
+            logger.debug("xVel greater than 1.4, resetting similar pose tracker");
+            this.pointNextReset();
+            return 0;
+        }
         if (Math.abs(signedAngleError) > Math.PI / 2) {
             logger.debug("Error is greater than PI/2, resetting similar pose tracker");
             this.pointNextReset();
