@@ -9,7 +9,7 @@ public class TEBConfig {
     private double maxVelTheta = 5.0;
     private double accLimTheta = 15.0;
     private double minTurningRadius = 0;
-    private double weightKinematicsForwardDrive = 0.7;
+    private double weightKinematicsForwardDrive = 0.0;
 
     public TEBConfig() {}
 
