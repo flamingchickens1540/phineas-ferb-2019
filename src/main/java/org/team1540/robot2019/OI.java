@@ -23,6 +23,7 @@ import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
+import org.team1540.robot2019.commands.hatch.WiggleAndGrab;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
@@ -183,14 +184,14 @@ public class OI {
         resetPointOffset.setRunWhenDisabled(true);
         OI.resetPointOffset.whenPressed(resetPointOffset);
 
-//        WiggleAndGrab wiggleAndGrab = new WiggleAndGrab();
-//        wiggleButton.whenPressed(new SimpleCommand("", () -> {
-//            boolean running = sensorGrabHatchSequence.isRunning();
-//            logger.debug("SensorGrabHatchSequence running: " + running);
-//            if (running) {
-//                wiggleAndGrab.start();
-//            }
-//        }));
+        WiggleAndGrab wiggleAndGrab = new WiggleAndGrab();
+        wiggleButton.whenPressed(new SimpleCommand("", () -> {
+            boolean running = sensorGrabHatchSequence.isRunning();
+            logger.debug("SensorGrabHatchSequence running: " + running);
+            if (running) {
+                wiggleAndGrab.start();
+            }
+        }));
 
         SimpleCommand runPointDrive = new SimpleCommand("", () -> {
             if (Robot.drivetrain.getCurrentCommand() instanceof DriveGrabSequence || Robot.drivetrain.getCurrentCommand() instanceof VisionPlaceSequence) {
