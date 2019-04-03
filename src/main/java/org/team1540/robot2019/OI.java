@@ -6,8 +6,9 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.auto.AutoPlaceSequence;
+import org.team1540.robot2019.commands.auto.DriveGrabSequence;
 import org.team1540.robot2019.commands.auto.TurnUntilNewTarget;
+import org.team1540.robot2019.commands.auto.VisionPlaceSequence;
 import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
@@ -22,7 +23,6 @@ import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
-import org.team1540.robot2019.commands.hatch.WiggleAndGrab;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
@@ -77,7 +77,7 @@ public class OI {
 
     // Driver
     // - Auto-align
-    private static Button highTargetButton = driver.getButton(XboxButton.A);
+    private static Button highTargetButton = driver.getButton(XboxButton.START);
 
     private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
     private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
@@ -85,10 +85,11 @@ public class OI {
 //    private static Button testBallEjectButton = driver.getButton(XboxAxis.asdfd, 0.5);
 
     // - Wiggle wiggle wiggle
-    private static Button wiggleButton = driver.getButton(XboxButton.START);
+//    private static Button wiggleButton = driver.getButton(XboxButton.BACK);
 
     // - Driving
-    private static Button pointDrivePointAxis = driver.getButton(0.4, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
+    private static Button pointDrivePointAxis = driver.getButton(0.2, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
+    private static Button pointDriveThrottle = driver.getButton(0.2, XboxAxis.LEFT_Y);
     private static Button resetPointOffset = driver.getButton(XboxButton.Y);
 
     // - LEDs
@@ -100,14 +101,15 @@ public class OI {
 
     // - Temporary
 //    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.asdfadf);
-    private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
-    private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
+//    private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
+//    private static Button testPlaceHatchInLoadingStationButton = driver.getButton(DPadAxis.UP);
 
-    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP);
-    private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
-    private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
+//    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP);
+//    private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
+//    private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
 
-    private static Button autoTestButton = driver.getButton(XboxButton.BACK);
+//    private static Button autoPlaceButton = driver.getButton(XboxButton.B);
+//    private static Button autoGrabButton = driver.getButton(XboxButton.X);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -165,7 +167,8 @@ public class OI {
 //        testBallEjectButton.whileHeld(forwardThenEjectCargo);
 //        testBallEjectButton.whenReleased(backThenDown);
 
-        autoTestButton.whenPressed(new AutoPlaceSequence());
+//        autoPlaceButton.whenPressed(new VisionPlaceSequence());
+//        autoGrabButton.whenPressed(new VisionGrabSequence());
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
@@ -180,14 +183,22 @@ public class OI {
         resetPointOffset.setRunWhenDisabled(true);
         OI.resetPointOffset.whenPressed(resetPointOffset);
 
-        WiggleAndGrab wiggleAndGrab = new WiggleAndGrab();
-        wiggleButton.whenPressed(new SimpleCommand("", () -> {
-            boolean running = sensorGrabHatchSequence.isRunning();
-            logger.debug("SensorGrabHatchSequence running: " + running);
-            if (running) {
-                wiggleAndGrab.start();
+//        WiggleAndGrab wiggleAndGrab = new WiggleAndGrab();
+//        wiggleButton.whenPressed(new SimpleCommand("", () -> {
+//            boolean running = sensorGrabHatchSequence.isRunning();
+//            logger.debug("SensorGrabHatchSequence running: " + running);
+//            if (running) {
+//                wiggleAndGrab.start();
+//            }
+//        }));
+
+        SimpleCommand runPointDrive = new SimpleCommand("", () -> {
+            if (Robot.drivetrain.getCurrentCommand() instanceof DriveGrabSequence || Robot.drivetrain.getCurrentCommand() instanceof VisionPlaceSequence) {
+                Robot.drivetrain.getDriveCommand().start();
             }
-        }));
+        });
+        pointDrivePointAxis.whenPressed(runPointDrive);
+        pointDriveThrottle.whenPressed(runPointDrive);
 
         // Next left/right target
         nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
