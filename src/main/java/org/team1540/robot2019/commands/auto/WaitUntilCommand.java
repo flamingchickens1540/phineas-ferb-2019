@@ -31,6 +31,8 @@ public class WaitUntilCommand extends Command {
 
     @Override
     protected void end() {
-        end.run();
+        if (end != null) {
+            end.run();
+        }
     }
 }
