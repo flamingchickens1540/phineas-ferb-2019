@@ -17,6 +17,8 @@ import org.team1540.robot2019.networking.TEBConfig;
 public class UDPVelocityTwistDrive extends Command {
 
     private static final Logger logger = Logger.getLogger(UDPVelocityTwistDrive.class);
+//    private final Executable pipeline;
+//    private final TankDriveTwist2DInput twist2DInput;
 
     public UDPVelocityTwistDrive() {
         SmartDashboard.setDefaultNumber("test-goal/position/x", 2);
@@ -26,11 +28,11 @@ public class UDPVelocityTwistDrive extends Command {
         requires(Robot.drivetrain);
         requires(Robot.tebPlanner);
 
-//        TankDriveTwist2DInput twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters); // TODO: Test closed loop
-//        Executable pipeline = twist2DInput
+//        this.twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
+//        this.pipeline = twist2DInput
 //            .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
 //            .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
-//            .then(new CTREOutput(Hardware.driveLeftMotorA, Hardware.driveRightMotorA, true));
+//            .then(Robot.drivetrain.getPipelineOutput(false));
     }
 
     @Override
@@ -58,18 +60,18 @@ public class UDPVelocityTwistDrive extends Command {
         Twist2D cmdVel = Robot.tebPlanner.getCmdVel();
         Robot.drivetrain.setTwist(cmdVel);
 
-//    twist2DInput.setTwist(cmdVel); // TODO: Test closed loop
-//    pipeline.execute();
+//        twist2DInput.setTwist(cmdVel); // TODO: Test closed loop
+//        pipeline.execute();
 
-        if (Robot.debugMode) {
+//        if (Robot.debugMode) {
             double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadiusMeters);
             double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadiusMeters);
-            SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
-            SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
+        SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint);
+        SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint);
             SmartDashboard.putNumber("debug-velocity-left", Robot.drivetrain.getLeftVelocityMetersPerSecond());
             SmartDashboard.putNumber("debug-velocity-right", Robot.drivetrain.getRightVelocityMetersPerSecond());
             NetworkTableInstance.getDefault().flush();
-        }
+//        }
     }
 
     @Override
@@ -77,6 +79,8 @@ public class UDPVelocityTwistDrive extends Command {
         double distanceError = Robot.odometry.getOdomToBaseLink().toTransform2D().getPositionVector().distance(Robot.tebPlanner.getGoal().getPositionVector()); // TODO: This should use javaTF
         double angleError = TrigUtils.signedAngleError(Hardware.navx.getYawRadians(), Robot.tebPlanner.getGoal().getTheta());
 
+        SmartDashboard.putNumber("debug-distanceError", distanceError);
+        SmartDashboard.putNumber("debug-angleError", Math.toDegrees(angleError));
         return distanceError < 0.1 && Math.abs(angleError) < Math.toRadians(10);
     }
 
