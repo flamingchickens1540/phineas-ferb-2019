@@ -149,7 +149,7 @@ public class Tuning {
         if (Tuning.isComp) {
             wristDownTravelPwrThrot = 0.7;
             wristDownTravelBrakeThrot = -0.25;
-            elevatorHatchIntakePosition = 0.4;
+            elevatorHatchIntakePosition = 0;
         } else {
             wristDownTravelPwrThrot = 0.7;
             wristDownTravelBrakeThrot = 0.25;
