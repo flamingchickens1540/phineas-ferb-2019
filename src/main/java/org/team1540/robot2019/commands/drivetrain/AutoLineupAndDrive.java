@@ -17,10 +17,10 @@ import org.team1540.rooster.functional.Executable;
 public class AutoLineupAndDrive extends PIDCommand { // TODO: Make this generic
 
     private static final Logger logger = Logger.getLogger(AutoLineupAndDrive.class);
-    private static double CMD_VEL_X_SCALAR = 2;
-    private static double MAX_VEL_X = 2;
+    private static double CMD_VEL_X_SCALAR = 2.5;
+    private static double MAX_VEL_X = 3;
     private static double MIN_VEL_X = 0.7;
-    private static double OFFSET_X = 0.7;
+    private static double OFFSET_X = 0.5;
 
     private static double CMD_VEL_X_MAX_ACCEL_UP = 0.05; // TODO: Use time
 
@@ -43,6 +43,8 @@ public class AutoLineupAndDrive extends PIDCommand { // TODO: Make this generic
     public AutoLineupAndDrive() {
         super(0, 0, 0);
         requires(Robot.drivetrain);
+
+        this.setTimeout(4);
 
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
@@ -101,7 +103,7 @@ public class AutoLineupAndDrive extends PIDCommand { // TODO: Make this generic
             desiredCmdVelX = ControlUtils.allVelocityConstraints(CMD_VEL_X_SCALAR * (lineupLocalization.getDistanceToVisionTarget() - OFFSET_X), MAX_VEL_X, MIN_VEL_X, 0);
 
         } else if (!lineupLocalization.hasGoalBeenFound()) {
-            logger.warn("Goal not found! Setting vel to full.");
+            logger.debug("Goal not found! Setting vel to full.");
             cmdVelTheta = 0;
             desiredCmdVelX = MAX_VEL_X;
         } else {
