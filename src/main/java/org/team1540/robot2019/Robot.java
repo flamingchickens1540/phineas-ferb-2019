@@ -182,17 +182,13 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        if (brakeTimer.hasPeriodPassed(2)) {
-            Hardware.limelight.setLeds(false);
+        if (brakeTimer.hasPeriodPassed(2) && disableBrakes) {
+            brakeTimer.stop();
+            setMechanismBrakes(false);
 
-            if (disableBrakes) {
-                brakeTimer.stop();
-                setMechanismBrakes(false);
+            logger.debug("Mechanism brakes disabled");
 
-                logger.debug("Mechanism brakes disabled");
-
-                disableBrakes = false;
-            }
+            disableBrakes = false;
         }
     }
 
