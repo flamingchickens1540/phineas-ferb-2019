@@ -56,7 +56,7 @@ public class PointDriveAngleProvider implements PointAngleProvider {
     }
 
     @Override
-    public double returnAngleError() {
+    public double returnAngleError(double defaultError) {
         if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
             goalAngle = OI.getPointDriveAngle();
         }

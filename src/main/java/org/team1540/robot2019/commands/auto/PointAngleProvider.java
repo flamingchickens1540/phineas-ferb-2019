@@ -6,5 +6,5 @@ public interface PointAngleProvider {
 
     PointControlConfig getPointControlConfig();
 
-    double returnAngleError();
+    double returnAngleError(double defaultError);
 }
