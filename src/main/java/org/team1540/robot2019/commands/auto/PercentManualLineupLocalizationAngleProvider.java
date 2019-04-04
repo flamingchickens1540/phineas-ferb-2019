@@ -145,7 +145,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     }
 
     @Override
-    public double returnAngleError() { // TODO: If speed is too large, reset similar vector tracking
+    public double returnAngleError(double defaultError) { // TODO: If speed is too large, reset similar vector tracking
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose() && Robot.elevator.getPosition() < 3) { // TODO: This should be a tuning constant
             Transform3D goal = computeGoal();
 //            if (timer != null && !timer.hasPeriodPassed(0)) {
@@ -165,7 +165,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         if (goal != null) {
             return getAngleError();
         } else {
-            return 0;
+            return defaultError;
         }
     }
 
