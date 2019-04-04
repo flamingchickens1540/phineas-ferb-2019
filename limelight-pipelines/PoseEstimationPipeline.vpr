@@ -9,7 +9,7 @@ contour_grouping:1
 contour_sort_final:6
 convexity_max:100
 convexity_min:64
-corner_approx:3.5
+corner_approx:2
 cross_a_a:1
 cross_a_x:0
 cross_a_y:0
@@ -35,7 +35,7 @@ pipeline_type:0
 red_balance:1406
 sat_max:255
 sat_min:86
-send_corners:1
+send_corners:0
 send_raw_contours:1
 solve3d:0
 solve3d_algo:0
