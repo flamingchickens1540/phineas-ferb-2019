@@ -51,6 +51,8 @@ public class Robot extends TimedRobot {
     public static TEBPlanner tebPlanner;
     public static LastValidTransformTracker lastOdomToVisionTargetTracker;
 
+    private UsbCamera cam = null;
+
     @Override
     public void robotInit() {
         // logging configuration
@@ -158,8 +160,8 @@ public class Robot extends TimedRobot {
             }
         }
 
-        if (SmartDashboard.getBoolean("EnableUSBCamera", false)) {
-            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("USBCamera", 0);
+        if ((cam == null) && SmartDashboard.getBoolean("EnableUSBCamera", false)) {
+            cam = CameraServer.getInstance().startAutomaticCapture("USBCamera", 0);
             cam.setResolution(128, 73);
             cam.setFPS(30);
         }
