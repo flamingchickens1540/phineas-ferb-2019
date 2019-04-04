@@ -94,13 +94,6 @@ public class Robot extends TimedRobot {
 
         Hardware.limelight.prepForDriverCam();
 
-        SmartDashboard.setDefaultBoolean("EnableUSBCamera", false);
-        if (SmartDashboard.getBoolean("EnableUSBCamera", false)) {
-            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("USBCamera", 0);
-            cam.setResolution(128, 73);
-            cam.setFPS(30);
-        }
-
         String distanceGuessKey = "CameraPoseCalibration/DistanceGuessInInches";
         SmartDashboard.putNumber(distanceGuessKey, 0);
         Command estimatePitch = new SimpleCommand("Estimate Camera Pitch Command", () -> {
@@ -139,6 +132,8 @@ public class Robot extends TimedRobot {
         calibrateCamera.setRunWhenDisabled(true);
         SmartDashboard.putData(calibrateCamera);
 
+        SmartDashboard.putBoolean("EnableUSBCamera", false);
+
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
     }
@@ -162,6 +157,13 @@ public class Robot extends TimedRobot {
                     .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
             }
         }
+
+        if (SmartDashboard.getBoolean("EnableUSBCamera", false)) {
+            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("USBCamera", 0);
+            cam.setResolution(128, 73);
+            cam.setFPS(30);
+        }
+        SmartDashboard.putBoolean("EnableUSBCamera", false);
 
         NetworkTableInstance.getDefault().flush();
     }
