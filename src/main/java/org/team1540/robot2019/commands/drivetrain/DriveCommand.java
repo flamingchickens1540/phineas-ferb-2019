@@ -49,9 +49,10 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
                 return 0;
             } else {
                 startLineup();
+                return lineupLocalization.returnAngleError(pointDriveAngleProvider.returnAngleError(0));
             }
         }
-        return currentAngleProvider.returnAngleError();
+        return currentAngleProvider.returnAngleError(0);
     }
 
     private void startPointDrive() {

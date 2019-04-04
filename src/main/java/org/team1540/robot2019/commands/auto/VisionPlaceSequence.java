@@ -9,7 +9,7 @@ public class VisionPlaceSequence extends CommandGroup {
     public VisionPlaceSequence() {
         addSequential(new WaitUntilCommand(() -> {
             return Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget() < 0.4
-                && Robot.drivetrain.getDriveCommand().getLineupLocalization().returnAngleError() < Math.toRadians(3);
+                && Robot.drivetrain.getDriveCommand().getLineupLocalization().returnAngleError(0) < Math.toRadians(3);
         }));
         addSequential(new AutoPlaceHatchSequenceNoDTReq());
     }
