@@ -82,7 +82,7 @@ public class Tuning {
     public static double wristDownTravelPwrThrot;
     public static double wristDownTravelBrakeThrot;
     // what's uptravel
-    public static double wristUpTravelThrot = .6;
+    public static double wristUpTravelThrot = 0.7;
     public static double wristHoldThrot = 0.05;
     public static double wristLowerTimeout = 1;
 
@@ -147,8 +147,8 @@ public class Tuning {
     static {
         //noinspection ConstantConditions
         if (Tuning.isComp) {
-            wristDownTravelPwrThrot = 0.7;
-            wristDownTravelBrakeThrot = -0.25;
+            wristDownTravelPwrThrot = 0.9;
+            wristDownTravelBrakeThrot = 0.45;
             elevatorHatchIntakePosition = 0;
         } else {
             wristDownTravelPwrThrot = 0.7;
