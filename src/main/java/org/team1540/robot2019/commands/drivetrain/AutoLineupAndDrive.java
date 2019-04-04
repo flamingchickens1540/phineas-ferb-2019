@@ -91,7 +91,7 @@ public class AutoLineupAndDrive extends PIDCommand { // TODO: Make this generic
 
     @Override
     protected final double returnPIDInput() {
-        return -lineupLocalization.returnAngleError(); // returnPIDInput expects a position, so the error must be negated
+        return -lineupLocalization.returnAngleError(0); // returnPIDInput expects a position, so the error must be negated
     }
 
     @Override
