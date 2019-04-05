@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
 
         OI.init();
 
-        ShuffleboardDisplay.init();
+        PhineasShuffleboardTab.init();
 
         SmartDashboard.putBoolean("Debug Mode", false);
 
