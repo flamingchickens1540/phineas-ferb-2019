@@ -1,6 +1,7 @@
 package org.team1540.robot2019.commands.selftests;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.apache.log4j.Logger;
 import org.team1540.rooster.util.SimpleCommand;
 
@@ -15,6 +16,7 @@ public class SelfTest extends CommandGroup {
         addSequential(new WristSelfTest());
 //        addSequential(new ElevatorSelfTest());
         addSequential(new ElevatorSelfTestEachMotor(true));
+        addSequential(new WaitCommand(0.5));
         addSequential(new ElevatorSelfTestEachMotor(false));
         addSequential(new DriveSelfTest());
         addSequential(new SimpleCommand("Print status", () -> logger.info("Robot self-test complete")));
