@@ -123,7 +123,8 @@ public class Tuning {
     public static double climberGyroD = 0;
 
     public static double climberArmsFwdLimit = 67000;
-    public static double climberStartPosLevel2 = 50000;
+    public static double climberStartPosLevel2 = 46000;
+    //    public static double climberStartPosLevel2 = 50000;
     public static double climberStartPosLevel3 = 30000;
     public static double climberBackPos = 0;
 
@@ -132,7 +133,7 @@ public class Tuning {
 
     public static double climberTolerance = 1000;
 
-    public static double axisButtonThreshold = 0.3;
+    public static double axisButtonThreshold = 0.4;
 
     // auto-lineup
     public static double drivetrainRadiusMeters = 0.305; // This is for pandora (Seems to work... hmmm) TODO: Change this

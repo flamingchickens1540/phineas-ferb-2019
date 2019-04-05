@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.Tuning;
 
 public class LiftGyroStabilizeLevel2 extends Command {
 
@@ -20,11 +19,11 @@ public class LiftGyroStabilizeLevel2 extends Command {
             Robot.climber.raiseCylinder();
         }
 
-        if (Robot.climber.getPosition() < Tuning.climberArmsFwdLimit) {
+//        if (Robot.climber.getArmsPosition() < Tuning.climberArmsFwdLimit) {
             Robot.climber.setArms(OI.getManualClimberArmsAxis());
-        } else {
-            Robot.climber.setArms(0);
-        }
+//        } else {
+//            Robot.climber.setArms(0);
+//        }
     }
 
     @Override
