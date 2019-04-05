@@ -32,7 +32,9 @@ public class IntakeCargo extends Command {
 
     @Override
     protected boolean isFinished() {
-        SmartDashboard.putNumber("PDP 6", Hardware.pdp.getCurrent(6));
+        if (Robot.debugMode) {
+            SmartDashboard.putNumber("PDP 6", Hardware.pdp.getCurrent(6));
+        }
         if (!Tuning.isComp && this.timeSinceInitialized() > 0.5 && Hardware.pdp.getCurrent(6) > MAX_CURRENT) {
             return true;
         }

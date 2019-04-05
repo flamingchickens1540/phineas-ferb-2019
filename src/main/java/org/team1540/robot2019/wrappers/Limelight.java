@@ -2,7 +2,6 @@ package org.team1540.robot2019.wrappers;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -120,27 +119,31 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
      * @param isOn the new state of the LEDs
      */
     public void setLeds(boolean isOn) {
-        limelightTable.getEntry("ledMode").setNumber(isOn ? 0 : 1);
-        NetworkTableInstance.getDefault().flush();
+        if (getLeds() != isOn) {
+            limelightTable.getEntry("ledMode").setNumber(isOn ? 0 : 1);
+            NetworkTableInstance.getDefault().flush();
+        }
     }
 
     public boolean getLeds() {
         return limelightTable.getEntry("ledMode").getDouble(1) == 0;
     }
 
-    /**
-     * Sets limelight to driver cam or vision mode.
-     *
-     * @param driverCam Whether the limelight should be in driver cam mode
-     */
-    public void setDriverCam(boolean driverCam) {
-        limelightTable.getEntry("camMode").setNumber(driverCam ? 1 : 0);
-        NetworkTableInstance.getDefault().flush();
-    }
+//    /**
+//     * Sets limelight to driver cam or vision mode.
+//     *
+//     * @param driverCam Whether the limelight should be in driver cam mode
+//     */
+//    public void setDriverCam(boolean driverCam) {
+//        limelightTable.getEntry("camMode").setNumber(driverCam ? 1 : 0);
+//        NetworkTableInstance.getDefault().flush();
+//    }
 
-    public void setPipeline(int id) {
-        limelightTable.getEntry("pipeline").setNumber(id);
-        NetworkTableInstance.getDefault().flush();
+    public void setPipeline(double id) {
+        if (getPipeline() != id) {
+            limelightTable.getEntry("pipeline").setNumber(id);
+            NetworkTableInstance.getDefault().flush();
+        }
     }
 
     public long getPipeline() {
@@ -151,15 +154,15 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
 
     public void prepForVision() {
         setLeds(true);
-        setDriverCam(false);
+//        setDriverCam(false);
     }
 
-    public void prepForDriverCam() {
-        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", false)) {
-            setLeds(false);
-        }
+//    public void prepForDriverCam() {
+//        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", false)) {
+//            setLeds(false);
+//        }
 //        setDriverCam(true);
-    }
+//    }
 
     /**
      * Attempts to get the published SolvePNP transform from the vision target to the limelight (not the other way around).
