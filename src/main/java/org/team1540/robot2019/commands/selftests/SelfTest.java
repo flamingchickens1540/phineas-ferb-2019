@@ -18,7 +18,8 @@ public class SelfTest extends CommandGroup {
         addSequential(new ElevatorSelfTestEachMotor(true));
         addSequential(new WaitCommand(0.5));
         addSequential(new ElevatorSelfTestEachMotor(false));
-        addSequential(new DriveSelfTest());
+        addSequential(new DriveSelfTest(true));
+        addSequential(new DriveSelfTest(false));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Robot self-test complete")));
     }
 }
