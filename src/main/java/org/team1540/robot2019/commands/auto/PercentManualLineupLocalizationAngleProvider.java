@@ -41,8 +41,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private static double D = 1;
 
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
-//    public static double ANGLE_OFFSET = 0; // Degrees offset from center of target
-//    public static double ANGLE_OFFSET = Math.toRadians(5.5); // Degrees offset from center of target
 
 
     private Transform3D goal;
@@ -102,7 +100,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         MAX = SmartDashboard.getNumber("PercentLineupLocalization/MAX_VEL_THETA", MAX);
         MIN = SmartDashboard.getNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN);
         DEADZONE = SmartDashboard.getNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE);
-//        ANGLE_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
         HATCH_GRAB_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_GRAB_X_OFFSET", HATCH_GRAB_X_OFFSET);
         HATCH_GRAB_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_GRAB_Y_OFFSET", HATCH_GRAB_Y_OFFSET);
         HATCH_PLACE_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_PLACE_X_OFFSET", HATCH_PLACE_X_OFFSET);
@@ -111,10 +108,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         M = SmartDashboard.getNumber("PercentLineupLocalization/M", M);
         Z = SmartDashboard.getNumber("PercentLineupLocalization/Z", Z);
         POINT_DEADZONE = SmartDashboard.getNumber("PercentLineupLocalization/POINT_DEADZONE", POINT_DEADZONE);
-
-//        this.getPIDController().setP(P);
-//        this.getPIDController().setI(I);
-//        this.getPIDController().setD(D);
 
         goal = null;
 
