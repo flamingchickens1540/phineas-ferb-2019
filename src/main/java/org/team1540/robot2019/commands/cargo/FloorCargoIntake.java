@@ -8,7 +8,7 @@ import org.team1540.robot2019.commands.wrist.WristDown;
 public class FloorCargoIntake extends CommandGroup {
 
     public FloorCargoIntake() {
-        addParallel(new StowHatchMech());
+        addSequential(new StowHatchMech());
         addSequential(new MoveElevatorToZero());
         addParallel(new IntakeCargo());
         addSequential(new WristDown());
