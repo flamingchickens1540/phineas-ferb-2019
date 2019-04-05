@@ -5,12 +5,24 @@ import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 
-public class ClimbLevelTwo extends CommandGroup {
+public class PrepClimbLevelTwo extends CommandGroup {
 
-    public ClimbLevelTwo() {
+    public static boolean hasPrepLvl2 = false;
+
+    public PrepClimbLevelTwo() {
         addSequential(new MoveElevatorToPosition(Tuning.elevatorClimbPosition));
         addSequential(new MoveArmsToPosition(Tuning.climberStartPosLevel2));
         addSequential(new MoveElevatorToZero());
-        addSequential(new LiftGyroStabilizeLevel2());
+//        addSequential(new LiftGyroStabilizeLevel2());
+    }
+
+    @Override
+    protected void end() {
+        hasPrepLvl2 = true;
+    }
+
+    @Override
+    protected void interrupted() {
+        end();
     }
 }

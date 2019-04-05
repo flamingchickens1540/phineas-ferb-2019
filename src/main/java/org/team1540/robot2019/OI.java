@@ -14,7 +14,8 @@ import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
 import org.team1540.robot2019.commands.cargo.LoadingStationCargoIntake;
 import org.team1540.robot2019.commands.climber.ClimbLevelThree;
-import org.team1540.robot2019.commands.climber.ClimbLevelTwo;
+import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel2;
+import org.team1540.robot2019.commands.climber.PrepClimbLevelTwo;
 import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
@@ -24,8 +25,6 @@ import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.WiggleAndGrab;
-import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
-import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
@@ -57,9 +56,9 @@ public class OI {
 
     // - Intake
     private static Button floorIntakeButton = copilot.getButton(XboxButton.A);
-    private static Button cancelIntakeButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
     private static Button ejectButton = copilot.getButton(XboxButton.B);
-    private static Button wristRecoverButton = copilot.getButton(XboxButton.LEFT_PRESS);
+
+    private static Button wristRecoverButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
 
     // - Hatch
     private static Button prepGetHatchButton = copilot.getButton(XboxButton.X);
@@ -67,13 +66,14 @@ public class OI {
     private static Button grabHatchButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
     private static Button placeHatchButton = copilot.getButton(XboxButton.Y);
     private static Button stowHatchButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
-    private static Button hatchSimpleForwardButton = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold);
-    private static Button hatchSimpleBackwardButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
+//    private static Button hatchSimpleForwardButton = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold);
+//    private static Button hatchSimpleBackwardButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
 
     // - Climb
     private static Button climbingSafety = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
     private static Button climbLevel3Button = copilot.getButton(XboxButton.RB); // + safety
-    private static Button climbLevel2Button = copilot.getButton(XboxButton.LB); // + safety
+    private static Button prepClimbLevel2Button = copilot.getButton(XboxButton.LB); // + safety
+    private static Button climbLevel2Button = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold); // + safety
     private static Button climberCylinderUp = copilot.getButton(XboxButton.BACK);
 
     // Driver
@@ -128,8 +128,8 @@ public class OI {
         // Intake cargo
         Command floorIntakeCommand = new FloorCargoIntake();
         floorIntakeButton.whenPressed(floorIntakeCommand);
-        cancelIntakeButton.cancelWhenPressed(floorIntakeCommand);
-        cancelIntakeButton.whenPressed(new MoveElevatorToZero());
+//        cancelIntakeButton.cancelWhenPressed(floorIntakeCommand);
+//        cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
         // Wrist
         wristRecoverButton.whileHeld(new RecoverWrist());
@@ -148,8 +148,8 @@ public class OI {
         grabHatchButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
 
-        hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
-        hatchSimpleBackwardButton.whenPressed(new RetractHatchMech());
+//        hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
+//        hatchSimpleBackwardButton.whenPressed(new RetractHatchMech());
 
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
@@ -173,7 +173,8 @@ public class OI {
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
-        climbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelTwo()));
+        prepClimbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new PrepClimbLevelTwo()));
+        climbLevel2Button.whenPressed(new SimpleConditionalCommand(() -> PrepClimbLevelTwo.hasPrepLvl2, new LiftGyroStabilizeLevel2()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
         // Point drive

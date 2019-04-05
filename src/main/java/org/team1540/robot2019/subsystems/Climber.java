@@ -48,14 +48,14 @@ public class Climber extends Subsystem {
         setDefaultCommand(new JoystickClimberArms());
     }
 
-    public double getPosition() {
+    public double getArmsPosition() {
         return climberArmLeft.getSelectedSensorPosition();
     }
 
     @Override
     public void periodic() {
         if (Robot.debugMode) {
-            posEntry.forceSetNumber(getPosition());
+            posEntry.forceSetNumber(getArmsPosition());
         }
     }
 

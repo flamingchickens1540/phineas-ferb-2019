@@ -25,7 +25,7 @@ public class MoveArmsToPosition extends Command {
 
     @Override
     protected boolean isFinished() {
-        return Math.abs(Robot.climber.getPosition() - setpoint)
+        return Math.abs(Robot.climber.getArmsPosition() - setpoint)
             < Tuning.climberTolerance;
     }
 }
