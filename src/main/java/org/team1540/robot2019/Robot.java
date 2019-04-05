@@ -2,7 +2,6 @@ package org.team1540.robot2019;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -90,11 +89,11 @@ public class Robot extends TimedRobot {
 
         PhineasShuffleboardTab.init();
 
-        SmartDashboard.putBoolean("Debug Mode", false);
+        SmartDashboard.putBoolean("Debug Mode", SmartDashboard.getBoolean("Debug Mode", false));
 
         SmartDashboard.putBoolean("EnableCompressor", true);
 
-        Hardware.limelight.prepForDriverCam();
+//        Hardware.limelight.prepForDriverCam();
 
         String distanceGuessKey = "CameraPoseCalibration/DistanceGuessInInches";
         SmartDashboard.putNumber(distanceGuessKey, 0);
@@ -167,7 +166,7 @@ public class Robot extends TimedRobot {
         }
         SmartDashboard.putBoolean("EnableUSBCamera", false);
 
-        NetworkTableInstance.getDefault().flush();
+//        NetworkTableInstance.getDefault().flush();
     }
 
     @Override

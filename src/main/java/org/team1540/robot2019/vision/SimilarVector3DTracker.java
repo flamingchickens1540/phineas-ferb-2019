@@ -3,6 +3,7 @@ package org.team1540.robot2019.vision;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
+import org.team1540.robot2019.Robot;
 
 public class SimilarVector3DTracker {
 
@@ -19,7 +20,9 @@ public class SimilarVector3DTracker {
             return true;
         }
         double distance = lastVector.distance(newTransform);
-        SmartDashboard.putNumber("Debug/SimilarVector3DTracker/Distance", distance);
+        if (Robot.debugMode) {
+            SmartDashboard.putNumber("Debug/SimilarVector3DTracker/Distance", distance);
+        }
         if (distance < maxDistance) {
             this.lastVector = newTransform;
             return true;

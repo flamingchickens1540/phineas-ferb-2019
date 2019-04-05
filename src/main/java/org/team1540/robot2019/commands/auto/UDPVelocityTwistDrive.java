@@ -1,6 +1,5 @@
 package org.team1540.robot2019.commands.auto;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.IOException;
@@ -63,15 +62,15 @@ public class UDPVelocityTwistDrive extends Command {
 //        twist2DInput.setTwist(cmdVel); // TODO: Test closed loop
 //        pipeline.execute();
 
-//        if (Robot.debugMode) {
+        if (Robot.debugMode) {
             double leftSetpoint = (cmdVel.getX() - cmdVel.getOmega() * Tuning.drivetrainRadiusMeters);
             double rightSetpoint = (cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadiusMeters);
         SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint);
         SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint);
             SmartDashboard.putNumber("debug-velocity-left", Robot.drivetrain.getLeftVelocityMetersPerSecond());
             SmartDashboard.putNumber("debug-velocity-right", Robot.drivetrain.getRightVelocityMetersPerSecond());
-            NetworkTableInstance.getDefault().flush();
-//        }
+//            NetworkTableInstance.getDefault().flush();
+        }
     }
 
     @Override
@@ -79,8 +78,10 @@ public class UDPVelocityTwistDrive extends Command {
         double distanceError = Robot.odometry.getOdomToBaseLink().toTransform2D().getPositionVector().distance(Robot.tebPlanner.getGoal().getPositionVector()); // TODO: This should use javaTF
         double angleError = TrigUtils.signedAngleError(Hardware.navx.getYawRadians(), Robot.tebPlanner.getGoal().getTheta());
 
-        SmartDashboard.putNumber("debug-distanceError", distanceError);
-        SmartDashboard.putNumber("debug-angleError", Math.toDegrees(angleError));
+        if (Robot.debugMode) {
+            SmartDashboard.putNumber("debug-distanceError", distanceError);
+            SmartDashboard.putNumber("debug-angleError", Math.toDegrees(angleError));
+        }
         return distanceError < 0.1 && Math.abs(angleError) < Math.toRadians(10);
     }
 

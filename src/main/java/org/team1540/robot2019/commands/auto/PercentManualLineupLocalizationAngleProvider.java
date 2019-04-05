@@ -210,7 +210,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             return Double.POSITIVE_INFINITY;
         }
         double distanceToVisionTarget = driveOdometry.getOdomToBaseLink().toTransform2D().getPositionVector().distance(goal.toTransform2D().getPositionVector());
-        SmartDashboard.putNumber("DistanceToTarget", distanceToVisionTarget);
+        if (Robot.debugMode) {
+            SmartDashboard.putNumber("DistanceToTarget", distanceToVisionTarget);
+        }
         return distanceToVisionTarget;
     }
 
