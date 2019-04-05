@@ -13,6 +13,10 @@ public class MoveArmsToPosition extends Command {
         setpoint = pos;
     }
 
+    public void setPosition(double pos) {
+        setpoint = pos;
+    }
+
     @Override
     protected void initialize() {
         Robot.climber.setArmPosition(setpoint);
