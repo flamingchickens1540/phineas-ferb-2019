@@ -24,8 +24,6 @@ import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.hatch.WiggleAndGrab;
-import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
-import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
@@ -148,8 +146,8 @@ public class OI {
         grabHatchButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
 
-        hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
-        hatchSimpleBackwardButton.whenPressed(new RetractHatchMech());
+//        hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
+//        hatchSimpleBackwardButton.whenPressed(new RetractHatchMech());
 
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
