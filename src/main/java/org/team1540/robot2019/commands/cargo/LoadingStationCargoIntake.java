@@ -5,11 +5,13 @@ import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
+import org.team1540.robot2019.commands.wrist.WristUp;
 
 public class LoadingStationCargoIntake extends CommandGroup {
 
     public LoadingStationCargoIntake() {
-        addParallel(new StowHatchMech());
+        addSequential(new StowHatchMech());
+        addSequential(new WristUp());
         addParallel(new MoveElevatorToPosition(Tuning.elevatorLoadingStationPosition));
         addSequential(new IntakeCargo());
         addSequential(new MoveElevatorToZero());
