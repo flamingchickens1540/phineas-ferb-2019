@@ -17,7 +17,7 @@ public class SelfTest extends CommandGroup {
 //        addSequential(new ElevatorSelfTest());
         addSequential(new ElevatorSelfTestEachMotor(true));
         addSequential(new WaitCommand(0.5));
-        addSequential(new ElevatorSelfTestEachMotor(false));
+        addSequential(new ElevatorSelfTestEachMotor(false)); // TODO: This doesn't work-- b/c follower???
         addSequential(new DriveSelfTest(true));
         addSequential(new DriveSelfTest(false));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Robot self-test complete")));
