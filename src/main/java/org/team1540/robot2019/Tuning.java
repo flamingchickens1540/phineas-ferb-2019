@@ -147,7 +147,7 @@ public class Tuning {
     static {
         //noinspection ConstantConditions
         if (Tuning.isComp) {
-            wristDownTravelPwrThrot = 0.9;
+            wristDownTravelPwrThrot = 1.0;
             wristDownTravelBrakeThrot = 0.45;
             elevatorHatchIntakePosition = 0;
         } else {
