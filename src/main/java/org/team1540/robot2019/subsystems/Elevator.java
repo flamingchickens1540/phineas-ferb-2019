@@ -58,6 +58,16 @@ public class Elevator extends Subsystem {
         elevatorA.set(throttle);
     }
 
+
+    public void setRaw(double throttle1, double throttle2) {
+        elevatorA.set(throttle1);
+        elevatorB.set(throttle2);
+    }
+
+    public void joinFollowers() {
+        elevatorB.follow(elevatorA, Tuning.invertElevatorB);
+    }
+
     public double getVelocity() {
         return -elevatorA.getEncoder().getVelocity() * (elevatorInPerRotation / 60);
     }
