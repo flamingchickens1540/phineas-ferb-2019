@@ -8,10 +8,10 @@ import org.team1540.rooster.util.SimpleLoopCommand;
 
 public class WristUpOrHold extends ConditionalCommand {
 
-    private static final Logger logger = Logger.getLogger(WristUp.class);
+    private static final Logger logger = Logger.getLogger(WristUpOrHold.class);
 
     public WristUpOrHold() {
-        super(new WristUp(),
+        super(new SimpleMoveWristUp(),
             new SimpleLoopCommand("Hold Wrist", () -> Robot.wrist.set(-Tuning.wristHoldThrot),
                 Robot.wrist));
     }
