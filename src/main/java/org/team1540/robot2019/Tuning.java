@@ -123,7 +123,7 @@ public class Tuning {
     public static double climberGyroD = 0;
 
     public static double climberArmsFwdLimit = 67000;
-    public static double climberStartPosLevel2 = 46000;
+    public static double climberStartPosLevel2 = 42000;
     //    public static double climberStartPosLevel2 = 50000;
     public static double climberStartPosLevel3 = 30000;
     public static double climberBackPos = 0;
