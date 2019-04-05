@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import org.team1540.robot2019.Hardware;
+import org.team1540.robot2019.PhineasShuffleboardTab;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.ShuffleboardDisplay;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel3;
 import org.team1540.robot2019.subsystems.Climber;
@@ -35,7 +35,7 @@ public class ClimberTuningRobot extends TimedRobot {
         Hardware.initDrive();
         Hardware.initPressureSensor();
 
-        ShuffleboardDisplay.init();
+        PhineasShuffleboardTab.init();
 
         Robot.climber = new Climber();
         Robot.elevator = new Elevator();
