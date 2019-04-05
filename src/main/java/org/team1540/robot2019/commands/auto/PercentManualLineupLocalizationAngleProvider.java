@@ -17,7 +17,7 @@ import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization
 public class PercentManualLineupLocalizationAngleProvider implements PointAngleProvider {
 
     private static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
-    private static final double MAX_ACCURATE_POSE_DISTANCE = 2.0;
+    private static final double MAX_ACCURATE_POSE_DISTANCE = 1.3;
     private static double HATCH_GRAB_X_OFFSET = -0.05;
     private static double HATCH_GRAB_Y_OFFSET = 0.01;
     private static double HATCH_PLACE_X_OFFSET = -0.1;
@@ -151,7 +151,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             if (similarVectorTracker.isSimilarTransform(goal.getPosition())) {
                 this.goal = goal;
             } else {
-//                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
+                logger.debug("Ignoring pose estimate- varies by more than the tolerance!");
             }
         }
 
