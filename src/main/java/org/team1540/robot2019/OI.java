@@ -46,6 +46,7 @@ public class OI {
     // Joysticks
     private static ChickenXboxController driver = new ChickenXboxController(0);
     private static ChickenXboxController copilot = new ChickenXboxController(1);
+    private static ChickenXboxController tester = new ChickenXboxController(2);
 
     // Copilot
     // - Elevator
@@ -104,6 +105,7 @@ public class OI {
     private static Button nextRightTarget = driver.getButton(XboxButton.RB);
 
     // - Temporary
+    private static Button climbSolToggle = tester.getButton(XboxButton.RB);
 //    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.asdfadf);
 //    private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
 //    private static Button testPlaceHatchInLoadingStationButton = driver.getButton(DPadAxis.UP);
@@ -149,7 +151,6 @@ public class OI {
         placeHatchButton.whenPressed(new PlaceHatchSequence());
         VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
         visionPlaceHatchLeft.whileHeld(new SimpleConditionalCommand(visionPlaceHatchRight::get, visionPlaceSequence));
-        visionPlaceHatchRight.whileHeld(new SimpleConditionalCommand(visionPlaceHatchLeft::get, visionPlaceSequence));
 
         grabThenRetractButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
@@ -160,6 +161,13 @@ public class OI {
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
         // Temporary
+        climbSolToggle.whenPressed(new SimpleCommand("", () -> {
+            if (Robot.climber.isCylLowered()) {
+                Robot.climber.raiseCylinder();
+            } else {
+                Robot.climber.lowerCylinder();
+            }
+        }));
 //        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
 //        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
 //

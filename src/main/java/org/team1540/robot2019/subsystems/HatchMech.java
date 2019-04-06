@@ -10,7 +10,7 @@ import org.team1540.robot2019.Hardware;
 
 public class HatchMech extends Subsystem {
 
-    private static final Logger logger = Logger.getLogger(Wrist.class);
+    private static final Logger logger = Logger.getLogger(HatchMech.class);
 
     private volatile boolean extendFlag = false;
 

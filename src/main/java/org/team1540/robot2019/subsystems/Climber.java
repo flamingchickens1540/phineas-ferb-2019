@@ -10,21 +10,30 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.climber.JoystickClimberArms;
 
 public class Climber extends Subsystem {
 
+    private static final Logger logger = Logger.getLogger(Climber.class);
+
     private NetworkTable table = NetworkTableInstance.getDefault().getTable("climber");
     private NetworkTableEntry posEntry = table.getEntry("pos");
 
     public void lowerCylinder() {
         climberCylinder.set(Value.kReverse);
+        logger.debug("Lowering cylinder");
     }
 
     public void raiseCylinder() {
         climberCylinder.set(Value.kForward);
+        logger.debug("Raising cylinder");
+    }
+
+    public boolean isCylLowered() {
+        return climberCylinder.get() == Value.kReverse;
     }
 
     public void setArms(double value) {
