@@ -151,7 +151,7 @@ public class OI {
         placeHatchButton.whenPressed(new PlaceHatchSequence());
 
         VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
-        prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> {
+        prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> { // TODO: Replace with simpleButton
             if (climbLevel3Button.get()) {
                 visionPlaceSequence.start();
             }
