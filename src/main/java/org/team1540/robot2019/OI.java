@@ -13,8 +13,9 @@ import org.team1540.robot2019.commands.cargo.BackThenDown;
 import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
 import org.team1540.robot2019.commands.cargo.LoadingStationCargoIntake;
-import org.team1540.robot2019.commands.climber.ClimbLevelThree;
 import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel2;
+import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel3;
+import org.team1540.robot2019.commands.climber.PrepClimbLevelThree;
 import org.team1540.robot2019.commands.climber.PrepClimbLevelTwo;
 import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
@@ -193,13 +194,20 @@ public class OI {
 //        autoGrabButton.whenPressed(new VisionGrabSequence());
 
         // Climb
-        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
+        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new PrepClimbLevelThree()));
         prepClimbLevel2Button.whenPressed(new SimpleCommand("", () -> {
             if (climbingSafety.get()) {
                 new PrepClimbLevelTwo().start();
             }
         }));
-        climbLevel2Button.whenPressed(new SimpleConditionalCommand(() -> PrepClimbLevelTwo.hasPrepLvl2, new LiftGyroStabilizeLevel2()));
+
+        climbLevel2Button.whenPressed(new SimpleCommand("", () -> {
+            if (PrepClimbLevelTwo.hasPrepLvl2) {
+                new LiftGyroStabilizeLevel2().start();
+            } else if (PrepClimbLevelThree.hasPrepLvl3) {
+                new LiftGyroStabilizeLevel3().start();
+            }
+        }));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
         // Point drive
