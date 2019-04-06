@@ -61,9 +61,9 @@ public class OI {
     private static Button wristRecoverButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
 
     // - Hatch
-    private static Button prepGetHatchButton = copilot.getButton(XboxButton.X);
+    private static Button sensorGrabHatchButton = copilot.getButton(XboxButton.X);
     private static Button prepGetHatchFloorButton = copilot.getButton(XboxButton.START);
-    private static Button grabHatchButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
+    private static Button grabThenRetractButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
     private static Button placeHatchButton = copilot.getButton(XboxButton.Y);
     private static Button stowHatchButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
 //    private static Button hatchSimpleForwardButton = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold);
@@ -75,6 +75,9 @@ public class OI {
     private static Button prepClimbLevel2Button = copilot.getButton(XboxButton.LB); // + safety
     private static Button climbLevel2Button = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold); // + safety
     private static Button climberCylinderUp = copilot.getButton(XboxButton.BACK);
+
+    private static Button visionPlaceHatchLeft = copilot.getButton(XboxButton.LB);
+    private static Button visionPlaceHatchRight = copilot.getButton(XboxButton.RB);
 
     // Driver
     // - Auto-align
@@ -142,10 +145,13 @@ public class OI {
 
         // Hatch
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
-        prepGetHatchButton.whenPressed(sensorGrabHatchSequence);
+        sensorGrabHatchButton.whenPressed(sensorGrabHatchSequence);
         placeHatchButton.whenPressed(new PlaceHatchSequence());
+        VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
+        visionPlaceHatchLeft.whileHeld(new SimpleConditionalCommand(visionPlaceHatchRight::get, visionPlaceSequence));
+        visionPlaceHatchRight.whileHeld(new SimpleConditionalCommand(visionPlaceHatchLeft::get, visionPlaceSequence));
 
-        grabHatchButton.whenPressed(new GrabThenRetract());
+        grabThenRetractButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
 
 //        hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
