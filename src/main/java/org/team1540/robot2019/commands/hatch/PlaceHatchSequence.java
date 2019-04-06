@@ -18,7 +18,7 @@ public class PlaceHatchSequence extends CommandGroup {
         addSequential(new ExtendHatchMech());
         addSequential(new SimpleCommand("Drive", () -> new TankDriveForTimePercent(0.3, 0.3).start()));
         addSequential(new TimedCommand(0.3));
-        addSequential(new WaitCommand(0.2));
+        addSequential(new WaitCommand(0.1));
         addSequential(new ReleaseHatch());
         addSequential(new WaitCommand(0.1));
         addSequential(new RetractHatchMech());
