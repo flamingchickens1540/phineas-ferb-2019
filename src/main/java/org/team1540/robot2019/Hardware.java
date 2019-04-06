@@ -87,6 +87,14 @@ public class Hardware {
 
     public static Compressor compressor;
 
+    // temp
+    static double returnPressureSensorValue() {
+        if (Hardware.pressureSensor == null) {
+            return 0;
+        }
+        return 50 * (Hardware.pressureSensor.getVoltage() - 0.5);
+    }
+
     static void initAll() {
         logger.info("Initializing robot hardware...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds

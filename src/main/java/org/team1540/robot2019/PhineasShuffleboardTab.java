@@ -30,7 +30,7 @@ public class PhineasShuffleboardTab {
 
         pressureEntry = tab.add("System Pressure", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withProperties(Map.of("Min", 0, "Max", 120))
+            .withProperties(Map.of("Min", 0, "Max", 150))
             .withPosition(0, 0)
             .withSize(2, 2)
             .getEntry();
@@ -50,7 +50,7 @@ public class PhineasShuffleboardTab {
     }
 
     private static void update() {
-        pressureEntry.forceSetNumber(50 * (Hardware.pressureSensor.getVoltage() - 0.5));
+        pressureEntry.forceSetNumber(Hardware.returnPressureSensorValue());
         pointDriveFakeGyro.setAngle(180 - Math.toDegrees(OI.getPointDriveAngle()));
     }
 }
