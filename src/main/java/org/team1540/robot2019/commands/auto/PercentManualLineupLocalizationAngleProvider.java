@@ -19,8 +19,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
     private static final double MAX_ACCURATE_POSE_DISTANCE = 1.3;
 
-    private static double BALL_PLACE_X_OFFSET = -0.1;
-    private static double BALL_PLACE_Y_OFFSET = 0.003;
+    private static double BALL_CARGOSHIP_PLACE_X_OFFSET = -0.1;
+    private static double BALL_CARGOSHIP_PLACE_Y_OFFSET = 0.003;
+    private static double BALL_ROCKET_PLACE_Y_OFFSET = 0.003;
+    private static double BALL_ROCKET_PLACE_X_OFFSET = -0.1;
     private static double HATCH_GRAB_X_OFFSET = -0.05;
     private static double HATCH_GRAB_Y_OFFSET = 0.01;
     private static double HATCH_PLACE_X_OFFSET = -0.1;
@@ -72,8 +74,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         SmartDashboard.putNumber("PercentLineupLocalization/HATCH_GRAB_Y_OFFSET", HATCH_GRAB_Y_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/HATCH_PLACE_X_OFFSET", HATCH_PLACE_X_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/HATCH_PLACE_Y_OFFSET", HATCH_PLACE_Y_OFFSET);
-        SmartDashboard.putNumber("PercentLineupLocalization/BALL_PLACE_X_OFFSET", BALL_PLACE_X_OFFSET);
-        SmartDashboard.putNumber("PercentLineupLocalization/BALL_PLACE_Y_OFFSET", BALL_PLACE_Y_OFFSET);
+        SmartDashboard.putNumber("PercentLineupLocalization/BALL_CARGOSHIP_PLACE_X_OFFSET", BALL_CARGOSHIP_PLACE_X_OFFSET);
+        SmartDashboard.putNumber("PercentLineupLocalization/BALL_CARGOSHIP_PLACE_Y_OFFSET", BALL_CARGOSHIP_PLACE_Y_OFFSET);
+        SmartDashboard.putNumber("PercentLineupLocalization/BALL_ROCKET_PLACE_X_OFFSET", BALL_ROCKET_PLACE_X_OFFSET);
+        SmartDashboard.putNumber("PercentLineupLocalization/BALL_ROCKET_PLACE_Y_OFFSET", BALL_ROCKET_PLACE_Y_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/A", A);
         SmartDashboard.putNumber("PercentLineupLocalization/M", M);
         SmartDashboard.putNumber("PercentLineupLocalization/Z", Z);
@@ -109,8 +113,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         HATCH_GRAB_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_GRAB_Y_OFFSET", HATCH_GRAB_Y_OFFSET);
         HATCH_PLACE_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_PLACE_X_OFFSET", HATCH_PLACE_X_OFFSET);
         HATCH_PLACE_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/HATCH_PLACE_Y_OFFSET", HATCH_PLACE_Y_OFFSET);
-        BALL_PLACE_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/BALL_PLACE_X_OFFSET", BALL_PLACE_X_OFFSET);
-        BALL_PLACE_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/BALL_PLACE_Y_OFFSET", BALL_PLACE_Y_OFFSET);
+        BALL_CARGOSHIP_PLACE_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/BALL_CARGOSHIP_PLACE_X_OFFSET", BALL_CARGOSHIP_PLACE_X_OFFSET);
+        BALL_CARGOSHIP_PLACE_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/BALL_CARGOSHIP_PLACE_Y_OFFSET", BALL_CARGOSHIP_PLACE_Y_OFFSET);
+        BALL_ROCKET_PLACE_X_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/BALL_ROCKET_PLACE_X_OFFSET", BALL_ROCKET_PLACE_X_OFFSET);
+        BALL_ROCKET_PLACE_Y_OFFSET = SmartDashboard.getNumber("PercentLineupLocalization/BALL_ROCKET_PLACE_Y_OFFSET", BALL_ROCKET_PLACE_Y_OFFSET);
         A = SmartDashboard.getNumber("PercentLineupLocalization/A", A);
         M = SmartDashboard.getNumber("PercentLineupLocalization/M", M);
         Z = SmartDashboard.getNumber("PercentLineupLocalization/Z", Z);
@@ -123,6 +129,8 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }
 
+    public boolean isHatchMode = true;
+
     public void enableHatchModeForNextCycle() {
         logger.debug("Hatch mode!");
         long pipeline = Hardware.limelight.getPipeline();
@@ -131,6 +139,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         }
         Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.HATCH_TARGET_HEIGHT);
         similarVectorTracker.reset();
+        isHatchMode = true;
     }
 
     public void enableRocketBallModeForNextCycle() {
@@ -138,6 +147,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         Hardware.limelight.setPipeline(1);
         Robot.deepSpaceVisionTargetLocalization.setPlaneHeight(RobotMap.ROCKET_BALL_TARGET_HEIGHT);
         similarVectorTracker.reset();
+        isHatchMode = false;
     }
 
     @Override
@@ -178,7 +188,11 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         Transform3D partialGoal = driveOdometry.getOdomToBaseLink()
             .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget());
         if (Robot.intake.hasBall()) {
-            partialGoal = partialGoal.add(new Transform3D(BALL_PLACE_X_OFFSET, BALL_PLACE_Y_OFFSET, 0));
+            if (isHatchMode) {
+                partialGoal = partialGoal.add(new Transform3D(BALL_CARGOSHIP_PLACE_X_OFFSET, BALL_CARGOSHIP_PLACE_Y_OFFSET, 0));
+            } else {
+                partialGoal = partialGoal.add(new Transform3D(BALL_ROCKET_PLACE_X_OFFSET, BALL_ROCKET_PLACE_Y_OFFSET, 0));
+            }
         } else if (Robot.hatch.isRetracted()) {
             partialGoal = partialGoal.add(new Transform3D(HATCH_PLACE_X_OFFSET, HATCH_PLACE_Y_OFFSET, 0));
         } else {
