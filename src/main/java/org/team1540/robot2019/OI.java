@@ -82,7 +82,7 @@ public class OI {
 
     // Driver
     // - Auto-align
-    private static Button highTargetButton = driver.getButton(XboxButton.A);
+//    private static Button highTargetButton = copilot.getButton(XboxAxis.RIGHT_TRIG, -Tuning.axisButtonThreshold);
 
     private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
     private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
@@ -229,7 +229,8 @@ public class OI {
         rightFilterButton.whenReleased(new SwitchFilterButton(0));
 
         // High vision target
-        highTargetButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
+        grabThenRetractButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
+        grabThenRetractButton.whenReleased(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableHatchModeForNextCycle));
 
         // Flash LEDs
         strobeRedBlueButton.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
