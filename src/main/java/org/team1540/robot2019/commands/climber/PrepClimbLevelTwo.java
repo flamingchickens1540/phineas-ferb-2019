@@ -31,6 +31,7 @@ public class PrepClimbLevelTwo extends CommandGroup {
     @Override
     protected void end() {
         hasPrepLvl2 = true;
+        PrepClimbLevelThree.hasPrepLvl3 = false;
     }
 
     @Override
