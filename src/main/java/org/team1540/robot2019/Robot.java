@@ -2,6 +2,7 @@ package org.team1540.robot2019;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -143,7 +144,11 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         Scheduler.getInstance().run();
 
-        debugMode = SmartDashboard.getBoolean("Debug Mode", false);
+        if (DriverStation.getInstance().isFMSAttached()) {
+            Logger.getRootLogger().setLevel(Level.WARN);
+        } else {
+            Logger.getRootLogger().setLevel(Level.DEBUG);
+        }
 
         if (debugMode) {
             odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
