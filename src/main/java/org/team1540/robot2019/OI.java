@@ -77,8 +77,8 @@ public class OI {
     private static Button climbLevel2Button = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold); // + safety
     private static Button climberCylinderUp = copilot.getButton(XboxButton.BACK);
 
-    private static Button visionPlaceHatchLeft = copilot.getButton(XboxButton.LB);
-    private static Button visionPlaceHatchRight = copilot.getButton(XboxButton.RB);
+//    private static Button visionPlaceHatchLeft = copilot.getButton(XboxButton.LB);
+//    private static Button visionPlaceHatchRight = copilot.getButton(XboxButton.RB);
 
     // Driver
     // - Auto-align
@@ -149,8 +149,11 @@ public class OI {
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
         sensorGrabHatchButton.whenPressed(sensorGrabHatchSequence);
         placeHatchButton.whenPressed(new PlaceHatchSequence());
-        VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
-        visionPlaceHatchLeft.whileHeld(new SimpleConditionalCommand(visionPlaceHatchRight::get, visionPlaceSequence));
+
+//        VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
+//        visionPlaceHatchLeft.whileHeld(new SimpleConditionalCommand(visionPlaceHatchRight::get, visionPlaceSequence));
+//        visionPlaceHatchLeft.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
+//        visionPlaceHatchRight.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
 
         grabThenRetractButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
