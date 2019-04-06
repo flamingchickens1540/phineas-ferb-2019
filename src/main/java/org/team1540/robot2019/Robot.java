@@ -214,6 +214,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
+        compressorPeriodic();
     }
 
     @Override
@@ -234,6 +235,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        compressorPeriodic();
+    }
+
+    private void compressorPeriodic() {
         if (SmartDashboard.getBoolean("EnableCompressor", true)) {
             if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
                 && (Robot.climber.getCurrentCommand() == null)) {
@@ -241,21 +246,17 @@ public class Robot extends TimedRobot {
                     logger.debug("Stopping compressor because elevator is up");
                     Hardware.compressor.stop();
                 }
-            } else if (!Hardware.compressor.getClosedLoopControl()) {
-                logger.debug("Restarting compressor");
-                Hardware.compressor.start();
+            } else {
+//                Hardware.compressor.start();
+                if (Hardware.returnPressureSensorValue() > 115) {
+                    Hardware.compressor.stop();
+                } else if (Hardware.returnPressureSensorValue() < 105) {
+                    Hardware.compressor.start();
+                }
             }
         } else {
             Hardware.compressor.stop();
         }
-    }
-
-    @Override
-    public void testInit() {
-    }
-
-    @Override
-    public void testPeriodic() {
     }
 
     private void setMechanismBrakes(boolean b) {
