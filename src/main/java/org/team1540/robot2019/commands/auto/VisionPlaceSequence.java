@@ -28,4 +28,9 @@ public class VisionPlaceSequence extends CommandGroup {
     protected void end() {
         logger.debug("End");
     }
+
+    @Override
+    protected void interrupted() {
+        end();
+    }
 }

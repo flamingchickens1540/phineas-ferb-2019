@@ -150,10 +150,14 @@ public class OI {
         sensorGrabHatchButton.whenPressed(sensorGrabHatchSequence);
         placeHatchButton.whenPressed(new PlaceHatchSequence());
 
-//        VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
-//        visionPlaceHatchLeft.whileHeld(new SimpleConditionalCommand(visionPlaceHatchRight::get, visionPlaceSequence));
-//        visionPlaceHatchLeft.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
-//        visionPlaceHatchRight.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
+        VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
+        prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> {
+            if (climbLevel3Button.get()) {
+                visionPlaceSequence.start();
+            }
+        }));
+        prepClimbLevel2Button.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
+        climbLevel3Button.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
 
         grabThenRetractButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
@@ -190,7 +194,11 @@ public class OI {
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new ClimbLevelThree()));
-        prepClimbLevel2Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new PrepClimbLevelTwo()));
+        prepClimbLevel2Button.whenPressed(new SimpleCommand("", () -> {
+            if (climbingSafety.get()) {
+                new PrepClimbLevelTwo().start();
+            }
+        }));
         climbLevel2Button.whenPressed(new SimpleConditionalCommand(() -> PrepClimbLevelTwo.hasPrepLvl2, new LiftGyroStabilizeLevel2()));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
