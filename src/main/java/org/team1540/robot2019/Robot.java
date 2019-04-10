@@ -144,6 +144,8 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         Scheduler.getInstance().run();
 
+        debugMode = SmartDashboard.getBoolean("Debug Mode", false);
+
         if (DriverStation.getInstance().isFMSAttached()) {
             Logger.getRootLogger().setLevel(Level.WARN);
         } else {
