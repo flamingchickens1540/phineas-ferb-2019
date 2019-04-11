@@ -9,13 +9,13 @@ public class EjectCargo extends Command {
     private static final Logger logger = Logger.getLogger(EjectCargo.class);
 
     public EjectCargo() {
-        requires(Robot.intake);
+        requires(Robot.cargoMech);
     }
 
     @Override
     protected void initialize() {
         logger.debug("Ejecting ball");
-        Robot.intake.startEjecting();
+        Robot.cargoMech.startEjecting();
     }
 
     @Override
@@ -26,6 +26,6 @@ public class EjectCargo extends Command {
     @Override
     protected void end() {
         logger.debug("Stopped ejecting");
-        Robot.intake.stop();
+        Robot.cargoMech.stop();
     }
 }

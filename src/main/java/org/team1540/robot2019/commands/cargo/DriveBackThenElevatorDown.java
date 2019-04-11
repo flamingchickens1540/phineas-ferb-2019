@@ -6,9 +6,9 @@ import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.rooster.util.SimpleCommand;
 
-public class BackThenDown extends CommandGroup {
+public class DriveBackThenElevatorDown extends CommandGroup {
 
-    public BackThenDown() {
+    public DriveBackThenElevatorDown() {
         addSequential(new SimpleCommand("Drive", () -> new TankDriveForTimePercent(0.2, -0.3).start()));
         addSequential(new TimedCommand(0.3));
         addSequential(new MoveElevatorToZero());

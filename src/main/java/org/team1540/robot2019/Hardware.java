@@ -59,10 +59,10 @@ public class Hardware {
 
 
     // positive setpoint is outtaking
-    public static ChickenController intakeTop;
-    public static ChickenController intakeBtm;
+    public static ChickenController cargoRollerTop;
+    public static ChickenController cargoRollerBottom;
 
-    public static DigitalInput intakeSensor;
+    public static DigitalInput cargoIntakeSensor;
 
     public static Solenoid hatchSlide;
     public static Solenoid hatchGrabber;
@@ -102,7 +102,7 @@ public class Hardware {
         initDrive();
         initElevator();
         initWrist();
-        initIntake();
+        initCargoMech();
         initHatchMech();
         initClimber();
         initCompressor();
@@ -225,29 +225,29 @@ public class Hardware {
         logger.info("Initialized wrist in " + (end - start) + " ms");
     }
 
-    public static void initIntake() {
-        logger.info("Initializing intake...");
+    public static void initCargoMech() {
+        logger.info("Initializing cargo mech...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        intakeTop = createController(RobotMap.INTAKE_TOP);
-        intakeBtm = createController(RobotMap.INTAKE_BTM);
+        cargoRollerTop = createController(RobotMap.CARGO_ROLLER_TOP);
+        cargoRollerBottom = createController(RobotMap.CARGO_ROLLER_BOTTOM);
 
-        intakeTop.setInverted(Tuning.intakeInvertTop);
-        intakeBtm.setInverted(Tuning.intakeInvertBtm);
+        cargoRollerTop.setInverted(Tuning.invertCargoRollerTop);
+        cargoRollerBottom.setInverted(Tuning.invertCargoRollerBottom);
 
-        intakeTop.setBrake(true);
-        intakeBtm.setBrake(true);
+        cargoRollerTop.setBrake(true);
+        cargoRollerBottom.setBrake(true);
 
-        intakeTop.configVoltageCompSaturation(12);
-        intakeTop.enableVoltageCompensation(true);
+        cargoRollerTop.configVoltageCompSaturation(12);
+        cargoRollerTop.enableVoltageCompensation(true);
 
-        intakeBtm.configVoltageCompSaturation(12);
-        intakeBtm.enableVoltageCompensation(true);
+        cargoRollerBottom.configVoltageCompSaturation(12);
+        cargoRollerBottom.enableVoltageCompensation(true);
 
-        intakeSensor = new DigitalInput(RobotMap.INTAKE_SENSOR);
+        cargoIntakeSensor = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR);
 
         double end = RobotController.getFPGATime() / 1000.0;
-        logger.info("Initialized intake in " + (end - start) + " ms");
+        logger.info("Initialized cargoMech in " + (end - start) + " ms");
     }
 
     public static void initHatchMech() {
@@ -353,8 +353,8 @@ public class Hardware {
 
         StickyFaultsUtils.processStickyFaults("Wrist", "motor", wristMotor);
 
-        StickyFaultsUtils.processStickyFaults("Intake", "top", intakeTop);
-        StickyFaultsUtils.processStickyFaults("Intake", "bottom", intakeBtm);
+        StickyFaultsUtils.processStickyFaults("CargoMech", "top", cargoRollerTop);
+        StickyFaultsUtils.processStickyFaults("CargoMech", "bottom", cargoRollerBottom);
     }
 
     public static ChickenController createController(int id) {
@@ -418,19 +418,19 @@ public class Hardware {
         }
     }
 
-    public static double getIntakeTopCurrent() {
-        if (intakeTop instanceof ChickenTalon) {
-            return ((ChickenTalon) intakeTop).getOutputCurrent();
+    public static double getCargoMechTopCurrent() {
+        if (cargoRollerTop instanceof ChickenTalon) {
+            return ((ChickenTalon) cargoRollerTop).getOutputCurrent();
         } else {
-            return pdp.getCurrent(RobotMap.PDP_INTAKE_TOP);
+            return pdp.getCurrent(RobotMap.PDP_CARGO_MECH_TOP);
         }
     }
 
-    public static double getIntakeBtmCurrent() {
-        if (intakeBtm instanceof ChickenTalon) {
-            return ((ChickenTalon) intakeBtm).getOutputCurrent();
+    public static double getCargoMechBtmCurrent() {
+        if (cargoRollerBottom instanceof ChickenTalon) {
+            return ((ChickenTalon) cargoRollerBottom).getOutputCurrent();
         } else {
-            return pdp.getCurrent(RobotMap.PDP_INTAKE_BTM);
+            return pdp.getCurrent(RobotMap.PDP_CARGO_MECH_BTM);
         }
     }
 
