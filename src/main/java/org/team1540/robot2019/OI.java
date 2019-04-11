@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.DriveGrabSequence;
 import org.team1540.robot2019.commands.auto.TurnUntilNewTarget;
@@ -19,13 +20,14 @@ import org.team1540.robot2019.commands.climber.PrepClimbLevelTwo;
 import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.GrabThenRetract;
-import org.team1540.robot2019.commands.hatch.PlaceHatchInLoadingStation;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
-import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
-import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
-import org.team1540.robot2019.commands.hatch.StowHatchMech;
-import org.team1540.robot2019.commands.hatch.WiggleAndGrab;
+import org.team1540.robot2019.commands.hatch.WiggleAndGrabHatch;
+import org.team1540.robot2019.commands.hatch.floor.PrepHatchFloorGrab;
+import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
+import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
+import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
+import org.team1540.robot2019.commands.hatch.subgroups.GrabHatchThenRetract;
+import org.team1540.robot2019.commands.hatch.temporary.PlaceHatchInLoadingStation;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
@@ -155,15 +157,18 @@ public class OI {
         //    Regular hatch sequences
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
         sensorGrabHatchButton.whenPressed(sensorGrabHatchSequence);
-        PlaceHatchSequence placeHatchSequence = new PlaceHatchSequence();
+        PlaceHatchSequence placeHatchSequence = new PlaceHatchSequence(false, true);
         placeHatchButton.whenPressed(placeHatchSequence);
 
         //    Floor hatch grab
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
         //    Rarely used hatch buttons
-        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new GrabThenRetract());
-        stowHatchButton.whenPressed(new StowHatchMech());
+        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new GrabHatchThenRetract(Tuning.hatchGrabWaitTime));
+        stowHatchButton.whenPressed(new CommandGroup() {{
+            addSequential(new ReleaseHatch());
+            addSequential(new RetractHatchMech());
+        }});
 
         //    Vision hatch place
         VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
@@ -230,7 +235,7 @@ public class OI {
         OI.resetPointOffset.whenPressed(resetPointOffset);
 
         // Wiggle and grab button
-        WiggleAndGrab wiggleAndGrab = new WiggleAndGrab();
+        WiggleAndGrabHatch wiggleAndGrab = new WiggleAndGrabHatch();
         wiggleButton.whenPressed(new SimpleCommand("", () -> {
             boolean running = sensorGrabHatchSequence.isRunning();
             logger.debug("SensorGrabHatchSequence running: " + running);

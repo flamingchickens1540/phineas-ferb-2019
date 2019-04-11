@@ -2,7 +2,7 @@ package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.commands.hatch.AutoGrabHatchSequence;
+import org.team1540.robot2019.commands.hatch.GrabHatchSequence;
 
 public class VisionGrabSequence extends CommandGroup {
 
@@ -13,6 +13,6 @@ public class VisionGrabSequence extends CommandGroup {
         addSequential(new WaitUntilCommand(() ->
             Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget() < MAX_DISTANCE
                 && Robot.drivetrain.getDriveCommand().getLineupLocalization().returnAngleError(0) < MAX_ANGLE_ERROR));
-        addSequential(new AutoGrabHatchSequence());
+        addSequential(new GrabHatchSequence());
     }
 }

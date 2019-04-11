@@ -1,5 +1,6 @@
 package org.team1540.robot2019.commands.hatch;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.team1540.robot2019.Robot;
@@ -14,10 +15,17 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class PlaceHatchSequence extends CommandGroup {
 
-    public PlaceHatchSequence() {
+    public PlaceHatchSequence(boolean requireDrivetrain, boolean reEnableLineup) {
         addSequential(new WristUp());
         addSequential(new SimpleCommand("", () -> Robot.drivetrain.getDriveCommand().tempDisableLineup()));
-        addSequential(new SimpleCommand("Drive", () -> new TankDriveForTimePercent(0.2, 0.3).start()));
+
+        Command tankDriveForTimePercent = new TankDriveForTimePercent(0.2, 0.3);
+        if (requireDrivetrain) {
+            addSequential(tankDriveForTimePercent);
+        } else {
+            addSequential(new SimpleCommand("Drive", tankDriveForTimePercent::start));
+        }
+
         addSequential(new WaitCommand(0.05));
         addSequential(new GrabHatch());
         addSequential(new ExtendHatchMech());
@@ -26,7 +34,11 @@ public class PlaceHatchSequence extends CommandGroup {
         addSequential(new WaitCommand(0.2));
         addSequential(new RetractHatchMech());
         addSequential(new WaitCommand(0.1));
-        addSequential(new SimpleCommand("", () -> Robot.drivetrain.getDriveCommand().clearTempDisableLineup()));
+
+        if (reEnableLineup) {
+            addSequential(new SimpleCommand("", () -> Robot.drivetrain.getDriveCommand().clearTempDisableLineup()));
+        }
+
         addSequential(new MoveElevatorToZero());
     }
 

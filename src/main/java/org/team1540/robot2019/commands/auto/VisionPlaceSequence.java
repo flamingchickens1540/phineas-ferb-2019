@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.commands.hatch.AutoPlaceHatchSequenceNoDTReq;
+import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 
 public class VisionPlaceSequence extends CommandGroup {
 
@@ -17,10 +17,8 @@ public class VisionPlaceSequence extends CommandGroup {
         SmartDashboard.putNumber("VisionPlaceSequence/MAX_DISTANCE", MAX_DISTANCE);
         SmartDashboard.putNumber("VisionPlaceSequence/MAX_ANGLE_ERROR_DEGREES", MAX_ANGLE_ERROR_DEGREES);
 
-        addSequential(new WaitUntilCommand(() ->
-            isDistanceReached()
-                && isAngleReached()));
-        addSequential(new AutoPlaceHatchSequenceNoDTReq());
+        addSequential(new WaitUntilCommand(() -> isDistanceReached() && isAngleReached()));
+        addSequential(new PlaceHatchSequence(false, true));
     }
 
     private boolean isDistanceReached() {
