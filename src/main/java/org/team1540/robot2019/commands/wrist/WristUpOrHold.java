@@ -11,7 +11,7 @@ public class WristUpOrHold extends ConditionalCommand {
     private static final Logger logger = Logger.getLogger(WristUpOrHold.class);
 
     public WristUpOrHold() {
-        super(new SimpleMoveWristUp(),
+        super(new SimpleWristUp(),
             new SimpleLoopCommand("Hold Wrist", () -> Robot.wrist.set(-Tuning.wristHoldThrot),
                 Robot.wrist));
     }

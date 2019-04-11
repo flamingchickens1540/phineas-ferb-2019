@@ -18,8 +18,8 @@ public class RobotMap {
 
     public static final int WRIST_MOTOR = 8;
 
-    public static final int INTAKE_TOP = 9;
-    public static final int INTAKE_BTM = 10;
+    public static final int CARGO_ROLLER_TOP = 9;
+    public static final int CARGO_ROLLER_BOTTOM = 10;
 
     public static final int CLIMBER_ARM_L = 5;
     public static final int CLIMBER_ARM_R = 4;
@@ -43,7 +43,7 @@ public class RobotMap {
 
     public static final int HATCH_EXTEND_SW = 4;
 
-    public static final int INTAKE_SENSOR = 0;
+    public static final int CARGO_INTAKE_SENSOR = 0;
 
     public static final int PRESSURE_SENSOR = 3;
 
@@ -56,8 +56,8 @@ public class RobotMap {
     public static final int PDP_DRIVE_RIGHT_B = 14;
     public static final int PDP_DRIVE_RIGHT_C = 13;
     public static final int PDP_WRIST_MOTOR = 7;
-    public static final int PDP_INTAKE_TOP = 5;
-    public static final int PDP_INTAKE_BTM = 4;
+    public static final int PDP_CARGO_MECH_TOP = 5;
+    public static final int PDP_CARGO_MECH_BTM = 4;
     public static final int PDP_CLIMBER_ARM_L = 10;
     public static final int PDP_CLIMBER_ARM_R = 11;
 

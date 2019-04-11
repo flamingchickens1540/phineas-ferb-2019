@@ -5,9 +5,9 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-class SimpleMoveWristUp extends Command {
+class SimpleWristUp extends Command {
 
-    private static final Logger logger = Logger.getLogger(SimpleMoveWristUp.class);
+    private static final Logger logger = Logger.getLogger(SimpleWristUp.class);
 
     @Override
     protected void initialize() {

@@ -14,7 +14,7 @@ public class StatusLEDs extends Command {
     protected void execute() {
         if (Hardware.limelight.isTargetFound()) {
             Robot.leds.setRaw(false, false, true);
-        } else if (Robot.intake.hasBall()) {
+        } else if (Robot.cargoMech.hasBall()) {
             Robot.leds.setRaw(true, false, false);
         } else if (!Robot.hatch.isReleased()) {
             Robot.leds.setRaw(false, true, false);
