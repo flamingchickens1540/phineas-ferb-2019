@@ -1,14 +1,13 @@
 package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import org.team1540.robot2019.commands.drivetrain.AutoLineupAndDrive;
-import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
-import org.team1540.robot2019.commands.drivetrain.TankDriveForTimeVelocity;
+import org.team1540.robot2019.commands.drivetrain.simple.TankDriveForTimePercent;
+import org.team1540.robot2019.commands.drivetrain.simple.TankDriveForTimeVelocity;
 import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
 
-public class DriveGrabSequence extends CommandGroup {
+public class DriveSensorGrabHatchSequence extends CommandGroup {
 
-    public DriveGrabSequence() {
+    public DriveSensorGrabHatchSequence() {
         AutoLineupAndDrive autoLineupAndDrive = new AutoLineupAndDrive();
         addParallel(new SensorGrabHatchSequence(autoLineupAndDrive::enableEndFlag));
         addSequential(autoLineupAndDrive);

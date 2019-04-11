@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
+import org.team1540.robot2019.commands.drivetrain.simple.TankDriveForTimePercent;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.GrabHatch;

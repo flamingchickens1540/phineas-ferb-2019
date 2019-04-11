@@ -5,17 +5,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
+import org.team1540.robot2019.utils.WaitUntilCommand;
 
-public class VisionPlaceSequence extends CommandGroup {
+public class VisionAutoPlaceSequence extends CommandGroup {
 
-    private static final Logger logger = Logger.getLogger(VisionPlaceSequence.class);
+    private static final Logger logger = Logger.getLogger(VisionAutoPlaceSequence.class);
 
     public static double MAX_DISTANCE = 0.4;
     public static double MAX_ANGLE_ERROR_DEGREES = 3;
 
-    public VisionPlaceSequence() {
-        SmartDashboard.putNumber("VisionPlaceSequence/MAX_DISTANCE", MAX_DISTANCE);
-        SmartDashboard.putNumber("VisionPlaceSequence/MAX_ANGLE_ERROR_DEGREES", MAX_ANGLE_ERROR_DEGREES);
+    public VisionAutoPlaceSequence() {
+        SmartDashboard.putNumber("VisionAutoPlaceSequence/MAX_DISTANCE", MAX_DISTANCE);
+        SmartDashboard.putNumber("VisionAutoPlaceSequence/MAX_ANGLE_ERROR_DEGREES", MAX_ANGLE_ERROR_DEGREES);
 
         addSequential(new WaitUntilCommand(() -> isDistanceReached() && isAngleReached()));
         addSequential(new PlaceHatchSequence(false, true));
@@ -31,8 +32,8 @@ public class VisionPlaceSequence extends CommandGroup {
 
     @Override
     protected void initialize() {
-        MAX_DISTANCE = SmartDashboard.getNumber("VisionPlaceSequence/MAX_DISTANCE", MAX_DISTANCE);
-        MAX_ANGLE_ERROR_DEGREES = SmartDashboard.getNumber("VisionPlaceSequence/MAX_ANGLE_ERROR_DEGREES", MAX_ANGLE_ERROR_DEGREES);
+        MAX_DISTANCE = SmartDashboard.getNumber("VisionAutoPlaceSequence/MAX_DISTANCE", MAX_DISTANCE);
+        MAX_ANGLE_ERROR_DEGREES = SmartDashboard.getNumber("VisionAutoPlaceSequence/MAX_ANGLE_ERROR_DEGREES", MAX_ANGLE_ERROR_DEGREES);
         logger.debug("Init");
     }
 

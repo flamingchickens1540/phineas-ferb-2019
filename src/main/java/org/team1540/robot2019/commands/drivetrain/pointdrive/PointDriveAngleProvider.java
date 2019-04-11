@@ -1,10 +1,8 @@
-package org.team1540.robot2019.commands.drivetrain;
+package org.team1540.robot2019.commands.drivetrain.pointdrive;
 
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
-import org.team1540.robot2019.commands.auto.PointAngleProvider;
-import org.team1540.robot2019.commands.auto.PointControlConfig;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 
 public class PointDriveAngleProvider implements PointAngleProvider {

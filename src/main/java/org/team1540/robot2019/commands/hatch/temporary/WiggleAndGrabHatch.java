@@ -1,8 +1,8 @@
-package org.team1540.robot2019.commands.hatch;
+package org.team1540.robot2019.commands.hatch.temporary;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import org.team1540.robot2019.commands.drivetrain.Wiggle;
+import org.team1540.robot2019.commands.drivetrain.simple.Wiggle;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.simple.GrabHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
