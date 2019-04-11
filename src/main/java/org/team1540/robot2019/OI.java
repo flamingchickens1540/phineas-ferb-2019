@@ -52,6 +52,13 @@ public class OI {
     private static ChickenXboxController tester = new ChickenXboxController(2);
 
     // ---------------------------------------- Copilot ----------------------------------------
+    // Hatch
+    private static Button sensorGrabHatchButton = copilot.getButton(XboxButton.X);
+    private static Button prepGetHatchFloorButton = copilot.getButton(XboxButton.START);
+    private static Button grabThenRetractButtonAndAlsoTheRocketBallIntakeButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
+    private static Button placeHatchButton = copilot.getButton(XboxButton.Y);
+    private static Button stowHatchButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
+
     // Elevator
     private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
@@ -63,13 +70,6 @@ public class OI {
     private static Button ejectButton = copilot.getButton(XboxButton.B);
 
     private static Button wristRecoverButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
-
-    // Hatch
-    private static Button sensorGrabHatchButton = copilot.getButton(XboxButton.X);
-    private static Button prepGetHatchFloorButton = copilot.getButton(XboxButton.START);
-    private static Button grabThenRetractButtonAndAlsoTheRocketBallIntakeButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
-    private static Button placeHatchButton = copilot.getButton(XboxButton.Y);
-    private static Button stowHatchButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
 
 //    private static Button visionPlaceHatchLeft = copilot.getButton(XboxButton.LB);
 //    private static Button visionPlaceHatchRight = copilot.getButton(XboxButton.RB);
@@ -149,28 +149,6 @@ public class OI {
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
         // ---------------------------------------- Copilot ----------------------------------------
-        // Elevator
-        MoveElevatorToPosition moveElevatorUp = new MoveElevatorToPosition(Tuning.elevatorUpPosition);
-        elevatorFullUpButton.whenPressed(moveElevatorUp);
-        MoveElevatorToPosition moveElevatorToCargoShip = new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition);
-        elevatorCargoShipButton.whenPressed(moveElevatorToCargoShip);
-        MoveElevatorToZero moveElevatorToZero = new MoveElevatorToZero();
-        elevatorDownButton.whenPressed(moveElevatorToZero);
-        intakeLoadingStationButton.whenPressed(new LoadingStationCargoIntake());
-
-        // Intake cargo
-        Command floorIntakeCommand = new FloorCargoIntake();
-        floorIntakeButton.whenPressed(floorIntakeCommand);
-
-        // Wrist
-        wristRecoverButton.whileHeld(new RecoverWrist());
-
-        // Eject cargo
-        ForwardThenEjectCargo forwardThenEjectCargo = new ForwardThenEjectCargo();
-        ejectButton.whileHeld(forwardThenEjectCargo);
-        BackThenDown backThenDown = new BackThenDown();
-        ejectButton.whenReleased(backThenDown);
-
         // Hatch
         //    Regular hatch sequences
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
@@ -198,6 +176,28 @@ public class OI {
         // High vision target
         grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
         grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenReleased(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableHatchModeForNextCycle));
+
+        // Elevator
+        MoveElevatorToPosition moveElevatorUp = new MoveElevatorToPosition(Tuning.elevatorUpPosition);
+        elevatorFullUpButton.whenPressed(moveElevatorUp);
+        MoveElevatorToPosition moveElevatorToCargoShip = new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition);
+        elevatorCargoShipButton.whenPressed(moveElevatorToCargoShip);
+        MoveElevatorToZero moveElevatorToZero = new MoveElevatorToZero();
+        elevatorDownButton.whenPressed(moveElevatorToZero);
+        intakeLoadingStationButton.whenPressed(new LoadingStationCargoIntake());
+
+        // Intake cargo
+        Command floorIntakeCommand = new FloorCargoIntake();
+        floorIntakeButton.whenPressed(floorIntakeCommand);
+
+        // Wrist
+        wristRecoverButton.whileHeld(new RecoverWrist());
+
+        // Eject cargo
+        ForwardThenEjectCargo forwardThenEjectCargo = new ForwardThenEjectCargo();
+        ejectButton.whileHeld(forwardThenEjectCargo);
+        BackThenDown backThenDown = new BackThenDown();
+        ejectButton.whenReleased(backThenDown);
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new PrepClimbLevelThree()));
