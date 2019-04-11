@@ -26,9 +26,8 @@ public class PlaceHatchInLoadingStation extends CommandGroup {
         addSequential(new WaitCommand(0.3));
         addSequential(new RetractHatchMech());
         addSequential(new WaitCommand(0.1));
-        addSequential(new ExtendHatchMech());
-        addSequential(new WaitCommand(0.3));
-        addSequential(new RetractHatchMech());
+        addSequential(new SimpleCommand("Drive", () -> new TankDriveForTimePercent(0.2, 0.35).start()));
+        addSequential(new WaitCommand(0.2));
     }
 
     @Override
