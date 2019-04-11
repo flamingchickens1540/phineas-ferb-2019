@@ -86,6 +86,10 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
         logger.debug("Lineup re-enabled!");
     }
 
+    public boolean isLineupTempDisabled() {
+        return tempDisableLineup;
+    }
+
     @Override
     protected boolean isFinished() {
         return false;

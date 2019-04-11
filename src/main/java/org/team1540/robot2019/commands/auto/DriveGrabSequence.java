@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2019.commands.drivetrain.AutoLineupAndDrive;
 import org.team1540.robot2019.commands.drivetrain.TankDriveForTimePercent;
 import org.team1540.robot2019.commands.drivetrain.TankDriveForTimeVelocity;
-import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
+import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
 
 public class DriveGrabSequence extends CommandGroup {
 
