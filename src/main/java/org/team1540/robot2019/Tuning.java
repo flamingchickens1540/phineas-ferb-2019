@@ -154,7 +154,7 @@ public class Tuning {
         } else {
             wristDownTravelPwrThrot = 0.7;
             wristDownTravelBrakeThrot = 0.25;
-            elevatorHatchIntakePosition = 1.4;
+            elevatorHatchIntakePosition = 0.8;
         }
     }
 }
