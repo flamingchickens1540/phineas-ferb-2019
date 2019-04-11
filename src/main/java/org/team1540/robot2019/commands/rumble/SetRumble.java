@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class SetRumble extends Command {
+public class SetRumble extends Command { // TODO: Rooster
 
     private GenericHID xboxController;
     private double value;

@@ -26,7 +26,6 @@ import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.robot2019.utils.LastValidTransformTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
-import org.team1540.robot2019.wrappers.TEBPlanner;
 import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
@@ -48,7 +47,6 @@ public class Robot extends TimedRobot {
 
     public static TankDriveOdometryAccumulatorRunnable odometry;
     public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
-    public static TEBPlanner tebPlanner;
     public static LastValidTransformTracker lastOdomToVisionTargetTracker;
 
     private UsbCamera cam = null;
