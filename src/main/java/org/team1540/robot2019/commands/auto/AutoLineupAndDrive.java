@@ -1,12 +1,12 @@
-package org.team1540.robot2019.commands.drivetrain;
+package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.auto.PercentManualLineupLocalizationAngleProvider;
-import org.team1540.robot2019.commands.auto.PointControlConfig;
+import org.team1540.robot2019.commands.drivetrain.pointdrive.PercentManualLineupLocalizationAngleProvider;
+import org.team1540.robot2019.commands.drivetrain.pointdrive.PointControlConfig;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.utils.ControlUtils;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;

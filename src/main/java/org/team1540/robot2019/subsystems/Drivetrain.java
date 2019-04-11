@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.drivetrain.DriveCommand;
+import org.team1540.robot2019.commands.drivetrain.pointdrive.MultiPointManualDriveCommand;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
@@ -30,7 +30,7 @@ import org.team1540.rooster.functional.Output;
 import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
 
-public class Drivetrain extends Subsystem {
+public class Drivetrain extends Subsystem { // TODO: Rooster interface
 
     private static final Logger logger = Logger.getLogger(Drivetrain.class);
 
@@ -54,13 +54,13 @@ public class Drivetrain extends Subsystem {
     private NetworkTableEntry rightCurrentBEntry = table.getEntry("rightCurrB");
     private NetworkTableEntry rightCurrentCEntry = table.getEntry("rightCurrC");
 
-    private DriveCommand driveCommand;
+    private MultiPointManualDriveCommand multiPointManualDriveCommand;
 
-    public DriveCommand getDriveCommand() {
-        if (driveCommand == null) {
-            driveCommand = new DriveCommand();
+    public MultiPointManualDriveCommand getDriveCommand() {
+        if (multiPointManualDriveCommand == null) {
+            multiPointManualDriveCommand = new MultiPointManualDriveCommand();
         }
-        return driveCommand;
+        return multiPointManualDriveCommand;
     }
 
     @Override

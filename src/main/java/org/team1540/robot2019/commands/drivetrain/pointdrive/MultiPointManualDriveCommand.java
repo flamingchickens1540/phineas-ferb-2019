@@ -1,16 +1,12 @@
-package org.team1540.robot2019.commands.drivetrain;
+package org.team1540.robot2019.commands.drivetrain.pointdrive;
 
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.commands.auto.PercentManualLineupLocalizationAngleProvider;
-import org.team1540.robot2019.commands.auto.PointAngleProvider;
-import org.team1540.robot2019.commands.auto.PointControlConfig;
-import org.team1540.robot2019.commands.auto.PointManualDriveCommand;
 
-public class DriveCommand extends PointManualDriveCommand { // TODO: Make this generic
+public class MultiPointManualDriveCommand extends PointManualDriveCommand { // TODO: Make this generic
 
-    private static final Logger logger = Logger.getLogger(DriveCommand.class);
+    private static final Logger logger = Logger.getLogger(MultiPointManualDriveCommand.class);
 
     private PercentManualLineupLocalizationAngleProvider lineupLocalization = new PercentManualLineupLocalizationAngleProvider(Robot.odometry, Robot.deepSpaceVisionTargetLocalization);
     private PointDriveAngleProvider pointDriveAngleProvider = new PointDriveAngleProvider();
@@ -19,7 +15,7 @@ public class DriveCommand extends PointManualDriveCommand { // TODO: Make this g
 
     private boolean tempDisableLineup = false;
 
-    public DriveCommand() {
+    public MultiPointManualDriveCommand() {
         super();
     }
 

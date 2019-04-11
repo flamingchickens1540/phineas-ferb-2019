@@ -3,13 +3,14 @@ package org.team1540.robot2019.commands.auto;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.commands.hatch.GrabHatchSequence;
+import org.team1540.robot2019.utils.WaitUntilCommand;
 
-public class VisionGrabSequence extends CommandGroup {
+public class VisionAutoGrabSequence extends CommandGroup {
 
     public static final double MAX_DISTANCE = 0.35;
     public static final double MAX_ANGLE_ERROR = Math.toRadians(3);
 
-    public VisionGrabSequence() {
+    public VisionAutoGrabSequence() {
         addSequential(new WaitUntilCommand(() ->
             Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget() < MAX_DISTANCE
                 && Robot.drivetrain.getDriveCommand().getLineupLocalization().returnAngleError(0) < MAX_ANGLE_ERROR));

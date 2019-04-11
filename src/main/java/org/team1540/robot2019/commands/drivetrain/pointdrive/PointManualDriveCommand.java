@@ -1,4 +1,4 @@
-package org.team1540.robot2019.commands.auto;
+package org.team1540.robot2019.commands.drivetrain.pointdrive;
 
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

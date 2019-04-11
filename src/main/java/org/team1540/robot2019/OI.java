@@ -6,9 +6,9 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.auto.DriveGrabSequence;
+import org.team1540.robot2019.commands.auto.DriveSensorGrabHatchSequence;
 import org.team1540.robot2019.commands.auto.TurnUntilNewTarget;
-import org.team1540.robot2019.commands.auto.VisionPlaceSequence;
+import org.team1540.robot2019.commands.auto.VisionAutoPlaceSequence;
 import org.team1540.robot2019.commands.cargo.DriveBackThenElevatorDown;
 import org.team1540.robot2019.commands.cargo.FloorIntakeCargo;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
@@ -17,17 +17,17 @@ import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel2;
 import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel3;
 import org.team1540.robot2019.commands.climber.PrepClimbLevelThree;
 import org.team1540.robot2019.commands.climber.PrepClimbLevelTwo;
-import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
+import org.team1540.robot2019.commands.drivetrain.pointdrive.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
-import org.team1540.robot2019.commands.hatch.WiggleAndGrabHatch;
 import org.team1540.robot2019.commands.hatch.floor.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.hatch.subgroups.GrabHatchThenRetract;
 import org.team1540.robot2019.commands.hatch.temporary.PlaceHatchInLoadingStation;
+import org.team1540.robot2019.commands.hatch.temporary.WiggleAndGrabHatch;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
@@ -171,14 +171,14 @@ public class OI {
         }});
 
         //    Vision hatch place
-        VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
+        VisionAutoPlaceSequence visionAutoPlaceSequence = new VisionAutoPlaceSequence();
         prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> { // TODO: Replace with simpleButton
             if (climbLevel3Button.get()) {
-                visionPlaceSequence.start();
+                visionAutoPlaceSequence.start();
             }
         }));
-        prepClimbLevel2Button.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
-        climbLevel3Button.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
+        prepClimbLevel2Button.whenReleased(new SimpleCommand("", visionAutoPlaceSequence::cancel));
+        climbLevel3Button.whenReleased(new SimpleCommand("", visionAutoPlaceSequence::cancel));
 
         // High vision target
         grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
@@ -246,7 +246,7 @@ public class OI {
 
         // Interrupt into point drive
         SimpleCommand runPointDrive = new SimpleCommand("", () -> {
-            if (Robot.drivetrain.getCurrentCommand() instanceof DriveGrabSequence || Robot.drivetrain.getCurrentCommand() instanceof VisionPlaceSequence) {
+            if (Robot.drivetrain.getCurrentCommand() instanceof DriveSensorGrabHatchSequence || Robot.drivetrain.getCurrentCommand() instanceof VisionAutoPlaceSequence) {
                 Robot.drivetrain.getDriveCommand().start();
             }
         });
@@ -272,8 +272,8 @@ public class OI {
             testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
             testPlaceHatchButton.whenPressed(placeHatchSequence);
             testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
-//            autoPlaceButton.whenPressed(new VisionPlaceSequence());
-//            autoGrabButton.whenPressed(new VisionGrabSequence());
+//            autoPlaceButton.whenPressed(new VisionAutoPlaceSequence());
+//            autoGrabButton.whenPressed(new VisionAutoGrabSequence());
 
             // Elevator
             testElevatorFullUpButton.whenPressed(moveElevatorUp);
