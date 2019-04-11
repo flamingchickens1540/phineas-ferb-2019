@@ -121,6 +121,52 @@
               "_source0": "network_table:///SmartDashboard/Intake/MAX_CURRENT",
               "_title": "SmartDashboard/Intake/MAX_CURRENT"
             }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/FAST_ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/FAST_ANGULAR_VEL"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/SLOW_ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/SLOW_ANGULAR_VEL"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/FAST_TIMEOUT_K",
+              "_title": "SmartDashboard/TurnUntilNewTarget/FAST_TIMEOUT_K"
+            }
+          },
+          "5,2": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/omega",
+              "_title": "SmartDashboard/TurnUntilNewTarget/omega",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/TurnUntilNewTarget/omega": true
+            }
           }
         }
       }

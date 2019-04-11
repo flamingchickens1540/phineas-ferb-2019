@@ -148,7 +148,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
         goal = null;
 
-        Hardware.limelight.setLeds(false);
+        Hardware.limelight.setLeds(true);
 
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }

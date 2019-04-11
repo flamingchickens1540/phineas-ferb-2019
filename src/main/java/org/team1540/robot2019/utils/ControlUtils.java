@@ -21,4 +21,33 @@ public class ControlUtils {
     public static double allVelocityConstraints(double output, double max, double min, double deadzone) {
         return simpleDeadzone(velocityPosNegConstrain(output, max, min), deadzone);
     }
+
+    /**
+     * https://www.desmos.com/calculator/ybuyhcfzgm
+     *
+     * @param input x
+     * @param fast f
+     * @param slow s
+     * @param fastX b, fastX > slowX
+     * @param slowX a
+     * @return y
+     */
+    public static double linearDeadzoneRamp(double input, boolean allowNegativeValues, double fast, double slow, double fastX, double slowX) {
+        double slope = (fast - slow) / (fastX - slowX);
+        double absInput = Math.abs(input);
+        double rawResult = slope * (absInput - slowX) + slow;
+        if (absInput < slowX) {
+            rawResult = slow;
+        } else if (absInput > fastX) {
+            rawResult = fast;
+        }
+        rawResult = Math.copySign(rawResult, input);
+        if (allowNegativeValues) {
+            return rawResult;
+        }
+        if (rawResult < 0) {
+            rawResult = slow;
+        }
+        return rawResult;
+    }
 }
