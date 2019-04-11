@@ -211,7 +211,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private Transform3D computeGoal() {
         Transform3D partialGoal = driveOdometry.getOdomToBaseLink()
             .add(deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget());
-        if (Robot.intake.hasBall()) {
+        if (Robot.cargoMech.hasBall()) {
             if (isHatchMode) {
                 partialGoal = partialGoal.add(new Transform3D(BALL_CARGOSHIP_PLACE_X_OFFSET, BALL_CARGOSHIP_PLACE_Y_OFFSET, 0));
             } else {

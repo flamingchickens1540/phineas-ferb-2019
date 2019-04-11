@@ -6,10 +6,10 @@ import org.team1540.robot2019.Robot;
 
 public class WristUp extends ConditionalCommand {
 
-    private static final Logger logger = Logger.getLogger(WristUpOrHold.class);
+    private static final Logger logger = Logger.getLogger(WristUp.class);
 
     public WristUp() {
-        super(new SimpleMoveWristUp());
+        super(new SimpleWristUp());
     }
 
     @Override

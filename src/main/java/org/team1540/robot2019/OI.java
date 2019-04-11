@@ -8,10 +8,10 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.DriveGrabSequence;
 import org.team1540.robot2019.commands.auto.TurnUntilNewTarget;
 import org.team1540.robot2019.commands.auto.VisionPlaceSequence;
-import org.team1540.robot2019.commands.cargo.BackThenDown;
-import org.team1540.robot2019.commands.cargo.FloorCargoIntake;
+import org.team1540.robot2019.commands.cargo.DriveBackThenElevatorDown;
+import org.team1540.robot2019.commands.cargo.FloorIntakeCargo;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
-import org.team1540.robot2019.commands.cargo.LoadingStationCargoIntake;
+import org.team1540.robot2019.commands.cargo.LoadingStationIntakeCargo;
 import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel2;
 import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel3;
 import org.team1540.robot2019.commands.climber.PrepClimbLevelThree;
@@ -63,10 +63,10 @@ public class OI {
     private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
-    private static Button intakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
+    private static Button cargoIntakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
 
-    // Intake
-    private static Button floorIntakeButton = copilot.getButton(XboxButton.A);
+    // Cargo
+    private static Button cargoFloorIntakeButton = copilot.getButton(XboxButton.A);
     private static Button ejectButton = copilot.getButton(XboxButton.B);
 
     private static Button wristRecoverButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
@@ -184,11 +184,12 @@ public class OI {
         elevatorCargoShipButton.whenPressed(moveElevatorToCargoShip);
         MoveElevatorToZero moveElevatorToZero = new MoveElevatorToZero();
         elevatorDownButton.whenPressed(moveElevatorToZero);
-        intakeLoadingStationButton.whenPressed(new LoadingStationCargoIntake());
 
-        // Intake cargo
-        Command floorIntakeCommand = new FloorCargoIntake();
-        floorIntakeButton.whenPressed(floorIntakeCommand);
+        // Cargo
+        Command cargoFloorIntake = new FloorIntakeCargo();
+        cargoFloorIntakeButton.whenPressed(cargoFloorIntake);
+
+        cargoIntakeLoadingStationButton.whenPressed(new LoadingStationIntakeCargo());
 
         // Wrist
         wristRecoverButton.whileHeld(new RecoverWrist());
@@ -196,7 +197,7 @@ public class OI {
         // Eject cargo
         ForwardThenEjectCargo forwardThenEjectCargo = new ForwardThenEjectCargo();
         ejectButton.whileHeld(forwardThenEjectCargo);
-        BackThenDown backThenDown = new BackThenDown();
+        DriveBackThenElevatorDown backThenDown = new DriveBackThenElevatorDown();
         ejectButton.whenReleased(backThenDown);
 
         // Climb
@@ -272,7 +273,7 @@ public class OI {
             testElevatorDownButton.whenPressed(moveElevatorToZero);
 
             // Cargo
-            testFloorIntakeButton.toggleWhenPressed(floorIntakeCommand);
+            testFloorIntakeButton.toggleWhenPressed(cargoFloorIntake);
 //            testBallEjectButton.whileHeld(forwardThenEjectCargo);
 //            testBallEjectButton.whenReleased(backThenDown);
         }

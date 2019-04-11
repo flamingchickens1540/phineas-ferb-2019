@@ -13,21 +13,21 @@ public class IntakeCargo extends Command {
     private static double MAX_CURRENT = 8;
 
     public IntakeCargo() {
-        requires(Robot.intake);
-        SmartDashboard.putNumber("Intake/MAX_CURRENT", MAX_CURRENT);
+        requires(Robot.cargoMech);
+        SmartDashboard.putNumber("CargoMech/MAX_CURRENT", MAX_CURRENT);
     }
 
     @Override
     protected void initialize() {
-        MAX_CURRENT = SmartDashboard.getNumber("Intake/MAX_CURRENT", MAX_CURRENT);
-        logger.debug("Intake starting, MAX_CURRENT: " + MAX_CURRENT);
-        Robot.intake.startIntaking();
+        MAX_CURRENT = SmartDashboard.getNumber("CargoMech/MAX_CURRENT", MAX_CURRENT);
+        logger.debug("CargoMech starting, MAX_CURRENT: " + MAX_CURRENT);
+        Robot.cargoMech.startIntaking();
     }
 
     @Override
     protected void end() {
-        logger.debug("Intake stopping");
-        Robot.intake.stop();
+        logger.debug("CargoMech stopping");
+        Robot.cargoMech.stop();
     }
 
     @Override
@@ -38,6 +38,6 @@ public class IntakeCargo extends Command {
         if (!Tuning.isComp && this.timeSinceInitialized() > 0.5 && Hardware.pdp.getCurrent(6) > MAX_CURRENT) {
             return true;
         }
-        return Robot.intake.hasBall() || isTimedOut();
+        return Robot.cargoMech.hasBall() || isTimedOut();
     }
 }
