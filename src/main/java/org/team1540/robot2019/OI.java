@@ -49,64 +49,57 @@ public class OI {
     private static ChickenXboxController copilot = new ChickenXboxController(1);
     private static ChickenXboxController tester = new ChickenXboxController(2);
 
-    // Copilot
-    // - Elevator
+    // -- Copilot --
+    // Elevator
     private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
     private static Button intakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
 
-    // - Intake
+    // Intake
     private static Button floorIntakeButton = copilot.getButton(XboxButton.A);
     private static Button ejectButton = copilot.getButton(XboxButton.B);
 
     private static Button wristRecoverButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
 
-    // - Hatch
+    // Hatch
     private static Button sensorGrabHatchButton = copilot.getButton(XboxButton.X);
     private static Button prepGetHatchFloorButton = copilot.getButton(XboxButton.START);
     private static Button grabThenRetractButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
     private static Button placeHatchButton = copilot.getButton(XboxButton.Y);
     private static Button stowHatchButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
-//    private static Button hatchSimpleForwardButton = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold);
-//    private static Button hatchSimpleBackwardButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
 
-    // - Climb
+//    private static Button visionPlaceHatchLeft = copilot.getButton(XboxButton.LB);
+//    private static Button visionPlaceHatchRight = copilot.getButton(XboxButton.RB);
+
+    // Climb
     private static Button climbingSafety = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
     private static Button climbLevel3Button = copilot.getButton(XboxButton.RB); // + safety
     private static Button prepClimbLevel2Button = copilot.getButton(XboxButton.LB); // + safety
     private static Button climbLevel2Button = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold); // + safety
     private static Button climberCylinderUp = copilot.getButton(XboxButton.BACK);
 
-//    private static Button visionPlaceHatchLeft = copilot.getButton(XboxButton.LB);
-//    private static Button visionPlaceHatchRight = copilot.getButton(XboxButton.RB);
-
-    // Driver
-    // - Auto-align
-//    private static Button highTargetButton = copilot.getButton(XboxAxis.RIGHT_TRIG, -Tuning.axisButtonThreshold);
-
+    // -- Driver --
+    // Auto-align
     private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
     private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
 
-//    private static Button testBallEjectButton = driver.getButton(XboxAxis.asdfd, 0.5);
-
-    // - Wiggle wiggle wiggle
+    // Wiggle wiggle wiggle
     private static Button wiggleButton = driver.getButton(XboxButton.START);
 
-    // - Driving
+    // Driving
     private static Button pointDrivePointAxis = driver.getButton(0.2, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
     private static Button pointDriveThrottle = driver.getButton(0.2, XboxAxis.LEFT_Y);
     private static Button resetPointOffset = driver.getButton(XboxButton.Y);
 
-    // - LEDs
+    // LEDs
     private static Button strobeRedBlueButton = driver.getButton(DPadAxis.DOWN);
 
     //
     private static Button nextLeftTarget = driver.getButton(XboxButton.LB);
     private static Button nextRightTarget = driver.getButton(XboxButton.RB);
 
-    // - Temporary
-    private static Button climbSolToggle = tester.getButton(XboxButton.RB);
+    // Temporary
 //    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.asdfadf);
 //    private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
 //    private static Button testPlaceHatchInLoadingStationButton = driver.getButton(DPadAxis.UP);
@@ -118,6 +111,11 @@ public class OI {
 //    private static Button autoPlaceButton = driver.getButton(XboxButton.B);
 //    private static Button autoGrabButton = driver.getButton(XboxButton.X);
 
+    // -- Tester --
+    private static Button climbSolToggle = tester.getButton(XboxButton.START);
+    private static Button hatchSlideSolToggle = tester.getButton(XboxButton.A);
+    private static Button hatchGrabSolToggle = tester.getButton(XboxButton.B);
+
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
      */
@@ -125,6 +123,7 @@ public class OI {
         logger.info("Initializing operator interface...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
+        // -- Copilot --
         // Elevator
         elevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
         elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
@@ -134,8 +133,6 @@ public class OI {
         // Intake cargo
         Command floorIntakeCommand = new FloorCargoIntake();
         floorIntakeButton.whenPressed(floorIntakeCommand);
-//        cancelIntakeButton.cancelWhenPressed(floorIntakeCommand);
-//        cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
         // Wrist
         wristRecoverButton.whileHeld(new RecoverWrist());
@@ -169,13 +166,6 @@ public class OI {
         prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
 
         // Temporary
-        climbSolToggle.whenPressed(new SimpleCommand("", () -> {
-            if (Robot.climber.isCylLowered()) {
-                Robot.climber.raiseCylinder();
-            } else {
-                Robot.climber.lowerCylinder();
-            }
-        }));
 //        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
 //        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
 //
@@ -250,6 +240,29 @@ public class OI {
 
         // Flash LEDs
         strobeRedBlueButton.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
+
+        // -- Tester --
+        climbSolToggle.whenPressed(new SimpleCommand("", () -> {
+            if (Robot.climber.isCylLowered()) {
+                Robot.climber.raiseCylinder();
+            } else {
+                Robot.climber.lowerCylinder();
+            }
+        }));
+        hatchSlideSolToggle.whenPressed(new SimpleCommand("", () -> {
+            if (Robot.hatch.isExtended()) {
+                Robot.hatch.retract();
+            } else {
+                Robot.hatch.extend();
+            }
+        }));
+        hatchGrabSolToggle.whenPressed(new SimpleCommand("", () -> {
+            if (Robot.hatch.isGrabbed()) {
+                Robot.hatch.release();
+            } else {
+                Robot.hatch.grab();
+            }
+        }));
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");

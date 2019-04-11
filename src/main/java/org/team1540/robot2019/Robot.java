@@ -227,9 +227,6 @@ public class Robot extends TimedRobot {
 
         Hardware.checkStickyFaults();
 
-//        if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
-//            elevator.setRaw(0);
-//        }
         new MoveElevatorToZero().start();
     }
 
@@ -240,8 +237,7 @@ public class Robot extends TimedRobot {
 
     private void compressorPeriodic() {
         if (SmartDashboard.getBoolean("EnableCompressor", true)) {
-            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
-                && (Robot.climber.getCurrentCommand() == null)) {
+            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance) && (Robot.climber.getCurrentCommand() == null)) {
                 if (Hardware.compressor.getClosedLoopControl()) {
                     logger.debug("Stopping compressor because elevator is up");
                     Hardware.compressor.stop();
