@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.RobotMap;
+import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
@@ -19,14 +20,37 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private static final Logger logger = Logger.getLogger(PercentManualLineupLocalizationAngleProvider.class);
     private static final double MAX_ACCURATE_POSE_DISTANCE = 1.3;
 
-    private static double BALL_CARGOSHIP_PLACE_X_OFFSET = -0.1;
-    private static double BALL_CARGOSHIP_PLACE_Y_OFFSET = 0.003;
-    private static double BALL_ROCKET_PLACE_Y_OFFSET = 0.003;
-    private static double BALL_ROCKET_PLACE_X_OFFSET = -0.1;
-    private static double HATCH_GRAB_X_OFFSET = -0.05;
-    private static double HATCH_GRAB_Y_OFFSET = 0.01;
-    private static double HATCH_PLACE_X_OFFSET = -0.1;
-    private static double HATCH_PLACE_Y_OFFSET = 0.003;
+    private static double BALL_CARGOSHIP_PLACE_X_OFFSET;
+    private static double BALL_CARGOSHIP_PLACE_Y_OFFSET;
+    private static double BALL_ROCKET_PLACE_Y_OFFSET;
+    private static double BALL_ROCKET_PLACE_X_OFFSET;
+    private static double HATCH_GRAB_X_OFFSET;
+    private static double HATCH_GRAB_Y_OFFSET;
+    private static double HATCH_PLACE_X_OFFSET;
+    private static double HATCH_PLACE_Y_OFFSET;
+
+    static {
+        if (Tuning.isComp) {
+            BALL_CARGOSHIP_PLACE_X_OFFSET = -0.1;
+            BALL_CARGOSHIP_PLACE_Y_OFFSET = 0.003;
+            BALL_ROCKET_PLACE_Y_OFFSET = 0.003;
+            BALL_ROCKET_PLACE_X_OFFSET = -0.1;
+            HATCH_GRAB_X_OFFSET = -0.05;
+            HATCH_GRAB_Y_OFFSET = 0.01;
+            HATCH_PLACE_X_OFFSET = -0.1;
+            HATCH_PLACE_Y_OFFSET = 0.003;
+        } else {
+            BALL_CARGOSHIP_PLACE_X_OFFSET = -0.1;
+            BALL_CARGOSHIP_PLACE_Y_OFFSET = 0.003;
+            BALL_ROCKET_PLACE_Y_OFFSET = 0.003;
+            BALL_ROCKET_PLACE_X_OFFSET = -0.1;
+            HATCH_GRAB_X_OFFSET = -0.05;
+            HATCH_GRAB_Y_OFFSET = -0.02;
+            HATCH_PLACE_X_OFFSET = -0.1;
+            HATCH_PLACE_Y_OFFSET = -0.03;
+        }
+    }
+
     private static double M = 1.2;
     private static double Z = 0.6;
     private static double A = 2;
