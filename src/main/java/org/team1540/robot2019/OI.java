@@ -21,6 +21,7 @@ import org.team1540.robot2019.commands.drivetrain.PointDriveAngleProvider;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.GrabThenRetract;
+import org.team1540.robot2019.commands.hatch.PlaceHatchInLoadingStation;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.SensorGrabHatchSequence;
@@ -65,7 +66,7 @@ public class OI {
     // - Hatch
     private static Button sensorGrabHatchButton = copilot.getButton(XboxButton.X);
     private static Button prepGetHatchFloorButton = copilot.getButton(XboxButton.START);
-    private static Button grabThenRetractButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
+    private static Button grabThenRetractButtonAndAlsoTheRocketBallIntakeButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
     private static Button placeHatchButton = copilot.getButton(XboxButton.Y);
     private static Button stowHatchButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
 //    private static Button hatchSimpleForwardButton = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold);
@@ -107,16 +108,16 @@ public class OI {
 
     // - Temporary
     private static Button climbSolToggle = tester.getButton(XboxButton.RB);
-//    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.asdfadf);
-//    private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
-//    private static Button testPlaceHatchInLoadingStationButton = driver.getButton(DPadAxis.UP);
+    private static Button testPrepGetHatchButton = driver.getButton(XboxButton.A);
+    private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
+    private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
 //    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP);
 //    private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
 //    private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
 
 //    private static Button autoPlaceButton = driver.getButton(XboxButton.B);
-//    private static Button autoGrabButton = driver.getButton(XboxButton.X);
+//    private static Button autoGrabButton = driver.getButton(XboxButton.A);
 
     /**
      * Since we want to initialize stuff once the robot actually boots up (not as static initializers), we instantiate stuff here to get more informative error traces and less general weirdness.
@@ -149,7 +150,8 @@ public class OI {
         // Hatch
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
         sensorGrabHatchButton.whenPressed(sensorGrabHatchSequence);
-        placeHatchButton.whenPressed(new PlaceHatchSequence());
+        PlaceHatchSequence placeHatchSequence = new PlaceHatchSequence();
+        placeHatchButton.whenPressed(placeHatchSequence);
 
         VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
         prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> { // TODO: Replace with simpleButton
@@ -160,7 +162,7 @@ public class OI {
         prepClimbLevel2Button.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
         climbLevel3Button.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
 
-        grabThenRetractButton.whenPressed(new GrabThenRetract());
+        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new GrabThenRetract());
         stowHatchButton.whenPressed(new StowHatchMech());
 
 //        hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
@@ -176,14 +178,14 @@ public class OI {
                 Robot.climber.lowerCylinder();
             }
         }));
-//        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-//        testPlaceHatchButton.whenPressed(new PlaceHatchSequence());
+        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
+        testPlaceHatchButton.whenPressed(placeHatchSequence);
 //
 //        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
 //
 //        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
 //
-//        testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
+        testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
 //
 //        testFloorIntakeButton.toggleWhenPressed(floorIntakeCommand);
 //
@@ -245,8 +247,8 @@ public class OI {
         rightFilterButton.whenReleased(new SwitchFilterButton(0));
 
         // High vision target
-        grabThenRetractButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
-        grabThenRetractButton.whenReleased(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableHatchModeForNextCycle));
+        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
+        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenReleased(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableHatchModeForNextCycle));
 
         // Flash LEDs
         strobeRedBlueButton.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
