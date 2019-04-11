@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
 
-public class RumbleForTime extends CommandGroup {
+public class RumbleForTime extends CommandGroup { // TODO: Rooster
 
     public RumbleForTime(XboxController xboxController, double timeSeconds) {
         addSequential(new SetRumble(xboxController, 1));
