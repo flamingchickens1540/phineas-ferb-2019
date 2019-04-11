@@ -238,6 +238,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 //        Vector3D goalPosition = adjustedGoal.getPosition();
         Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
+        SmartDashboard.putNumber("PercentLineupLocalization/TargetAngle", targetAngle);
         double signedAngleError = TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
         double xVel = Robot.drivetrain.getTwist().getX();
         if (Math.abs(xVel) > 1.4) {
