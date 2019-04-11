@@ -16,17 +16,16 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
 import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
+import org.team1540.robot2019.subsystems.CargoMech;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
 import org.team1540.robot2019.subsystems.HatchMech;
-import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.robot2019.utils.LastValidTransformTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
-import org.team1540.robot2019.wrappers.TEBPlanner;
 import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
@@ -36,7 +35,7 @@ public class Robot extends TimedRobot {
     public static Drivetrain drivetrain;
     public static Elevator elevator;
     public static Wrist wrist;
-    public static Intake intake;
+    public static CargoMech cargoMech;
     public static HatchMech hatch;
     public static Climber climber;
     public static LEDs leds;
@@ -48,7 +47,6 @@ public class Robot extends TimedRobot {
 
     public static TankDriveOdometryAccumulatorRunnable odometry;
     public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
-    public static TEBPlanner tebPlanner;
     public static LastValidTransformTracker lastOdomToVisionTargetTracker;
 
     private UsbCamera cam = null;
@@ -66,7 +64,7 @@ public class Robot extends TimedRobot {
         drivetrain = new Drivetrain();
         elevator = new Elevator();
         wrist = new Wrist();
-        intake = new Intake();
+        cargoMech = new CargoMech();
         hatch = new HatchMech();
         climber = new Climber();
         leds = new LEDs();
@@ -229,9 +227,6 @@ public class Robot extends TimedRobot {
 
         Hardware.checkStickyFaults();
 
-//        if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
-//            elevator.setRaw(0);
-//        }
         new MoveElevatorToZero().start();
     }
 
@@ -242,8 +237,7 @@ public class Robot extends TimedRobot {
 
     private void compressorPeriodic() {
         if (SmartDashboard.getBoolean("EnableCompressor", true)) {
-            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
-                && (Robot.climber.getCurrentCommand() == null)) {
+            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance) && (Robot.climber.getCurrentCommand() == null)) {
                 logger.debug("Stopping compressor because elevator is up");
                 Hardware.compressor.stop();
             } else {

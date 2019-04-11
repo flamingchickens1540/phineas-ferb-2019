@@ -40,12 +40,10 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         this.baseLinkToCamera = baseLinkToCamera;
     }
 
-    @Override
     public double getHorizontalFov() {
         return HORIZONTAL_FOV;
     }
 
-    @Override
     public double getVerticalFov() {
         return VERTICAL_FOV;
     }
@@ -129,15 +127,15 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         return limelightTable.getEntry("ledMode").getDouble(1) == 0;
     }
 
-//    /**
-//     * Sets limelight to driver cam or vision mode.
-//     *
-//     * @param driverCam Whether the limelight should be in driver cam mode
-//     */
-//    public void setDriverCam(boolean driverCam) {
-//        limelightTable.getEntry("camMode").setNumber(driverCam ? 1 : 0);
-//        NetworkTableInstance.getDefault().flush();
-//    }
+    /**
+     * Sets limelight to driver cam or vision mode.
+     *
+     * @param driverCam Whether the limelight should be in driver cam mode
+     */
+    public void setDriverCam(boolean driverCam) {
+        limelightTable.getEntry("camMode").setNumber(driverCam ? 1 : 0);
+        NetworkTableInstance.getDefault().flush();
+    }
 
     public void setPipeline(double id) {
         if (getPipeline() != id) {
@@ -149,20 +147,6 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
     public long getPipeline() {
         return Math.round((double) limelightTable.getEntry("getpipe").getNumber(-1));
     }
-
-    // TODO: Incorrect pipeline warnings
-
-    public void prepForVision() {
-        setLeds(true);
-//        setDriverCam(false);
-    }
-
-//    public void prepForDriverCam() {
-//        if (SmartDashboard.getBoolean("TurnOffLimelightWhenNotInUse", false)) {
-//            setLeds(false);
-//        }
-//        setDriverCam(true);
-//    }
 
     /**
      * Attempts to get the published SolvePNP transform from the vision target to the limelight (not the other way around).
@@ -218,13 +202,6 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
             return null;
         }
         // TODO: Add pipeline checks
-
-//        logger.debug("Using contours with id: " + sortedContours.get(0).getId() + " and " + sortedContours.get(1).getId());
-//        logger.debug(String.format("left: %f %f right: %f %f",
-//            Math.toDegrees(sortedContours.get(0).getX()),
-//            Math.toDegrees(sortedContours.get(0).getY()),
-//            Math.toDegrees(sortedContours.get(1).getX()),
-//            Math.toDegrees(sortedContours.get(1).getY())));
 
         return new RawDeepSpaceVisionTarget(
             sortedContours.get(0).getCenter(),

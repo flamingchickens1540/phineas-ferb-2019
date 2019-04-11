@@ -86,19 +86,19 @@ public class Tuning {
     public static double wristHoldThrot = 0.05;
     public static double wristLowerTimeout = 1;
 
-    // intake
-    public static boolean intakeInvertTop = false;
-    public static boolean intakeInvertBtm = false;
+    // cargoMech
+    public static boolean invertCargoRollerTop = false;
+    public static boolean invertCargoRollerBottom = false;
 
-    public static double intakeIntakeSpeedTop = 1;
-    public static double intakeIntakeSpeedBtm = 1;
+    public static double cargoIntakeSpeedTop = 1;
+    public static double cargoIntakeSpeedBtm = 1;
 
-    public static double intakeEjectSpeedTop = 1;
-    public static double intakeEjectSpeedBtm = 1;
+    public static double cargoEjectSpeedTop = 1;
+    public static double cargoEjectSpeedBtm = 1;
 
-    public static double intakeTimeout = 5;
+    public static double cargoIntakeTimeout = 5;
 
-    public static double intakeEjectTime = 1.3;
+    public static double cargoEjectTime = 1.3;
 
     // hatch mech
     public static double hatchGrabWaitTime = 1;

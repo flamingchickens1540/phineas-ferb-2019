@@ -12,21 +12,21 @@ public class CargoMechSelfTest extends CommandGroup {
 
     public CargoMechSelfTest() {
         addSequential(
-            new SimpleCommand("Print status", () -> logger.info("Beginning intake self-test")));
-        addSequential(new SimpleCommand("Print status", () -> logger.info("Running intake in")));
-        addSequential(new SimpleCommand("Run In", Robot.intake::startIntaking, Robot.intake));
+            new SimpleCommand("Print status", () -> logger.info("Beginning cargoMech self-test")));
+        addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargoMech in")));
+        addSequential(new SimpleCommand("Run In", Robot.cargoMech::startIntaking, Robot.cargoMech));
         addSequential(new TimedCommand(1));
-        addSequential(new SimpleCommand("Print status", () -> logger.info("Running intake out")));
-        addSequential(new SimpleCommand("Run Out", Robot.intake::startEjecting, Robot.intake));
+        addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargoMech out")));
+        addSequential(new SimpleCommand("Run Out", Robot.cargoMech::startEjecting, Robot.cargoMech));
         addSequential(new TimedCommand(1));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Stopping")));
-        addSequential(new SimpleCommand("Stop intake", Robot.intake::stop, Robot.intake));
+        addSequential(new SimpleCommand("Stop cargo mech", Robot.cargoMech::stop, Robot.cargoMech));
         addSequential(new SimpleCommand("Check Sensor", () -> {
-            if (Robot.intake.hasBall()) {
+            if (Robot.cargoMech.hasBall()) {
                 logger.warn("Ball sensor is still tripped after ejecting");
             }
-        }, Robot.intake));
+        }, Robot.cargoMech));
         addSequential(
-            new SimpleCommand("Print status", () -> logger.info("Intake self-test complete")));
+            new SimpleCommand("Print status", () -> logger.info("CargoMech self-test complete")));
     }
 }
