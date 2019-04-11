@@ -1,6 +1,5 @@
 package org.team1540.robot2019;
 
-import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -41,16 +40,18 @@ import org.team1540.rooster.util.SimpleConditionalCommand;
 
 public class OI {
 
-    // TODO: ChickenButton with better logic (whileReleased, etc)
+    // TODO: ChickenButton with better logic (whileReleased, whenPressed runnable, whenReleased runnable, etc)
 
     private static final Logger logger = Logger.getLogger(OI.class);
+
+    private static final boolean INIT_TEMPORARY_BINDINGS = !Tuning.isComp;
 
     // Joysticks
     private static ChickenXboxController driver = new ChickenXboxController(0);
     private static ChickenXboxController copilot = new ChickenXboxController(1);
     private static ChickenXboxController tester = new ChickenXboxController(2);
 
-    // -- Copilot --
+    // ---------------------------------------- Copilot ----------------------------------------
     // Elevator
     private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
@@ -80,7 +81,12 @@ public class OI {
     private static Button climbLevel2Button = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold); // + safety
     private static Button climberCylinderUp = copilot.getButton(XboxButton.BACK);
 
-    // -- Driver --
+    // Climber arms
+    public static double getManualClimberArmsAxis() {
+        return Utilities.processDeadzone(-copilot.getY(Hand.kRight), Tuning.driveDeadzone);
+    }
+
+    // ---------------------------------------- Driver ----------------------------------------
     // Auto-align
     private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
     private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
@@ -89,14 +95,32 @@ public class OI {
     private static Button wiggleButton = driver.getButton(XboxButton.START);
 
     // Driving
-    private static Button pointDrivePointAxis = driver.getButton(0.2, XboxAxis.RIGHT_X, XboxAxis.RIGHT_Y);
-    private static Button pointDriveThrottle = driver.getButton(0.2, XboxAxis.LEFT_Y);
+    public static final XboxAxis POINT_DRIVE_POINT_X = XboxAxis.RIGHT_X;
+    public static final XboxAxis POINT_DRIVE_POINT_Y = XboxAxis.RIGHT_Y;
+    public static final XboxAxis POINT_DRIVE_THROTTLE = XboxAxis.LEFT_Y;
+
     private static Button resetPointOffset = driver.getButton(XboxButton.Y);
 
-    // LEDs
-    private static Button strobeRedBlueButton = driver.getButton(DPadAxis.DOWN);
+    private static Button pointDrivePointAxis = driver.getButton(Tuning.driveDeadzone, POINT_DRIVE_POINT_X, POINT_DRIVE_POINT_Y);
+    private static Button pointDriveThrottle = driver.getButton(Tuning.driveDeadzone, POINT_DRIVE_THROTTLE);
 
-    //
+    // Point drive
+    public static double getPointDriveThrottle() {
+        return -Utilities.scale(Utilities.processDeadzone(driver.getRawAxis(POINT_DRIVE_THROTTLE), Tuning.driveDeadzone), 2);
+    }
+
+    public static double getPointDriveAngle() {
+        return driver.get2DJoystickAngle(Hand.kRight);
+    }
+
+    public static double getPointDriveMagnitude() {
+        return Utilities.processDeadzone(driver.get2DJoystickMagnitude(Hand.kRight), Tuning.driveDeadzone);
+    }
+
+    // LEDs and limelight off
+    private static Button turnOffLimelightAndFlashLEDs = driver.getButton(DPadAxis.DOWN);
+
+    // Next left/right target
     private static Button nextLeftTarget = driver.getButton(XboxButton.LB);
     private static Button nextRightTarget = driver.getButton(XboxButton.RB);
 
@@ -105,14 +129,14 @@ public class OI {
     private static Button testPlaceHatchButton = driver.getButton(XboxButton.B);
     private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
-//    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP);
-//    private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
-//    private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
+    private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP);
+    private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
+    private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
 
 //    private static Button autoPlaceButton = driver.getButton(XboxButton.B);
 //    private static Button autoGrabButton = driver.getButton(XboxButton.A);
 
-    // -- Tester --
+    // ---------------------------------------- Tester ----------------------------------------
     private static Button climbSolToggle = tester.getButton(XboxButton.START);
     private static Button hatchSlideSolToggle = tester.getButton(XboxButton.A);
     private static Button hatchGrabSolToggle = tester.getButton(XboxButton.B);
@@ -124,11 +148,14 @@ public class OI {
         logger.info("Initializing operator interface...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        // -- Copilot --
+        // ---------------------------------------- Copilot ----------------------------------------
         // Elevator
-        elevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-        elevatorCargoShipButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition));
-        elevatorDownButton.whenPressed(new MoveElevatorToZero());
+        MoveElevatorToPosition moveElevatorUp = new MoveElevatorToPosition(Tuning.elevatorUpPosition);
+        elevatorFullUpButton.whenPressed(moveElevatorUp);
+        MoveElevatorToPosition moveElevatorToCargoShip = new MoveElevatorToPosition(Tuning.elevatorCargoShipPosition);
+        elevatorCargoShipButton.whenPressed(moveElevatorToCargoShip);
+        MoveElevatorToZero moveElevatorToZero = new MoveElevatorToZero();
+        elevatorDownButton.whenPressed(moveElevatorToZero);
         intakeLoadingStationButton.whenPressed(new LoadingStationCargoIntake());
 
         // Intake cargo
@@ -145,11 +172,20 @@ public class OI {
         ejectButton.whenReleased(backThenDown);
 
         // Hatch
+        //    Regular hatch sequences
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
         sensorGrabHatchButton.whenPressed(sensorGrabHatchSequence);
         PlaceHatchSequence placeHatchSequence = new PlaceHatchSequence();
         placeHatchButton.whenPressed(placeHatchSequence);
 
+        //    Floor hatch grab
+        prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
+
+        //    Rarely used hatch buttons
+        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new GrabThenRetract());
+        stowHatchButton.whenPressed(new StowHatchMech());
+
+        //    Vision hatch place
         VisionPlaceSequence visionPlaceSequence = new VisionPlaceSequence();
         prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> { // TODO: Replace with simpleButton
             if (climbLevel3Button.get()) {
@@ -159,31 +195,9 @@ public class OI {
         prepClimbLevel2Button.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
         climbLevel3Button.whenReleased(new SimpleCommand("", visionPlaceSequence::cancel));
 
-        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new GrabThenRetract());
-        stowHatchButton.whenPressed(new StowHatchMech());
-
-//        hatchSimpleForwardButton.whenPressed(new ExtendHatchMech());
-//        hatchSimpleBackwardButton.whenPressed(new RetractHatchMech());
-
-        prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
-
-        // Temporary
-        testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
-        testPlaceHatchButton.whenPressed(placeHatchSequence);
-//
-//        testElevatorFullUpButton.whenPressed(new MoveElevatorToPosition(Tuning.elevatorUpPosition));
-//
-//        testElevatorDownButton.whenPressed(new MoveElevatorToZero());
-//
-        testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
-//
-//        testFloorIntakeButton.toggleWhenPressed(floorIntakeCommand);
-//
-//        testBallEjectButton.whileHeld(forwardThenEjectCargo);
-//        testBallEjectButton.whenReleased(backThenDown);
-
-//        autoPlaceButton.whenPressed(new VisionPlaceSequence());
-//        autoGrabButton.whenPressed(new VisionGrabSequence());
+        // High vision target
+        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
+        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenReleased(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableHatchModeForNextCycle));
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new PrepClimbLevelThree()));
@@ -202,7 +216,9 @@ public class OI {
         }));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
 
-        // Point drive
+        // ---------------------------------------- Driver ----------------------------------------
+
+        // Point offset
         SimpleCommand resetPointOffset = new SimpleCommand("Reset Point Offset", () -> {
             logger.debug("Setting Angle Offset");
             PointDriveAngleProvider.setInitAngleOffset(Hardware.navx.getYawRadians());
@@ -210,6 +226,7 @@ public class OI {
         resetPointOffset.setRunWhenDisabled(true);
         OI.resetPointOffset.whenPressed(resetPointOffset);
 
+        // Wiggle and grab button
         WiggleAndGrab wiggleAndGrab = new WiggleAndGrab();
         wiggleButton.whenPressed(new SimpleCommand("", () -> {
             boolean running = sensorGrabHatchSequence.isRunning();
@@ -219,6 +236,7 @@ public class OI {
             }
         }));
 
+        // Interrupt into point drive
         SimpleCommand runPointDrive = new SimpleCommand("", () -> {
             if (Robot.drivetrain.getCurrentCommand() instanceof DriveGrabSequence || Robot.drivetrain.getCurrentCommand() instanceof VisionPlaceSequence) {
                 Robot.drivetrain.getDriveCommand().start();
@@ -231,19 +249,35 @@ public class OI {
         nextLeftTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, true));
         nextRightTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, false));
 
+        // Left/right filtering
         leftFilterButton.whenPressed(new SwitchFilterButton(2));
         leftFilterButton.whenReleased(new SwitchFilterButton(0));
         rightFilterButton.whenPressed(new SwitchFilterButton(3));
         rightFilterButton.whenReleased(new SwitchFilterButton(0));
 
-        // High vision target
-        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
-        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenReleased(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableHatchModeForNextCycle));
+        // Flash LEDs and turn off limelight
+        turnOffLimelightAndFlashLEDs.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
 
-        // Flash LEDs
-        strobeRedBlueButton.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
+        // ---------------------------------------- Temporary ----------------------------------------
+        if (INIT_TEMPORARY_BINDINGS) {
+            // Hatch
+            testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
+            testPlaceHatchButton.whenPressed(placeHatchSequence);
+            testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
+//            autoPlaceButton.whenPressed(new VisionPlaceSequence());
+//            autoGrabButton.whenPressed(new VisionGrabSequence());
 
-        // -- Tester --
+            // Elevator
+            testElevatorFullUpButton.whenPressed(moveElevatorUp);
+            testElevatorDownButton.whenPressed(moveElevatorToZero);
+
+            // Cargo
+            testFloorIntakeButton.toggleWhenPressed(floorIntakeCommand);
+//            testBallEjectButton.whileHeld(forwardThenEjectCargo);
+//            testBallEjectButton.whenReleased(backThenDown);
+        }
+
+        // ---------------------------------------- Tester ----------------------------------------
         climbSolToggle.whenPressed(new SimpleCommand("", () -> {
             if (Robot.climber.isCylLowered()) {
                 Robot.climber.raiseCylinder();
@@ -268,44 +302,6 @@ public class OI {
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized operator interface in " + (end - start) + " ms");
-    }
-
-    // Climber arms
-    public static double getManualClimberArmsAxis() {
-        return Utilities.processDeadzone(-copilot.getY(Hand.kRight), Tuning.driveDeadzone);
-    }
-
-    // Point drive
-    public static double getPointDriveThrottle() {
-        return -Utilities.scale(Utilities.processDeadzone(driver.getY(Hand.kLeft), Tuning.driveDeadzone), 2);
-    }
-
-    public static double getPointDriveAngle() {
-        return driver.get2DJoystickAngle(Hand.kRight);
-    }
-
-    public static double getPointDriveMagnitude() {
-        return Utilities.processDeadzone(driver.get2DJoystickMagnitude(Hand.kRight), Tuning.driveDeadzone);
-    }
-
-    // Arcade drive
-    public static double getArcadeDriveThrottle() {
-        return Utilities.scale(
-            -Utilities.processDeadzone(driver.getY(GenericHID.Hand.kLeft), Tuning.driveDeadzone),
-            Tuning.driveThrottleExponent);
-    }
-
-    public static double getArcadeDriveSoftTurn() {
-        return Utilities.scale(
-            Utilities.processDeadzone(driver.getX(Hand.kRight), Tuning.driveDeadzone),
-            Tuning.driveSoftTurnExponent);
-    }
-
-    public static double getArcadeDriveHardTurn() {
-        return Utilities.scale(
-            Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kRight), 0.1)
-                - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
-            Tuning.driveHardTurnExponent);
     }
 
     // Tank drive
