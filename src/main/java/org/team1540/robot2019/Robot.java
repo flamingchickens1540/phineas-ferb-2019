@@ -244,15 +244,12 @@ public class Robot extends TimedRobot {
         if (SmartDashboard.getBoolean("EnableCompressor", true)) {
             if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
                 && (Robot.climber.getCurrentCommand() == null)) {
-                if (Hardware.compressor.getClosedLoopControl()) {
-                    logger.debug("Stopping compressor because elevator is up");
-                    Hardware.compressor.stop();
-                }
+                logger.debug("Stopping compressor because elevator is up");
+                Hardware.compressor.stop();
             } else {
-//                Hardware.compressor.start();
-                if (Hardware.returnPressureSensorValue() > 115) {
+                if (Hardware.returnPressureSensorValue() > 120) {
                     Hardware.compressor.stop();
-                } else if (Hardware.returnPressureSensorValue() < 105) {
+                } else if (Hardware.returnPressureSensorValue() < 110) {
                     Hardware.compressor.start();
                 }
             }
