@@ -63,11 +63,12 @@ public class OI {
     private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
-    private static Button cargoIntakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
 
     // Cargo
     private static Button cargoFloorIntakeButton = copilot.getButton(XboxButton.A);
-    private static Button ejectButton = copilot.getButton(XboxButton.B);
+    private static Button cargoIntakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
+
+    private static Button cargoEjectButton = copilot.getButton(XboxButton.B);
 
     private static Button wristRecoverButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
 
@@ -130,8 +131,9 @@ public class OI {
     private static Button testPlaceHatchInLoadingStationButton = driver.getButton(XboxButton.X);
 
     private static Button testElevatorFullUpButton = driver.getButton(DPadAxis.UP);
-    private static Button testFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
     private static Button testElevatorDownButton = driver.getButton(DPadAxis.DOWN);
+
+//    private static Button testCargoFloorIntakeButton = driver.getButton(DPadAxis.LEFT);
 
 //    private static Button autoPlaceButton = driver.getButton(XboxButton.B);
 //    private static Button autoGrabButton = driver.getButton(XboxButton.A);
@@ -196,9 +198,9 @@ public class OI {
 
         // Eject cargo
         ForwardThenEjectCargo forwardThenEjectCargo = new ForwardThenEjectCargo();
-        ejectButton.whileHeld(forwardThenEjectCargo);
+        cargoEjectButton.whileHeld(forwardThenEjectCargo);
         DriveBackThenElevatorDown backThenDown = new DriveBackThenElevatorDown();
-        ejectButton.whenReleased(backThenDown);
+        cargoEjectButton.whenReleased(backThenDown);
 
         // Climb
         climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new PrepClimbLevelThree()));
@@ -273,7 +275,7 @@ public class OI {
             testElevatorDownButton.whenPressed(moveElevatorToZero);
 
             // Cargo
-            testFloorIntakeButton.toggleWhenPressed(cargoFloorIntake);
+//            testCargoFloorIntakeButton.toggleWhenPressed(cargoFloorIntake);
 //            testBallEjectButton.whileHeld(forwardThenEjectCargo);
 //            testBallEjectButton.whenReleased(backThenDown);
         }
