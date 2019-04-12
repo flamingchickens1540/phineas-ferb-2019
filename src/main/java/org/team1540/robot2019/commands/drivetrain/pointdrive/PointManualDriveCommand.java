@@ -112,5 +112,5 @@ public abstract class PointManualDriveCommand extends PIDCommand {
         return angleError; // returnPIDInput expects a position, so the error must be negated
     }
 
-    protected abstract double returnAngleError();
+    protected abstract double returnAngleError(); // TODO: This should return the desired position, not error
 }
