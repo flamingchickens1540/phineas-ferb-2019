@@ -1,6 +1,6 @@
 package org.team1540.robot2019.commands.drivetrain.pointdrive;
 
-import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.OI;
@@ -14,10 +14,12 @@ import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
 
-public abstract class PointManualDriveCommand extends PIDCommand {
+public abstract class PointManualDriveCommand extends Command {
 
     private static final Logger logger = Logger.getLogger(PointManualDriveCommand.class);
     public static double SPEED_FF = 0;
+
+    private final MiniPID pointPID;
 
     public static double THROTTLE_P = 0.25;
     public static double THROTTLE_I = 0;
@@ -36,7 +38,8 @@ public abstract class PointManualDriveCommand extends PIDCommand {
     private boolean isConfigSet = false;
 
     public PointManualDriveCommand() {
-        super(0, 0, 0);
+        pointPID = new MiniPID(0, 0, 0);
+        pointPID.setOutputLimits(1);
         requires(Robot.drivetrain);
 
         SmartDashboard.putNumber("PointManualDrive/SPEED_FF", SPEED_FF);
@@ -73,9 +76,7 @@ public abstract class PointManualDriveCommand extends PIDCommand {
         this.deadzone = cfg.getDEADZONE();
         this.throttleConstant = cfg.getTHROTTLE_CONSTANT();
 
-        this.getPIDController().setP(cfg.getP());
-        this.getPIDController().setI(cfg.getI());
-        this.getPIDController().setD(cfg.getD());
+        pointPID.setPID(cfg.getP(), cfg.getI(), cfg.getD());
 
         this.isConfigSet = true;
 
@@ -85,7 +86,8 @@ public abstract class PointManualDriveCommand extends PIDCommand {
     }
 
     @Override
-    protected final void usePIDOutput(double output) {
+    protected void execute() {
+        double output = pointPID.getOutput(-returnAngleError());
         if (isConfigSet) {
             double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
             SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
@@ -104,13 +106,18 @@ public abstract class PointManualDriveCommand extends PIDCommand {
         }
         pipeline.execute();
     }
-
-    @Override
-    protected final double returnPIDInput() {
-        double angleError = -returnAngleError();
-        SmartDashboard.putNumber("PointManualDrive/AngleError", -angleError);
-        return angleError; // returnPIDInput expects a position, so the error must be negated
-    }
+//
+//    @Override
+//    protected final void usePIDOutput(double output) {
+//
+//    }
+//
+//    @Override
+//    protected final double returnPIDInput() {
+//        double angleError = -returnAngleError();
+//        SmartDashboard.putNumber("PointManualDrive/AngleError", -angleError);
+//        return angleError; // returnPIDInput expects a position, so the error must be negated
+//    }
 
     protected abstract double returnAngleError(); // TODO: This should return the desired position, not error
 }
