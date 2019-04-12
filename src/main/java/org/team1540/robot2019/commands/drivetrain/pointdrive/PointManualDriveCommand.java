@@ -9,7 +9,6 @@ import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.utils.ControlUtils;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
-import org.team1540.rooster.Utilities;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
 import org.team1540.rooster.functional.Executable;
@@ -75,9 +74,14 @@ public abstract class PointManualDriveCommand extends PIDCommand {
         if (isConfigSet) {
             double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
             SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
-            double pointDriveThrottle = OI.getPointDriveThrottle();
-            twist2DInput
-                .setTwist(new Twist2D(pointDriveThrottle * throttleConstant, 0, cmdVelTheta + cmdVelTheta * Utilities.processDeadzone(Math.abs(Robot.drivetrain.getTwist().getX()), 0.4) * SPEED_FF));
+            double xVel = OI.getPointDriveThrottle() * throttleConstant;
+            if (Robot.drivetrain.getDriveCommand().isLineupRunning()) {
+                double maxXVel = ControlUtils.linearDeadzoneRamp(Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget(), false, 3, 0.7, 1.5, 1);
+                if (xVel > maxXVel) {
+                    xVel = maxXVel;
+                }
+            }
+            twist2DInput.setTwist(new Twist2D(xVel, 0, cmdVelTheta));
             SmartDashboard.putNumber("PointManualDrive/velX", Robot.drivetrain.getTwist().getX());
         } else {
             logger.warn("Config not set! Setting vel to zero.");
