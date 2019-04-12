@@ -74,14 +74,14 @@ public abstract class PointManualDriveCommand extends PIDCommand {
         if (isConfigSet) {
             double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
             SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
-            double xVel = OI.getPointDriveThrottle() * throttleConstant;
+            double xVel = OI.getPointDriveThrottle();
             if (Robot.drivetrain.getDriveCommand().isLineupRunning()) {
-                double maxXVel = ControlUtils.linearDeadzoneRamp(Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget(), false, 3, 0.7, 1.5, 1);
-                if (xVel > maxXVel) {
-                    xVel = maxXVel;
+                double distanceScalar = ControlUtils.linearDeadzoneRamp(Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget(), false, 0.9, 0.38, 1.5, 1);
+                if (xVel > 0) {
+                    xVel *= distanceScalar;
                 }
             }
-            twist2DInput.setTwist(new Twist2D(xVel, 0, cmdVelTheta));
+            twist2DInput.setTwist(new Twist2D(xVel * throttleConstant, 0, cmdVelTheta));
             SmartDashboard.putNumber("PointManualDrive/velX", Robot.drivetrain.getTwist().getX());
         } else {
             logger.warn("Config not set! Setting vel to zero.");
