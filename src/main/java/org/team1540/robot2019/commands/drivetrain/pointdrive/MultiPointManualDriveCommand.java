@@ -67,6 +67,10 @@ public class MultiPointManualDriveCommand extends PointManualDriveCommand { // T
         }
     }
 
+    public boolean isLineupRunning() {
+        return currentAngleProvider == lineupLocalization;
+    }
+
     private void initializeAndUpdateConfig() {
         currentAngleProvider.initialize();
         super.applyConfig(currentAngleProvider.getPointControlConfig());

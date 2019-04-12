@@ -244,13 +244,16 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         if (Math.abs(xVel) > 1.4) {
             logger.debug("xVel greater than 1.4, resetting similar pose tracker");
             this.pointNextReset();
+            SmartDashboard.putNumber("PercentLineupLocalization/AngleError", 0);
             return 0;
         }
         if (Math.abs(signedAngleError) > Math.PI / 2) {
             logger.debug("Error is greater than PI/2, resetting similar pose tracker");
             this.pointNextReset();
+            SmartDashboard.putNumber("PercentLineupLocalization/AngleError", 0);
             return 0;
         }
+        SmartDashboard.putNumber("PercentLineupLocalization/AngleError", signedAngleError);
         return signedAngleError;
     }
 
