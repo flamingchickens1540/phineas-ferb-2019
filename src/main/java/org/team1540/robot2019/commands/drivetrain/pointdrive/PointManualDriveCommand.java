@@ -77,10 +77,10 @@ public abstract class PointManualDriveCommand extends Command {
         this.throttleConstant = cfg.getTHROTTLE_CONSTANT();
 
         pointPID.setPID(cfg.getP(), cfg.getI(), cfg.getD());
+        throttlePID.setPID(THROTTLE_P, THROTTLE_I, THROTTLE_D);
 
         this.isConfigSet = true;
 
-        throttlePID.setPID(THROTTLE_P, THROTTLE_I, THROTTLE_D);
 
         logger.debug(String
             .format("Applied config with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f OutputScalar:%f throtConstant:%f", cfg.getP(), cfg.getI(), cfg.getD(), max, min, deadzone, outputScalar,
@@ -89,8 +89,8 @@ public abstract class PointManualDriveCommand extends Command {
 
     @Override
     protected void execute() {
-        double output = pointPID.getOutput(-returnAngleError());
         if (isConfigSet) {
+            double output = pointPID.getOutput(-returnAngleError());
             double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
             SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
             double outputPercent = OI.getPointDriveThrottle();
