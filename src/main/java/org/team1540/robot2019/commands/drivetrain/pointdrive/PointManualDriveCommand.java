@@ -8,6 +8,7 @@ import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.robot2019.utils.ControlUtils;
+import org.team1540.robot2019.utils.MiniPID;
 import org.team1540.robot2019.utils.TankDriveTwist2DInput;
 import org.team1540.rooster.drive.pipeline.FeedForwardProcessor;
 import org.team1540.rooster.drive.pipeline.UnitScaler;
@@ -17,6 +18,11 @@ public abstract class PointManualDriveCommand extends PIDCommand {
 
     private static final Logger logger = Logger.getLogger(PointManualDriveCommand.class);
     public static double SPEED_FF = 0;
+
+    public static double THROTTLE_P = 0.25;
+    public static double THROTTLE_I = 0;
+    public static double THROTTLE_D = 0;
+    private final MiniPID throttlePID;
 
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
@@ -34,17 +40,26 @@ public abstract class PointManualDriveCommand extends PIDCommand {
         requires(Robot.drivetrain);
 
         SmartDashboard.putNumber("PointManualDrive/SPEED_FF", SPEED_FF);
+        SmartDashboard.putNumber("PointManualDrive/THROTTLE_P", THROTTLE_P);
+        SmartDashboard.putNumber("PointManualDrive/THROTTLE_I", THROTTLE_I);
+        SmartDashboard.putNumber("PointManualDrive/THROTTLE_D", THROTTLE_D);
 
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
+
+        throttlePID = new MiniPID(THROTTLE_P, THROTTLE_I, THROTTLE_D);
+        throttlePID.setOutputLimits(-1, 0); // can only slow down
     }
 
     @Override
     protected final void initialize() {
         SPEED_FF = SmartDashboard.getNumber("PointManualDrive/SPEED_FF", SPEED_FF);
+        THROTTLE_P = SmartDashboard.getNumber("PointManualDrive/THROTTLE_P", THROTTLE_P);
+        THROTTLE_I = SmartDashboard.getNumber("PointManualDrive/THROTTLE_I", THROTTLE_I);
+        THROTTLE_D = SmartDashboard.getNumber("PointManualDrive/THROTTLE_D", THROTTLE_D);
         logger.debug("Initialized with SPEED_FF: " + SPEED_FF);
         applyConfig(initializeAndGetConfig());
     }
@@ -74,14 +89,14 @@ public abstract class PointManualDriveCommand extends PIDCommand {
         if (isConfigSet) {
             double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
             SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
-            double xVel = OI.getPointDriveThrottle();
+            double outputPercent = OI.getPointDriveThrottle();
             if (Robot.drivetrain.getDriveCommand().isLineupRunning()) {
-                double distanceScalar = ControlUtils.linearDeadzoneRamp(Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget(), false, 0.9, 0.38, 1.5, 1);
-                if (xVel > 0) {
-                    xVel *= distanceScalar;
-                }
+                double targetXVel = ControlUtils.linearDeadzoneRamp(Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget(), false, 3, 1, 1.5, 1);
+                double pidOutput = throttlePID.getOutput(Robot.drivetrain.getTwist().getX(), targetXVel);
+                SmartDashboard.putNumber("PointManualDrive/throttlePIDOutput", pidOutput);
+                outputPercent += pidOutput;
             }
-            twist2DInput.setTwist(new Twist2D(xVel * throttleConstant, 0, cmdVelTheta));
+            twist2DInput.setTwist(new Twist2D(outputPercent * throttleConstant, 0, cmdVelTheta));
             SmartDashboard.putNumber("PointManualDrive/velX", Robot.drivetrain.getTwist().getX());
         } else {
             logger.warn("Config not set! Setting vel to zero.");
