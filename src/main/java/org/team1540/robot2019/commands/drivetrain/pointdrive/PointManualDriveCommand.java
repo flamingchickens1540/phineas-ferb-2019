@@ -50,7 +50,7 @@ public abstract class PointManualDriveCommand extends PIDCommand {
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
 
-        throttlePID = new MiniPID(THROTTLE_P, THROTTLE_I, THROTTLE_D);
+        throttlePID = new MiniPID(0, 0, 0);
         throttlePID.setOutputLimits(-1, 0); // can only slow down
     }
 
@@ -78,6 +78,8 @@ public abstract class PointManualDriveCommand extends PIDCommand {
         this.getPIDController().setD(cfg.getD());
 
         this.isConfigSet = true;
+
+        throttlePID.setPID(THROTTLE_P, THROTTLE_I, THROTTLE_D);
 
         logger.debug(String
             .format("Applied config with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f OutputScalar:%f throtConstant:%f", cfg.getP(), cfg.getI(), cfg.getD(), max, min, deadzone, outputScalar,
