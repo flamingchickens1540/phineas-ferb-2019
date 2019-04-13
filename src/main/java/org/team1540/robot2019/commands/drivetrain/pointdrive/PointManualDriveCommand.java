@@ -96,7 +96,9 @@ public abstract class PointManualDriveCommand extends Command {
         this.throttleConstant = cfg.getTHROTTLE_CONSTANT();
 
         pointPID.setPID(cfg.getP(), cfg.getI(), cfg.getD());
+        pointPID.reset();
         throttlePID.setPID(THROTTLE_P, THROTTLE_I, THROTTLE_D, THROTTLE_F);
+        throttlePID.reset();
 
         this.isConfigSet = true;
 
@@ -109,7 +111,9 @@ public abstract class PointManualDriveCommand extends Command {
     @Override
     protected void execute() {
         if (isConfigSet) {
-            double output = pointPID.getOutput(-returnAngleError());
+            double relGoalAngle = -returnAngleError();
+            SmartDashboard.putNumber("PointManualDrive/anglePIDError", relGoalAngle);
+            double output = pointPID.getOutput(relGoalAngle);
             double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
             SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
             double outputPercent = OI.getPointDriveThrottle();
