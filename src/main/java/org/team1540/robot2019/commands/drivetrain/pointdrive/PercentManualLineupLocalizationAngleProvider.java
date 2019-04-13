@@ -44,7 +44,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             BALL_CARGOSHIP_PLACE_Y_OFFSET = 0.003;
             BALL_ROCKET_PLACE_Y_OFFSET = 0.003;
             BALL_ROCKET_PLACE_X_OFFSET = -0.1;
-            HATCH_GRAB_X_OFFSET = -0.05;
+            HATCH_GRAB_X_OFFSET = -0.03;
             HATCH_GRAB_Y_OFFSET = -0.02;
             HATCH_PLACE_X_OFFSET = -0.1;
             HATCH_PLACE_Y_OFFSET = -0.03;
@@ -66,7 +66,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     // Constants for angular VPID controller
     private static double P = 0.45;
-    private static double I = 0;
+    private static double I = 0.01;
     private static double D = 1;
 
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
@@ -248,16 +248,13 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         if (Math.abs(xVel) > 1.4) {
             logger.debug("xVel greater than 1.4, resetting similar pose tracker");
             this.pointNextReset();
-            SmartDashboard.putNumber("PercentLineupLocalization/AngleError", 0);
             return 0;
         }
         if (Math.abs(signedAngleError) > Math.PI / 2) {
             logger.debug("Error is greater than PI/2, resetting similar pose tracker");
             this.pointNextReset();
-            SmartDashboard.putNumber("PercentLineupLocalization/AngleError", 0);
             return 0;
         }
-        SmartDashboard.putNumber("PercentLineupLocalization/AngleError", signedAngleError);
         return signedAngleError;
     }
 
