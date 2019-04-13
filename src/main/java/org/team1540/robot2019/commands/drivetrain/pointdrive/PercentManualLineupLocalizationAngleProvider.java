@@ -45,9 +45,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             BALL_ROCKET_PLACE_Y_OFFSET = 0.003;
             BALL_ROCKET_PLACE_X_OFFSET = -0.1;
             HATCH_GRAB_X_OFFSET = -0.05;
-            HATCH_GRAB_Y_OFFSET = 0;
+            HATCH_GRAB_Y_OFFSET = 0.015;
             HATCH_PLACE_X_OFFSET = -0.1;
-            HATCH_PLACE_Y_OFFSET = -0.03;
+            HATCH_PLACE_Y_OFFSET = -0.015;
         }
     }
 
@@ -66,7 +66,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     // Constants for angular VPID controller
     private static double P = 0.45;
-    private static double I = 0.01;
+    private static double I = 0;
     private static double D = 2.0;
 
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
