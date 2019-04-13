@@ -643,7 +643,41 @@
         "showGrid": true,
         "hgap": 16.0,
         "vgap": 16.0,
-        "tiles": {}
+        "tiles": {
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/SLOW_ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/SLOW_ANGULAR_VEL"
+            }
+          },
+          "4,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/FAST_ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/FAST_ANGULAR_VEL"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/FAST_TIMEOUT_K",
+              "_title": "SmartDashboard/TurnUntilNewTarget/FAST_TIMEOUT_K"
+            }
+          }
+        }
       }
     }
   ],
