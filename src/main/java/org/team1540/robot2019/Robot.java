@@ -106,7 +106,7 @@ public class Robot extends TimedRobot {
             if (calibrationPitch == null) {
                 logger.error("calibrationPitch is null!");
             } else {
-                logger.info("Pitch estimation successful: " + calibrationPitch);
+                logger.info("Pitch estimation successful: " + Math.toDegrees(calibrationPitch));
                 SmartDashboard.putNumber("CameraPoseCalibration/PitchEstimate", Math.toDegrees(calibrationPitch));
             }
         });
@@ -118,7 +118,7 @@ public class Robot extends TimedRobot {
             if (calibrationYaw == null) {
                 logger.error("calibrationYaw is null!");
             } else {
-                logger.info("Yaw estimation successful: " + calibrationYaw);
+                logger.info("Yaw estimation successful: " + Math.toDegrees(calibrationYaw));
                 SmartDashboard.putNumber("CameraPoseCalibration/YawEstimate", Math.toDegrees(calibrationYaw));
             }
         });
