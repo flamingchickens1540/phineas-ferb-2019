@@ -17,6 +17,7 @@ import org.team1540.rooster.functional.Executable;
 public abstract class PointManualDriveCommand extends Command {
 
     private static final Logger logger = Logger.getLogger(PointManualDriveCommand.class);
+    public static double DESIRED_THROTTLE_JOYSTICK_PERCENT = 0.95;
     public static double FAST = 3;
     public static double SLOW = 1;
     public static double FAST_X = 1.5;
@@ -60,6 +61,8 @@ public abstract class PointManualDriveCommand extends Command {
         SmartDashboard.putNumber("PointManualDrive/FAST_X", FAST_X);
         SmartDashboard.putNumber("PointManualDrive/SLOW_X", SLOW_X);
 
+        SmartDashboard.putNumber("PointManualDrive/DESIRED_THROTTLE_JOYSTICK_PERCENT", DESIRED_THROTTLE_JOYSTICK_PERCENT);
+
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
         pipeline = twist2DInput
             .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
@@ -82,6 +85,8 @@ public abstract class PointManualDriveCommand extends Command {
         SLOW = SmartDashboard.getNumber("PointManualDrive/SLOW", SLOW);
         FAST_X = SmartDashboard.getNumber("PointManualDrive/FAST_X", FAST_X);
         SLOW_X = SmartDashboard.getNumber("PointManualDrive/SLOW_X", SLOW_X);
+
+        DESIRED_THROTTLE_JOYSTICK_PERCENT = SmartDashboard.getNumber("PointManualDrive/DESIRED_THROTTLE_JOYSTICK_PERCENT", DESIRED_THROTTLE_JOYSTICK_PERCENT);
         logger.debug("Initialized with SPEED_FF: " + SPEED_FF);
         applyConfig(initializeAndGetConfig());
     }
@@ -123,7 +128,7 @@ public abstract class PointManualDriveCommand extends Command {
                 double pidOutput = throttlePID.getOutput(Robot.drivetrain.getTwist().getX(), targetXVel);
                 SmartDashboard.putNumber("PointManualDrive/throttlePIDError", targetXVel - Robot.drivetrain.getTwist().getX());
                 if (outputPercent > 0) {
-                    outputPercent *= pidOutput;
+                    outputPercent *= pidOutput / DESIRED_THROTTLE_JOYSTICK_PERCENT;
                 }
             }
             twist2DInput.setTwist(new Twist2D(outputPercent * throttleConstant, 0, cmdVelTheta));
