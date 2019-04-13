@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
@@ -150,6 +151,10 @@ public class Robot extends TimedRobot {
             Logger.getRootLogger().setLevel(Level.DEBUG);
         }
 
+        Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
+        if (lastBaseLinkToVisionTarget != null) {
+            SmartDashboard.putNumber("CameraPoseCalibration/DistanceToTargetOut", UnitsUtils.metersToInches(lastBaseLinkToVisionTarget.toTransform2D().getPositionVector().distance(Vector2D.ZERO)));
+        }
         if (debugMode) {
             odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
             if (lastOdomToVisionTargetTracker.getTransform3D() != null) {
@@ -157,7 +162,6 @@ public class Robot extends TimedRobot {
                     .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
 
             }
-            Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
             if (lastBaseLinkToVisionTarget != null) {
                 lastBaseLinkToVisionTarget.toTransform2D()
                     .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
