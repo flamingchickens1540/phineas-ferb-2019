@@ -407,7 +407,7 @@
       }
     },
     {
-      "title": "LineupPIDTuning",
+      "title": "AnglePIDTuning",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -514,8 +514,136 @@
               "_source0": "network_table:///SmartDashboard/PointManualDrive/velX",
               "_title": "SmartDashboard/PointManualDrive/velX"
             }
+          },
+          "3,0": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/anglePIDError",
+              "_title": "SmartDashboard/PointManualDrive/anglePIDError",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/PointManualDrive/anglePIDError": true
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointDriveAngleProvider/ANGULAR_KP",
+              "_title": "SmartDashboard/PointDriveAngleProvider/ANGULAR_KP"
+            }
+          },
+          "8,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointDriveAngleProvider/ANGULAR_KI",
+              "_title": "SmartDashboard/PointDriveAngleProvider/ANGULAR_KI"
+            }
+          },
+          "9,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointDriveAngleProvider/ANGULAR_KD",
+              "_title": "SmartDashboard/PointDriveAngleProvider/ANGULAR_KD"
+            }
           }
         }
+      }
+    },
+    {
+      "title": "SlowBeforeVisionTarget",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/THROTTLE_P",
+              "_title": "SmartDashboard/PointManualDrive/THROTTLE_P"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/THROTTLE_I",
+              "_title": "SmartDashboard/PointManualDrive/THROTTLE_I"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/THROTTLE_D",
+              "_title": "SmartDashboard/PointManualDrive/THROTTLE_D"
+            }
+          },
+          "3,2": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/throttlePIDError",
+              "_title": "SmartDashboard/PointManualDrive/throttlePIDError",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/PointManualDrive/throttlePIDError": true
+            }
+          },
+          "6,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/THROTTLE_F",
+              "_title": "SmartDashboard/PointManualDrive/THROTTLE_F"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 6",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {}
       }
     }
   ],
