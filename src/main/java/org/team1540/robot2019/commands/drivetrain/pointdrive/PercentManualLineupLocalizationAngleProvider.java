@@ -67,7 +67,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     // Constants for angular VPID controller
     private static double P = 0.45;
     private static double I = 0;
-    private static double D = 2.0;
+    private static double D = 1.0;
 
     private static double THROTTLE_CONSTANT = 3; // Throttle constant for linear velocity
 
