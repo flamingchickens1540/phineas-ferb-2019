@@ -86,8 +86,8 @@ public class RobotMap {
             WRIST_MID_SW = 2;
             WRIST_BTM_SW = 3;
         } else {
-            CAM_YAW = Math.toRadians(0.616);
-            CAM_PITCH = Math.toRadians(-33.08);
+            CAM_YAW = Math.toRadians(1.5534);
+            CAM_PITCH = Math.toRadians(-31.986);
             HATCH_SLIDE = 1;
             HATCH_GRABBER = 0;
             WRIST_MID_SW = 2;
