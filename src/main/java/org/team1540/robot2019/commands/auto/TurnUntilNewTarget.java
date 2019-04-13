@@ -24,8 +24,8 @@ public class TurnUntilNewTarget extends Command {
     private static final Logger logger = Logger.getLogger(TurnUntilNewTarget.class);
     private static final double MAX_ANGULAR_VEL = 5;
     private static double FAST_ANGULAR_VEL = 7;
-    private static double SLOW_ANGULAR_VEL = 1.5;
-    private static double FAST_TIMEOUT_K = 0.085;
+    private static double SLOW_ANGULAR_VEL = 2.5;
+    private static double FAST_TIMEOUT_K = 0.075;
     private final TankDriveTwist2DInput twist2DInput;
     private final Executable pipeline;
 
