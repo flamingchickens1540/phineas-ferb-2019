@@ -55,9 +55,9 @@ public class OI {
     // ---------------------------------------- Copilot ----------------------------------------
     // Hatch
     private static Button sensorGrabHatchButton = copilot.getButton(XboxButton.X);
-    private static Button prepGetHatchFloorButton = copilot.getButton(XboxButton.START);
+    private static Button placeHatchSequenceButton = copilot.getButton(XboxButton.START);
     private static Button grabThenRetractButtonAndAlsoTheRocketBallIntakeButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
-    private static Button placeHatchButton = copilot.getButton(XboxButton.Y);
+    private static Button visionPlaceHatchButton = copilot.getButton(XboxButton.Y);
     private static Button stowHatchButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
 
     // Elevator
@@ -157,10 +157,17 @@ public class OI {
         SensorGrabHatchSequence sensorGrabHatchSequence = new SensorGrabHatchSequence();
         sensorGrabHatchButton.whenPressed(sensorGrabHatchSequence);
         PlaceHatchSequence placeHatchSequence = new PlaceHatchSequence(false, true);
-        placeHatchButton.whenPressed(placeHatchSequence);
+        placeHatchSequenceButton.whenPressed(placeHatchSequence);
 
         //    Floor hatch grab
-        prepGetHatchFloorButton.whenPressed(new PrepHatchFloorGrab());
+        Command prepHatchFloorGrab = new PrepHatchFloorGrab();
+        prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> { // TODO: Replace with simpleButton
+            if (climbLevel3Button.get()) {
+                prepHatchFloorGrab.start();
+            }
+        }));
+        prepClimbLevel2Button.whenReleased(new SimpleCommand("", prepHatchFloorGrab::cancel));
+        climbLevel3Button.whenReleased(new SimpleCommand("", prepHatchFloorGrab::cancel));
 
         //    Rarely used hatch buttons
         grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new GrabHatchThenRetract(Tuning.hatchGrabWaitTime));
@@ -171,13 +178,8 @@ public class OI {
 
         //    Vision hatch place
         VisionAutoPlaceSequence visionAutoPlaceSequence = new VisionAutoPlaceSequence();
-        prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> { // TODO: Replace with simpleButton
-            if (climbLevel3Button.get()) {
-                visionAutoPlaceSequence.start();
-            }
-        }));
-        prepClimbLevel2Button.whenReleased(new SimpleCommand("", visionAutoPlaceSequence::cancel));
-        climbLevel3Button.whenReleased(new SimpleCommand("", visionAutoPlaceSequence::cancel));
+        visionPlaceHatchButton.whenPressed(visionAutoPlaceSequence);
+        visionPlaceHatchButton.whenReleased(new SimpleCommand("", visionAutoPlaceSequence::cancel));
 
         // High vision target
         grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
