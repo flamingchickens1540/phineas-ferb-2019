@@ -17,7 +17,7 @@ import org.team1540.rooster.functional.Executable;
 public abstract class PointManualDriveCommand extends Command {
 
     private static final Logger logger = Logger.getLogger(PointManualDriveCommand.class);
-    public static double DESIRED_THROTTLE_JOYSTICK_PERCENT = 0.95;
+    public static double DESIRED_THROTTLE_JOYSTICK_PERCENT = 0.90;
     public static double FAST = 3;
     public static double SLOW = 1;
     public static double FAST_X = 1.5;
