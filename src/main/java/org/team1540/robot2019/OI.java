@@ -26,7 +26,6 @@ import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.hatch.subgroups.GrabHatchThenRetract;
-import org.team1540.robot2019.commands.hatch.temporary.PlaceHatchInLoadingStation;
 import org.team1540.robot2019.commands.hatch.temporary.WiggleAndGrabHatch;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
@@ -271,7 +270,9 @@ public class OI {
             // Hatch
             testPrepGetHatchButton.whenPressed(sensorGrabHatchSequence);
             testPlaceHatchButton.whenPressed(placeHatchSequence);
-            testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
+            testPlaceHatchInLoadingStationButton.whenPressed(new VisionAutoPlaceSequence());
+//            testPlaceHatchInLoadingStationButton.whenPressed(new PlaceHatchInLoadingStation());
+
 //            autoPlaceButton.whenPressed(new VisionAutoPlaceSequence());
 //            autoGrabButton.whenPressed(new VisionAutoGrabSequence());
 
