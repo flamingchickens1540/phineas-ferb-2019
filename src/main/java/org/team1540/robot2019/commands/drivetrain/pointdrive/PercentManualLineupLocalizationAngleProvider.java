@@ -78,6 +78,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.4);
     private Timer timer;
+    private boolean ignoreDefault = false;
 
     public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
 //        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
@@ -147,6 +148,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         POINT_DEADZONE = SmartDashboard.getNumber("PercentLineupLocalization/POINT_DEADZONE", POINT_DEADZONE);
 
         goal = null;
+        ignoreDefault = false;
 
         Hardware.limelight.setLeds(true);
 
@@ -200,6 +202,10 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         if (goal != null) {
             return getAngleError();
         } else {
+            if (ignoreDefault || Robot.elevator.getPosition() > 3) {
+                ignoreDefault = true;
+                return 0;
+            }
             return defaultError;
         }
     }
