@@ -245,11 +245,11 @@ public class Robot extends TimedRobot {
                 logger.debug("Stopping compressor because elevator is up");
                 Hardware.compressor.stop();
             } else {
-                if (Hardware.returnPressureSensorValue() > 120) {
-                    Hardware.compressor.stop();
-                } else if (Hardware.returnPressureSensorValue() < 110) {
+//                if (Hardware.returnPressureSensorValue() > 120) {
+//                    Hardware.compressor.stop();
+//                } else if (Hardware.returnPressureSensorValue() < 110) {
                     Hardware.compressor.start();
-                }
+//                }
             }
         } else {
             Hardware.compressor.stop();
