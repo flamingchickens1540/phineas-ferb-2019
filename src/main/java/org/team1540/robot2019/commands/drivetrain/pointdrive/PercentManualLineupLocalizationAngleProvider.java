@@ -31,9 +31,9 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     static {
         if (Tuning.isComp) {
-            BALL_CARGOSHIP_PLACE_X_OFFSET = -0.1;
+            BALL_CARGOSHIP_PLACE_X_OFFSET = 0.1;
             BALL_CARGOSHIP_PLACE_Y_OFFSET = 0.003;
-            BALL_ROCKET_PLACE_Y_OFFSET = 0.003;
+            BALL_ROCKET_PLACE_Y_OFFSET = -0.03;
             BALL_ROCKET_PLACE_X_OFFSET = -0.1;
             HATCH_GRAB_X_OFFSET = -0.05;
             HATCH_GRAB_Y_OFFSET = 0.01;
