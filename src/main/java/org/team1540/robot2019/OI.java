@@ -338,4 +338,13 @@ public class OI {
     public static double getPointUntilNextTargetAxis() { // unused
         return Utilities.processDeadzone(driver.getTriggerAxis(Hand.kLeft), 0.1) - Utilities.processDeadzone(driver.getTriggerAxis(Hand.kRight), 0.1);
     }
+
+    // Elevator testing
+    public static double getElevatorManualA() {
+        return Utilities.scale(Utilities.processDeadzone(tester.getY(Hand.kLeft), Tuning.driveDeadzone), 2);
+    }
+
+    public static double getElevatorManualB() {
+        return Utilities.scale(Utilities.processDeadzone(tester.getY(Hand.kRight), Tuning.driveDeadzone), 2);
+    }
 }
