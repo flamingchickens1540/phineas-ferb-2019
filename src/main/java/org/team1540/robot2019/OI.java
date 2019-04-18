@@ -64,6 +64,7 @@ public class OI {
     private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
+    private static Button moveElevatorToClimbArmsBackButton = copilot.getButton(XboxButton.RIGHT_PRESS);
 
     // Cargo
     private static Button cargoFloorIntakeButton = copilot.getButton(XboxButton.A);
@@ -192,6 +193,8 @@ public class OI {
         elevatorCargoShipButton.whenPressed(moveElevatorToCargoShip);
         MoveElevatorToZero moveElevatorToZero = new MoveElevatorToZero();
         elevatorDownButton.whenPressed(moveElevatorToZero);
+        MoveElevatorToPosition moveElevatorToClimbArmsBack = new MoveElevatorToPosition(Tuning.elevatorToClimbArmsBack);
+        moveElevatorToClimbArmsBackButton.whenPressed(moveElevatorToClimbArmsBack);
 
         // Cargo
         Command cargoFloorIntake = new FloorIntakeCargo();
