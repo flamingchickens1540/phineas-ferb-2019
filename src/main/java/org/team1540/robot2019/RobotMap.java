@@ -79,10 +79,10 @@ public class RobotMap {
         if (Tuning.isComp) {
 //            CAM_YAW = Math.toRadians(3);
 //            CAM_PITCH = Math.toRadians(-30.0);
-            CAM_YAW = Math.toRadians(4.01562054);
-            CAM_PITCH = Math.toRadians(-27.8904396);
+            CAM_YAW = Math.toRadians(0.96874);
+            CAM_PITCH = Math.toRadians(-32.2654);
             HATCH_SLIDE = 7;
-            HATCH_GRABBER = 1;//0;
+            HATCH_GRABBER = 0;//0;
             WRIST_MID_SW = 2;
             WRIST_BTM_SW = 3;
         } else {
