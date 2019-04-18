@@ -14,7 +14,7 @@ public class VisionAutoPlaceSequence extends CommandGroup {
 
     private static final Logger logger = Logger.getLogger(VisionAutoPlaceSequence.class);
 
-    public static double MAX_DISTANCE = 0.4;
+    public static double MAX_DISTANCE = 0.50;
     public static double MAX_ANGLE_ERROR_DEGREES = 3;
     public static double MAX_RELATIVE_ANGLE = 50;
 
@@ -24,6 +24,7 @@ public class VisionAutoPlaceSequence extends CommandGroup {
         SmartDashboard.putNumber("VisionAutoPlaceSequence/MAX_RELATIVE_ANGLE", MAX_RELATIVE_ANGLE);
 
         addSequential(new WaitUntilCommand(() -> isDistanceReached() && isAngleReached() && isSmallRelativeAngle()));
+//        addParallel(new SimpleCommand("", () -> new TankDriveForTimeVelocity(0.3, 0).start()));
         addSequential(new PlaceHatchSequence(false, true));
     }
 
