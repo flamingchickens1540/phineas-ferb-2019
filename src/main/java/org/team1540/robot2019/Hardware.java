@@ -229,7 +229,9 @@ public class Hardware {
         logger.info("Initializing cargo mech...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        cargoRollerTop = createController(RobotMap.CARGO_ROLLER_TOP);
+        //        cargoRollerTopTalon.configPeakCurrentLimit(50);
+
+        Hardware.cargoRollerTop = new ChickenTalon(RobotMap.CARGO_ROLLER_TOP);
         cargoRollerBottom = createController(RobotMap.CARGO_ROLLER_BOTTOM);
 
         cargoRollerTop.setInverted(Tuning.invertCargoRollerTop);
