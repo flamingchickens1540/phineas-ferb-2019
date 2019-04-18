@@ -24,7 +24,6 @@ public class VisionAutoPlaceSequence extends CommandGroup {
         SmartDashboard.putNumber("VisionAutoPlaceSequence/MAX_RELATIVE_ANGLE", MAX_RELATIVE_ANGLE);
 
         addSequential(new WaitUntilCommand(() -> isDistanceReached() && isAngleReached() && isSmallRelativeAngle()));
-//        addParallel(new SimpleCommand("", () -> new TankDriveForTimeVelocity(0.3, 0).start()));
         addSequential(new PlaceHatchSequence(false, true));
     }
 

@@ -21,9 +21,9 @@ public class PlaceHatchSequence extends CommandGroup {
 
         Command tankDriveForTimePercent = new TankDriveForTimePercent(0.2, 0.3);
         if (requireDrivetrain) {
-            addSequential(tankDriveForTimePercent);
+            addParallel(tankDriveForTimePercent);
         } else {
-            addSequential(new SimpleCommand("Drive", tankDriveForTimePercent::start));
+            addParallel(new SimpleCommand("Drive", tankDriveForTimePercent::start));
         }
 
         addSequential(new WaitCommand(0.05));
