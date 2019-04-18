@@ -206,6 +206,22 @@ public class Hardware {
         logger.info("Initialized elevator in " + (end - start) + " ms");
     }
 
+    public static void unfollowInitElevator() {
+        logger.info("Initializing elevator...");
+        double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+        elevatorA = new CANSparkMax(RobotMap.ELEVATOR_L, MotorType.kBrushless);
+        elevatorB = new CANSparkMax(RobotMap.ELEVATOR_R, MotorType.kBrushless);
+
+        elevatorA.setIdleMode(IdleMode.kBrake);
+        elevatorB.setIdleMode(IdleMode.kBrake);
+
+        elevatorA.setInverted(Tuning.invertElevatorA);
+
+        double end = RobotController.getFPGATime() / 1000.0;
+        logger.info("Initialized elevator in " + (end - start) + " ms");
+    }
+
     public static void initWrist() {
         logger.info("Initializing wrist...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
