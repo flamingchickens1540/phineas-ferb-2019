@@ -193,8 +193,8 @@ public class OI {
         elevatorCargoShipButton.whenPressed(moveElevatorToCargoShip);
         MoveElevatorToZero moveElevatorToZero = new MoveElevatorToZero();
         elevatorDownButton.whenPressed(moveElevatorToZero);
-        MoveElevatorToPosition moveElevatorToClimbArmsBack = new MoveElevatorToPosition(Tuning.elevatorToClimbArmsBack);
-        moveElevatorToClimbArmsBackButton.whenPressed(moveElevatorToClimbArmsBack);
+//        MoveElevatorToPosition moveElevatorToClimbArmsBack = new MoveElevatorToPosition(Tuning.elevatorToClimbArmsBack);
+//        moveElevatorToClimbArmsBackButton.whenPressed(moveElevatorToClimbArmsBack);
 
         // Cargo
         Command cargoFloorIntake = new FloorIntakeCargo();
