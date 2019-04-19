@@ -247,17 +247,19 @@ public class Hardware {
 
         //        cargoRollerTopTalon.configPeakCurrentLimit(50);
 
-        Hardware.cargoRollerTop = new ChickenTalon(RobotMap.CARGO_ROLLER_TOP);
+        ChickenTalon cargoRollerTop = new ChickenTalon(RobotMap.CARGO_ROLLER_TOP);
+        Hardware.cargoRollerTop = cargoRollerTop;
+        cargoRollerTop.configPeakCurrentLimit(50);
         cargoRollerBottom = createController(RobotMap.CARGO_ROLLER_BOTTOM);
 
-        cargoRollerTop.setInverted(Tuning.invertCargoRollerTop);
+        Hardware.cargoRollerTop.setInverted(Tuning.invertCargoRollerTop);
         cargoRollerBottom.setInverted(Tuning.invertCargoRollerBottom);
 
-        cargoRollerTop.setBrake(true);
+        Hardware.cargoRollerTop.setBrake(true);
         cargoRollerBottom.setBrake(true);
 
-        cargoRollerTop.configVoltageCompSaturation(12);
-        cargoRollerTop.enableVoltageCompensation(true);
+        Hardware.cargoRollerTop.configVoltageCompSaturation(12);
+        Hardware.cargoRollerTop.enableVoltageCompensation(true);
 
         cargoRollerBottom.configVoltageCompSaturation(12);
         cargoRollerBottom.enableVoltageCompensation(true);
