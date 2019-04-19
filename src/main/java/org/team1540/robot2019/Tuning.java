@@ -84,7 +84,7 @@ public class Tuning {
     public static double wristDownTravelBrakeThrot;
     // what's uptravel
     public static double wristUpTravelThrot = 0.7;
-    public static double wristHoldThrot = 0.05;
+    public static double wristHoldThrot = 0.08;
     public static double wristLowerTimeout = 1;
 
     // cargoMech
