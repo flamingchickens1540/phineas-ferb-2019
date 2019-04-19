@@ -11,12 +11,14 @@ public class LiftGyroStabilizeLevel3 extends PIDCommand {
     public static double CLIMBER_GYRO_P = Tuning.climberGyroP;
     public static double CLIMBER_GYRO_I = Tuning.climberGyroI;
     public static double CLIMBER_GYRO_D = Tuning.climberGyroD;
+    public static double CLIMBER_GYRO_GOAL = 0;
 
     public LiftGyroStabilizeLevel3() {
         super(0, 0, 0);
         SmartDashboard.putNumber("LiftGyroStabilizeLevel3/CLIMBER_GYRO_P", CLIMBER_GYRO_P);
         SmartDashboard.putNumber("LiftGyroStabilizeLevel3/CLIMBER_GYRO_I", CLIMBER_GYRO_I);
         SmartDashboard.putNumber("LiftGyroStabilizeLevel3/CLIMBER_GYRO_D", CLIMBER_GYRO_D);
+        SmartDashboard.putNumber("LiftGyroStabilizeLevel3/CLIMBER_GYRO_GOAL", CLIMBER_GYRO_GOAL);
 
         requires(Robot.climber);
     }
@@ -26,9 +28,9 @@ public class LiftGyroStabilizeLevel3 extends PIDCommand {
         CLIMBER_GYRO_P = SmartDashboard.getNumber("LiftGyroStabilizeLevel3/CLIMBER_GYRO_P", CLIMBER_GYRO_P);
         CLIMBER_GYRO_I = SmartDashboard.getNumber("LiftGyroStabilizeLevel3/CLIMBER_GYRO_I", CLIMBER_GYRO_I);
         CLIMBER_GYRO_D = SmartDashboard.getNumber("LiftGyroStabilizeLevel3/CLIMBER_GYRO_D", CLIMBER_GYRO_D);
+        CLIMBER_GYRO_GOAL = SmartDashboard.getNumber("LiftGyroStabilizeLevel3/CLIMBER_GYRO_GOAL", CLIMBER_GYRO_GOAL);
 
         this.getPIDController().setPID(CLIMBER_GYRO_P, CLIMBER_GYRO_I, CLIMBER_GYRO_D);
-        Robot.climber.lowerCylinder();
     }
 
     @Override
@@ -38,7 +40,7 @@ public class LiftGyroStabilizeLevel3 extends PIDCommand {
 
     @Override
     protected double returnPIDInput() {
-        double rawPitchDegrees = Hardware.navx.getRawPitchDegrees();
+        double rawPitchDegrees = Hardware.navx.getRawPitchDegrees() + CLIMBER_GYRO_GOAL;
         SmartDashboard.putNumber("LiftGyroStabilizeLevel3/rawPitchDegrees", rawPitchDegrees);
         return rawPitchDegrees;
     }

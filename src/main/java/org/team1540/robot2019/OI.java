@@ -14,7 +14,7 @@ import org.team1540.robot2019.commands.cargo.FloorIntakeCargo;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntakeCargo;
 import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel2;
-import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel3;
+import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel3Group;
 import org.team1540.robot2019.commands.climber.PrepClimbLevelThree;
 import org.team1540.robot2019.commands.climber.PrepClimbLevelTwo;
 import org.team1540.robot2019.commands.drivetrain.pointdrive.PointDriveAngleProvider;
@@ -219,11 +219,12 @@ public class OI {
             }
         }));
 
+        LiftGyroStabilizeLevel3Group liftGyroStabilizeLevel3 = new LiftGyroStabilizeLevel3Group();
         climbLevel2Button.whenPressed(new SimpleCommand("", () -> {
             if (PrepClimbLevelTwo.hasPrepLvl2) {
                 new LiftGyroStabilizeLevel2().start();
             } else if (PrepClimbLevelThree.hasPrepLvl3) {
-                new LiftGyroStabilizeLevel3().start();
+                liftGyroStabilizeLevel3.start();
             }
         }));
         climberCylinderUp.whenPressed(new SimpleCommand("Raise Cylinder", Robot.climber::raiseCylinder, Robot.climber));
