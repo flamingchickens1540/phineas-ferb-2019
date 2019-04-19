@@ -227,7 +227,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             } else {
                 partialGoal = partialGoal.add(new Transform3D(BALL_ROCKET_PLACE_X_OFFSET, BALL_ROCKET_PLACE_Y_OFFSET, 0));
             }
-        } else if (Robot.hatch.isRetracted()) {
+        } else if (Robot.hatch.isRetracted()) { // TODO: Better indicator
             partialGoal = partialGoal.add(new Transform3D(HATCH_PLACE_X_OFFSET, HATCH_PLACE_Y_OFFSET, 0));
         } else {
             partialGoal = partialGoal.add(new Transform3D(HATCH_GRAB_X_OFFSET, HATCH_GRAB_Y_OFFSET, 0));
@@ -247,7 +247,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 //        }
 //        Vector3D goalPosition = adjustedGoal.getPosition();
         Vector3D goalPosition = goal.getPosition();
-        double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX());
+        double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX()); // TODO: Method
         SmartDashboard.putNumber("PercentLineupLocalization/TargetAngle", targetAngle);
         double signedAngleError = TrigUtils.signedAngleError(targetAngle, Hardware.navx.getYawRadians());
         double xVel = Robot.drivetrain.getTwist().getX();
@@ -276,7 +276,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     }
 
     //
-//    private static double smoothStep(double x) {
+//    private static double smoothStep(double x) { // TODO: Method
 //        if (x > 1) {
 //            return 1;
 //        } else if (x < 0) {
@@ -285,7 +285,7 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 //        return 3 * x * x - 2 * x * x * x;
 //    }
 //
-//    private static double smoothStepFiveDir(double x) {
+//    private static double smoothStepFiveDir(double x) { // TODO: Method
 //        if (x > 1) {
 //            return 1;
 //        } else if (x < 0) {
