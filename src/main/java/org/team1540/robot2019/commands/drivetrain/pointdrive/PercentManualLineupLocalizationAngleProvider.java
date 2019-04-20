@@ -37,8 +37,8 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
             BALL_ROCKET_PLACE_Y_OFFSET = -0.065;
             HATCH_GRAB_X_OFFSET = -0.05;
             HATCH_GRAB_Y_OFFSET = -0.03;
-            HATCH_PLACE_X_OFFSET = -0.1;
-            HATCH_PLACE_Y_OFFSET = -0.037;
+            HATCH_PLACE_X_OFFSET = -0.08;
+            HATCH_PLACE_Y_OFFSET = -0.032;
         } else {
             BALL_CARGOSHIP_PLACE_X_OFFSET = -0.1;
             BALL_CARGOSHIP_PLACE_Y_OFFSET = 0.003;
