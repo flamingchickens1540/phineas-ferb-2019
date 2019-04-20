@@ -104,8 +104,6 @@ public class OI {
 
     private static Button resetPointOffset = driver.getButton(XboxButton.Y);
 
-    private static Button lockPointDrive = driver.getButton(XboxButton.RIGHT_PRESS);
-
     private static Button pointDrivePointAxis = driver.getButton(Tuning.driveDeadzone, POINT_DRIVE_POINT_X, POINT_DRIVE_POINT_Y);
     private static Button pointDriveThrottle = driver.getButton(Tuning.driveDeadzone, POINT_DRIVE_THROTTLE);
 
@@ -349,9 +347,5 @@ public class OI {
 
     public static double getElevatorManualB() {
         return Utilities.scale(Utilities.processDeadzone(tester.getY(Hand.kRight), Tuning.driveDeadzone), 2);
-    }
-
-    public static boolean getPointDriveLockButton() {
-        return OI.lockPointDrive.get();
     }
 }
