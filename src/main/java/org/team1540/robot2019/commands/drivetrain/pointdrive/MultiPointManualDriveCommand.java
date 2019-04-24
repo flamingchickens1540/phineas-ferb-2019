@@ -1,7 +1,6 @@
 package org.team1540.robot2019.commands.drivetrain.pointdrive;
 
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 
 public class MultiPointManualDriveCommand extends PointManualDriveCommand { // TODO: Make this generic
@@ -36,18 +35,18 @@ public class MultiPointManualDriveCommand extends PointManualDriveCommand { // T
     @Override
     protected double returnAngleError() {
 //            || Math.abs(pointDriveAngleProvider.returnAngleError()) > Math.toRadians(10)
-        if (OI.getPointDriveMagnitude() > 0.5) { // TODO: Make these tunable
-            tempDisableLineup = false;
-            startPointDrive();
-        } else {
+//        if (OI.getPointDriveMagnitude() > 0.5) { // TODO: Make these tunable
+//            tempDisableLineup = false;
+//            startPointDrive();
+//        } else {
             if (tempDisableLineup) {
                 return 0;
             } else {
                 startLineup();
                 return lineupLocalization.returnAngleError(pointDriveAngleProvider.returnAngleError(0));
             }
-        }
-        return currentAngleProvider.returnAngleError(0);
+//        }
+//        return currentAngleProvider.returnAngleError(0);
     }
 
     private void startPointDrive() {

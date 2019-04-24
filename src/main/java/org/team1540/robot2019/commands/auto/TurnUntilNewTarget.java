@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
@@ -89,7 +88,7 @@ public class TurnUntilNewTarget extends Command {
         if (left != null) {
             omega = (left ? 1 : -1) * ControlUtils.linearDeadzoneRamp(fastTimeout - this.timeSinceInitialized(), false, FAST_ANGULAR_VEL, SLOW_ANGULAR_VEL, 0.02, -0.02);
         } else {
-            omega = ControlUtils.velocityPosNegConstrain(OI.getPointUntilNextTargetAxis() * MAX_ANGULAR_VEL, MAX_ANGULAR_VEL, SLOW_ANGULAR_VEL);
+            omega = 0;//ControlUtils.velocityPosNegConstrain(OI.getPointUntilNextTargetAxis() * MAX_ANGULAR_VEL, MAX_ANGULAR_VEL, SLOW_ANGULAR_VEL);
         }
         SmartDashboard.putNumber("TurnUntilNewTarget/omega", omega);
         twist2DInput.setTwist(new Twist2D(0, 0, omega));
@@ -104,9 +103,9 @@ public class TurnUntilNewTarget extends Command {
 
     @Override
     protected boolean isFinished() {
-        if (OI.getPointDriveMagnitude() > 0.4 || Math.abs(OI.getPointDriveThrottle()) > Tuning.driveDeadzone) {
-            return true;
-        }
+//        if (OI.getPointDriveMagnitude() > 0.4 || Math.abs(OI.getPointDriveThrottle()) > Tuning.driveDeadzone) {
+//            return true;
+//        }
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose()) {
             if (untilAnyTarget) {
                 return true;

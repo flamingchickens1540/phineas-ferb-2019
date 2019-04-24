@@ -3,7 +3,6 @@ package org.team1540.robot2019.commands.drivetrain.pointdrive;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
@@ -121,7 +120,7 @@ public abstract class PointManualDriveCommand extends Command {
             double output = pointPID.getOutput(relGoalAngle);
             double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
             SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
-            double outputPercent = OI.getPointDriveThrottle();
+            double outputPercent = 0;//OI.getPointDriveThrottle();
             if (Robot.drivetrain.getDriveCommand().isLineupRunning()) {
                 double targetXVel = ControlUtils.linearDeadzoneRamp(Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget(), false, FAST, SLOW, FAST_X, SLOW_X);
 //                double targetXVel = 2;

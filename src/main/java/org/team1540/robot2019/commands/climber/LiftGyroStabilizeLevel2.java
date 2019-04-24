@@ -3,7 +3,6 @@ package org.team1540.robot2019.commands.climber;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 
 public class LiftGyroStabilizeLevel2 extends Command {
@@ -29,7 +28,7 @@ public class LiftGyroStabilizeLevel2 extends Command {
         }
 
 //        if (Robot.climber.getArmsPosition() < Tuning.climberArmsFwdLimit) {
-        Robot.climber.setArms(OI.getManualClimberArmsAxis());
+//        Robot.climber.setArms(OI.getManualClimberArmsAxis());
 //        } else {
 //            Robot.climber.setArms(0);
 //        }

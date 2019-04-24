@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.subsystems.Elevator;
@@ -29,8 +28,8 @@ public class ElevatorTestingRobot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-        Hardware.elevatorA.set(OI.getElevatorManualA());
-        Hardware.elevatorB.set(OI.getElevatorManualB());
+//        Hardware.elevatorA.set(OI.getElevatorManualA());
+//        Hardware.elevatorB.set(OI.getElevatorManualB());
     }
 
     public void teleopInit() {

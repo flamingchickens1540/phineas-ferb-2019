@@ -51,6 +51,6 @@ public class PhineasShuffleboardTab {
 
     private static void update() {
         pressureEntry.forceSetNumber(Hardware.returnPressureSensorValue());
-        pointDriveFakeGyro.setAngle(180 - Math.toDegrees(OI.getPointDriveAngle()));
+//        pointDriveFakeGyro.setAngle(180 - Math.toDegrees(OI.getPointDriveAngle()));
     }
 }

@@ -1,40 +1,20 @@
 package org.team1540.robot2019;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.apache.log4j.Logger;
-import org.team1540.robot2019.commands.auto.DriveSensorGrabHatchSequence;
-import org.team1540.robot2019.commands.auto.TurnUntilNewTarget;
-import org.team1540.robot2019.commands.auto.VisionAutoPlaceSequence;
-import org.team1540.robot2019.commands.cargo.*;
-import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel2;
-import org.team1540.robot2019.commands.climber.LiftGyroStabilizeLevel3Group;
-import org.team1540.robot2019.commands.climber.PrepClimbLevelThree;
-import org.team1540.robot2019.commands.climber.PrepClimbLevelTwo;
-import org.team1540.robot2019.commands.drivetrain.pointdrive.PointDriveAngleProvider;
+import org.team1540.robot2019.commands.cargo.FloorIntakeCargo;
+import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
+import org.team1540.robot2019.commands.cargo.LoadingStationIntakeCargo;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
-import org.team1540.robot2019.commands.hatch.floor.PrepHatchFloorGrab;
-import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
-import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
-import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
-import org.team1540.robot2019.commands.hatch.subgroups.GrabHatchThenRetract;
-import org.team1540.robot2019.commands.hatch.temporary.WiggleAndGrabHatch;
-import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
-import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.robot2019.utils.ChickenXboxController;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxAxis;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxButton;
-import org.team1540.robot2019.wrappers.SwitchFilterButton;
-import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.util.SimpleCommand;
-import org.team1540.rooster.util.SimpleConditionalCommand;
 
 public class OI {
 
@@ -54,6 +34,7 @@ public class OI {
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
 
+    private static Button cancelIntakeButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
     // Cargo
     private static Button cargoFloorIntakeButton = copilot.getButton(XboxButton.A);
     private static Button cargoIntakeLoadingStationButton = copilot.getButton(XboxButton.X);
@@ -88,13 +69,16 @@ public class OI {
         Command cargoFloorIntake = new FloorIntakeCargo();
         cargoFloorIntakeButton.whenPressed(cargoFloorIntake);
 
-        cargoIntakeLoadingStationButton.whenPressed(new IntakeCargo());
+        cargoIntakeLoadingStationButton.whenPressed(new LoadingStationIntakeCargo());
 
         // Wrist
         wristRecoverButton.whileHeld(new RecoverWrist());
 
         // Eject cargo
-        cargoEjectButton.whenPressed(new EjectCargo());
+        cargoEjectButton.whenPressed(new ForwardThenEjectCargo());
+
+        cancelIntakeButton.whenPressed(new SimpleCommand("cancel", Robot.hatch::retract, Robot.cargoMech, Robot.wrist));
+        cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
 
         // ---------------------------------------- Driver ----------------------------------------

@@ -3,7 +3,6 @@ package org.team1540.robot2019.commands.drivetrain.pointdrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
-import org.team1540.robot2019.OI;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 
 public class PointDriveAngleProvider implements PointAngleProvider {
@@ -64,9 +63,9 @@ public class PointDriveAngleProvider implements PointAngleProvider {
 
     @Override
     public double returnAngleError(double defaultError) {
-        if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
-            goalAngle = OI.getPointDriveAngle();
-        }
+//        if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
+//            goalAngle = OI.getPointDriveAngle();
+//        }
         return TrigUtils.signedAngleError(goalAngle + initAngleOffset, Hardware.navx.getYawRadians());
     }
 }
