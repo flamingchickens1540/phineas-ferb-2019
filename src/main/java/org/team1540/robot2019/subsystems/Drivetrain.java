@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
-import org.team1540.robot2019.commands.drivetrain.PointDrive;
+import org.team1540.robot2019.commands.drivetrain.DriveCommand;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
 import org.team1540.rooster.drive.pipeline.TankDriveData;
@@ -32,7 +32,7 @@ import org.team1540.rooster.wrappers.ChickenTalon;
 
 public class Drivetrain extends Subsystem {
 
-    public static final Logger logger = Logger.getLogger(Drivetrain.class);
+    private static final Logger logger = Logger.getLogger(Drivetrain.class);
 
     boolean inFineDrive = false;
 
@@ -54,9 +54,18 @@ public class Drivetrain extends Subsystem {
     private NetworkTableEntry rightCurrentBEntry = table.getEntry("rightCurrB");
     private NetworkTableEntry rightCurrentCEntry = table.getEntry("rightCurrC");
 
+    private DriveCommand driveCommand;
+
+    public DriveCommand getDriveCommand() {
+        if (driveCommand == null) {
+            driveCommand = new DriveCommand();
+        }
+        return driveCommand;
+    }
+
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(new PointDrive());
+        setDefaultCommand(getDriveCommand());
     }
 
     public Output<TankDriveData> getPipelineOutput() {
@@ -218,7 +227,7 @@ public class Drivetrain extends Subsystem {
         double rightSetpoint = cmdVel.getX() + cmdVel.getOmega() * Tuning.drivetrainRadiusMeters;
         setLeftVelocityMetersPerSecond(leftSetpoint);
         setRightVelocityMetersPerSecond(rightSetpoint);
-        cmdVel.putToNetworkTable("Debug/DriveTrain/CmdVel");
+//        cmdVel.putToNetworkTable("Debug/DriveTrain/CmdVel");
     }
 
     public void setPercentTwist(Twist2D cmdVel) {
@@ -226,7 +235,7 @@ public class Drivetrain extends Subsystem {
         double rightSetpoint = cmdVel.getX() + cmdVel.getOmega();
         setLeftPercent(leftSetpoint);
         setRightPercent(rightSetpoint);
-        cmdVel.putToNetworkTable("Debug/DriveTrain/CmdVelPercent");
+//        cmdVel.putToNetworkTable("Debug/DriveTrain/CmdVelPercent");
     }
 
     public double getLeftPositionTicks() {

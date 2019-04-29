@@ -52,7 +52,7 @@ public class Tuning {
 
     public static double elevatorUpPosition = 28;
     public static double elevatorCargoShipPosition = 16;
-    public static double elevatorDownPosition = 0;
+    public static double elevatorHatchIntakePosition;
     public static double elevatorClimbPosition = 18;
     public static double elevatorLoadingStationPosition = 18;
     public static double elevatorDuringClimbPosition = 10;
@@ -79,26 +79,26 @@ public class Tuning {
     // wrist
     public static boolean wristInvertMotor = true;
 
-    public static double wristDownTravelPwrThrot = 0.7;
-    public static double wristDownTravelBrakeThrot = -0.25;
+    public static double wristDownTravelPwrThrot;
+    public static double wristDownTravelBrakeThrot;
     // what's uptravel
-    public static double wristUpTravelThrot = .6;
+    public static double wristUpTravelThrot = 0.7;
     public static double wristHoldThrot = 0.05;
     public static double wristLowerTimeout = 1;
 
-    // intake
-    public static boolean intakeInvertTop = false;
-    public static boolean intakeInvertBtm = false;
+    // cargoMech
+    public static boolean invertCargoRollerTop = false;
+    public static boolean invertCargoRollerBottom = false;
 
-    public static double intakeIntakeSpeedTop = 1;
-    public static double intakeIntakeSpeedBtm = 1;
+    public static double cargoIntakeSpeedTop = 1;
+    public static double cargoIntakeSpeedBtm = 1;
 
-    public static double intakeEjectSpeedTop = 1;
-    public static double intakeEjectSpeedBtm = 1;
+    public static double cargoEjectSpeedTop = 1;
+    public static double cargoEjectSpeedBtm = 1;
 
-    public static double intakeTimeout = 5;
+    public static double cargoIntakeTimeout = 5;
 
-    public static double intakeEjectTime = 1.3;
+    public static double cargoEjectTime = 1.3;
 
     // hatch mech
     public static double hatchGrabWaitTime = 1;
@@ -123,7 +123,8 @@ public class Tuning {
     public static double climberGyroD = 0;
 
     public static double climberArmsFwdLimit = 67000;
-    public static double climberStartPosLevel2 = 50000;
+    public static double climberStartPosLevel2 = 42000;
+    //    public static double climberStartPosLevel2 = 50000;
     public static double climberStartPosLevel3 = 30000;
     public static double climberBackPos = 0;
 
@@ -132,7 +133,7 @@ public class Tuning {
 
     public static double climberTolerance = 1000;
 
-    public static double axisButtonThreshold = 0.3;
+    public static double axisButtonThreshold = 0.4;
 
     // auto-lineup
     public static double drivetrainRadiusMeters = 0.305; // This is for pandora (Seems to work... hmmm) TODO: Change this
@@ -143,4 +144,17 @@ public class Tuning {
 
     public static double ledTime = 5;
     public static double ledStrobeTime = 0.2;
+
+    static {
+        //noinspection ConstantConditions
+        if (Tuning.isComp) {
+            wristDownTravelPwrThrot = 1.0;
+            wristDownTravelBrakeThrot = 0.45;
+            elevatorHatchIntakePosition = 0;
+        } else {
+            wristDownTravelPwrThrot = 0.7;
+            wristDownTravelBrakeThrot = 0.25;
+            elevatorHatchIntakePosition = 1.4;
+        }
+    }
 }

@@ -5,10 +5,10 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.StowHatchMech;
 import org.team1540.robot2019.commands.wrist.WristDown;
 
-public class FloorCargoIntake extends CommandGroup {
+public class FloorIntakeCargo extends CommandGroup {
 
-    public FloorCargoIntake() {
-        addParallel(new StowHatchMech());
+    public FloorIntakeCargo() {
+        addSequential(new StowHatchMech());
         addSequential(new MoveElevatorToZero());
         addParallel(new IntakeCargo());
         addSequential(new WristDown());

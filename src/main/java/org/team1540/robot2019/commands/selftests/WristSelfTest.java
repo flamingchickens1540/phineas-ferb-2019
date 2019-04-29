@@ -9,7 +9,7 @@ import org.team1540.rooster.util.SimpleCommand;
 
 public class WristSelfTest extends CommandGroup {
 
-    public static final Logger logger = Logger.getLogger(WristSelfTest.class);
+    private static final Logger logger = Logger.getLogger(WristSelfTest.class);
 
     public WristSelfTest() {
         addSequential(

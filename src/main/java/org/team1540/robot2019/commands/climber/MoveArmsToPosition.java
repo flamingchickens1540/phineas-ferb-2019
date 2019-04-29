@@ -13,6 +13,10 @@ public class MoveArmsToPosition extends Command {
         setpoint = pos;
     }
 
+    public void setPosition(double pos) {
+        setpoint = pos;
+    }
+
     @Override
     protected void initialize() {
         Robot.climber.setArmPosition(setpoint);
@@ -25,7 +29,7 @@ public class MoveArmsToPosition extends Command {
 
     @Override
     protected boolean isFinished() {
-        return Math.abs(Robot.climber.getPosition() - setpoint)
+        return Math.abs(Robot.climber.getArmsPosition() - setpoint)
             < Tuning.climberTolerance;
     }
 }

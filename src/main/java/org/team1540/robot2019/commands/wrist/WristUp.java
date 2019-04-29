@@ -1,24 +1,25 @@
 package org.team1540.robot2019.commands.wrist;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.Tuning;
 
-public class WristUp extends Command {
+public class WristUp extends ConditionalCommand {
 
-    @Override
-    protected void initialize() {
-        Robot.wrist.clearMidFlag();
-        Robot.wrist.set(-Tuning.wristUpTravelThrot);
+    private static final Logger logger = Logger.getLogger(WristUp.class);
+
+    public WristUp() {
+        super(new SimpleWristUp());
     }
 
     @Override
-    protected void end() {
-        Robot.wrist.set(-Tuning.wristHoldThrot);
-    }
-
-    @Override
-    protected boolean isFinished() {
-        return Robot.wrist.getMidFlag();
+    protected boolean condition() {
+        boolean atBtm = Robot.wrist.isAtBtm();
+        if (atBtm) {
+            logger.debug("Wrist at bottom! Moving up...");
+        } else {
+            logger.debug("Wrist already not at bottom! Holding...");
+        }
+        return atBtm;
     }
 }

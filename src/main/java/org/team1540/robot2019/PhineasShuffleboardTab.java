@@ -1,7 +1,6 @@
 package org.team1540.robot2019;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -11,12 +10,11 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.selftests.SelfTest;
 import org.team1540.robot2019.utils.ShuffleboardFakeGyro;
-import org.team1540.rooster.util.SimpleCommand;
 import org.team1540.rooster.util.SimpleLoopCommand;
 
-public class ShuffleboardDisplay {
+public class PhineasShuffleboardTab {
 
-    private static final Logger logger = Logger.getLogger(ShuffleboardDisplay.class);
+    private static final Logger logger = Logger.getLogger(PhineasShuffleboardTab.class);
 
     private static NetworkTableEntry pressureEntry;
     private static ShuffleboardFakeGyro pointDriveFakeGyro = new ShuffleboardFakeGyro();
@@ -27,18 +25,18 @@ public class ShuffleboardDisplay {
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
         ShuffleboardTab tab = Shuffleboard.getTab("Phineas");
-        tab.add(new SimpleCommand("Reset Preferences", Preferences.getInstance()::removeAll))
-            .withPosition(2, 0);
+//        tab.add(new SimpleCommand("Reset Preferences", Preferences.getInstance()::removeAll))
+//            .withPosition(2, 0);
 
         pressureEntry = tab.add("System Pressure", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withProperties(Map.of("Min", 0, "Max", 120))
+            .withProperties(Map.of("Min", 0, "Max", 150))
             .withPosition(0, 0)
             .withSize(2, 2)
             .getEntry();
 
         // initialize a loop command to update values
-        Command command = new SimpleLoopCommand("Shuffleboard Update", ShuffleboardDisplay::update);
+        Command command = new SimpleLoopCommand("Shuffleboard Update", PhineasShuffleboardTab::update);
         command.setRunWhenDisabled(true);
         command.start();
 
@@ -52,7 +50,7 @@ public class ShuffleboardDisplay {
     }
 
     private static void update() {
-        pressureEntry.forceSetNumber(50 * (Hardware.pressureSensor.getVoltage() - 0.5));
+        pressureEntry.forceSetNumber(Hardware.returnPressureSensorValue());
         pointDriveFakeGyro.setAngle(180 - Math.toDegrees(OI.getPointDriveAngle()));
     }
 }

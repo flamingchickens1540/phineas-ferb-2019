@@ -60,7 +60,7 @@ public class DualVisionTargetLocalizationUtils {
 
     public static double angleFromVisionTargets(Vector2D left, Vector2D right) {
         Vector2D difference = left.subtract(right);
-        if (difference.getX() < CM_TOLERANCE) {
+        if (difference.getX() == 0) {
             return 0;
         }
         double atan = Math.atan(difference.getY() / difference.getX()) + Math.PI / 2;
@@ -81,6 +81,19 @@ public class DualVisionTargetLocalizationUtils {
 
         return new Transform3D(
             midpoint(leftPoint, rightPoint),
+            new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angleFromVisionTargets(
+                xyFromVector3D(leftPoint),
+                xyFromVector3D(rightPoint))));
+    }
+
+    public static Transform3D poseFromTwoRawCamPointsAndCenter(Vector2D leftAngles, Vector2D rightAngles, Vector2D centerAngles, double planeHeight, Vector3D cameraPosition, Rotation cameraRotation) {
+
+        Vector3D leftPoint = getIntersection(lineFromScreenAngles(leftAngles, cameraPosition, cameraRotation), planeHeight);
+        Vector3D rightPoint = getIntersection(lineFromScreenAngles(rightAngles, cameraPosition, cameraRotation), planeHeight);
+        Vector3D centerPoint = getIntersection(lineFromScreenAngles(centerAngles, cameraPosition, cameraRotation), planeHeight);
+
+        return new Transform3D(
+            centerPoint,
             new Rotation(RotationOrder.XYZ, RotationConvention.FRAME_TRANSFORM, 0, 0, angleFromVisionTargets(
                 xyFromVector3D(leftPoint),
                 xyFromVector3D(rightPoint))));

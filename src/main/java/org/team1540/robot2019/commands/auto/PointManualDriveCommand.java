@@ -1,6 +1,8 @@
 package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.apache.log4j.Logger;
 import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
@@ -13,6 +15,8 @@ import org.team1540.rooster.functional.Executable;
 
 public abstract class PointManualDriveCommand extends PIDCommand {
 
+    private static final Logger logger = Logger.getLogger(PointManualDriveCommand.class);
+
     private Executable pipeline;
     private TankDriveTwist2DInput twist2DInput;
 
@@ -22,13 +26,10 @@ public abstract class PointManualDriveCommand extends PIDCommand {
     private double deadzone;
     private double throttleConstant;
 
-    public PointManualDriveCommand(double p, double i, double d, double outputScalar, double max, double min, double deadzone, double throttleConstant) {
-        super(p, i, d);
-        this.outputScalar = outputScalar;
-        this.max = max;
-        this.min = min;
-        this.deadzone = deadzone;
-        this.throttleConstant = throttleConstant;
+    private boolean isConfigSet = false;
+
+    public PointManualDriveCommand() {
+        super(0, 0, 0);
         requires(Robot.drivetrain);
 
         twist2DInput = new TankDriveTwist2DInput(Tuning.drivetrainRadiusMeters);
@@ -39,9 +40,40 @@ public abstract class PointManualDriveCommand extends PIDCommand {
     }
 
     @Override
+    protected final void initialize() {
+        applyConfig(initializeAndGetConfig());
+    }
+
+    protected abstract PointControlConfig initializeAndGetConfig();
+
+    public void applyConfig(PointControlConfig cfg) {
+        this.outputScalar = cfg.getOUTPUT_SCALAR();
+        this.max = cfg.getMAX();
+        this.min = cfg.getMIN();
+        this.deadzone = cfg.getDEADZONE();
+        this.throttleConstant = cfg.getTHROTTLE_CONSTANT();
+
+        this.getPIDController().setP(cfg.getP());
+        this.getPIDController().setI(cfg.getI());
+        this.getPIDController().setD(cfg.getD());
+
+        this.isConfigSet = true;
+
+        logger.debug(String
+            .format("Applied config with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f OutputScalar:%f throtConstant:%f", cfg.getP(), cfg.getI(), cfg.getD(), max, min, deadzone, outputScalar,
+                throttleConstant));
+    }
+
+    @Override
     protected final void usePIDOutput(double output) {
-        double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
-        twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * throttleConstant, 0, cmdVelTheta));
+        if (isConfigSet) {
+            double cmdVelTheta = ControlUtils.allVelocityConstraints(output * outputScalar, max, min, deadzone);
+            SmartDashboard.putNumber("PointManualDrive/CmdVelTheta", cmdVelTheta);
+            twist2DInput.setTwist(new Twist2D(OI.getPointDriveThrottle() * throttleConstant, 0, cmdVelTheta));
+        } else {
+            logger.warn("Config not set! Setting vel to zero.");
+            twist2DInput.setTwist(Twist2D.ZERO);
+        }
         pipeline.execute();
     }
 

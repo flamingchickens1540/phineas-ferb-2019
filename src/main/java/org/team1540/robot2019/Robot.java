@@ -2,27 +2,31 @@ package org.team1540.robot2019;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.datastructures.threed.Transform3D;
+import org.team1540.robot2019.datastructures.utils.UnitsUtils;
 import org.team1540.robot2019.odometry.tankdrive.TankDriveOdometryAccumulatorRunnable;
+import org.team1540.robot2019.subsystems.CargoMech;
 import org.team1540.robot2019.subsystems.Climber;
 import org.team1540.robot2019.subsystems.Drivetrain;
 import org.team1540.robot2019.subsystems.Elevator;
 import org.team1540.robot2019.subsystems.HatchMech;
-import org.team1540.robot2019.subsystems.Intake;
 import org.team1540.robot2019.subsystems.LEDs;
 import org.team1540.robot2019.subsystems.Wrist;
 import org.team1540.robot2019.utils.LastValidTransformTracker;
 import org.team1540.robot2019.vision.deepspace.DeepSpaceVisionTargetLocalization;
 import org.team1540.robot2019.wrappers.Limelight;
-import org.team1540.robot2019.wrappers.TEBPlanner;
+import org.team1540.rooster.util.SimpleCommand;
 
 public class Robot extends TimedRobot {
 
@@ -31,7 +35,7 @@ public class Robot extends TimedRobot {
     public static Drivetrain drivetrain;
     public static Elevator elevator;
     public static Wrist wrist;
-    public static Intake intake;
+    public static CargoMech cargoMech;
     public static HatchMech hatch;
     public static Climber climber;
     public static LEDs leds;
@@ -43,8 +47,9 @@ public class Robot extends TimedRobot {
 
     public static TankDriveOdometryAccumulatorRunnable odometry;
     public static DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization;
-    public static TEBPlanner tebPlanner;
     public static LastValidTransformTracker lastOdomToVisionTargetTracker;
+
+    private UsbCamera cam = null;
 
     @Override
     public void robotInit() {
@@ -59,7 +64,7 @@ public class Robot extends TimedRobot {
         drivetrain = new Drivetrain();
         elevator = new Elevator();
         wrist = new Wrist();
-        intake = new Intake();
+        cargoMech = new CargoMech();
         hatch = new HatchMech();
         climber = new Climber();
         leds = new LEDs();
@@ -81,21 +86,53 @@ public class Robot extends TimedRobot {
 
         OI.init();
 
-        ShuffleboardDisplay.init();
+        PhineasShuffleboardTab.init();
 
-        // TODO: use shuffleboard properly
-        SmartDashboard.putBoolean("Debug Mode", false);
+        SmartDashboard.putBoolean("Debug Mode", SmartDashboard.getBoolean("Debug Mode", false));
 
         SmartDashboard.putBoolean("EnableCompressor", true);
 
-        Hardware.limelight.prepForDriverCam();
+//        Hardware.limelight.prepForDriverCam();
 
-        SmartDashboard.setDefaultBoolean("EnableUSBCamera", false);
-        if (SmartDashboard.getBoolean("EnableUSBCamera", false)) {
-            UsbCamera cam = CameraServer.getInstance().startAutomaticCapture("USBCamera", 0);
-            cam.setResolution(128, 73);
-            cam.setFPS(30);
-        }
+        String distanceGuessKey = "CameraPoseCalibration/DistanceGuessInInches";
+        SmartDashboard.putNumber(distanceGuessKey, 0);
+        Command estimatePitch = new SimpleCommand("Estimate Camera Pitch Command", () -> {
+            double distanceEstimate = UnitsUtils.inchesToMeters(SmartDashboard.getNumber(distanceGuessKey, 0));
+            if (distanceEstimate == 0) {
+                logger.error("No distance estimate provided at networktables key: " + distanceGuessKey);
+                return;
+            }
+            Double calibrationPitch = deepSpaceVisionTargetLocalization.estimateCorrectPitch(distanceEstimate, 1000, 0.001, true);
+            if (calibrationPitch == null) {
+                logger.error("calibrationPitch is null!");
+            } else {
+                logger.info("Pitch estimation successful: " + calibrationPitch);
+                SmartDashboard.putNumber("CameraPoseCalibration/PitchEstimate", Math.toDegrees(calibrationPitch));
+            }
+        });
+        estimatePitch.setRunWhenDisabled(true);
+        SmartDashboard.putData(estimatePitch);
+
+        Command estimateYaw = new SimpleCommand("Estimate Camera Yaw Command", () -> {
+            Double calibrationYaw = deepSpaceVisionTargetLocalization.estimateCorrectYaw(0, 1000, 0.001, true);
+            if (calibrationYaw == null) {
+                logger.error("calibrationYaw is null!");
+            } else {
+                logger.info("Yaw estimation successful: " + calibrationYaw);
+                SmartDashboard.putNumber("CameraPoseCalibration/YawEstimate", Math.toDegrees(calibrationYaw));
+            }
+        });
+        estimateYaw.setRunWhenDisabled(true);
+        SmartDashboard.putData(estimateYaw);
+
+        Command calibrateCamera = new CommandGroup("Calibrate Camera Command") {{
+            addSequential(estimatePitch);
+            addSequential(estimateYaw);
+        }};
+        calibrateCamera.setRunWhenDisabled(true);
+        SmartDashboard.putData(calibrateCamera);
+
+        SmartDashboard.putBoolean("EnableUSBCamera", false);
 
         double end = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
         logger.info("Robot ready. Initialization took " + (end - start) + " ms");
@@ -106,21 +143,35 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
 
         debugMode = SmartDashboard.getBoolean("Debug Mode", false);
-        odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
-        if (lastOdomToVisionTargetTracker.getOdomToVisionTarget() != null) {
-            lastOdomToVisionTargetTracker.getOdomToVisionTarget().toTransform2D()
-                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
 
-        }
-        Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
-        if (lastBaseLinkToVisionTarget != null) {
-            lastBaseLinkToVisionTarget.toTransform2D()
-                .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+        if (DriverStation.getInstance().isFMSAttached()) {
+            Logger.getRootLogger().setLevel(Level.WARN);
+        } else {
+            Logger.getRootLogger().setLevel(Level.DEBUG);
         }
 
-        SmartDashboard.putNumber("DrivetrainLeftPos", drivetrain.getLeftPositionTicks());
-        SmartDashboard.putNumber("DrivetrainRightPos", drivetrain.getRightPositionTicks());
-        NetworkTableInstance.getDefault().flush();
+        if (debugMode) {
+            odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
+            if (lastOdomToVisionTargetTracker.getTransform3D() != null) {
+                lastOdomToVisionTargetTracker.getTransform3D().toTransform2D()
+                    .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
+
+            }
+            Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
+            if (lastBaseLinkToVisionTarget != null) {
+                lastBaseLinkToVisionTarget.toTransform2D()
+                    .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
+            }
+        }
+
+        if ((cam == null) && SmartDashboard.getBoolean("EnableUSBCamera", false)) {
+            cam = CameraServer.getInstance().startAutomaticCapture("USBCamera", 0);
+            cam.setResolution(128, 73);
+            cam.setFPS(30);
+        }
+        SmartDashboard.putBoolean("EnableUSBCamera", false);
+
+//        NetworkTableInstance.getDefault().flush();
     }
 
     @Override
@@ -163,11 +214,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
+        compressorPeriodic();
     }
 
     @Override
     public void teleopInit() {
-        OI.pointDriveCommand.start();
         Hardware.limelight.setLeds(true);
 
         setMechanismBrakes(true);
@@ -176,35 +227,32 @@ public class Robot extends TimedRobot {
 
         Hardware.checkStickyFaults();
 
-        if (elevator.getPosition() < 1 && elevator.getCurrentCommand() == null) {
-            elevator.setRaw(0);
-        }
+        new MoveElevatorToZero().start();
     }
 
     @Override
     public void teleopPeriodic() {
+        compressorPeriodic();
+    }
+
+    private void compressorPeriodic() {
         if (SmartDashboard.getBoolean("EnableCompressor", true)) {
-            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance)
-                && (Robot.climber.getCurrentCommand() == null)) {
+            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance) && (Robot.climber.getCurrentCommand() == null)) {
                 if (Hardware.compressor.getClosedLoopControl()) {
                     logger.debug("Stopping compressor because elevator is up");
                     Hardware.compressor.stop();
                 }
-            } else if (!Hardware.compressor.getClosedLoopControl()) {
-                logger.debug("Restarting compressor");
-                Hardware.compressor.start();
+            } else {
+//                Hardware.compressor.start();
+                if (Hardware.returnPressureSensorValue() > 115) {
+                    Hardware.compressor.stop();
+                } else if (Hardware.returnPressureSensorValue() < 105) {
+                    Hardware.compressor.start();
+                }
             }
         } else {
             Hardware.compressor.stop();
         }
-    }
-
-    @Override
-    public void testInit() {
-    }
-
-    @Override
-    public void testPeriodic() {
     }
 
     private void setMechanismBrakes(boolean b) {

@@ -18,8 +18,8 @@ public class RobotMap {
 
     public static final int WRIST_MOTOR = 8;
 
-    public static final int INTAKE_TOP = 9;
-    public static final int INTAKE_BTM = 10;
+    public static final int CARGO_ROLLER_TOP = 9;
+    public static final int CARGO_ROLLER_BOTTOM = 10;
 
     public static final int CLIMBER_ARM_L = 5;
     public static final int CLIMBER_ARM_R = 4;
@@ -28,22 +28,22 @@ public class RobotMap {
     public static final int CLIMBER_CYLINDER_1 = 3;
     public static final int CLIMBER_CYLINDER_2 = 2;
 
-    public static final int HATCH_SLIDE = 1;
-    public static final int HATCH_GRABBER = 4;//0;
+    public static final int HATCH_SLIDE;
+    public static final int HATCH_GRABBER;
 
     public static final int LED_GREEN = 5;
     public static final int LED_BLUE = 6;
-    public static final int LED_RED = 7;
+    public static final int LED_RED = 4;
 
     // sensors and switches
     public static final int ELEVATOR_LIMIT_SENSOR = 1;
 
-    public static final int WRIST_MID_SW = 2;
-    public static final int WRIST_BTM_SW = 3;
+    public static final int WRIST_MID_SW;
+    public static final int WRIST_BTM_SW;
 
     public static final int HATCH_EXTEND_SW = 4;
 
-    public static final int INTAKE_SENSOR = 0;
+    public static final int CARGO_INTAKE_SENSOR = 0;
 
     public static final int PRESSURE_SENSOR = 3;
 
@@ -56,8 +56,8 @@ public class RobotMap {
     public static final int PDP_DRIVE_RIGHT_B = 14;
     public static final int PDP_DRIVE_RIGHT_C = 13;
     public static final int PDP_WRIST_MOTOR = 7;
-    public static final int PDP_INTAKE_TOP = 5;
-    public static final int PDP_INTAKE_BTM = 4;
+    public static final int PDP_CARGO_MECH_TOP = 5;
+    public static final int PDP_CARGO_MECH_BTM = 4;
     public static final int PDP_CLIMBER_ARM_L = 10;
     public static final int PDP_CLIMBER_ARM_R = 11;
 
@@ -69,16 +69,29 @@ public class RobotMap {
     public static final double CAM_PITCH;
     public static final double CAM_ROLL = Math.toRadians(0);
     public static final double CAM_YAW;
-    public static final double HATCH_TARGET_HEIGHT = 0.74;
-    public static final double ROCKET_BALL_TARGET_HEIGHT = 0.99;
+
+    public static final double HATCH_TARGET_HEIGHT = 0.74; // center
+    public static final double ROCKET_BALL_TARGET_HEIGHT = 0.99; // center
+//    public static final double HATCH_TARGET_HEIGHT = 0.652018; // bottom
+//    public static final double ROCKET_BALL_TARGET_HEIGHT = 0.851408; // bottom
 
     static {
         if (Tuning.isComp) {
-            CAM_YAW = Math.toRadians(3); // TODO: THIS WAS BECAUSE THE LIMELIGHT HAD AN OFFSET!!! FIX THIS
-            CAM_PITCH = Math.toRadians(-30.0);
+//            CAM_YAW = Math.toRadians(3);
+//            CAM_PITCH = Math.toRadians(-30.0);
+            CAM_YAW = Math.toRadians(4.01562054);
+            CAM_PITCH = Math.toRadians(-27.8904396);
+            HATCH_SLIDE = 7;
+            HATCH_GRABBER = 1;//0;
+            WRIST_MID_SW = 2;
+            WRIST_BTM_SW = 3;
         } else {
-            CAM_YAW = Math.toRadians(2.96);
-            CAM_PITCH = Math.toRadians(-29.255225);
+            CAM_YAW = Math.toRadians(0.616);
+            CAM_PITCH = Math.toRadians(-33.08);
+            HATCH_SLIDE = 1;
+            HATCH_GRABBER = 0;
+            WRIST_MID_SW = 2;
+            WRIST_BTM_SW = 3;
         }
     }
 }

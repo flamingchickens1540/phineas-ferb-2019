@@ -3,13 +3,13 @@ package org.team1540.robot2019.commands.drivetrain;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
-import org.team1540.robot2019.Robot;
-import org.team1540.robot2019.commands.auto.PointManualDriveCommand;
+import org.team1540.robot2019.commands.auto.PointAngleProvider;
+import org.team1540.robot2019.commands.auto.PointControlConfig;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 
-public class PointDrive extends PointManualDriveCommand {
+public class PointDriveAngleProvider implements PointAngleProvider {
 
-    public static final Logger logger = Logger.getLogger(PointDrive.class);
+    private static final Logger logger = Logger.getLogger(PointDriveAngleProvider.class);
 
     private static double OUTPUT_SCALAR = 20;
 
@@ -30,15 +30,20 @@ public class PointDrive extends PointManualDriveCommand {
     private static double initAngleOffset = Hardware.navx.getYawRadians();
     private static double goalAngle = 0;
 
-    public PointDrive() {
-        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
-        requires(Robot.drivetrain);
+    public PointDriveAngleProvider() {
+//        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
+//        requires(Robot.drivetrain);
     }
 
     @Override
-    protected void initialize() {
+    public void initialize() {
         setGoalToCurrentAngle();
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
+    }
+
+    @Override
+    public PointControlConfig getPointControlConfig() {
+        return new PointControlConfig(OUTPUT_SCALAR, MIN, MAX, DEADZONE, P, I, D, THROTTLE_CONSTANT);
     }
 
     private static void setGoalToCurrentAngle() {
@@ -46,20 +51,15 @@ public class PointDrive extends PointManualDriveCommand {
     }
 
     public static void setInitAngleOffset(Double initAngleOffset) {
-        PointDrive.initAngleOffset = initAngleOffset;
+        PointDriveAngleProvider.initAngleOffset = initAngleOffset;
         setGoalToCurrentAngle();
     }
 
     @Override
-    protected double returnAngleError() {
+    public double returnAngleError(double defaultError) {
         if (OI.getPointDriveMagnitude() > POINT_JOYSTICK_DEADZONE) {
             goalAngle = OI.getPointDriveAngle();
         }
         return TrigUtils.signedAngleError(goalAngle + initAngleOffset, Hardware.navx.getYawRadians());
-    }
-
-    @Override
-    protected boolean isFinished() {
-        return false;
     }
 }

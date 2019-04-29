@@ -7,19 +7,19 @@ import org.team1540.robot2019.datastructures.threed.Transform3D;
 // TODO: This temporary class will be replaced by TF
 public class LastValidTransformTracker implements Consumer<Transform3D> {
 
-    private Transform3D odomToVisionTarget;
-    private Supplier<Transform3D> odomToBaseLinkSupplier;
+    private Transform3D transform3D;
+    private Supplier<Transform3D> transform3DSupplier;
 
-    public LastValidTransformTracker(Supplier<Transform3D> odomToBaseLinkSupplier) {
-        this.odomToBaseLinkSupplier = odomToBaseLinkSupplier;
+    public LastValidTransformTracker(Supplier<Transform3D> transform3DSupplier) {
+        this.transform3DSupplier = transform3DSupplier;
     }
 
     @Override
     public void accept(Transform3D baseLinkToVisionTarget) {
-        odomToVisionTarget = odomToBaseLinkSupplier.get().add(baseLinkToVisionTarget);
+        transform3D = transform3DSupplier.get().add(baseLinkToVisionTarget);
     }
 
-    public Transform3D getOdomToVisionTarget() {
-        return odomToVisionTarget;
+    public Transform3D getTransform3D() {
+        return transform3D;
     }
 }

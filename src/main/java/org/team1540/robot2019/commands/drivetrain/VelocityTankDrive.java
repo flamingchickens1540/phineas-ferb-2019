@@ -20,16 +20,18 @@ public class VelocityTankDrive extends Command {
         double rightSetpoint = (triggerValue - OI.getTankdriveRightAxis()) * Tuning.drivetrainMaxVelocity;
         Robot.drivetrain.setLeftVelocityTicks(leftSetpoint);
         Robot.drivetrain.setRightVelocityTicks(rightSetpoint);
-        SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
-        SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
-        SmartDashboard.putNumber("debug-setpoint-left-raw", leftSetpoint);
-        SmartDashboard.putNumber("debug-setpoint-right-raw", rightSetpoint);
-        SmartDashboard.putNumber("debug-velocity-left", Robot.drivetrain.getLeftVelocityMetersPerSecond());
-        SmartDashboard.putNumber("debug-velocity-right", Robot.drivetrain.getRightVelocityMetersPerSecond());
-        SmartDashboard.putNumber("debug-velocity-left-raw", Robot.drivetrain.getLeftVelocityTicks());
-        SmartDashboard.putNumber("debug-velocity-right-raw", Robot.drivetrain.getRightVelocityTicks());
-        SmartDashboard.putNumber("debug-velocity-right-error", Hardware.driveRightMotorA.getClosedLoopError());
-        SmartDashboard.putNumber("debug-velocity-left-error", Hardware.driveLeftMotorA.getClosedLoopError());
+        if (Robot.debugMode) {
+            SmartDashboard.putNumber("debug-setpoint-left", leftSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
+            SmartDashboard.putNumber("debug-setpoint-right", rightSetpoint * 10 / Tuning.drivetrainTicksPerMeter);
+            SmartDashboard.putNumber("debug-setpoint-left-raw", leftSetpoint);
+            SmartDashboard.putNumber("debug-setpoint-right-raw", rightSetpoint);
+            SmartDashboard.putNumber("debug-velocity-left", Robot.drivetrain.getLeftVelocityMetersPerSecond());
+            SmartDashboard.putNumber("debug-velocity-right", Robot.drivetrain.getRightVelocityMetersPerSecond());
+            SmartDashboard.putNumber("debug-velocity-left-raw", Robot.drivetrain.getLeftVelocityTicks());
+            SmartDashboard.putNumber("debug-velocity-right-raw", Robot.drivetrain.getRightVelocityTicks());
+            SmartDashboard.putNumber("debug-velocity-right-error", Hardware.driveRightMotorA.getClosedLoopError());
+            SmartDashboard.putNumber("debug-velocity-left-error", Hardware.driveLeftMotorA.getClosedLoopError());
+        }
     }
 
     @Override

@@ -11,7 +11,7 @@ import org.team1540.rooster.util.SimpleLoopCommand;
 public class PrepHatchFloorGrab extends CommandGroup {
 
     public PrepHatchFloorGrab() {
-        addParallel(new StowHatchMech());
+        addSequential(new StowHatchMech());
         addSequential(new MoveElevatorToZero());
         addSequential(new WristDown());
         addSequential(new WaitCommand(Tuning.hatchPrepFloorWaitTime));

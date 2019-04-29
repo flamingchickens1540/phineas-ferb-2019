@@ -15,6 +15,7 @@ import org.team1540.rooster.wrappers.ChickenController;
 public class DriveSelfTest extends Command {
 
     private static final Logger logger = Logger.getLogger(DriveSelfTest.class);
+    private final boolean forwards;
 
     private boolean finished = false;
     private int currentMotor;
@@ -28,7 +29,8 @@ public class DriveSelfTest extends Command {
 
     private boolean motorRunning;
 
-    public DriveSelfTest() {
+    public DriveSelfTest(boolean forwards) {
+        this.forwards = forwards;
         requires(Robot.drivetrain);
     }
 
@@ -74,7 +76,7 @@ public class DriveSelfTest extends Command {
                 runTimer.start();
                 ChickenController motor = Hardware.driveMotorAll[currentMotor];
 
-                motor.set(ControlMode.PercentOutput, Tuning.driveTestMotorThrot);
+                motor.set(ControlMode.PercentOutput, (forwards ? 1 : -1) * Tuning.driveTestMotorThrot);
                 motorRunning = true;
                 Robot.drivetrain.setBrake(false);
             }

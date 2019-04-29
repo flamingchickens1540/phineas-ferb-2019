@@ -7,7 +7,7 @@ import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 
-public class BlinkLEDs extends TimedCommand {
+public class BlinkLEDsAndTurnOffLimelight extends TimedCommand {
 
     private LEDColor color1;
     private LEDColor color2;
@@ -17,7 +17,7 @@ public class BlinkLEDs extends TimedCommand {
 
     boolean usingColor2 = false;
 
-    public BlinkLEDs(LEDColor color1, LEDColor color2, double blinkTime) {
+    public BlinkLEDsAndTurnOffLimelight(LEDColor color1, LEDColor color2, double blinkTime) {
         super(Tuning.ledTime);
         requires(Robot.leds);
         this.color1 = color1;

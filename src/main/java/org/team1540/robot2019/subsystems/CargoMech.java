@@ -1,8 +1,8 @@
 package org.team1540.robot2019.subsystems;
 
-import static org.team1540.robot2019.Hardware.intakeBtm;
-import static org.team1540.robot2019.Hardware.intakeSensor;
-import static org.team1540.robot2019.Hardware.intakeTop;
+import static org.team1540.robot2019.Hardware.cargoIntakeSensor;
+import static org.team1540.robot2019.Hardware.cargoRollerBottom;
+import static org.team1540.robot2019.Hardware.cargoRollerTop;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.networktables.NetworkTable;
@@ -13,9 +13,9 @@ import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
 
-public class Intake extends Subsystem {
+public class CargoMech extends Subsystem {
 
-    private NetworkTable table = NetworkTableInstance.getDefault().getTable("intake");
+    private NetworkTable table = NetworkTableInstance.getDefault().getTable("cargoMech");
     private NetworkTableEntry hasBallEntry = table.getEntry("hasBall");
     private NetworkTableEntry topThrottleEntry = table.getEntry("topThrot");
     private NetworkTableEntry topCurrentEntry = table.getEntry("topCurr");
@@ -28,32 +28,32 @@ public class Intake extends Subsystem {
     }
 
     public void startIntaking() {
-        intakeTop.set(ControlMode.PercentOutput, Tuning.intakeIntakeSpeedTop); // TODO: rip whoever uses ferb next lol
-        intakeBtm.set(ControlMode.PercentOutput, -Tuning.intakeIntakeSpeedBtm);
+        cargoRollerTop.set(ControlMode.PercentOutput, Tuning.cargoIntakeSpeedTop);
+        cargoRollerBottom.set(ControlMode.PercentOutput, -Tuning.cargoIntakeSpeedBtm);
     }
 
     public void startEjecting() {
-        intakeTop.set(ControlMode.PercentOutput, -Tuning.intakeEjectSpeedTop);
-        intakeBtm.set(ControlMode.PercentOutput, Tuning.intakeEjectSpeedBtm);
+        cargoRollerTop.set(ControlMode.PercentOutput, -Tuning.cargoEjectSpeedTop);
+        cargoRollerBottom.set(ControlMode.PercentOutput, Tuning.cargoEjectSpeedBtm);
     }
 
     public void stop() {
-        intakeTop.set(ControlMode.PercentOutput, 0);
-        intakeBtm.set(ControlMode.PercentOutput, 0);
+        cargoRollerTop.set(ControlMode.PercentOutput, 0);
+        cargoRollerBottom.set(ControlMode.PercentOutput, 0);
     }
 
     public boolean hasBall() {
-        return intakeSensor.get();
+        return cargoIntakeSensor.get();
     }
 
     @Override
     public void periodic() {
         if (Robot.debugMode) {
             hasBallEntry.forceSetBoolean(hasBall());
-            topThrottleEntry.forceSetNumber(intakeTop.getMotorOutputPercent());
-            topCurrentEntry.forceSetNumber(Hardware.getIntakeTopCurrent());
-            btmThrottleEntry.forceSetNumber(intakeBtm.getMotorOutputPercent());
-            btmCurrentEntry.forceSetNumber(Hardware.getIntakeBtmCurrent());
+            topThrottleEntry.forceSetNumber(cargoRollerTop.getMotorOutputPercent());
+            topCurrentEntry.forceSetNumber(Hardware.getCargoMechTopCurrent());
+            btmThrottleEntry.forceSetNumber(cargoRollerBottom.getMotorOutputPercent());
+            btmCurrentEntry.forceSetNumber(Hardware.getCargoMechBtmCurrent());
         }
     }
 }
