@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import org.apache.log4j.Logger;
+import org.team1540.robot2019.commands.cargo.EjectCargo;
 import org.team1540.robot2019.commands.cargo.FloorIntakeCargo;
 import org.team1540.robot2019.commands.cargo.ForwardThenEjectCargo;
 import org.team1540.robot2019.commands.cargo.LoadingStationIntakeCargo;
@@ -75,7 +76,7 @@ public class OI {
         wristRecoverButton.whileHeld(new RecoverWrist());
 
         // Eject cargo
-        cargoEjectButton.whenPressed(new ForwardThenEjectCargo());
+        cargoEjectButton.whenPressed(new EjectCargo());
 
         cancelIntakeButton.whenPressed(new SimpleCommand("cancel", Robot.hatch::retract, Robot.cargoMech, Robot.wrist));
         cancelIntakeButton.whenPressed(new MoveElevatorToZero());
