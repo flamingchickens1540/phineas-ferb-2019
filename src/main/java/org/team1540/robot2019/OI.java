@@ -79,7 +79,6 @@ public class OI {
         cargoEjectButton.whenPressed(new EjectCargo());
 
         cancelIntakeButton.whenPressed(new SimpleCommand("cancel", Robot.hatch::retract, Robot.cargoMech, Robot.wrist));
-        cancelIntakeButton.whenPressed(new MoveElevatorToZero());
 
 
         // ---------------------------------------- Driver ----------------------------------------
