@@ -238,14 +238,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
 
     private double getAngleError() {
         Vector3D odomPosition = driveOdometry.getOdomToBaseLink().getPosition(); // TODO: This should use javaTF
-//        double x = -(M * smoothStep(1.0 / (A - Z) * (distanceToVisionTarget - Z)));
-//        double x1 = -0.15 * smoothStepFiveDir(distanceToVisionTarget - 0.5);
-//        SmartDashboard.putNumber("DistanceOffset", x1);
-//        Transform3D adjustedGoal = goal.add(new Transform3D(x1, 0, 0));
-//        if (distanceToVisionTarget < POINT_DEADZONE) {
-//            adjustedGoal = goal;
-//        }
-//        Vector3D goalPosition = adjustedGoal.getPosition();
         Vector3D goalPosition = goal.getPosition();
         double targetAngle = Math.atan2(goalPosition.getY() - odomPosition.getY(), goalPosition.getX() - odomPosition.getX()); // TODO: Method
         SmartDashboard.putNumber("PercentLineupLocalization/TargetAngle", targetAngle);
@@ -275,26 +267,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         return distanceToVisionTarget;
     }
 
-    //
-//    private static double smoothStep(double x) { // TODO: Method
-//        if (x > 1) {
-//            return 1;
-//        } else if (x < 0) {
-//            return 0;
-//        }
-//        return 3 * x * x - 2 * x * x * x;
-//    }
-//
-//    private static double smoothStepFiveDir(double x) { // TODO: Method
-//        if (x > 1) {
-//            return 1;
-//        } else if (x < 0) {
-//            return 0;
-//        }
-//        return 30 * x * x * x * x - 60 * x * x * x + 30 * x * x;
-//    }
-//
     public void end() {
-//        enableHatchModeForNextCycle();
     }
 }
