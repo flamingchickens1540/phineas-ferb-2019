@@ -52,7 +52,7 @@ public class Tuning {
 
     public static double elevatorUpPosition = 28;
     public static double elevatorCargoShipPosition = 16;
-    public static double elevatorToClimbArmsBack = 10;
+    public static double elevatorClimbArmsBackPosition = 10;
     public static double elevatorHatchIntakePosition;
     public static double elevatorClimbPosition = 18;
     public static double elevatorLoadingStationPosition = 18;
