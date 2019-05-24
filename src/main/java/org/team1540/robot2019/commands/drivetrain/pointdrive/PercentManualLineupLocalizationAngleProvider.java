@@ -81,9 +81,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     private boolean ignoreDefault = false;
 
     public PercentManualLineupLocalizationAngleProvider(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization) {
-//        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
-//        requires(Robot.drivetrain);
-
         this.driveOdometry = driveOdometry;
         this.deepSpaceVisionTargetLocalization = deepSpaceVisionTargetLocalization;
 
@@ -94,7 +91,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
         SmartDashboard.putNumber("PercentLineupLocalization/MAX_VEL_THETA", MAX);
         SmartDashboard.putNumber("PercentLineupLocalization/MIN_VEL_THETA", MIN);
         SmartDashboard.putNumber("PercentLineupLocalization/DEADZONE_VEL_THETA", DEADZONE);
-//        SmartDashboard.putNumber("PercentLineupLocalization/ANGLE_OFFSET", ANGLE_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/HATCH_GRAB_X_OFFSET", HATCH_GRAB_X_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/HATCH_GRAB_Y_OFFSET", HATCH_GRAB_Y_OFFSET);
         SmartDashboard.putNumber("PercentLineupLocalization/HATCH_PLACE_X_OFFSET", HATCH_PLACE_X_OFFSET);
@@ -185,9 +181,6 @@ public class PercentManualLineupLocalizationAngleProvider implements PointAngleP
     public double returnAngleError(double defaultError) { // TODO: If speed is too large, reset similar vector tracking
         if (deepSpaceVisionTargetLocalization.attemptUpdatePose() && Robot.elevator.getPosition() < 3) { // TODO: This should be a tuning constant
             Transform3D goal = computeGoal();
-//            if (timer != null && !timer.hasPeriodPassed(0)) {
-//                similarVectorTracker.reset();
-//            }
             if (deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget().toTransform2D().getPositionVector().distance(Vector2D.ZERO) > MAX_ACCURATE_POSE_DISTANCE) {
                 similarVectorTracker.setVector3D(goal.getPosition());
                 this.goal = goal;

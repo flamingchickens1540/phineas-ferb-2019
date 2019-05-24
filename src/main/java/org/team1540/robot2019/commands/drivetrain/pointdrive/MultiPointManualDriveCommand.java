@@ -35,7 +35,6 @@ public class MultiPointManualDriveCommand extends PointManualDriveCommand { // T
 
     @Override
     protected double returnAngleError() {
-//            || Math.abs(pointDriveAngleProvider.returnAngleError()) > Math.toRadians(10)
         if (OI.getPointDriveMagnitude() > 0.5) { // TODO: Make these tunable
             tempDisableLineup = false;
             startPointDrive();
