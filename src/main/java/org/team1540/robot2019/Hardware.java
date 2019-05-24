@@ -59,7 +59,7 @@ public class Hardware {
 
 
     // positive setpoint is outtaking
-    public static ChickenController cargoRollerTop;
+    public static ChickenTalon cargoRollerTop;
     public static ChickenController cargoRollerBottom;
 
     public static DigitalInput cargoIntakeSensor;
@@ -245,21 +245,17 @@ public class Hardware {
         logger.info("Initializing cargo mech...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        //        cargoRollerTopTalon.configPeakCurrentLimit(50);
-
-        ChickenTalon cargoRollerTop = new ChickenTalon(RobotMap.CARGO_ROLLER_TOP);
-        Hardware.cargoRollerTop = cargoRollerTop;
+        cargoRollerTop = new ChickenTalon(RobotMap.CARGO_ROLLER_TOP);
         cargoRollerTop.configPeakCurrentLimit(50);
         cargoRollerBottom = createController(RobotMap.CARGO_ROLLER_BOTTOM);
 
-        Hardware.cargoRollerTop.setInverted(Tuning.invertCargoRollerTop);
+        cargoRollerTop.setInverted(Tuning.invertCargoRollerTop);
         cargoRollerBottom.setInverted(Tuning.invertCargoRollerBottom);
-
-        Hardware.cargoRollerTop.setBrake(true);
+        cargoRollerTop.setBrake(true);
         cargoRollerBottom.setBrake(true);
 
-        Hardware.cargoRollerTop.configVoltageCompSaturation(12);
-        Hardware.cargoRollerTop.enableVoltageCompensation(true);
+        cargoRollerTop.configVoltageCompSaturation(12);
+        cargoRollerTop.enableVoltageCompensation(true);
 
         cargoRollerBottom.configVoltageCompSaturation(12);
         cargoRollerBottom.enableVoltageCompensation(true);
@@ -439,11 +435,7 @@ public class Hardware {
     }
 
     public static double getCargoMechTopCurrent() {
-        if (cargoRollerTop instanceof ChickenTalon) {
-            return ((ChickenTalon) cargoRollerTop).getOutputCurrent();
-        } else {
-            return pdp.getCurrent(RobotMap.PDP_CARGO_MECH_TOP);
-        }
+        return cargoRollerTop.getOutputCurrent();
     }
 
     public static double getCargoMechBtmCurrent() {
