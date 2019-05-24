@@ -22,7 +22,7 @@ public class ElevatorTestingRobot extends TimedRobot {
         PreferenceManager.getInstance().add(new Tuning());
         Scheduler.getInstance().run();
 
-        Hardware.unfollowInitElevator();
+        Hardware.initElevatorIndependent();
 
         Robot.elevator = new Elevator();
     }

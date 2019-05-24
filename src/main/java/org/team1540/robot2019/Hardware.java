@@ -206,8 +206,8 @@ public class Hardware {
         logger.info("Initialized elevator in " + (end - start) + " ms");
     }
 
-    public static void unfollowInitElevator() {
-        logger.info("Initializing elevator...");
+    public static void initElevatorIndependent() {
+        logger.info("Initializing elevator in independent mode...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
         elevatorA = new CANSparkMax(RobotMap.ELEVATOR_L, MotorType.kBrushless);
