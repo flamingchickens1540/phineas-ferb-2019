@@ -240,20 +240,13 @@ public class Robot extends TimedRobot {
     }
 
     private void compressorPeriodic() {
-        if (SmartDashboard.getBoolean("EnableCompressor", true)) {
-            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance) && (Robot.climber.getCurrentCommand() == null)) {
-                logger.debug("Stopping compressor because elevator is up");
+        if (!SmartDashboard.getBoolean("EnableCompressor", true)
+            || (Robot.elevator.getPosition() > Tuning.elevatorTolerance
+                && Robot.climber.getCurrentCommand() == null)) {
                 Hardware.compressor.stop();
             } else {
-//                if (Hardware.returnPressureSensorValue() > 120) {
-//                    Hardware.compressor.stop();
-//                } else if (Hardware.returnPressureSensorValue() < 110) {
-                    Hardware.compressor.start();
-//                }
+                Hardware.compressor.start();
             }
-        } else {
-            Hardware.compressor.stop();
-        }
     }
 
     private void setMechanismBrakes(boolean b) {
