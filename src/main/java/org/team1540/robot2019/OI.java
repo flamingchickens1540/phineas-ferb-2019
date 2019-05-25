@@ -26,7 +26,7 @@ import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
 import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.hatch.subgroups.GrabHatchThenRetract;
-import org.team1540.robot2019.commands.hatch.temporary.WiggleAndGrabHatch;
+import org.team1540.robot2019.commands.hatch.testing.WiggleAndGrabHatch;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
 import org.team1540.robot2019.subsystems.LEDs.LEDColor;
