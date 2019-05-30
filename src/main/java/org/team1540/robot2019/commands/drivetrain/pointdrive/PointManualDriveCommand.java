@@ -139,18 +139,6 @@ public abstract class PointManualDriveCommand extends Command {
         }
         pipeline.execute();
     }
-//
-//    @Override
-//    protected final void usePIDOutput(double output) {
-//
-//    }
-//
-//    @Override
-//    protected final double returnPIDInput() {
-//        double angleError = -returnAngleError();
-//        SmartDashboard.putNumber("PointManualDrive/AngleError", -angleError);
-//        return angleError; // returnPIDInput expects a position, so the error must be negated
-//    }
 
     protected abstract double returnAngleError(); // TODO: This should return the desired position, not error
 }
