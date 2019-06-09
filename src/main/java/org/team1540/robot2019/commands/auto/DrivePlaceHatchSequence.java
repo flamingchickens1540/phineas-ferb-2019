@@ -1,15 +1,15 @@
 package org.team1540.robot2019.commands.auto;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import org.team1540.robot2019.commands.drivetrain.AutoLineupAndDrive;
-import org.team1540.robot2019.commands.hatch.AutoPlaceHatchSequence;
+import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
+import org.team1540.robot2019.utils.WaitUntilCommand;
 
-public class DrivePlaceSequence extends CommandGroup {
+public class DrivePlaceHatchSequence extends CommandGroup {
 
-    public DrivePlaceSequence() {
+    public DrivePlaceHatchSequence() {
         AutoLineupAndDrive autoLineupAndDrive = new AutoLineupAndDrive();
         addParallel(new WaitUntilCommand(() -> autoLineupAndDrive.getDistanceToVisionTarget() < 0.5, autoLineupAndDrive::enableEndFlag));
         addSequential(autoLineupAndDrive);
-        addSequential(new AutoPlaceHatchSequence());
+        addSequential(new PlaceHatchSequence(true, true));
     }
 }

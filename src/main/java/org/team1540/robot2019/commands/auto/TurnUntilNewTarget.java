@@ -23,7 +23,9 @@ public class TurnUntilNewTarget extends Command {
 
     private static final Logger logger = Logger.getLogger(TurnUntilNewTarget.class);
     private static final double MAX_ANGULAR_VEL = 5;
-    private static double ANGULAR_VEL = 2.5;
+    private static double FAST_ANGULAR_VEL = 7;
+    private static double SLOW_ANGULAR_VEL = 2.5;
+    private static double FAST_TIMEOUT_K = 0.075;
     private final TankDriveTwist2DInput twist2DInput;
     private final Executable pipeline;
 
@@ -37,6 +39,7 @@ public class TurnUntilNewTarget extends Command {
     private boolean untilAnyTarget;
 
     private final SimilarVector3DTracker similarVectorTracker = new SimilarVector3DTracker(0.1);
+    private double fastTimeout;
 
     public TurnUntilNewTarget(TankDriveOdometryAccumulatorRunnable driveOdometry, DeepSpaceVisionTargetLocalization deepSpaceVisionTargetLocalization, boolean left) {
         this(driveOdometry, deepSpaceVisionTargetLocalization);
@@ -55,15 +58,27 @@ public class TurnUntilNewTarget extends Command {
             .then(new UnitScaler(Tuning.drivetrainTicksPerMeter, 10))
             .then(Robot.drivetrain.getPipelineOutput(false));
 
-        SmartDashboard.putNumber("TurnUntilNewTarget/ANGULAR_VEL", ANGULAR_VEL);
+        SmartDashboard.putNumber("TurnUntilNewTarget/FAST_ANGULAR_VEL", FAST_ANGULAR_VEL);
+        SmartDashboard.putNumber("TurnUntilNewTarget/SLOW_ANGULAR_VEL", SLOW_ANGULAR_VEL);
+        SmartDashboard.putNumber("TurnUntilNewTarget/FAST_TIMEOUT_K", FAST_TIMEOUT_K);
     }
 
     @Override
     public void initialize() {
-        ANGULAR_VEL = SmartDashboard.getNumber("TurnUntilNewTarget/ANGULAR_VEL", ANGULAR_VEL);
+        FAST_ANGULAR_VEL = SmartDashboard.getNumber("TurnUntilNewTarget/FAST_ANGULAR_VEL", FAST_ANGULAR_VEL);
+        SLOW_ANGULAR_VEL = SmartDashboard.getNumber("TurnUntilNewTarget/SLOW_ANGULAR_VEL", SLOW_ANGULAR_VEL);
+        FAST_TIMEOUT_K = SmartDashboard.getNumber("TurnUntilNewTarget/FAST_TIMEOUT_K", FAST_TIMEOUT_K);
+
+        double distanceToVisionTarget = Robot.drivetrain.getDriveCommand().getLineupLocalization().getDistanceToVisionTarget();
+        fastTimeout = FAST_TIMEOUT_K / distanceToVisionTarget;
+
+        SmartDashboard.putNumber("TurnUntilNewTarget/distanceToVisionTarget", distanceToVisionTarget);
+        SmartDashboard.putNumber("TurnUntilNewTarget/fastTimeout", fastTimeout);
+
 
         logger.debug("Hatch mode!");
         Hardware.limelight.setPipeline(0);
+        Hardware.limelight.setLeds(true);
         untilAnyTarget = !deepSpaceVisionTargetLocalization.attemptUpdatePose();
         reset = true;
     }
@@ -72,10 +87,11 @@ public class TurnUntilNewTarget extends Command {
     protected void execute() {
         double omega = 0;
         if (left != null) {
-            omega = (left ? 1 : -1) * ANGULAR_VEL;
+            omega = (left ? 1 : -1) * ControlUtils.linearDeadzoneRamp(fastTimeout - this.timeSinceInitialized(), false, FAST_ANGULAR_VEL, SLOW_ANGULAR_VEL, 0.02, -0.02);
         } else {
-            omega = ControlUtils.velocityPosNegConstrain(OI.getPointUntilNextTargetAxis() * MAX_ANGULAR_VEL, MAX_ANGULAR_VEL, ANGULAR_VEL);
+            omega = ControlUtils.velocityPosNegConstrain(OI.getPointUntilNextTargetAxis() * MAX_ANGULAR_VEL, MAX_ANGULAR_VEL, SLOW_ANGULAR_VEL);
         }
+        SmartDashboard.putNumber("TurnUntilNewTarget/omega", omega);
         twist2DInput.setTwist(new Twist2D(0, 0, omega));
         pipeline.execute();
     }

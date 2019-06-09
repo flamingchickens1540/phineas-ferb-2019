@@ -30,9 +30,9 @@ public class PhineasShuffleboardTab {
 
         pressureEntry = tab.add("System Pressure", 0)
             .withWidget(BuiltInWidgets.kDial)
-            .withProperties(Map.of("Min", 0, "Max", 150))
+            .withProperties(Map.of("Min", 0, "Max", 120))
             .withPosition(0, 0)
-            .withSize(2, 2)
+            .withSize(3, 3)
             .getEntry();
 
         // initialize a loop command to update values

@@ -2,6 +2,7 @@ package org.team1540.robot2019.commands.selftests;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Robot;
 import org.team1540.rooster.util.SimpleCommand;
@@ -16,6 +17,9 @@ public class CargoMechSelfTest extends CommandGroup {
         addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargoMech in")));
         addSequential(new SimpleCommand("Run In", Robot.cargoMech::startIntaking, Robot.cargoMech));
         addSequential(new TimedCommand(1));
+        addSequential(new SimpleCommand("Print status", () -> logger.info("Stopping")));
+        addSequential(new SimpleCommand("Stop cargo mech", Robot.cargoMech::stop, Robot.cargoMech));
+        addSequential(new WaitCommand(0.5));
         addSequential(new SimpleCommand("Print status", () -> logger.info("Running cargoMech out")));
         addSequential(new SimpleCommand("Run Out", Robot.cargoMech::startEjecting, Robot.cargoMech));
         addSequential(new TimedCommand(1));

@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package org.team1540.robot2019.commands.auto;
+package org.team1540.robot2019.utils;
 
 import edu.wpi.first.wpilibj.command.Command;
 import java.util.function.BooleanSupplier;

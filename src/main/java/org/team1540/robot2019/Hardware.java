@@ -19,7 +19,7 @@ import org.team1540.rooster.wrappers.ChickenTalon;
 import org.team1540.rooster.wrappers.ChickenVictor;
 
 /**
- * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I centralize the motors themselves. This also means we don't have to redo loads of config when making alternative robots or funky testing
+ * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I centralize the motors themselves. This also means we don't have to redo loads of config when making alternative robots or funky temporary
  * code.
  */
 public class Hardware {
@@ -59,7 +59,7 @@ public class Hardware {
 
 
     // positive setpoint is outtaking
-    public static ChickenController cargoRollerTop;
+    public static ChickenTalon cargoRollerTop;
     public static ChickenController cargoRollerBottom;
 
     public static DigitalInput cargoIntakeSensor;
@@ -206,6 +206,22 @@ public class Hardware {
         logger.info("Initialized elevator in " + (end - start) + " ms");
     }
 
+    public static void initElevatorIndependent() {
+        logger.info("Initializing elevator in independent mode...");
+        double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
+
+        elevatorA = new CANSparkMax(RobotMap.ELEVATOR_L, MotorType.kBrushless);
+        elevatorB = new CANSparkMax(RobotMap.ELEVATOR_R, MotorType.kBrushless);
+
+        elevatorA.setIdleMode(IdleMode.kBrake);
+        elevatorB.setIdleMode(IdleMode.kBrake);
+
+        elevatorA.setInverted(Tuning.invertElevatorA);
+
+        double end = RobotController.getFPGATime() / 1000.0;
+        logger.info("Initialized elevator in " + (end - start) + " ms");
+    }
+
     public static void initWrist() {
         logger.info("Initializing wrist...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
@@ -229,12 +245,12 @@ public class Hardware {
         logger.info("Initializing cargo mech...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        cargoRollerTop = createController(RobotMap.CARGO_ROLLER_TOP);
+        cargoRollerTop = new ChickenTalon(RobotMap.CARGO_ROLLER_TOP);
+        cargoRollerTop.configPeakCurrentLimit(50);
         cargoRollerBottom = createController(RobotMap.CARGO_ROLLER_BOTTOM);
 
         cargoRollerTop.setInverted(Tuning.invertCargoRollerTop);
         cargoRollerBottom.setInverted(Tuning.invertCargoRollerBottom);
-
         cargoRollerTop.setBrake(true);
         cargoRollerBottom.setBrake(true);
 
@@ -419,11 +435,7 @@ public class Hardware {
     }
 
     public static double getCargoMechTopCurrent() {
-        if (cargoRollerTop instanceof ChickenTalon) {
-            return ((ChickenTalon) cargoRollerTop).getOutputCurrent();
-        } else {
-            return pdp.getCurrent(RobotMap.PDP_CARGO_MECH_TOP);
-        }
+        return cargoRollerTop.getOutputCurrent();
     }
 
     public static double getCargoMechBtmCurrent() {

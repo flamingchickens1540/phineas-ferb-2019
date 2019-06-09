@@ -121,6 +121,51 @@
               "_source0": "network_table:///SmartDashboard/Intake/MAX_CURRENT",
               "_title": "SmartDashboard/Intake/MAX_CURRENT"
             }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/FAST_ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/FAST_ANGULAR_VEL"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/SLOW_ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/SLOW_ANGULAR_VEL"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/FAST_TIMEOUT_K",
+              "_title": "SmartDashboard/TurnUntilNewTarget/FAST_TIMEOUT_K"
+            }
+          },
+          "5,2": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/omega",
+              "_title": "SmartDashboard/TurnUntilNewTarget/omega",
+              "Graph/Visible time": 30.0
+            }
           }
         }
       }
@@ -135,17 +180,6 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "6,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/A",
-              "_title": "SmartDashboard/PercentLineupLocalization/A"
-            }
-          },
           "3,1": {
             "size": [
               1,
@@ -188,50 +222,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/DEADZONE_VEL_THETA",
               "_title": "SmartDashboard/PercentLineupLocalization/DEADZONE_VEL_THETA"
-            }
-          },
-          "4,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/MAX_VEL_THETA",
-              "_title": "SmartDashboard/PercentLineupLocalization/MAX_VEL_THETA"
-            }
-          },
-          "5,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/MIN_VEL_THETA",
-              "_title": "SmartDashboard/PercentLineupLocalization/MIN_VEL_THETA"
-            }
-          },
-          "3,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/OUTPUT_SCALAR",
-              "_title": "SmartDashboard/PercentLineupLocalization/OUTPUT_SCALAR"
-            }
-          },
-          "7,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/POINT_DEADZONE",
-              "_title": "SmartDashboard/PercentLineupLocalization/POINT_DEADZONE"
             }
           },
           "9,0": {
@@ -290,78 +280,12 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
-          },
-          "4,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/M",
-              "_title": "SmartDashboard/PercentLineupLocalization/M"
-            }
-          },
-          "5,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/Z",
-              "_title": "SmartDashboard/PercentLineupLocalization/Z"
-            }
-          },
-          "3,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DistanceToTarget",
-              "_title": "SmartDashboard/DistanceToTarget"
-            }
-          },
-          "7,1": {
-            "size": [
-              2,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Debug/SimilarVector3DTracker/Distance",
-              "_title": "SmartDashboard/Debug/SimilarVector3DTracker/Distance"
-            }
-          },
-          "8,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DistanceOffset",
-              "_title": "SmartDashboard/DistanceOffset"
-            }
-          },
-          "6,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PointManualDrive/CmdVelTheta",
-              "_title": "SmartDashboard/PointManualDrive/CmdVelTheta"
-            }
           }
         }
       }
     },
     {
-      "title": "NextLeftRightTargetTuning",
+      "title": "AnglePIDTuning",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -370,52 +294,6 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
-          "3,0": {
-            "size": [
-              4,
-              3
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Debug/SimilarVector3DTracker/Distance",
-              "_title": "SmartDashboard/Debug/SimilarVector3DTracker/Distance"
-            }
-          },
-          "7,0": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/ANGULAR_VEL",
-              "_title": "SmartDashboard/TurnUntilNewTarget/ANGULAR_VEL"
-            }
-          }
-        }
-      }
-    },
-    {
-      "title": "LineupPIDTuning",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "tiles": {
-          "3,0": {
-            "size": [
-              4,
-              3
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/PointManualDrive/CmdVelTheta",
-              "_title": "SmartDashboard/PointManualDrive/CmdVelTheta"
-            }
-          },
           "7,0": {
             "size": [
               1,
@@ -492,81 +370,80 @@
               "_source0": "network_table:///SmartDashboard/PercentLineupLocalization/POINT_DEADZONE",
               "_title": "SmartDashboard/PercentLineupLocalization/POINT_DEADZONE"
             }
-          }
-        }
-      }
-    },
-    {
-      "title": "IntakeCurrent",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "tiles": {}
-      }
-    },
-    {
-      "title": "TEB Tuning",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 128.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "tiles": {
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/SPEED_FF",
+              "_title": "SmartDashboard/PointManualDrive/SPEED_FF"
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/velX",
+              "_title": "SmartDashboard/PointManualDrive/velX"
+            }
+          },
           "3,0": {
             "size": [
-              1,
-              1
+              4,
+              4
             ],
             "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Test TEB",
-              "_title": "SmartDashboard/Test TEB"
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/anglePIDError",
+              "_title": "SmartDashboard/PointManualDrive/anglePIDError",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/PointManualDrive/anglePIDError": true
             }
           },
-          "4,0": {
+          "7,2": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/test-goal/position/x",
-              "_title": "SmartDashboard/test-goal/position/x"
+              "_source0": "network_table:///SmartDashboard/PointDriveAngleProvider/ANGULAR_KP",
+              "_title": "SmartDashboard/PointDriveAngleProvider/ANGULAR_KP"
             }
           },
-          "5,0": {
+          "8,2": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/test-goal/position/y",
-              "_title": "SmartDashboard/test-goal/position/y"
+              "_source0": "network_table:///SmartDashboard/PointDriveAngleProvider/ANGULAR_KI",
+              "_title": "SmartDashboard/PointDriveAngleProvider/ANGULAR_KI"
             }
           },
-          "6,0": {
+          "9,2": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/test-goal/orientation/z",
-              "_title": "/SmartDashboard/test-goal/orientation/z"
+              "_source0": "network_table:///SmartDashboard/PointDriveAngleProvider/ANGULAR_KD",
+              "_title": "SmartDashboard/PointDriveAngleProvider/ANGULAR_KD"
             }
           }
         }
       }
     },
     {
-      "title": "PointAndDriveTune",
+      "title": "SlowBeforeVisionTarget",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
       "widgetPane": {
@@ -575,6 +452,17 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "tiles": {
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/THROTTLE_P",
+              "_title": "SmartDashboard/PointManualDrive/THROTTLE_P"
+            }
+          },
           "4,1": {
             "size": [
               1,
@@ -582,19 +470,32 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/AutoLineupAndDrive/MAX_VEL_X",
-              "_title": "SmartDashboard/AutoLineupAndDrive/MAX_VEL_X"
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/THROTTLE_I",
+              "_title": "SmartDashboard/PointManualDrive/THROTTLE_I"
             }
           },
-          "4,0": {
+          "5,1": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/AutoLineupAndDrive/CMD_VEL_X_MAX_ACCEL_UP",
-              "_title": "SmartDashboard/AutoLineupAndDrive/CMD_VEL_X_MAX_ACCEL_UP"
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/THROTTLE_D",
+              "_title": "SmartDashboard/PointManualDrive/THROTTLE_D"
+            }
+          },
+          "3,2": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/throttlePIDError",
+              "_title": "SmartDashboard/PointManualDrive/throttlePIDError",
+              "Graph/Visible time": 30.0,
+              "Visible data/SmartDashboard/PointManualDrive/throttlePIDError": true
             }
           },
           "6,1": {
@@ -604,19 +505,32 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/AutoLineupAndDrive/CMD_VEL_X_SCALAR",
-              "_title": "SmartDashboard/AutoLineupAndDrive/CMD_VEL_X_SCALAR"
+              "_source0": "network_table:///SmartDashboard/PointManualDrive/THROTTLE_F",
+              "_title": "SmartDashboard/PointManualDrive/THROTTLE_F"
             }
-          },
-          "3,1": {
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 6",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "5,2": {
             "size": [
               1,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/AutoLineupAndDrive/MIN_VEL_X",
-              "_title": "SmartDashboard/AutoLineupAndDrive/MIN_VEL_X"
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/SLOW_ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/SLOW_ANGULAR_VEL"
             }
           },
           "4,2": {
@@ -626,8 +540,19 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/AutoLineupAndDrive/OFFSET_X",
-              "_title": "SmartDashboard/AutoLineupAndDrive/OFFSET_X"
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/FAST_ANGULAR_VEL",
+              "_title": "SmartDashboard/TurnUntilNewTarget/FAST_ANGULAR_VEL"
+            }
+          },
+          "3,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/TurnUntilNewTarget/FAST_TIMEOUT_K",
+              "_title": "SmartDashboard/TurnUntilNewTarget/FAST_TIMEOUT_K"
             }
           }
         }

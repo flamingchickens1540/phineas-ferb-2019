@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
@@ -106,7 +107,7 @@ public class Robot extends TimedRobot {
             if (calibrationPitch == null) {
                 logger.error("calibrationPitch is null!");
             } else {
-                logger.info("Pitch estimation successful: " + calibrationPitch);
+                logger.info("Pitch estimation successful: " + Math.toDegrees(calibrationPitch));
                 SmartDashboard.putNumber("CameraPoseCalibration/PitchEstimate", Math.toDegrees(calibrationPitch));
             }
         });
@@ -118,7 +119,7 @@ public class Robot extends TimedRobot {
             if (calibrationYaw == null) {
                 logger.error("calibrationYaw is null!");
             } else {
-                logger.info("Yaw estimation successful: " + calibrationYaw);
+                logger.info("Yaw estimation successful: " + Math.toDegrees(calibrationYaw));
                 SmartDashboard.putNumber("CameraPoseCalibration/YawEstimate", Math.toDegrees(calibrationYaw));
             }
         });
@@ -150,6 +151,10 @@ public class Robot extends TimedRobot {
             Logger.getRootLogger().setLevel(Level.DEBUG);
         }
 
+        Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
+        if (lastBaseLinkToVisionTarget != null) {
+            SmartDashboard.putNumber("CameraPoseCalibration/DistanceToTargetOut", UnitsUtils.metersToInches(lastBaseLinkToVisionTarget.toTransform2D().getPositionVector().distance(Vector2D.ZERO)));
+        }
         if (debugMode) {
             odometry.getOdomToBaseLink().toTransform2D().putToNetworkTable("Odometry/Debug");
             if (lastOdomToVisionTargetTracker.getTransform3D() != null) {
@@ -157,7 +162,6 @@ public class Robot extends TimedRobot {
                     .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/OdomToVisionTarget");
 
             }
-            Transform3D lastBaseLinkToVisionTarget = deepSpaceVisionTargetLocalization.getLastBaseLinkToVisionTarget();
             if (lastBaseLinkToVisionTarget != null) {
                 lastBaseLinkToVisionTarget.toTransform2D()
                     .putToNetworkTable("DeepSpaceVisionTargetLocalization/Debug/BaseLinkToVisionTarget");
@@ -236,23 +240,13 @@ public class Robot extends TimedRobot {
     }
 
     private void compressorPeriodic() {
-        if (SmartDashboard.getBoolean("EnableCompressor", true)) {
-            if ((Robot.elevator.getPosition() > Tuning.elevatorTolerance) && (Robot.climber.getCurrentCommand() == null)) {
-                if (Hardware.compressor.getClosedLoopControl()) {
-                    logger.debug("Stopping compressor because elevator is up");
-                    Hardware.compressor.stop();
-                }
+        if (!SmartDashboard.getBoolean("EnableCompressor", true)
+            || (Robot.elevator.getPosition() > Tuning.elevatorTolerance
+                && Robot.climber.getCurrentCommand() == null)) {
+                Hardware.compressor.stop();
             } else {
-//                Hardware.compressor.start();
-                if (Hardware.returnPressureSensorValue() > 115) {
-                    Hardware.compressor.stop();
-                } else if (Hardware.returnPressureSensorValue() < 105) {
-                    Hardware.compressor.start();
-                }
+                Hardware.compressor.start();
             }
-        } else {
-            Hardware.compressor.stop();
-        }
     }
 
     private void setMechanismBrakes(boolean b) {

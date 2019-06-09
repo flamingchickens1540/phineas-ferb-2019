@@ -1,10 +1,9 @@
-package org.team1540.robot2019.commands.drivetrain;
+package org.team1540.robot2019.commands.drivetrain.pointdrive;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.OI;
-import org.team1540.robot2019.commands.auto.PointAngleProvider;
-import org.team1540.robot2019.commands.auto.PointControlConfig;
 import org.team1540.robot2019.datastructures.utils.TrigUtils;
 
 public class PointDriveAngleProvider implements PointAngleProvider {
@@ -19,9 +18,9 @@ public class PointDriveAngleProvider implements PointAngleProvider {
     private static double DEADZONE = 0.05;
 
     // Constants for angular PID controller
-    private static double P = 0.2;
+    private static double P = 0.25;
     private static double I = 0;
-    private static double D = 0.5;
+    private static double D = 2;
 
     private static final double POINT_JOYSTICK_DEADZONE = 0.5;
 
@@ -33,10 +32,18 @@ public class PointDriveAngleProvider implements PointAngleProvider {
     public PointDriveAngleProvider() {
 //        super(P, I, D, OUTPUT_SCALAR, MAX, MIN, DEADZONE, THROTTLE_CONSTANT);
 //        requires(Robot.drivetrain);
+
+        SmartDashboard.putNumber("PointDriveAngleProvider/ANGULAR_KP", P);
+        SmartDashboard.putNumber("PointDriveAngleProvider/ANGULAR_KI", I);
+        SmartDashboard.putNumber("PointDriveAngleProvider/ANGULAR_KD", D);
     }
 
     @Override
     public void initialize() {
+        P = SmartDashboard.getNumber("PointDriveAngleProvider/ANGULAR_KP", P);
+        I = SmartDashboard.getNumber("PointDriveAngleProvider/ANGULAR_KI", I);
+        D = SmartDashboard.getNumber("PointDriveAngleProvider/ANGULAR_KD", D);
+
         setGoalToCurrentAngle();
         logger.debug(String.format("Initialized with P:%f I:%f D:%f Max:%f Min:%f Deadzone:%f", P, I, D, MAX, MIN, DEADZONE));
     }

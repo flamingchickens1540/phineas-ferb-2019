@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.team1540.robot2019.Tuning;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
-import org.team1540.robot2019.commands.hatch.StowHatchMech;
+import org.team1540.robot2019.commands.hatch.subgroups.StowHatchMech;
 import org.team1540.robot2019.commands.wrist.WristUp;
 
 public class LoadingStationIntakeCargo extends CommandGroup {
