@@ -2,6 +2,7 @@ import edu.wpi.first.gradlerio.GradleRIOPlugin
 
 plugins {
     id "java"
+    id "idea"
     id "edu.wpi.first.GradleRIO" version "2019.3.2"
 }
 

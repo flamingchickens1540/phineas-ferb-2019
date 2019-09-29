@@ -102,7 +102,7 @@ public class Tuning {
     public static double cargoEjectTime = 1.3;
 
     // hatch mech
-    public static double hatchGrabWaitTime = 1;
+    public static double hatchGrabWaitTime = 0.5;
     public static double hatchExtendWaitTime = 0.2;
     public static double hatchReleaseWaitTime = 0.2;
     public static double hatchPrepFloorWaitTime = 0.5;

@@ -30,6 +30,6 @@ public class SensorGrabHatchSequence extends CommandGroup {
                 onSensorTrip.run();
             }
         }));
-        addSequential(new GrabHatchThenRetract(0.5));
+        addSequential(new GrabHatchThenRetract(Tuning.hatchGrabWaitTime));
     }
 }

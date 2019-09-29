@@ -3,8 +3,6 @@ package org.team1540.robot2019;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import org.apache.log4j.Logger;
 import org.team1540.robot2019.commands.auto.DriveSensorGrabHatchSequence;
 import org.team1540.robot2019.commands.auto.TurnUntilNewTarget;
@@ -21,11 +19,8 @@ import org.team1540.robot2019.commands.drivetrain.pointdrive.PointDriveAngleProv
 import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
-import org.team1540.robot2019.commands.hatch.floor.PrepHatchFloorGrab;
 import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
-import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
-import org.team1540.robot2019.commands.hatch.subgroups.GrabHatchThenRetract;
 import org.team1540.robot2019.commands.hatch.temporary.WiggleAndGrabHatch;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
@@ -53,23 +48,21 @@ public class OI {
     private static ChickenXboxController tester = new ChickenXboxController(2);
 
     // ---------------------------------------- Copilot ----------------------------------------
+    // Vision
+    private static Button visionRocketBall = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
+
     // Hatch
     private static Button sensorGrabHatchButton = copilot.getButton(XboxButton.X);
     private static Button placeHatchSequenceButton = copilot.getButton(XboxButton.START);
-    private static Button grabThenRetractButtonAndAlsoTheRocketBallIntakeButton = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
-    private static Button visionPlaceHatchButton = copilot.getButton(XboxButton.Y);
-    private static Button stowHatchButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
 
     // Elevator
     private static Button elevatorFullUpButton = copilot.getButton(DPadAxis.UP);
     private static Button elevatorCargoShipButton = copilot.getButton(DPadAxis.LEFT);
     private static Button elevatorDownButton = copilot.getButton(DPadAxis.DOWN);
-    private static Button moveElevatorToClimbArmsBackButton = copilot.getButton(XboxButton.RIGHT_PRESS);
 
     // Cargo
     private static Button cargoFloorIntakeButton = copilot.getButton(XboxButton.A);
-    private static Button cargoIntakeLoadingStationButton = copilot.getButton(DPadAxis.RIGHT);
-
+    private static Button cargoIntakeLoadingStationButton = copilot.getButton(XboxButton.Y);
     private static Button cargoEjectButton = copilot.getButton(XboxButton.B);
 
     private static Button wristRecoverButton = copilot.getButton(XboxAxis.LEFT_Y, Tuning.axisButtonThreshold);
@@ -78,10 +71,10 @@ public class OI {
 //    private static Button visionPlaceHatchRight = copilot.getButton(XboxButton.RB);
 
     // Climb
-    private static Button climbingSafety = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
+    private static Button climbingSafetyAndCancelButton = copilot.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
     private static Button climbLevel3Button = copilot.getButton(XboxButton.RB); // + safety
     private static Button prepClimbLevel2Button = copilot.getButton(XboxButton.LB); // + safety
-    private static Button climbLevel2Button = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold); // + safety
+    private static Button startClimbButton = copilot.getButton(XboxAxis.LEFT_Y, -Tuning.axisButtonThreshold); // + safety
     private static Button climberCylinderUp = copilot.getButton(XboxButton.BACK);
 
     // Climber arms
@@ -160,31 +153,9 @@ public class OI {
         PlaceHatchSequence placeHatchSequence = new PlaceHatchSequence(false, true);
         placeHatchSequenceButton.whenPressed(placeHatchSequence);
 
-        //    Floor hatch grab
-        Command prepHatchFloorGrab = new PrepHatchFloorGrab();
-        prepClimbLevel2Button.whileHeld(new SimpleCommand("", () -> { // TODO: Replace with simpleButton
-            if (climbLevel3Button.get()) {
-                prepHatchFloorGrab.start();
-            }
-        }));
-        prepClimbLevel2Button.whenReleased(new SimpleCommand("", prepHatchFloorGrab::cancel));
-        climbLevel3Button.whenReleased(new SimpleCommand("", prepHatchFloorGrab::cancel));
-
-        //    Rarely used hatch buttons
-        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new GrabHatchThenRetract(Tuning.hatchGrabWaitTime));
-        stowHatchButton.whenPressed(new CommandGroup() {{
-            addSequential(new ReleaseHatch());
-            addSequential(new RetractHatchMech());
-        }});
-
-        //    Vision hatch place
-        VisionAutoPlaceSequence visionAutoPlaceSequence = new VisionAutoPlaceSequence();
-        visionPlaceHatchButton.whenPressed(visionAutoPlaceSequence);
-        visionPlaceHatchButton.whenReleased(new SimpleCommand("", visionAutoPlaceSequence::cancel));
-
         // High vision target
-        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
-        grabThenRetractButtonAndAlsoTheRocketBallIntakeButton.whenReleased(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableHatchModeForNextCycle));
+        visionRocketBall.whenPressed(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableRocketBallModeForNextCycle));
+        visionRocketBall.whenReleased(new SimpleCommand("", Robot.drivetrain.getDriveCommand().getLineupLocalization()::enableHatchModeForNextCycle));
 
         // Elevator
         MoveElevatorToPosition moveElevatorUp = new MoveElevatorToPosition(Tuning.elevatorUpPosition);
@@ -193,13 +164,10 @@ public class OI {
         elevatorCargoShipButton.whenPressed(moveElevatorToCargoShip);
         MoveElevatorToZero moveElevatorToZero = new MoveElevatorToZero();
         elevatorDownButton.whenPressed(moveElevatorToZero);
-//        MoveElevatorToPosition moveElevatorToClimbArmsBack = new MoveElevatorToPosition(Tuning.elevatorToClimbArmsBack);
-//        moveElevatorToClimbArmsBackButton.whenPressed(moveElevatorToClimbArmsBack);
 
         // Cargo
-        Command cargoFloorIntake = new FloorIntakeCargo();
-        cargoFloorIntakeButton.whenPressed(cargoFloorIntake);
-
+        FloorIntakeCargo floorIntakeCargo = new FloorIntakeCargo();
+        cargoFloorIntakeButton.whenPressed(floorIntakeCargo);
         cargoIntakeLoadingStationButton.whenPressed(new LoadingStationIntakeCargo());
 
         // Wrist
@@ -211,16 +179,20 @@ public class OI {
         DriveBackThenElevatorDown backThenDown = new DriveBackThenElevatorDown();
         cargoEjectButton.whenReleased(backThenDown);
 
+        // Cancel hatch and cargo
+        climbingSafetyAndCancelButton.whenPressed(new RetractHatchMech());
+        climbingSafetyAndCancelButton.cancelWhenPressed(floorIntakeCargo);
+
         // Climb
-        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafety::get, new PrepClimbLevelThree()));
+        climbLevel3Button.whenPressed(new SimpleConditionalCommand(climbingSafetyAndCancelButton::get, new PrepClimbLevelThree()));
         prepClimbLevel2Button.whenPressed(new SimpleCommand("", () -> {
-            if (climbingSafety.get()) {
+            if (climbingSafetyAndCancelButton.get()) {
                 new PrepClimbLevelTwo().start();
             }
         }));
 
         LiftGyroStabilizeLevel3Group liftGyroStabilizeLevel3 = new LiftGyroStabilizeLevel3Group();
-        climbLevel2Button.whenPressed(new SimpleCommand("", () -> {
+        startClimbButton.whenPressed(new SimpleCommand("", () -> {
             if (PrepClimbLevelTwo.hasPrepLvl2) {
                 new LiftGyroStabilizeLevel2().start();
             } else if (PrepClimbLevelThree.hasPrepLvl3) {
