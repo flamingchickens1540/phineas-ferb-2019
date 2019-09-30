@@ -42,7 +42,7 @@ public class WristDown extends Command {
         } else {
             logger.debug("Finished because wrist is at bottom!");
         }
-        Robot.wrist.set(0);
+        Robot.wrist.set(Tuning.wristHoldThrot);
     }
 
     @Override

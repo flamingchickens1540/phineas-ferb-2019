@@ -150,7 +150,7 @@ public class Tuning {
         //noinspection ConstantConditions
         if (Tuning.isComp) {
             wristDownTravelPwrThrot = 1.0;
-            wristDownTravelBrakeThrot = 0.75;
+            wristDownTravelBrakeThrot = 1;
             elevatorHatchIntakePosition = 0;
         } else {
             wristDownTravelPwrThrot = 0.7;
