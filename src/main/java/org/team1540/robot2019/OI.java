@@ -28,7 +28,6 @@ import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.robot2019.utils.ChickenXboxController;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxAxis;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxButton;
-import org.team1540.robot2019.wrappers.SwitchFilterButton;
 import org.team1540.rooster.Utilities;
 import org.team1540.rooster.triggers.DPadAxis;
 import org.team1540.rooster.util.SimpleCommand;
@@ -49,7 +48,7 @@ public class OI {
 
     // ---------------------------------------- Copilot ----------------------------------------
     // Vision
-    private static Button visionRocketBall = copilot.getButton(XboxAxis.RIGHT_TRIG, Tuning.axisButtonThreshold);
+    private static Button visionRocketBall = driver.getButton(XboxAxis.LEFT_TRIG, Tuning.axisButtonThreshold);
 
     // Hatch
     private static Button sensorGrabHatchButton = copilot.getButton(XboxButton.X);
@@ -84,8 +83,8 @@ public class OI {
 
     // ---------------------------------------- Driver ----------------------------------------
     // Auto-align
-    private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
-    private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
+//    private static Button leftFilterButton = driver.getButton(XboxAxis.LEFT_TRIG, 0.3);
+//    private static Button rightFilterButton = driver.getButton(XboxAxis.RIGHT_TRIG, 0.3);
 
     // Wiggle wiggle wiggle
     private static Button wiggleButton = driver.getButton(XboxButton.START);
@@ -235,10 +234,10 @@ public class OI {
         nextRightTarget.whenPressed(new TurnUntilNewTarget(Robot.odometry, Robot.deepSpaceVisionTargetLocalization, false));
 
         // Left/right filtering
-        leftFilterButton.whenPressed(new SwitchFilterButton(2));
-        leftFilterButton.whenReleased(new SwitchFilterButton(0));
-        rightFilterButton.whenPressed(new SwitchFilterButton(3));
-        rightFilterButton.whenReleased(new SwitchFilterButton(0));
+//        leftFilterButton.whenPressed(new SwitchFilterButton(2));
+//        leftFilterButton.whenReleased(new SwitchFilterButton(0));
+//        rightFilterButton.whenPressed(new SwitchFilterButton(3));
+//        rightFilterButton.whenReleased(new SwitchFilterButton(0));
 
         // Flash LEDs and turn off limelight
         turnOffLimelightAndFlashLEDs.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
