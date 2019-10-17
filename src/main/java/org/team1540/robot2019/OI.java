@@ -1,5 +1,6 @@
 package org.team1540.robot2019;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -319,4 +320,24 @@ public class OI {
     public static double getElevatorManualB() {
         return Utilities.scale(Utilities.processDeadzone(tester.getY(Hand.kRight), Tuning.driveDeadzone), 2);
     }
+
+    public static double getDriveThrottle() {
+        return Utilities.scale(
+            -Utilities.processDeadzone(driver.getY(GenericHID.Hand.kLeft), Tuning.driveDeadzone),
+            Tuning.driveThrottleExponent);
+    }
+
+    public static double getDriveSoftTurn() {
+        return Utilities.scale(
+            Utilities.processDeadzone(driver.getX(Hand.kRight), Tuning.driveDeadzone),
+            Tuning.driveSoftTurnExponent);
+    }
+
+    public static double getDriveHardTurn() {
+        return Utilities.scale(
+            Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kRight), 0.1)
+                - Utilities.processDeadzone(driver.getTriggerAxis(GenericHID.Hand.kLeft), 0.1),
+            Tuning.driveHardTurnExponent);
+    }
+
 }

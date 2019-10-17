@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.team1540.robot2019.Hardware;
 import org.team1540.robot2019.Robot;
 import org.team1540.robot2019.Tuning;
+import org.team1540.robot2019.commands.drivetrain.deprecated.PercentTankDrive;
 import org.team1540.robot2019.commands.drivetrain.pointdrive.MultiPointManualDriveCommand;
 import org.team1540.robot2019.datastructures.twod.Twist2D;
 import org.team1540.rooster.drive.pipeline.DriveData;
@@ -65,7 +66,13 @@ public class Drivetrain extends Subsystem { // TODO: Rooster interface
 
     @Override
     protected void initDefaultCommand() {
-        setDefaultCommand(getDriveCommand());
+//        setDefaultCommand(new SimpleLoopCommand("Drive",
+//            new AdvancedArcadeJoystickInput(true, OI::getDriveThrottle, OI::getDriveSoftTurn,
+//                OI::getDriveHardTurn)
+//                .then(new FeedForwardToVelocityProcessor(Tuning.driveMaxVel))
+//                .then(new FeedForwardProcessor(Tuning.driveKV, Tuning.driveVIntercept, 0))
+//                .then(getPipelineOutput(false)), this));
+        setDefaultCommand(new PercentTankDrive());
     }
 
     public Output<TankDriveData> getPipelineOutput() {
