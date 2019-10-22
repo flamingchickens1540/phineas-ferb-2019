@@ -146,15 +146,16 @@ public class Tuning {
     public static double drivetrainMaxVelocity = 400;
 
     public static double ledTime = 5;
-    public static double ledStrobeTime = 0.2;
+    public static double ledStrobeTime = 1;
 
     public static RevBlinken.ColorPattern idleLEDs = RevBlinken.ColorPattern.FIRE_LARGE;
-    public static RevBlinken.ColorPattern turnOffLimelightLEDs = RevBlinken.ColorPattern.CHASE_RED;
     public static RevBlinken.ColorPattern elevatorCargoShipPositionLEDs = RevBlinken.ColorPattern.GREEN;
     public static RevBlinken.ColorPattern elevatorTopLEDs = RevBlinken.ColorPattern.SINELON_LAVA;
     public static RevBlinken.ColorPattern floorIntakeCargoLEDs = RevBlinken.ColorPattern.TWINKLES_RAINBOW;
     public static RevBlinken.ColorPattern hasBallLEDs = RevBlinken.ColorPattern.TWINKLES_OCEAN;
     public static RevBlinken.ColorPattern hatchPlacedLEDs = RevBlinken.ColorPattern.CONFETTI;
+    public static RevBlinken.ColorPattern limelightOffLEDs1 = RevBlinken.ColorPattern.RED;
+    public static RevBlinken.ColorPattern limelightOffLEDs2 = RevBlinken.ColorPattern.ORANGE;
 
 
     static {
