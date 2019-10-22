@@ -7,7 +7,7 @@ import org.team1540.robot2019.Tuning;
 public class HatchPlacedLEDs extends TimedCommand {
 
     public HatchPlacedLEDs() {
-        super(0.5);
+        super(1);
         requires(Robot.leds);
     }
 

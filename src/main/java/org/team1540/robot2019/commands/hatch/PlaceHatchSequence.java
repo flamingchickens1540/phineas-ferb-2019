@@ -18,6 +18,7 @@ public class PlaceHatchSequence extends CommandGroup {
 
     public PlaceHatchSequence(boolean requireDrivetrain, boolean reEnableLineup) {
         addSequential(new WristUp());
+        addSequential(new SimpleCommand("LEDs", new HatchPlacedLEDs()::start));
         addSequential(new SimpleCommand("", () -> Robot.drivetrain.getDriveCommand().tempDisableLineup()));
 
         Command tankDriveForTimePercent = new TankDriveForTimePercent(0.2, 0.3);
@@ -35,7 +36,6 @@ public class PlaceHatchSequence extends CommandGroup {
         addSequential(new WaitCommand(0.2));
         addSequential(new RetractHatchMech());
         addSequential(new WaitCommand(0.1));
-        addSequential(new SimpleCommand("LEDs", new HatchPlacedLEDs()::start));
 
         if (reEnableLineup) {
             addSequential(new SimpleCommand("", () -> Robot.drivetrain.getDriveCommand().clearTempDisableLineup()));

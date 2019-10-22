@@ -239,7 +239,7 @@ public class OI {
 //        rightFilterButton.whenReleased(new SwitchFilterButton(0));
 
         // Flash LEDs and turn off limelight
-        turnOffLimelightAndFlashLEDs.whileHeld(new BlinkLEDsAndTurnOffLimelight());
+        turnOffLimelightAndFlashLEDs.whenPressed(new BlinkLEDsAndTurnOffLimelight());
 
         // ---------------------------------------- Temporary ----------------------------------------
         if (INIT_TEMPORARY_BINDINGS) {

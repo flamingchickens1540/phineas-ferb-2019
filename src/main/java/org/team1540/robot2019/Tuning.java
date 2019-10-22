@@ -146,16 +146,17 @@ public class Tuning {
     public static double drivetrainMaxVelocity = 400;
 
     public static double ledTime = 5;
-    public static double ledStrobeTime = 1;
+    public static double ledStrobeTime = .2;
 
-    public static RevBlinken.ColorPattern idleLEDs = RevBlinken.ColorPattern.FIRE_LARGE;
-    public static RevBlinken.ColorPattern elevatorCargoShipPositionLEDs = RevBlinken.ColorPattern.GREEN;
-    public static RevBlinken.ColorPattern elevatorTopLEDs = RevBlinken.ColorPattern.SINELON_LAVA;
-    public static RevBlinken.ColorPattern floorIntakeCargoLEDs = RevBlinken.ColorPattern.TWINKLES_RAINBOW;
-    public static RevBlinken.ColorPattern hasBallLEDs = RevBlinken.ColorPattern.TWINKLES_OCEAN;
-    public static RevBlinken.ColorPattern hatchPlacedLEDs = RevBlinken.ColorPattern.CONFETTI;
-    public static RevBlinken.ColorPattern limelightOffLEDs1 = RevBlinken.ColorPattern.RED;
-    public static RevBlinken.ColorPattern limelightOffLEDs2 = RevBlinken.ColorPattern.ORANGE;
+    public static RevBlinken.ColorPattern idleLEDs = RevBlinken.ColorPattern.FIRE_MEDIUM;
+    public static RevBlinken.ColorPattern elevatorCargoShipPositionLEDs = RevBlinken.ColorPattern.BLUE_GREEN;
+    public static RevBlinken.ColorPattern elevatorTopLEDs = RevBlinken.ColorPattern.BLUE_VIOLET;
+    public static RevBlinken.ColorPattern floorIntakeCargoLEDs = RevBlinken.ColorPattern.STROBE_BLUE;
+    public static RevBlinken.ColorPattern hasBallLEDs = RevBlinken.ColorPattern.HEARTBEAT_BLUE;
+    public static RevBlinken.ColorPattern hatchPlacedLEDs = RevBlinken.ColorPattern.STROBE_GOLD;
+    public static RevBlinken.ColorPattern limelightOffLEDs1 = RevBlinken.ColorPattern.RED_ORANGE;
+    public static RevBlinken.ColorPattern limelightOffLEDs2 = RevBlinken.ColorPattern.SKY_BLUE;
+    public static RevBlinken.ColorPattern hasHatchLEDs = RevBlinken.ColorPattern.GOLD;
 
 
     static {
