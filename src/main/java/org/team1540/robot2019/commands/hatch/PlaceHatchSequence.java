@@ -35,7 +35,7 @@ public class PlaceHatchSequence extends CommandGroup {
         addSequential(new WaitCommand(0.2));
         addSequential(new RetractHatchMech());
         addSequential(new WaitCommand(0.1));
-        addSequential(new HatchPlacedLEDs());
+        addSequential(new SimpleCommand("LEDs", new HatchPlacedLEDs()::start));
 
         if (reEnableLineup) {
             addSequential(new SimpleCommand("", () -> Robot.drivetrain.getDriveCommand().clearTempDisableLineup()));
