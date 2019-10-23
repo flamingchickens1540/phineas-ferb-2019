@@ -17,6 +17,7 @@ import org.team1540.robot2019.wrappers.NavX;
 import org.team1540.rooster.wrappers.ChickenController;
 import org.team1540.rooster.wrappers.ChickenTalon;
 import org.team1540.rooster.wrappers.ChickenVictor;
+import org.team1540.rooster.wrappers.RevBlinken;
 
 /**
  * This is my fancy replacement for the RobotMap class. Now instead of centralizing motor numbers, I centralize the motors themselves. This also means we don't have to redo loads of config when making alternative robots or funky temporary
@@ -72,9 +73,7 @@ public class Hardware {
 
     public static DoubleSolenoid climberCylinder;
 
-    public static Solenoid redLEDs;
-    public static Solenoid greenLEDs;
-    public static Solenoid blueLEDs;
+    public static RevBlinken leds;
 
     public static AnalogInput pressureSensor;
 
@@ -355,9 +354,7 @@ public class Hardware {
         logger.info("Initializing LEDs...");
         double start = RobotController.getFPGATime() / 1000.0; // getFPGATime returns microseconds
 
-        redLEDs = new Solenoid(RobotMap.LED_RED);
-        greenLEDs = new Solenoid(RobotMap.LED_GREEN);
-        blueLEDs = new Solenoid(RobotMap.LED_BLUE);
+        leds = new RevBlinken(RobotMap.LEDS);
 
         double end = RobotController.getFPGATime() / 1000.0;
         logger.info("Initialized LEDs in " + (end - start) + " ms");

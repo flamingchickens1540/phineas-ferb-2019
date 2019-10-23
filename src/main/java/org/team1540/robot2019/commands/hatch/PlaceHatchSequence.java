@@ -10,6 +10,7 @@ import org.team1540.robot2019.commands.hatch.simple.ExtendHatchMech;
 import org.team1540.robot2019.commands.hatch.simple.GrabHatch;
 import org.team1540.robot2019.commands.hatch.simple.ReleaseHatch;
 import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
+import org.team1540.robot2019.commands.leds.HatchPlacedLEDs;
 import org.team1540.robot2019.commands.wrist.WristUp;
 import org.team1540.rooster.util.SimpleCommand;
 
@@ -34,6 +35,7 @@ public class PlaceHatchSequence extends CommandGroup {
         addSequential(new WaitCommand(0.2));
         addSequential(new RetractHatchMech());
         addSequential(new WaitCommand(0.1));
+        addSequential(new HatchPlacedLEDs());
 
         if (reEnableLineup) {
             addSequential(new SimpleCommand("", () -> Robot.drivetrain.getDriveCommand().clearTempDisableLineup()));

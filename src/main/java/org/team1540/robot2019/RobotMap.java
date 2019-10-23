@@ -31,9 +31,7 @@ public class RobotMap {
     public static final int HATCH_SLIDE;
     public static final int HATCH_GRABBER;
 
-    public static final int LED_GREEN = 5;
-    public static final int LED_BLUE = 6;
-    public static final int LED_RED = 4;
+    public static final int LEDS = 9;
 
     // sensors and switches
     public static final int ELEVATOR_LIMIT_SENSOR = 1;

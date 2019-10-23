@@ -24,7 +24,6 @@ import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.hatch.temporary.WiggleAndGrabHatch;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
-import org.team1540.robot2019.subsystems.LEDs.LEDColor;
 import org.team1540.robot2019.utils.ChickenXboxController;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxAxis;
 import org.team1540.robot2019.utils.ChickenXboxController.XboxButton;
@@ -240,7 +239,7 @@ public class OI {
 //        rightFilterButton.whenReleased(new SwitchFilterButton(0));
 
         // Flash LEDs and turn off limelight
-        turnOffLimelightAndFlashLEDs.whileHeld(new BlinkLEDsAndTurnOffLimelight(LEDColor.PURPLE, LEDColor.OFF, Tuning.ledStrobeTime));
+        turnOffLimelightAndFlashLEDs.whileHeld(new BlinkLEDsAndTurnOffLimelight());
 
         // ---------------------------------------- Temporary ----------------------------------------
         if (INIT_TEMPORARY_BINDINGS) {

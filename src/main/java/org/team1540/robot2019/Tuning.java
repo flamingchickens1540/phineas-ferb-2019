@@ -1,5 +1,7 @@
 package org.team1540.robot2019;
 
+import org.team1540.rooster.wrappers.RevBlinken;
+
 public class Tuning {
 
     // general
@@ -145,6 +147,15 @@ public class Tuning {
 
     public static double ledTime = 5;
     public static double ledStrobeTime = 0.2;
+
+    public static RevBlinken.ColorPattern idleLEDs = RevBlinken.ColorPattern.FIRE_LARGE;
+    public static RevBlinken.ColorPattern turnOffLimelightLEDs = RevBlinken.ColorPattern.CHASE_RED;
+    public static RevBlinken.ColorPattern elevatorCargoShipPositionLEDs = RevBlinken.ColorPattern.GREEN;
+    public static RevBlinken.ColorPattern elevatorTopLEDs = RevBlinken.ColorPattern.SINELON_LAVA;
+    public static RevBlinken.ColorPattern floorIntakeCargoLEDs = RevBlinken.ColorPattern.TWINKLES_RAINBOW;
+    public static RevBlinken.ColorPattern hasBallLEDs = RevBlinken.ColorPattern.TWINKLES_OCEAN;
+    public static RevBlinken.ColorPattern hatchPlacedLEDs = RevBlinken.ColorPattern.CONFETTI;
+
 
     static {
         //noinspection ConstantConditions
