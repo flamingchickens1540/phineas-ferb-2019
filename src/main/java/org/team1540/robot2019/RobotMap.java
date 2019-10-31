@@ -43,7 +43,7 @@ public class RobotMap {
 
     public static final int CARGO_INTAKE_SENSOR = 0;
 
-    public static final int PRESSURE_SENSOR = 3;
+    public static final int PRESSURE_SENSOR = 0;
 
 
     // pdp ports
