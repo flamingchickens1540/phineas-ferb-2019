@@ -1,6 +1,7 @@
 package org.team1540.robot2019.commands.hatch.sensor;
 
 import edu.wpi.first.wpilibj.command.Command;
+import org.team1540.robot2019.OI;
 import org.team1540.robot2019.Robot;
 
 public class WaitForExtendSensorTrip extends Command {
@@ -12,7 +13,7 @@ public class WaitForExtendSensorTrip extends Command {
 
     @Override
     protected boolean isFinished() {
-        if (Robot.hatch.wasExtendSensorTripped()) {
+        if (Robot.hatch.wasExtendSensorTripped() || OI.getCancelButton()) {
             Robot.hatch.clearExtendSensor();
             return true;
         }

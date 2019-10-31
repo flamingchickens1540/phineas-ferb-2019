@@ -289,6 +289,10 @@ public class OI {
         logger.info("Initialized operator interface in " + (end - start) + " ms");
     }
 
+    public static boolean getCancelButton() {
+        return climbingSafetyAndCancelButton.get();
+    }
+
     // Tank drive
     public static double getTankdriveLeftAxis() {
         return Utilities.scale(Utilities.processDeadzone(driver.getY(Hand.kLeft), Tuning.driveDeadzone), 2);
