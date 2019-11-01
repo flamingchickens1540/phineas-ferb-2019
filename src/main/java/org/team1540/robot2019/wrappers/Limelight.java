@@ -1,12 +1,16 @@
 package org.team1540.robot2019.wrappers;
 
+import edu.wpi.first.networktables.EntryListenerFlags;
+import edu.wpi.first.networktables.EntryNotification;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 import org.apache.log4j.Logger;
@@ -78,6 +82,23 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
         return (double) limelightTable.getEntry("tv").getNumber(0) > 0;
     }
 
+    public int registerTxCallback(Consumer<EntryNotification> entryConsumer) {
+        NetworkTableEntry tv = limelightTable.getEntry("tx");
+        return tv.addListener(entryConsumer, EntryListenerFlags.kUpdate);
+    }
+
+    public void removeCallback(int value) {
+        NetworkTableEntry tv = limelightTable.getEntry("tv");
+        tv.removeListener(value);
+    }
+
+    public int registerCallback(Consumer<EntryNotification> entryConsumer) {
+        NetworkTableEntry tv = limelightTable.getEntry("tv");
+        return tv.addListener(entryConsumer, EntryListenerFlags.kUpdate);
+    }
+
+
+
     /**
      * Gets additional raw contour centers published by the limelight. SendRawContours in the limelight web interface must be turned on.
      *
@@ -117,6 +138,7 @@ public class Limelight implements DeepSpaceVisionTargetCamera {
      * @param isOn the new state of the LEDs
      */
     public void setLeds(boolean isOn) {
+        isOn = false;
         if (getLeds() != isOn) {
             limelightTable.getEntry("ledMode").setNumber(isOn ? 0 : 1);
             NetworkTableInstance.getDefault().flush();

@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
     public static LEDs leds;
 
     public static boolean debugMode = false;
+    private final CameraFrequencyTimer cameraLatencyTimer = new CameraFrequencyTimer(6);
 
     boolean disableBrakes;
     private Timer brakeTimer = new Timer();
@@ -232,6 +233,7 @@ public class Robot extends TimedRobot {
         Hardware.checkStickyFaults();
 
         new MoveElevatorToZero().start();
+        cameraLatencyTimer.start();
     }
 
     @Override
