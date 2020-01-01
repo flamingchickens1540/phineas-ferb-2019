@@ -20,7 +20,6 @@ import org.team1540.robot2019.commands.elevator.MoveElevatorToPosition;
 import org.team1540.robot2019.commands.elevator.MoveElevatorToZero;
 import org.team1540.robot2019.commands.hatch.PlaceHatchSequence;
 import org.team1540.robot2019.commands.hatch.sensor.SensorGrabHatchSequence;
-import org.team1540.robot2019.commands.hatch.simple.RetractHatchMech;
 import org.team1540.robot2019.commands.hatch.temporary.WiggleAndGrabHatch;
 import org.team1540.robot2019.commands.leds.BlinkLEDsAndTurnOffLimelight;
 import org.team1540.robot2019.commands.wrist.RecoverWrist;
@@ -178,7 +177,7 @@ public class OI {
         cargoEjectButton.whenReleased(backThenDown);
 
         // Cancel hatch and cargo
-        climbingSafetyAndCancelButton.whenPressed(new RetractHatchMech());
+//        climbingSafetyAndCancelButton.whenPressed(new RetractHatchMech());
         climbingSafetyAndCancelButton.cancelWhenPressed(floorIntakeCargo);
 
         // Climb
